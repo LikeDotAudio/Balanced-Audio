@@ -577,6 +577,14 @@
           <a href="#contributor-kenny" class="alignment-contributor-badge"><span>👤 AES72 QTP Research:</span> <strong>Richard Kenny</strong> &rarr;</a>
           <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Grounding:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
           <a href="#contributor-schmidt" class="alignment-contributor-badge"><span>👤 Multichannel Snakes:</span> <strong>John Schmidt (Whirlwind)</strong> &rarr;</a>
+          <a href="#contributor-celli" class="alignment-contributor-badge"><span>👤 Snake Shield Continuity:</span> <strong>John Celli</strong> &rarr;</a>
+          <a href="#contributor-brito" class="alignment-contributor-badge"><span>👤 Standards Implementation:</span> <strong>Joel Brito</strong> &rarr;</a>
+          <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 SCIN Physics:</span> <strong>Bill Whitlock</strong> &rarr;</a>
+        </div>
+        <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="#contributor-kenny" class="alignment-contributor-badge"><span>👤 AES72 QTP Research:</span> <strong>Richard Kenny</strong> &rarr;</a>
+          <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Grounding:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
+          <a href="#contributor-schmidt" class="alignment-contributor-badge"><span>👤 Multichannel Snakes:</span> <strong>John Schmidt (Whirlwind)</strong> &rarr;</a>
           <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 SCIN Physics:</span> <strong>Bill Whitlock</strong> &rarr;</a>
         </div>
         </p>
@@ -833,6 +841,7 @@
 
     </div>
   </section>
+
 
 
 
@@ -1855,25 +1864,33 @@
         <svg viewBox="0 0 920 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
           <rect width="920" height="320" fill="#070b13" rx="8"/>
           
-          <!-- Headroom Ceiling Tier (Top) -->
-          <polygon points="460,25 310,95 610,95" fill="rgba(239, 68, 68, 0.2)" stroke="#ef4444" stroke-width="2"/>
-          <text x="460" y="60" fill="#f87171" font-size="12" font-weight="800" text-anchor="middle">MAXIMUM SYSTEM HEADROOM CEILING (+24 to +28 dBu)</text>
-          <text x="460" y="78" fill="#fecdd3" font-size="10" text-anchor="middle">12.28 V to 19.46 V RMS &bull; Professional Analog Console Boundary</text>
+          <!-- Headroom Ceiling Tier (Top: +24 to +28 dBu) -->
+          <g id="pyramid-tier-headroom" class="pyramid-tier tier-zone-headroom" data-tier="headroom" tabindex="0" role="button" aria-label="Maximum System Headroom Tier">
+            <polygon class="pyramid-tier-poly" points="460,25 310,95 610,95" fill="rgba(239, 68, 68, 0.2)" stroke="#ef4444" stroke-width="2"/>
+            <text x="460" y="60" fill="#f87171" font-size="12" font-weight="800" text-anchor="middle">MAXIMUM SYSTEM HEADROOM CEILING (+24 to +28 dBu)</text>
+            <text x="460" y="78" fill="#fecdd3" font-size="10" text-anchor="middle">12.28 V to 19.46 V RMS &bull; Professional Analog Console Boundary</text>
+          </g>
 
-          <!-- Professional Line Level Tier -->
-          <polygon points="310,98 610,98 680,165 240,165" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="2"/>
-          <text x="460" y="125" fill="#34d399" font-size="13" font-weight="800" text-anchor="middle">PROFESSIONAL LINE LEVEL REFERENCE (+4 dBu / 0 VU)</text>
-          <text x="460" y="145" fill="#a7f3d0" font-size="10.5" text-anchor="middle">1.228 V RMS &bull; Standard Studio Interconnect (0.775 V Ref)</text>
+          <!-- Professional Line Level Tier (+4 dBu / 0 VU) -->
+          <g id="pyramid-tier-pro" class="pyramid-tier tier-zone-pro tier-active" data-tier="pro" tabindex="0" role="button" aria-label="Professional Line Level Tier">
+            <polygon class="pyramid-tier-poly" points="310,98 610,98 680,165 240,165" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="2.5"/>
+            <text x="460" y="125" fill="#34d399" font-size="13" font-weight="800" text-anchor="middle">PROFESSIONAL LINE LEVEL REFERENCE (+4 dBu / 0 VU)</text>
+            <text x="460" y="145" fill="#a7f3d0" font-size="10.5" text-anchor="middle">1.228 V RMS &bull; Standard Studio Interconnect (0.775 V Ref)</text>
+          </g>
 
-          <!-- Consumer Line Level Tier -->
-          <polygon points="240,168 680,168 750,235 170,235" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
-          <text x="460" y="195" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">CONSUMER LINE LEVEL REFERENCE (-10 dBV / -7.78 dBu)</text>
-          <text x="460" y="215" fill="#bae6fd" font-size="10.5" text-anchor="middle">0.316 V RMS (1.000 V Ref) &bull; RCA Hi-Fi &amp; Semi-Pro Gear</text>
+          <!-- Consumer Line Level Tier (-10 dBV / -7.78 dBu) -->
+          <g id="pyramid-tier-consumer" class="pyramid-tier tier-zone-consumer" data-tier="consumer" tabindex="0" role="button" aria-label="Consumer Line Level Tier">
+            <polygon class="pyramid-tier-poly" points="240,168 680,168 750,235 170,235" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+            <text x="460" y="195" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">CONSUMER LINE LEVEL REFERENCE (-10 dBV / -7.78 dBu)</text>
+            <text x="460" y="215" fill="#bae6fd" font-size="10.5" text-anchor="middle">0.316 V RMS (1.000 V Ref) &bull; RCA Hi-Fi &amp; Semi-Pro Gear</text>
+          </g>
 
-          <!-- Microphone Transducer Level Tier (Bottom) -->
-          <polygon points="170,238 750,238 820,305 100,305" fill="rgba(245, 158, 11, 0.18)" stroke="#f59e0b" stroke-width="2"/>
-          <text x="460" y="265" fill="#fbbf24" font-size="13" font-weight="800" text-anchor="middle">MICROPHONE TRANSDUCER LEVEL (-60 to -40 dBu)</text>
-          <text x="460" y="285" fill="#fde68a" font-size="10.5" text-anchor="middle">0.775 mV to 7.75 mV RMS &bull; Ultra-sensitive High-Gain Preamp Stage</text>
+          <!-- Microphone Transducer Level Tier (Bottom: -60 to -40 dBu) -->
+          <g id="pyramid-tier-mic" class="pyramid-tier tier-zone-mic" data-tier="mic" tabindex="0" role="button" aria-label="Microphone Transducer Level Tier">
+            <polygon class="pyramid-tier-poly" points="170,238 750,238 820,305 100,305" fill="rgba(245, 158, 11, 0.18)" stroke="#f59e0b" stroke-width="2"/>
+            <text x="460" y="265" fill="#fbbf24" font-size="13" font-weight="800" text-anchor="middle">MICROPHONE TRANSDUCER LEVEL (-60 to -40 dBu)</text>
+            <text x="460" y="285" fill="#fde68a" font-size="10.5" text-anchor="middle">0.775 mV to 7.75 mV RMS &bull; Ultra-sensitive High-Gain Preamp Stage</text>
+          </g>
 
           <!-- Dynamic Voltage Margin Brackets -->
           <line x1="770" y1="98" x2="770" y2="165" stroke="#10b981" stroke-width="1.8"/>
@@ -1884,6 +1901,21 @@
           <polyline points="835,168 840,168 840,305 835,305" fill="none" stroke="#f59e0b" stroke-width="1.8"/>
           <text x="850" y="240" fill="#f59e0b" font-size="10" font-weight="700">44–64 dB Gain</text>
         </svg>
+      </div>
+
+      <!-- Calibrated Voltmeter & Dynamic Range Pyramid Alignment HUD -->
+      <div id="pyramid-meter-alignment-hud" class="pyramid-meter-alignment-hud">
+        <div class="pyr-hud-left">
+          <span class="pyr-hud-badge">CALIBRATED COUPLING</span>
+          <span class="pyr-hud-label">METER RANGE &harr; PYRAMID TIER:</span>
+          <span id="pyramid-hud-range" class="pyr-hud-range-pill">3 V (+10 dB)</span>
+          <span class="pyr-hud-arrow">&bull;</span>
+          <span id="pyramid-hud-dot" class="pyr-hud-indicator-dot"></span>
+          <span id="pyramid-hud-domain" class="pyr-hud-domain-name">PROFESSIONAL LINE LEVEL REFERENCE (+4 dBu / 0 VU)</span>
+        </div>
+        <div class="pyr-hud-right">
+          <span class="pyr-hud-hint">Click any tier or rotary range switch to align curves &amp; domains</span>
+        </div>
       </div>
 
       <!-- 1970s Laboratory Instrument Rack & Level Converter -->
@@ -1910,7 +1942,7 @@
     <stop offset="100%" stop-color="#64748b"/>
   </linearGradient>
 
-  <!-- HP Sage Grey Front Panel Texture -->
+  <!-- Sage Grey Front Panel Texture -->
   <linearGradient id="pyr-panel-face" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0%" stop-color="#e2e7e0"/>
     <stop offset="3%" stop-color="#d6ddd4"/>
@@ -1997,7 +2029,7 @@
 <circle cx="369" cy="470" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
 <line x1="367" y1="470" x2="371" y2="470" stroke="#334155" stroke-width="0.75"/>
 
-<!-- HP Vintage Sage Grey Front Panel Faceplate -->
+<!-- Vintage Sage Grey Front Panel Faceplate -->
 <rect x="22" y="16" width="336" height="472" fill="url(#pyr-panel-face)"/>
 <rect x="24" y="18" width="332" height="468" fill="none" stroke="#b2bbb0" stroke-width="1"/>
 
@@ -2008,8 +2040,25 @@
 <!-- Ivory Dial Plate -->
 <rect x="46" y="38" width="288" height="186" rx="3" fill="url(#pyr-dial-cream)"/>
 <rect x="46" y="38" width="288" height="186" rx="3" fill="none" stroke="#d5cebd" stroke-width="0.75"/><!-- Anti-Parallax Mirrored Strip -->
-<path d="M 97.13,122.18 A 158,158 0 0,1 290.71,128.26 L 283.70,136.73 A 147,147 0 0,0 103.60,131.07 Z" fill="url(#pyr-mirror-strip)" stroke="#64748b" stroke-width="0.5"/><path d="M 87.14,108.42 A 175,175 0 0,1 261.18,90.13" fill="none" stroke="#0f172a" stroke-width="1.2"/><path d="M 261.18,90.13 A 175,175 0 0,1 301.55,115.16" fill="none" stroke="#dc2626" stroke-width="2.5"/><text x="190" y="60" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.1em" text-anchor="middle">DECIBELS</text><text x="190" y="68" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle">1 mW 600 Ω</text><text x="190" y="152" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.08em" text-anchor="middle">R. M. S. VOLTS</text><text x="190" y="160" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5" font-weight="600" letter-spacing="0.05em" text-anchor="middle">AVERAGE RESPONDING</text><rect x="62" y="48" width="13" height="13" rx="2" fill="#006699"/>
-<text x="68.5" y="58" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="9" text-anchor="middle">hp</text><line x1="102.50" y1="98.45" x2="106.00" y2="104.51" stroke="#0f172a" stroke-width="1.3"/><text x="108.75" y="109.27" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-20</text><line x1="115.13" y1="91.83" x2="117.05" y2="95.89" stroke="#0f172a" stroke-width="0.75"/><line x1="138.76" y1="82.67" x2="140.81" y2="89.36" stroke="#0f172a" stroke-width="1.3"/><text x="142.42" y="94.62" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-10</text><line x1="145.56" y1="80.74" x2="146.70" y2="85.09" stroke="#0f172a" stroke-width="0.75"/><line x1="153.28" y1="78.90" x2="154.75" y2="85.74" stroke="#0f172a" stroke-width="1.3"/><text x="155.90" y="91.12" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-8</text><line x1="162.02" y1="77.25" x2="162.74" y2="81.69" stroke="#0f172a" stroke-width="0.75"/><line x1="171.92" y1="75.94" x2="172.65" y2="82.90" stroke="#0f172a" stroke-width="1.3"/><text x="173.22" y="88.37" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-6</text><line x1="183.10" y1="75.14" x2="183.28" y2="79.63" stroke="#0f172a" stroke-width="0.75"/><line x1="195.67" y1="75.09" x2="195.45" y2="82.09" stroke="#0f172a" stroke-width="1.3"/><text x="195.27" y="87.59" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-4</text><line x1="209.74" y1="76.12" x2="209.23" y2="80.59" stroke="#0f172a" stroke-width="0.75"/><line x1="225.37" y1="78.61" x2="223.95" y2="85.47" stroke="#0f172a" stroke-width="1.3"/><text x="222.84" y="90.85" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-2</text><line x1="242.55" y1="83.08" x2="241.20" y2="87.37" stroke="#0f172a" stroke-width="0.75"/><line x1="261.18" y1="90.13" x2="258.33" y2="96.52" stroke="#dc2626" stroke-width="1.3"/><text x="256.09" y="101.55" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="280.97" y1="100.50" x2="277.33" y2="106.48" stroke="#dc2626" stroke-width="1.3"/><text x="274.47" y="111.18" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+1</text><line x1="301.40" y1="115.03" x2="296.94" y2="120.43" stroke="#dc2626" stroke-width="1.3"/><text x="293.44" y="124.68" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+2</text><path d="M 105.36,133.50 A 144,144 0 0,1 248.57,118.45" fill="none" stroke="#0f172a" stroke-width="1.0"/><line x1="105.36" y1="133.50" x2="108.89" y2="138.36" stroke="#0f172a" stroke-width="1.0"/><text x="111.82" y="142.40" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="118.00" y1="125.29" x2="121.00" y2="130.49" stroke="#0f172a" stroke-width="1.0"/><line x1="131.43" y1="118.45" x2="133.87" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="135.90" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.2</text><line x1="145.50" y1="113.05" x2="147.36" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="160.06" y1="109.15" x2="161.31" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="162.35" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.4</text><line x1="174.95" y1="106.79" x2="175.58" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="190.00" y1="106.00" x2="190.00" y2="112.00" stroke="#0f172a" stroke-width="1.0"/><text x="190.00" y="117.00" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.6</text><line x1="205.05" y1="106.79" x2="204.42" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="219.94" y1="109.15" x2="218.69" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="217.65" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.8</text><line x1="234.50" y1="113.05" x2="232.64" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="248.57" y1="118.45" x2="246.13" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="244.10" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">1.0</text><line x1="107.82" y1="131.75" x2="109.81" y2="134.63" stroke="#475569" stroke-width="0.5"/><line x1="110.31" y1="130.06" x2="112.25" y2="132.97" stroke="#475569" stroke-width="0.5"/><line x1="112.84" y1="128.42" x2="114.72" y2="131.37" stroke="#475569" stroke-width="0.5"/><line x1="115.40" y1="126.83" x2="117.22" y2="129.82" stroke="#475569" stroke-width="0.5"/><line x1="120.63" y1="123.81" x2="122.31" y2="126.88" stroke="#475569" stroke-width="0.5"/><line x1="123.29" y1="122.39" x2="124.91" y2="125.49" stroke="#475569" stroke-width="0.5"/><line x1="125.97" y1="121.02" x2="127.53" y2="124.15" stroke="#475569" stroke-width="0.5"/><line x1="128.69" y1="119.70" x2="130.18" y2="122.87" stroke="#475569" stroke-width="0.5"/><line x1="134.20" y1="117.25" x2="135.55" y2="120.48" stroke="#475569" stroke-width="0.5"/><line x1="136.99" y1="116.11" x2="138.28" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="139.81" y1="115.03" x2="141.03" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="142.64" y1="114.01" x2="143.79" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="148.38" y1="112.15" x2="149.39" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="151.28" y1="111.30" x2="152.22" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="154.19" y1="110.52" x2="155.06" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="157.12" y1="109.80" x2="157.92" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="163.02" y1="108.55" x2="163.67" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="165.99" y1="108.02" x2="166.57" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="168.96" y1="107.54" x2="169.48" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="171.95" y1="107.14" x2="172.39" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="177.95" y1="106.51" x2="178.24" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="180.96" y1="106.28" x2="181.18" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="183.97" y1="106.13" x2="184.12" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="186.98" y1="106.03" x2="187.06" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="193.02" y1="106.03" x2="192.94" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="196.03" y1="106.13" x2="195.88" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="199.04" y1="106.28" x2="198.82" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="202.05" y1="106.51" x2="201.76" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="208.05" y1="107.14" x2="207.61" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="211.04" y1="107.54" x2="210.52" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="214.01" y1="108.02" x2="213.43" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="216.98" y1="108.55" x2="216.33" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="222.88" y1="109.80" x2="222.08" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="225.81" y1="110.52" x2="224.94" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="228.72" y1="111.30" x2="227.78" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="231.62" y1="112.15" x2="230.61" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="237.36" y1="114.01" x2="236.21" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="240.19" y1="115.03" x2="238.97" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="243.01" y1="116.11" x2="241.72" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="245.80" y1="117.25" x2="244.45" y2="120.48" stroke="#475569" stroke-width="0.5"/><path d="M 115.94,148.06 A 126,126 0 0,1 241.25,134.89" fill="none" stroke="#0f172a" stroke-width="0.8"/><line x1="115.94" y1="148.06" x2="118.88" y2="152.11" stroke="#0f172a" stroke-width="0.9"/><text x="121.52" y="155.75" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="134.77" y1="136.75" x2="136.96" y2="141.25" stroke="#0f172a" stroke-width="0.9"/><text x="138.93" y="145.29" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0.5</text><line x1="155.27" y1="128.88" x2="156.65" y2="133.69" stroke="#0f172a" stroke-width="0.9"/><text x="157.89" y="138.01" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><line x1="176.83" y1="124.69" x2="177.35" y2="129.66" stroke="#0f172a" stroke-width="0.9"/><text x="177.82" y="134.14" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1.5</text><line x1="198.79" y1="124.31" x2="198.44" y2="129.29" stroke="#0f172a" stroke-width="0.9"/><text x="198.13" y="133.78" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><line x1="220.48" y1="127.74" x2="219.27" y2="132.59" stroke="#0f172a" stroke-width="0.9"/><text x="218.18" y="136.96" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2.5</text><line x1="241.25" y1="134.89" x2="239.22" y2="139.46" stroke="#0f172a" stroke-width="0.9"/><text x="237.38" y="143.57" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><!-- Galvanometer Pointer Needle -->
+<path d="M 97.13,122.18 A 158,158 0 0,1 290.71,128.26 L 283.70,136.73 A 147,147 0 0,0 103.60,131.07 Z" fill="url(#pyr-mirror-strip)" stroke="#64748b" stroke-width="0.5"/><!-- Aligned Dynamic Range Pyramid Color Zone Curves -->
+<path id="pyr-scale-zone-mic" class="meter-scale-zone zone-mic" d="M 100.50,94.98 A 179,179 0 0,1 137.59,78.85" fill="none" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round" title="Microphone Level (-60 to -40 dBu)"/>
+<path id="pyr-scale-zone-consumer" class="meter-scale-zone zone-consumer" d="M 137.59,78.85 A 179,179 0 0,1 210.19,72.14" fill="none" stroke="#06b6d4" stroke-width="3.5" title="Consumer Line Level (-10 dBV)"/>
+<path id="pyr-scale-zone-pro" class="meter-scale-zone zone-pro active" d="M 210.19,72.14 A 179,179 0 0,1 283.05,97.09" fill="none" stroke="#10b981" stroke-width="4.5" title="Professional Line Level (+4 dBu / 0 VU)"/>
+<path id="pyr-scale-zone-headroom" class="meter-scale-zone zone-headroom" d="M 283.05,97.09 A 179,179 0 0,1 304.10,112.08" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round" title="Maximum System Headroom Ceiling (+24 to +28 dBu)"/><path d="M 87.14,108.42 A 175,175 0 0,1 261.18,90.13" fill="none" stroke="#0f172a" stroke-width="1.2"/><path d="M 261.18,90.13 A 175,175 0 0,1 301.55,115.16" fill="none" stroke="#dc2626" stroke-width="2.5"/><text x="190" y="58" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.1em" text-anchor="middle">DECIBELS</text><text x="190" y="66" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle">1 mW 600 Ω</text><text x="190" y="152" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.08em" text-anchor="middle">R. M. S. VOLTS</text><text x="190" y="160" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5" font-weight="600" letter-spacing="0.05em" text-anchor="middle">AVERAGE RESPONDING</text><rect x="62" y="48" width="13" height="13" rx="2" fill="#006699"/>
+<text x="68.5" y="58" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="9" text-anchor="middle">hp</text><line x1="102.50" y1="98.45" x2="106.00" y2="104.51" stroke="#0f172a" stroke-width="1.3"/><text x="108.75" y="109.27" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-20</text><line x1="115.13" y1="91.83" x2="117.05" y2="95.89" stroke="#0f172a" stroke-width="0.75"/><line x1="138.76" y1="82.67" x2="140.81" y2="89.36" stroke="#0f172a" stroke-width="1.3"/><text x="142.42" y="94.62" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-10</text><line x1="145.56" y1="80.74" x2="146.70" y2="85.09" stroke="#0f172a" stroke-width="0.75"/><line x1="153.28" y1="78.90" x2="154.75" y2="85.74" stroke="#0f172a" stroke-width="1.3"/><text x="155.90" y="91.12" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-8</text><line x1="162.02" y1="77.25" x2="162.74" y2="81.69" stroke="#0f172a" stroke-width="0.75"/><line x1="171.92" y1="75.94" x2="172.65" y2="82.90" stroke="#0f172a" stroke-width="1.3"/><text x="173.22" y="88.37" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-6</text><line x1="183.10" y1="75.14" x2="183.28" y2="79.63" stroke="#0f172a" stroke-width="0.75"/><line x1="195.67" y1="75.09" x2="195.45" y2="82.09" stroke="#0f172a" stroke-width="1.3"/><text x="195.27" y="87.59" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-4</text><line x1="209.74" y1="76.12" x2="209.23" y2="80.59" stroke="#0f172a" stroke-width="0.75"/><line x1="225.37" y1="78.61" x2="223.95" y2="85.47" stroke="#0f172a" stroke-width="1.3"/><text x="222.84" y="90.85" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-2</text><line x1="242.55" y1="83.08" x2="241.20" y2="87.37" stroke="#0f172a" stroke-width="0.75"/><line x1="261.18" y1="90.13" x2="258.33" y2="96.52" stroke="#dc2626" stroke-width="1.3"/><text x="256.09" y="101.55" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="280.97" y1="100.50" x2="277.33" y2="106.48" stroke="#dc2626" stroke-width="1.3"/><text x="274.47" y="111.18" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+1</text><line x1="301.40" y1="115.03" x2="296.94" y2="120.43" stroke="#dc2626" stroke-width="1.3"/><text x="293.44" y="124.68" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+2</text><path d="M 105.36,133.50 A 144,144 0 0,1 248.57,118.45" fill="none" stroke="#0f172a" stroke-width="1.0"/><line x1="105.36" y1="133.50" x2="108.89" y2="138.36" stroke="#0f172a" stroke-width="1.0"/><text x="111.82" y="142.40" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="118.00" y1="125.29" x2="121.00" y2="130.49" stroke="#0f172a" stroke-width="1.0"/><line x1="131.43" y1="118.45" x2="133.87" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="135.90" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.2</text><line x1="145.50" y1="113.05" x2="147.36" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="160.06" y1="109.15" x2="161.31" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="162.35" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.4</text><line x1="174.95" y1="106.79" x2="175.58" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="190.00" y1="106.00" x2="190.00" y2="112.00" stroke="#0f172a" stroke-width="1.0"/><text x="190.00" y="117.00" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.6</text><line x1="205.05" y1="106.79" x2="204.42" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="219.94" y1="109.15" x2="218.69" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="217.65" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.8</text><line x1="234.50" y1="113.05" x2="232.64" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="248.57" y1="118.45" x2="246.13" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="244.10" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">1.0</text><line x1="107.82" y1="131.75" x2="109.81" y2="134.63" stroke="#475569" stroke-width="0.5"/><line x1="110.31" y1="130.06" x2="112.25" y2="132.97" stroke="#475569" stroke-width="0.5"/><line x1="112.84" y1="128.42" x2="114.72" y2="131.37" stroke="#475569" stroke-width="0.5"/><line x1="115.40" y1="126.83" x2="117.22" y2="129.82" stroke="#475569" stroke-width="0.5"/><line x1="120.63" y1="123.81" x2="122.31" y2="126.88" stroke="#475569" stroke-width="0.5"/><line x1="123.29" y1="122.39" x2="124.91" y2="125.49" stroke="#475569" stroke-width="0.5"/><line x1="125.97" y1="121.02" x2="127.53" y2="124.15" stroke="#475569" stroke-width="0.5"/><line x1="128.69" y1="119.70" x2="130.18" y2="122.87" stroke="#475569" stroke-width="0.5"/><line x1="134.20" y1="117.25" x2="135.55" y2="120.48" stroke="#475569" stroke-width="0.5"/><line x1="136.99" y1="116.11" x2="138.28" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="139.81" y1="115.03" x2="141.03" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="142.64" y1="114.01" x2="143.79" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="148.38" y1="112.15" x2="149.39" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="151.28" y1="111.30" x2="152.22" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="154.19" y1="110.52" x2="155.06" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="157.12" y1="109.80" x2="157.92" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="163.02" y1="108.55" x2="163.67" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="165.99" y1="108.02" x2="166.57" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="168.96" y1="107.54" x2="169.48" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="171.95" y1="107.14" x2="172.39" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="177.95" y1="106.51" x2="178.24" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="180.96" y1="106.28" x2="181.18" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="183.97" y1="106.13" x2="184.12" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="186.98" y1="106.03" x2="187.06" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="193.02" y1="106.03" x2="192.94" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="196.03" y1="106.13" x2="195.88" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="199.04" y1="106.28" x2="198.82" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="202.05" y1="106.51" x2="201.76" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="208.05" y1="107.14" x2="207.61" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="211.04" y1="107.54" x2="210.52" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="214.01" y1="108.02" x2="213.43" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="216.98" y1="108.55" x2="216.33" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="222.88" y1="109.80" x2="222.08" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="225.81" y1="110.52" x2="224.94" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="228.72" y1="111.30" x2="227.78" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="231.62" y1="112.15" x2="230.61" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="237.36" y1="114.01" x2="236.21" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="240.19" y1="115.03" x2="238.97" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="243.01" y1="116.11" x2="241.72" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="245.80" y1="117.25" x2="244.45" y2="120.48" stroke="#475569" stroke-width="0.5"/><path d="M 115.94,148.06 A 126,126 0 0,1 241.25,134.89" fill="none" stroke="#0f172a" stroke-width="0.8"/><line x1="115.94" y1="148.06" x2="118.88" y2="152.11" stroke="#0f172a" stroke-width="0.9"/><text x="121.52" y="155.75" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="134.77" y1="136.75" x2="136.96" y2="141.25" stroke="#0f172a" stroke-width="0.9"/><text x="138.93" y="145.29" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0.5</text><line x1="155.27" y1="128.88" x2="156.65" y2="133.69" stroke="#0f172a" stroke-width="0.9"/><text x="157.89" y="138.01" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><line x1="176.83" y1="124.69" x2="177.35" y2="129.66" stroke="#0f172a" stroke-width="0.9"/><text x="177.82" y="134.14" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1.5</text><line x1="198.79" y1="124.31" x2="198.44" y2="129.29" stroke="#0f172a" stroke-width="0.9"/><text x="198.13" y="133.78" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><line x1="220.48" y1="127.74" x2="219.27" y2="132.59" stroke="#0f172a" stroke-width="0.9"/><text x="218.18" y="136.96" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2.5</text><line x1="241.25" y1="134.89" x2="239.22" y2="139.46" stroke="#0f172a" stroke-width="0.9"/><text x="237.38" y="143.57" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><!-- Aligned Pyramid Domain Color Badges Ribbon -->
+<g class="meter-pyramid-legend" transform="translate(190, 185)">
+  <rect x="-132" y="0" width="62" height="11" rx="2" fill="rgba(245, 158, 11, 0.12)" stroke="#d97706" stroke-width="0.75"/>
+  <text x="-101" y="8" fill="#d97706" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">MIC (-60..-40)</text>
+
+  <rect x="-67" y="0" width="62" height="11" rx="2" fill="rgba(6, 182, 212, 0.12)" stroke="#0284c7" stroke-width="0.75"/>
+  <text x="-36" y="8" fill="#0284c7" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">CONSUMER (-10)</text>
+
+  <rect x="-2" y="0" width="65" height="11" rx="2" fill="rgba(16, 185, 129, 0.15)" stroke="#16a34a" stroke-width="0.85"/>
+  <text x="30.5" y="8" fill="#16a34a" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">PRO (+4 / 0VU)</text>
+
+  <rect x="66" y="0" width="66" height="11" rx="2" fill="rgba(239, 68, 68, 0.15)" stroke="#dc2626" stroke-width="0.85"/>
+  <text x="99" y="8" fill="#dc2626" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">HEADROOM (+24+)</text>
+</g><!-- Galvanometer Pointer Needle -->
 <g id="pyr-vu-needle" class="hp-galvo-needle" filter="url(#pyr-needle-shadow)" transform="rotate(-36 190 250)">
   <!-- Counterweight Tail -->
   <path d="M 188.5,250 L 187,268 A 3,3 0 0,0 193,268 L 191.5,250 Z" fill="#1e293b"/>
@@ -2026,13 +2075,13 @@
 <!-- Mechanical Zero Screw -->
 <circle cx="190" cy="230" r="7" fill="#cbd5e1" stroke="#334155" stroke-width="1"/>
 <circle cx="190" cy="230" r="5.5" fill="#94a3b8"/>
-<line x1="185" y1="230" x2="195" y2="230" stroke="#1e293b" stroke-width="1.2"/><!-- Lower Panel Silkscreen Header -->
+<line x1="185" y1="230" x2="195" y2="230" stroke="#1e293b" stroke-width="1.2"/><!-- Lower Panel Silkscreen Header: APK Precision AC Voltmeter -->
 <g transform="translate(42, 252)">
-  <!-- HP Logo -->
-  <rect x="0" y="0" width="18" height="18" rx="3" fill="#006699"/>
-  <text x="9" y="13" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="12" text-anchor="middle">hp</text>
-  <text x="26" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="0.1em">HEWLETT • PACKARD</text>
-  <text x="180" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="0.08em">400FL AC VOLTMETER</text>
+  <!-- APK Cyan Badge Logo -->
+  <rect x="0" y="0" width="24" height="18" rx="3" fill="#06b6d4"/>
+  <text x="12" y="13" fill="#040711" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="11" text-anchor="middle">APK</text>
+  <text x="32" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.08em">ANTHONY PETER KUZUB</text>
+  <text x="175" y="13" fill="#0284c7" font-family="'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="800" letter-spacing="0.06em">PRECISION AC VOLTMETER</text>
   <text x="96" y="25" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="0.05em">IN ~ 100kHz L.P. FILTER ~ OUT</text>
 </g>
 
@@ -2070,58 +2119,103 @@
   </g>
 </g>
 
-<!-- ================= Center: RANGE Rotary Selector ================= -->
+<!-- ================= Center: RANGE Rotary Selector with Pyramid Color Alignment ================= -->
 <g transform="translate(190, 365)">
   <text x="0" y="-62" fill="#0f172a" font-family="Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.1em" text-anchor="middle">RANGE</text>
   
-  <!-- Header Labels -->
-  <text x="-58" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">dB</text>
-  <text x="-36" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">mV</text>
-  <text x="36" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800">V</text>
-  <text x="58" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800">dB</text>
+  <!-- Header Labels with Color Accents -->
+  <text x="-58" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">dB</text>
+  <text x="-36" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">mV</text>
+  <text x="36" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">V</text>
+  <text x="58" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">dB</text>
 
-  <!-- Left Bank (mV & dB) & Radial Ticks -->
-  <g fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <text x="-58" y="-34" text-anchor="end">-20</text><text x="-36" y="-34" text-anchor="end">100</text>
-    <line x1="-32" y1="-34" x2="-22" y2="-24" stroke="#475569" stroke-width="0.8"/>
-    <text x="-58" y="-22" text-anchor="end">-30</text><text x="-36" y="-22" text-anchor="end">30</text>
-    <line x1="-32" y1="-22" x2="-26" y2="-16" stroke="#475569" stroke-width="0.8"/>
-    <text x="-58" y="-10" text-anchor="end">-40</text><text x="-36" y="-10" text-anchor="end">10</text>
-    <line x1="-32" y1="-10" x2="-28" y2="-8" stroke="#475569" stroke-width="0.8"/>
-    <text x="-58" y="2" text-anchor="end">-50</text><text x="-36" y="2" text-anchor="end">3</text>
-    <line x1="-32" y1="2" x2="-28" y2="2" stroke="#475569" stroke-width="0.8"/>
-    <text x="-58" y="14" text-anchor="end">-60</text><text x="-36" y="14" text-anchor="end">1</text>
-    <line x1="-32" y1="14" x2="-28" y2="10" stroke="#475569" stroke-width="0.8"/>
-    <text x="-58" y="26" text-anchor="end">-70</text><text x="-36" y="26" text-anchor="end">.3</text>
-    <line x1="-32" y1="26" x2="-26" y2="18" stroke="#475569" stroke-width="0.8"/>
-    <text x="-58" y="38" text-anchor="end">-80</text><text x="-36" y="38" text-anchor="end">.1</text>
-    <line x1="-32" y1="38" x2="-22" y2="26" stroke="#475569" stroke-width="0.8"/>
+  <!-- Left Bank: Amber (Mic Level: -80 to -40 dB) & Cyan (Consumer: -30, -20 dB) -->
+  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
+    <!-- Range 6: 100 mV / -20 dB (Consumer: Cyan) -->
+    <g class="range-dial-tick zone-consumer" data-range-idx="6" data-tier="consumer">
+      <text x="-58" y="-34" text-anchor="end" fill="#0284c7">-20</text><text x="-36" y="-34" text-anchor="end" fill="#0284c7">100</text>
+      <line x1="-32" y1="-34" x2="-22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+    </g>
+    <!-- Range 5: 30 mV / -30 dB (Consumer: Cyan) -->
+    <g class="range-dial-tick zone-consumer" data-range-idx="5" data-tier="consumer">
+      <text x="-58" y="-22" text-anchor="end" fill="#0284c7">-30</text><text x="-36" y="-22" text-anchor="end" fill="#0284c7">30</text>
+      <line x1="-32" y1="-22" x2="-26" y2="-16" stroke="#0284c7" stroke-width="1.2"/>
+    </g>
+    <!-- Range 4: 10 mV / -40 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="4" data-tier="mic">
+      <text x="-58" y="-10" text-anchor="end" fill="#d97706">-40</text><text x="-36" y="-10" text-anchor="end" fill="#d97706">10</text>
+      <line x1="-32" y1="-10" x2="-28" y2="-8" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <!-- Range 3: 3 mV / -50 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="3" data-tier="mic">
+      <text x="-58" y="2" text-anchor="end" fill="#d97706">-50</text><text x="-36" y="2" text-anchor="end" fill="#d97706">3</text>
+      <line x1="-32" y1="2" x2="-28" y2="2" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <!-- Range 2: 1 mV / -60 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="2" data-tier="mic">
+      <text x="-58" y="14" text-anchor="end" fill="#d97706">-60</text><text x="-36" y="14" text-anchor="end" fill="#d97706">1</text>
+      <line x1="-32" y1="14" x2="-28" y2="10" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <!-- Range 1: .3 mV / -70 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="1" data-tier="mic">
+      <text x="-58" y="26" text-anchor="end" fill="#d97706">-70</text><text x="-36" y="26" text-anchor="end" fill="#d97706">.3</text>
+      <line x1="-32" y1="26" x2="-26" y2="18" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <!-- Range 0: .1 mV / -80 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="0" data-tier="mic">
+      <text x="-58" y="38" text-anchor="end" fill="#d97706">-80</text><text x="-36" y="38" text-anchor="end" fill="#d97706">.1</text>
+      <line x1="-32" y1="38" x2="-22" y2="26" stroke="#d97706" stroke-width="1.2"/>
+    </g>
   </g>
 
-  <!-- Right Bank (V & dB) & Radial Ticks -->
-  <g fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <text x="36" y="-34">.3</text><text x="58" y="-34">-10</text>
-    <line x1="32" y1="-34" x2="22" y2="-24" stroke="#475569" stroke-width="0.8"/>
-    <text x="36" y="-22">1</text><text x="58" y="-22">0</text>
-    <line x1="32" y1="-22" x2="26" y2="-16" stroke="#475569" stroke-width="0.8"/>
-    <text x="36" y="-10">3</text><text x="58" y="-10">+10</text>
-    <line x1="32" y1="-10" x2="28" y2="-8" stroke="#475569" stroke-width="0.8"/>
-    <text x="36" y="2">10</text><text x="58" y="2">+20</text>
-    <line x1="32" y1="2" x2="28" y2="2" stroke="#475569" stroke-width="0.8"/>
-    <text x="36" y="14">30</text><text x="58" y="14">+30</text>
-    <line x1="32" y1="14" x2="28" y2="10" stroke="#475569" stroke-width="0.8"/>
-    <text x="36" y="26">100</text><text x="58" y="26">+40</text>
-    <line x1="32" y1="26" x2="26" y2="18" stroke="#475569" stroke-width="0.8"/>
-    <text x="36" y="38">300</text><text x="58" y="38">+50</text>
-    <line x1="32" y1="38" x2="22" y2="26" stroke="#475569" stroke-width="0.8"/>
+  <!-- Right Bank: Cyan (.3V / -10dB), Green (Pro Line: 1V, 3V), Red (Headroom: 10V to 300V) -->
+  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
+    <!-- Range 7: .3 V / -10 dB (Consumer: Cyan) -->
+    <g class="range-dial-tick zone-consumer" data-range-idx="7" data-tier="consumer">
+      <text x="36" y="-34" fill="#0284c7">.3</text><text x="58" y="-34" fill="#0284c7">-10</text>
+      <line x1="32" y1="-34" x2="22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+    </g>
+    <!-- Range 8: 1 V / 0 dB (Pro Line: Green) -->
+    <g class="range-dial-tick zone-pro" data-range-idx="8" data-tier="pro">
+      <text x="36" y="-22" fill="#16a34a">1</text><text x="58" y="-22" fill="#16a34a">0</text>
+      <line x1="32" y1="-22" x2="26" y2="-16" stroke="#16a34a" stroke-width="1.2"/>
+    </g>
+    <!-- Range 9: 3 V / +10 dB (Pro Line Nominal: Green - Active Default) -->
+    <g class="range-dial-tick zone-pro active" data-range-idx="9" data-tier="pro">
+      <text x="36" y="-10" fill="#16a34a" font-weight="900">3</text><text x="58" y="-10" fill="#16a34a" font-weight="900">+10</text>
+      <line x1="32" y1="-10" x2="28" y2="-8" stroke="#16a34a" stroke-width="2"/>
+    </g>
+    <!-- Range 10: 10 V / +20 dB (Headroom: Red) -->
+    <g class="range-dial-tick zone-headroom" data-range-idx="10" data-tier="headroom">
+      <text x="36" y="2" fill="#dc2626">10</text><text x="58" y="2" fill="#dc2626">+20</text>
+      <line x1="32" y1="2" x2="28" y2="2" stroke="#dc2626" stroke-width="1.2"/>
+    </g>
+    <!-- Range 11: 30 V / +30 dB (Headroom: Red) -->
+    <g class="range-dial-tick zone-headroom" data-range-idx="11" data-tier="headroom">
+      <text x="36" y="14" fill="#dc2626">30</text><text x="58" y="14" fill="#dc2626">+30</text>
+      <line x1="32" y1="14" x2="28" y2="10" stroke="#dc2626" stroke-width="1.2"/>
+    </g>
+    <!-- Range 12: 100 V / +40 dB (Headroom: Red) -->
+    <g class="range-dial-tick zone-headroom" data-range-idx="12" data-tier="headroom">
+      <text x="36" y="26" fill="#dc2626">100</text><text x="58" y="26" fill="#dc2626">+40</text>
+      <line x1="32" y1="26" x2="26" y2="18" stroke="#dc2626" stroke-width="1.2"/>
+    </g>
+    <!-- Range 13: 300 V / +50 dB (Headroom: Red) -->
+    <g class="range-dial-tick zone-headroom" data-range-idx="13" data-tier="headroom">
+      <text x="36" y="38" fill="#dc2626">300</text><text x="58" y="38" fill="#dc2626">+50</text>
+      <line x1="32" y1="38" x2="22" y2="26" stroke="#dc2626" stroke-width="1.2"/>
+    </g>
   </g>
 
-  <!-- Large Fluted Phenolic Range Knob -->
-  <circle cx="0" cy="0" r="23" fill="url(#pyr-knob-base)" stroke="#090d16" stroke-width="2"/>
-  <circle cx="0" cy="0" r="21" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
-  <circle cx="0" cy="0" r="11" fill="url(#pyr-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
-  <line x1="0" y1="0" x2="16" y2="-12" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-  <circle cx="0" cy="0" r="3.5" fill="#f8fafc"/>
+  <!-- Interactive Rotary Knob Rotor -->
+  <g id="pyr-range-knob-rotor" class="range-knob-rotor" style="transform-origin: 0px 0px; cursor: grab; transform: rotate(-15.9deg);" data-range-idx="9">
+    <circle cx="0" cy="0" r="23" fill="url(#pyr-knob-base)" stroke="#090d16" stroke-width="2"/>
+    <circle cx="0" cy="0" r="21" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
+    <circle cx="0" cy="0" r="11" fill="url(#pyr-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
+    <!-- Range Pointer Indicator Line (pointing at angle along positive X) -->
+    <line x1="0" y1="0" x2="19" y2="0" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="3.5" fill="#f8fafc"/>
+  </g>
 </g>
 
 <!-- ================= Right: LINE Power Switch & Jewel Pilot Lamp ================= -->
@@ -2483,7 +2577,7 @@
     <stop offset="100%" stop-color="#64748b"/>
   </linearGradient>
 
-  <!-- HP Sage Grey Front Panel Texture -->
+  <!-- Sage Grey Front Panel Texture -->
   <linearGradient id="pp-panel-face" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0%" stop-color="#e2e7e0"/>
     <stop offset="3%" stop-color="#d6ddd4"/>
@@ -2570,7 +2664,7 @@
 <circle cx="369" cy="470" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
 <line x1="367" y1="470" x2="371" y2="470" stroke="#334155" stroke-width="0.75"/>
 
-<!-- HP Vintage Sage Grey Front Panel Faceplate -->
+<!-- Vintage Sage Grey Front Panel Faceplate -->
 <rect x="22" y="16" width="336" height="472" fill="url(#pp-panel-face)"/>
 <rect x="24" y="18" width="332" height="468" fill="none" stroke="#b2bbb0" stroke-width="1"/>
 
@@ -2581,8 +2675,25 @@
 <!-- Ivory Dial Plate -->
 <rect x="46" y="38" width="288" height="186" rx="3" fill="url(#pp-dial-cream)"/>
 <rect x="46" y="38" width="288" height="186" rx="3" fill="none" stroke="#d5cebd" stroke-width="0.75"/><!-- Anti-Parallax Mirrored Strip -->
-<path d="M 97.13,122.18 A 158,158 0 0,1 290.71,128.26 L 283.70,136.73 A 147,147 0 0,0 103.60,131.07 Z" fill="url(#pp-mirror-strip)" stroke="#64748b" stroke-width="0.5"/><path d="M 87.14,108.42 A 175,175 0 0,1 261.18,90.13" fill="none" stroke="#0f172a" stroke-width="1.2"/><path d="M 261.18,90.13 A 175,175 0 0,1 301.55,115.16" fill="none" stroke="#dc2626" stroke-width="2.5"/><text x="190" y="60" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.1em" text-anchor="middle">DECIBELS</text><text x="190" y="68" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle">1 mW 600 Ω</text><text x="190" y="152" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.08em" text-anchor="middle">R. M. S. VOLTS</text><text x="190" y="160" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5" font-weight="600" letter-spacing="0.05em" text-anchor="middle">AVERAGE RESPONDING</text><rect x="62" y="48" width="13" height="13" rx="2" fill="#006699"/>
-<text x="68.5" y="58" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="9" text-anchor="middle">hp</text><line x1="102.50" y1="98.45" x2="106.00" y2="104.51" stroke="#0f172a" stroke-width="1.3"/><text x="108.75" y="109.27" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-20</text><line x1="115.13" y1="91.83" x2="117.05" y2="95.89" stroke="#0f172a" stroke-width="0.75"/><line x1="138.76" y1="82.67" x2="140.81" y2="89.36" stroke="#0f172a" stroke-width="1.3"/><text x="142.42" y="94.62" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-10</text><line x1="145.56" y1="80.74" x2="146.70" y2="85.09" stroke="#0f172a" stroke-width="0.75"/><line x1="153.28" y1="78.90" x2="154.75" y2="85.74" stroke="#0f172a" stroke-width="1.3"/><text x="155.90" y="91.12" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-8</text><line x1="162.02" y1="77.25" x2="162.74" y2="81.69" stroke="#0f172a" stroke-width="0.75"/><line x1="171.92" y1="75.94" x2="172.65" y2="82.90" stroke="#0f172a" stroke-width="1.3"/><text x="173.22" y="88.37" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-6</text><line x1="183.10" y1="75.14" x2="183.28" y2="79.63" stroke="#0f172a" stroke-width="0.75"/><line x1="195.67" y1="75.09" x2="195.45" y2="82.09" stroke="#0f172a" stroke-width="1.3"/><text x="195.27" y="87.59" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-4</text><line x1="209.74" y1="76.12" x2="209.23" y2="80.59" stroke="#0f172a" stroke-width="0.75"/><line x1="225.37" y1="78.61" x2="223.95" y2="85.47" stroke="#0f172a" stroke-width="1.3"/><text x="222.84" y="90.85" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-2</text><line x1="242.55" y1="83.08" x2="241.20" y2="87.37" stroke="#0f172a" stroke-width="0.75"/><line x1="261.18" y1="90.13" x2="258.33" y2="96.52" stroke="#dc2626" stroke-width="1.3"/><text x="256.09" y="101.55" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="280.97" y1="100.50" x2="277.33" y2="106.48" stroke="#dc2626" stroke-width="1.3"/><text x="274.47" y="111.18" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+1</text><line x1="301.40" y1="115.03" x2="296.94" y2="120.43" stroke="#dc2626" stroke-width="1.3"/><text x="293.44" y="124.68" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+2</text><path d="M 105.36,133.50 A 144,144 0 0,1 248.57,118.45" fill="none" stroke="#0f172a" stroke-width="1.0"/><line x1="105.36" y1="133.50" x2="108.89" y2="138.36" stroke="#0f172a" stroke-width="1.0"/><text x="111.82" y="142.40" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="118.00" y1="125.29" x2="121.00" y2="130.49" stroke="#0f172a" stroke-width="1.0"/><line x1="131.43" y1="118.45" x2="133.87" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="135.90" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.2</text><line x1="145.50" y1="113.05" x2="147.36" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="160.06" y1="109.15" x2="161.31" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="162.35" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.4</text><line x1="174.95" y1="106.79" x2="175.58" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="190.00" y1="106.00" x2="190.00" y2="112.00" stroke="#0f172a" stroke-width="1.0"/><text x="190.00" y="117.00" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.6</text><line x1="205.05" y1="106.79" x2="204.42" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="219.94" y1="109.15" x2="218.69" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="217.65" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.8</text><line x1="234.50" y1="113.05" x2="232.64" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="248.57" y1="118.45" x2="246.13" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="244.10" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">1.0</text><line x1="107.82" y1="131.75" x2="109.81" y2="134.63" stroke="#475569" stroke-width="0.5"/><line x1="110.31" y1="130.06" x2="112.25" y2="132.97" stroke="#475569" stroke-width="0.5"/><line x1="112.84" y1="128.42" x2="114.72" y2="131.37" stroke="#475569" stroke-width="0.5"/><line x1="115.40" y1="126.83" x2="117.22" y2="129.82" stroke="#475569" stroke-width="0.5"/><line x1="120.63" y1="123.81" x2="122.31" y2="126.88" stroke="#475569" stroke-width="0.5"/><line x1="123.29" y1="122.39" x2="124.91" y2="125.49" stroke="#475569" stroke-width="0.5"/><line x1="125.97" y1="121.02" x2="127.53" y2="124.15" stroke="#475569" stroke-width="0.5"/><line x1="128.69" y1="119.70" x2="130.18" y2="122.87" stroke="#475569" stroke-width="0.5"/><line x1="134.20" y1="117.25" x2="135.55" y2="120.48" stroke="#475569" stroke-width="0.5"/><line x1="136.99" y1="116.11" x2="138.28" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="139.81" y1="115.03" x2="141.03" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="142.64" y1="114.01" x2="143.79" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="148.38" y1="112.15" x2="149.39" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="151.28" y1="111.30" x2="152.22" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="154.19" y1="110.52" x2="155.06" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="157.12" y1="109.80" x2="157.92" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="163.02" y1="108.55" x2="163.67" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="165.99" y1="108.02" x2="166.57" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="168.96" y1="107.54" x2="169.48" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="171.95" y1="107.14" x2="172.39" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="177.95" y1="106.51" x2="178.24" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="180.96" y1="106.28" x2="181.18" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="183.97" y1="106.13" x2="184.12" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="186.98" y1="106.03" x2="187.06" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="193.02" y1="106.03" x2="192.94" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="196.03" y1="106.13" x2="195.88" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="199.04" y1="106.28" x2="198.82" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="202.05" y1="106.51" x2="201.76" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="208.05" y1="107.14" x2="207.61" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="211.04" y1="107.54" x2="210.52" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="214.01" y1="108.02" x2="213.43" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="216.98" y1="108.55" x2="216.33" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="222.88" y1="109.80" x2="222.08" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="225.81" y1="110.52" x2="224.94" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="228.72" y1="111.30" x2="227.78" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="231.62" y1="112.15" x2="230.61" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="237.36" y1="114.01" x2="236.21" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="240.19" y1="115.03" x2="238.97" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="243.01" y1="116.11" x2="241.72" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="245.80" y1="117.25" x2="244.45" y2="120.48" stroke="#475569" stroke-width="0.5"/><path d="M 115.94,148.06 A 126,126 0 0,1 241.25,134.89" fill="none" stroke="#0f172a" stroke-width="0.8"/><line x1="115.94" y1="148.06" x2="118.88" y2="152.11" stroke="#0f172a" stroke-width="0.9"/><text x="121.52" y="155.75" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="134.77" y1="136.75" x2="136.96" y2="141.25" stroke="#0f172a" stroke-width="0.9"/><text x="138.93" y="145.29" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0.5</text><line x1="155.27" y1="128.88" x2="156.65" y2="133.69" stroke="#0f172a" stroke-width="0.9"/><text x="157.89" y="138.01" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><line x1="176.83" y1="124.69" x2="177.35" y2="129.66" stroke="#0f172a" stroke-width="0.9"/><text x="177.82" y="134.14" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1.5</text><line x1="198.79" y1="124.31" x2="198.44" y2="129.29" stroke="#0f172a" stroke-width="0.9"/><text x="198.13" y="133.78" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><line x1="220.48" y1="127.74" x2="219.27" y2="132.59" stroke="#0f172a" stroke-width="0.9"/><text x="218.18" y="136.96" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2.5</text><line x1="241.25" y1="134.89" x2="239.22" y2="139.46" stroke="#0f172a" stroke-width="0.9"/><text x="237.38" y="143.57" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><!-- Galvanometer Pointer Needle -->
+<path d="M 97.13,122.18 A 158,158 0 0,1 290.71,128.26 L 283.70,136.73 A 147,147 0 0,0 103.60,131.07 Z" fill="url(#pp-mirror-strip)" stroke="#64748b" stroke-width="0.5"/><!-- Aligned Dynamic Range Pyramid Color Zone Curves -->
+<path id="pp-scale-zone-mic" class="meter-scale-zone zone-mic" d="M 100.50,94.98 A 179,179 0 0,1 137.59,78.85" fill="none" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round" title="Microphone Level (-60 to -40 dBu)"/>
+<path id="pp-scale-zone-consumer" class="meter-scale-zone zone-consumer" d="M 137.59,78.85 A 179,179 0 0,1 210.19,72.14" fill="none" stroke="#06b6d4" stroke-width="3.5" title="Consumer Line Level (-10 dBV)"/>
+<path id="pp-scale-zone-pro" class="meter-scale-zone zone-pro active" d="M 210.19,72.14 A 179,179 0 0,1 283.05,97.09" fill="none" stroke="#10b981" stroke-width="4.5" title="Professional Line Level (+4 dBu / 0 VU)"/>
+<path id="pp-scale-zone-headroom" class="meter-scale-zone zone-headroom" d="M 283.05,97.09 A 179,179 0 0,1 304.10,112.08" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round" title="Maximum System Headroom Ceiling (+24 to +28 dBu)"/><path d="M 87.14,108.42 A 175,175 0 0,1 261.18,90.13" fill="none" stroke="#0f172a" stroke-width="1.2"/><path d="M 261.18,90.13 A 175,175 0 0,1 301.55,115.16" fill="none" stroke="#dc2626" stroke-width="2.5"/><text x="190" y="58" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.1em" text-anchor="middle">DECIBELS</text><text x="190" y="66" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle">1 mW 600 Ω</text><text x="190" y="152" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.08em" text-anchor="middle">R. M. S. VOLTS</text><text x="190" y="160" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5" font-weight="600" letter-spacing="0.05em" text-anchor="middle">AVERAGE RESPONDING</text><rect x="62" y="48" width="13" height="13" rx="2" fill="#006699"/>
+<text x="68.5" y="58" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="9" text-anchor="middle">hp</text><line x1="102.50" y1="98.45" x2="106.00" y2="104.51" stroke="#0f172a" stroke-width="1.3"/><text x="108.75" y="109.27" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-20</text><line x1="115.13" y1="91.83" x2="117.05" y2="95.89" stroke="#0f172a" stroke-width="0.75"/><line x1="138.76" y1="82.67" x2="140.81" y2="89.36" stroke="#0f172a" stroke-width="1.3"/><text x="142.42" y="94.62" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-10</text><line x1="145.56" y1="80.74" x2="146.70" y2="85.09" stroke="#0f172a" stroke-width="0.75"/><line x1="153.28" y1="78.90" x2="154.75" y2="85.74" stroke="#0f172a" stroke-width="1.3"/><text x="155.90" y="91.12" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-8</text><line x1="162.02" y1="77.25" x2="162.74" y2="81.69" stroke="#0f172a" stroke-width="0.75"/><line x1="171.92" y1="75.94" x2="172.65" y2="82.90" stroke="#0f172a" stroke-width="1.3"/><text x="173.22" y="88.37" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-6</text><line x1="183.10" y1="75.14" x2="183.28" y2="79.63" stroke="#0f172a" stroke-width="0.75"/><line x1="195.67" y1="75.09" x2="195.45" y2="82.09" stroke="#0f172a" stroke-width="1.3"/><text x="195.27" y="87.59" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-4</text><line x1="209.74" y1="76.12" x2="209.23" y2="80.59" stroke="#0f172a" stroke-width="0.75"/><line x1="225.37" y1="78.61" x2="223.95" y2="85.47" stroke="#0f172a" stroke-width="1.3"/><text x="222.84" y="90.85" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-2</text><line x1="242.55" y1="83.08" x2="241.20" y2="87.37" stroke="#0f172a" stroke-width="0.75"/><line x1="261.18" y1="90.13" x2="258.33" y2="96.52" stroke="#dc2626" stroke-width="1.3"/><text x="256.09" y="101.55" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="280.97" y1="100.50" x2="277.33" y2="106.48" stroke="#dc2626" stroke-width="1.3"/><text x="274.47" y="111.18" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+1</text><line x1="301.40" y1="115.03" x2="296.94" y2="120.43" stroke="#dc2626" stroke-width="1.3"/><text x="293.44" y="124.68" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+2</text><path d="M 105.36,133.50 A 144,144 0 0,1 248.57,118.45" fill="none" stroke="#0f172a" stroke-width="1.0"/><line x1="105.36" y1="133.50" x2="108.89" y2="138.36" stroke="#0f172a" stroke-width="1.0"/><text x="111.82" y="142.40" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="118.00" y1="125.29" x2="121.00" y2="130.49" stroke="#0f172a" stroke-width="1.0"/><line x1="131.43" y1="118.45" x2="133.87" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="135.90" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.2</text><line x1="145.50" y1="113.05" x2="147.36" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="160.06" y1="109.15" x2="161.31" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="162.35" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.4</text><line x1="174.95" y1="106.79" x2="175.58" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="190.00" y1="106.00" x2="190.00" y2="112.00" stroke="#0f172a" stroke-width="1.0"/><text x="190.00" y="117.00" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.6</text><line x1="205.05" y1="106.79" x2="204.42" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="219.94" y1="109.15" x2="218.69" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="217.65" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.8</text><line x1="234.50" y1="113.05" x2="232.64" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="248.57" y1="118.45" x2="246.13" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="244.10" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">1.0</text><line x1="107.82" y1="131.75" x2="109.81" y2="134.63" stroke="#475569" stroke-width="0.5"/><line x1="110.31" y1="130.06" x2="112.25" y2="132.97" stroke="#475569" stroke-width="0.5"/><line x1="112.84" y1="128.42" x2="114.72" y2="131.37" stroke="#475569" stroke-width="0.5"/><line x1="115.40" y1="126.83" x2="117.22" y2="129.82" stroke="#475569" stroke-width="0.5"/><line x1="120.63" y1="123.81" x2="122.31" y2="126.88" stroke="#475569" stroke-width="0.5"/><line x1="123.29" y1="122.39" x2="124.91" y2="125.49" stroke="#475569" stroke-width="0.5"/><line x1="125.97" y1="121.02" x2="127.53" y2="124.15" stroke="#475569" stroke-width="0.5"/><line x1="128.69" y1="119.70" x2="130.18" y2="122.87" stroke="#475569" stroke-width="0.5"/><line x1="134.20" y1="117.25" x2="135.55" y2="120.48" stroke="#475569" stroke-width="0.5"/><line x1="136.99" y1="116.11" x2="138.28" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="139.81" y1="115.03" x2="141.03" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="142.64" y1="114.01" x2="143.79" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="148.38" y1="112.15" x2="149.39" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="151.28" y1="111.30" x2="152.22" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="154.19" y1="110.52" x2="155.06" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="157.12" y1="109.80" x2="157.92" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="163.02" y1="108.55" x2="163.67" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="165.99" y1="108.02" x2="166.57" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="168.96" y1="107.54" x2="169.48" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="171.95" y1="107.14" x2="172.39" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="177.95" y1="106.51" x2="178.24" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="180.96" y1="106.28" x2="181.18" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="183.97" y1="106.13" x2="184.12" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="186.98" y1="106.03" x2="187.06" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="193.02" y1="106.03" x2="192.94" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="196.03" y1="106.13" x2="195.88" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="199.04" y1="106.28" x2="198.82" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="202.05" y1="106.51" x2="201.76" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="208.05" y1="107.14" x2="207.61" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="211.04" y1="107.54" x2="210.52" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="214.01" y1="108.02" x2="213.43" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="216.98" y1="108.55" x2="216.33" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="222.88" y1="109.80" x2="222.08" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="225.81" y1="110.52" x2="224.94" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="228.72" y1="111.30" x2="227.78" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="231.62" y1="112.15" x2="230.61" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="237.36" y1="114.01" x2="236.21" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="240.19" y1="115.03" x2="238.97" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="243.01" y1="116.11" x2="241.72" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="245.80" y1="117.25" x2="244.45" y2="120.48" stroke="#475569" stroke-width="0.5"/><path d="M 115.94,148.06 A 126,126 0 0,1 241.25,134.89" fill="none" stroke="#0f172a" stroke-width="0.8"/><line x1="115.94" y1="148.06" x2="118.88" y2="152.11" stroke="#0f172a" stroke-width="0.9"/><text x="121.52" y="155.75" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="134.77" y1="136.75" x2="136.96" y2="141.25" stroke="#0f172a" stroke-width="0.9"/><text x="138.93" y="145.29" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0.5</text><line x1="155.27" y1="128.88" x2="156.65" y2="133.69" stroke="#0f172a" stroke-width="0.9"/><text x="157.89" y="138.01" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><line x1="176.83" y1="124.69" x2="177.35" y2="129.66" stroke="#0f172a" stroke-width="0.9"/><text x="177.82" y="134.14" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1.5</text><line x1="198.79" y1="124.31" x2="198.44" y2="129.29" stroke="#0f172a" stroke-width="0.9"/><text x="198.13" y="133.78" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><line x1="220.48" y1="127.74" x2="219.27" y2="132.59" stroke="#0f172a" stroke-width="0.9"/><text x="218.18" y="136.96" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2.5</text><line x1="241.25" y1="134.89" x2="239.22" y2="139.46" stroke="#0f172a" stroke-width="0.9"/><text x="237.38" y="143.57" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><!-- Aligned Pyramid Domain Color Badges Ribbon -->
+<g class="meter-pyramid-legend" transform="translate(190, 185)">
+  <rect x="-132" y="0" width="62" height="11" rx="2" fill="rgba(245, 158, 11, 0.12)" stroke="#d97706" stroke-width="0.75"/>
+  <text x="-101" y="8" fill="#d97706" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">MIC (-60..-40)</text>
+
+  <rect x="-67" y="0" width="62" height="11" rx="2" fill="rgba(6, 182, 212, 0.12)" stroke="#0284c7" stroke-width="0.75"/>
+  <text x="-36" y="8" fill="#0284c7" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">CONSUMER (-10)</text>
+
+  <rect x="-2" y="0" width="65" height="11" rx="2" fill="rgba(16, 185, 129, 0.15)" stroke="#16a34a" stroke-width="0.85"/>
+  <text x="30.5" y="8" fill="#16a34a" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">PRO (+4 / 0VU)</text>
+
+  <rect x="66" y="0" width="66" height="11" rx="2" fill="rgba(239, 68, 68, 0.15)" stroke="#dc2626" stroke-width="0.85"/>
+  <text x="99" y="8" fill="#dc2626" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">HEADROOM (+24+)</text>
+</g><!-- Galvanometer Pointer Needle -->
 <g id="pp-vu-needle" class="hp-galvo-needle" filter="url(#pp-needle-shadow)" transform="rotate(-36 190 250)">
   <!-- Counterweight Tail -->
   <path d="M 188.5,250 L 187,268 A 3,3 0 0,0 193,268 L 191.5,250 Z" fill="#1e293b"/>
@@ -2599,13 +2710,13 @@
 <!-- Mechanical Zero Screw -->
 <circle cx="190" cy="230" r="7" fill="#cbd5e1" stroke="#334155" stroke-width="1"/>
 <circle cx="190" cy="230" r="5.5" fill="#94a3b8"/>
-<line x1="185" y1="230" x2="195" y2="230" stroke="#1e293b" stroke-width="1.2"/><!-- Lower Panel Silkscreen Header -->
+<line x1="185" y1="230" x2="195" y2="230" stroke="#1e293b" stroke-width="1.2"/><!-- Lower Panel Silkscreen Header: APK Precision AC Voltmeter -->
 <g transform="translate(42, 252)">
-  <!-- HP Logo -->
-  <rect x="0" y="0" width="18" height="18" rx="3" fill="#006699"/>
-  <text x="9" y="13" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="12" text-anchor="middle">hp</text>
-  <text x="26" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="0.1em">HEWLETT • PACKARD</text>
-  <text x="180" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="0.08em">400FL AC VOLTMETER</text>
+  <!-- APK Cyan Badge Logo -->
+  <rect x="0" y="0" width="24" height="18" rx="3" fill="#06b6d4"/>
+  <text x="12" y="13" fill="#040711" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="11" text-anchor="middle">APK</text>
+  <text x="32" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.08em">ANTHONY PETER KUZUB</text>
+  <text x="175" y="13" fill="#0284c7" font-family="'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="800" letter-spacing="0.06em">PRECISION AC VOLTMETER</text>
   <text x="96" y="25" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="0.05em">IN ~ 100kHz L.P. FILTER ~ OUT</text>
 </g>
 
@@ -2643,58 +2754,103 @@
   </g>
 </g>
 
-<!-- ================= Center: RANGE Rotary Selector ================= -->
+<!-- ================= Center: RANGE Rotary Selector with Pyramid Color Alignment ================= -->
 <g transform="translate(190, 365)">
   <text x="0" y="-62" fill="#0f172a" font-family="Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.1em" text-anchor="middle">RANGE</text>
   
-  <!-- Header Labels -->
-  <text x="-58" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">dB</text>
-  <text x="-36" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">mV</text>
-  <text x="36" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800">V</text>
-  <text x="58" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800">dB</text>
+  <!-- Header Labels with Color Accents -->
+  <text x="-58" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">dB</text>
+  <text x="-36" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">mV</text>
+  <text x="36" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">V</text>
+  <text x="58" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">dB</text>
 
-  <!-- Left Bank (mV & dB) & Radial Ticks -->
-  <g fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <text x="-58" y="-34" text-anchor="end">-20</text><text x="-36" y="-34" text-anchor="end">100</text>
-    <line x1="-32" y1="-34" x2="-22" y2="-24" stroke="#475569" stroke-width="0.8"/>
-    <text x="-58" y="-22" text-anchor="end">-30</text><text x="-36" y="-22" text-anchor="end">30</text>
-    <line x1="-32" y1="-22" x2="-26" y2="-16" stroke="#475569" stroke-width="0.8"/>
-    <text x="-58" y="-10" text-anchor="end">-40</text><text x="-36" y="-10" text-anchor="end">10</text>
-    <line x1="-32" y1="-10" x2="-28" y2="-8" stroke="#475569" stroke-width="0.8"/>
-    <text x="-58" y="2" text-anchor="end">-50</text><text x="-36" y="2" text-anchor="end">3</text>
-    <line x1="-32" y1="2" x2="-28" y2="2" stroke="#475569" stroke-width="0.8"/>
-    <text x="-58" y="14" text-anchor="end">-60</text><text x="-36" y="14" text-anchor="end">1</text>
-    <line x1="-32" y1="14" x2="-28" y2="10" stroke="#475569" stroke-width="0.8"/>
-    <text x="-58" y="26" text-anchor="end">-70</text><text x="-36" y="26" text-anchor="end">.3</text>
-    <line x1="-32" y1="26" x2="-26" y2="18" stroke="#475569" stroke-width="0.8"/>
-    <text x="-58" y="38" text-anchor="end">-80</text><text x="-36" y="38" text-anchor="end">.1</text>
-    <line x1="-32" y1="38" x2="-22" y2="26" stroke="#475569" stroke-width="0.8"/>
+  <!-- Left Bank: Amber (Mic Level: -80 to -40 dB) & Cyan (Consumer: -30, -20 dB) -->
+  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
+    <!-- Range 6: 100 mV / -20 dB (Consumer: Cyan) -->
+    <g class="range-dial-tick zone-consumer" data-range-idx="6" data-tier="consumer">
+      <text x="-58" y="-34" text-anchor="end" fill="#0284c7">-20</text><text x="-36" y="-34" text-anchor="end" fill="#0284c7">100</text>
+      <line x1="-32" y1="-34" x2="-22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+    </g>
+    <!-- Range 5: 30 mV / -30 dB (Consumer: Cyan) -->
+    <g class="range-dial-tick zone-consumer" data-range-idx="5" data-tier="consumer">
+      <text x="-58" y="-22" text-anchor="end" fill="#0284c7">-30</text><text x="-36" y="-22" text-anchor="end" fill="#0284c7">30</text>
+      <line x1="-32" y1="-22" x2="-26" y2="-16" stroke="#0284c7" stroke-width="1.2"/>
+    </g>
+    <!-- Range 4: 10 mV / -40 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="4" data-tier="mic">
+      <text x="-58" y="-10" text-anchor="end" fill="#d97706">-40</text><text x="-36" y="-10" text-anchor="end" fill="#d97706">10</text>
+      <line x1="-32" y1="-10" x2="-28" y2="-8" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <!-- Range 3: 3 mV / -50 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="3" data-tier="mic">
+      <text x="-58" y="2" text-anchor="end" fill="#d97706">-50</text><text x="-36" y="2" text-anchor="end" fill="#d97706">3</text>
+      <line x1="-32" y1="2" x2="-28" y2="2" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <!-- Range 2: 1 mV / -60 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="2" data-tier="mic">
+      <text x="-58" y="14" text-anchor="end" fill="#d97706">-60</text><text x="-36" y="14" text-anchor="end" fill="#d97706">1</text>
+      <line x1="-32" y1="14" x2="-28" y2="10" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <!-- Range 1: .3 mV / -70 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="1" data-tier="mic">
+      <text x="-58" y="26" text-anchor="end" fill="#d97706">-70</text><text x="-36" y="26" text-anchor="end" fill="#d97706">.3</text>
+      <line x1="-32" y1="26" x2="-26" y2="18" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <!-- Range 0: .1 mV / -80 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="0" data-tier="mic">
+      <text x="-58" y="38" text-anchor="end" fill="#d97706">-80</text><text x="-36" y="38" text-anchor="end" fill="#d97706">.1</text>
+      <line x1="-32" y1="38" x2="-22" y2="26" stroke="#d97706" stroke-width="1.2"/>
+    </g>
   </g>
 
-  <!-- Right Bank (V & dB) & Radial Ticks -->
-  <g fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <text x="36" y="-34">.3</text><text x="58" y="-34">-10</text>
-    <line x1="32" y1="-34" x2="22" y2="-24" stroke="#475569" stroke-width="0.8"/>
-    <text x="36" y="-22">1</text><text x="58" y="-22">0</text>
-    <line x1="32" y1="-22" x2="26" y2="-16" stroke="#475569" stroke-width="0.8"/>
-    <text x="36" y="-10">3</text><text x="58" y="-10">+10</text>
-    <line x1="32" y1="-10" x2="28" y2="-8" stroke="#475569" stroke-width="0.8"/>
-    <text x="36" y="2">10</text><text x="58" y="2">+20</text>
-    <line x1="32" y1="2" x2="28" y2="2" stroke="#475569" stroke-width="0.8"/>
-    <text x="36" y="14">30</text><text x="58" y="14">+30</text>
-    <line x1="32" y1="14" x2="28" y2="10" stroke="#475569" stroke-width="0.8"/>
-    <text x="36" y="26">100</text><text x="58" y="26">+40</text>
-    <line x1="32" y1="26" x2="26" y2="18" stroke="#475569" stroke-width="0.8"/>
-    <text x="36" y="38">300</text><text x="58" y="38">+50</text>
-    <line x1="32" y1="38" x2="22" y2="26" stroke="#475569" stroke-width="0.8"/>
+  <!-- Right Bank: Cyan (.3V / -10dB), Green (Pro Line: 1V, 3V), Red (Headroom: 10V to 300V) -->
+  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
+    <!-- Range 7: .3 V / -10 dB (Consumer: Cyan) -->
+    <g class="range-dial-tick zone-consumer" data-range-idx="7" data-tier="consumer">
+      <text x="36" y="-34" fill="#0284c7">.3</text><text x="58" y="-34" fill="#0284c7">-10</text>
+      <line x1="32" y1="-34" x2="22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+    </g>
+    <!-- Range 8: 1 V / 0 dB (Pro Line: Green) -->
+    <g class="range-dial-tick zone-pro" data-range-idx="8" data-tier="pro">
+      <text x="36" y="-22" fill="#16a34a">1</text><text x="58" y="-22" fill="#16a34a">0</text>
+      <line x1="32" y1="-22" x2="26" y2="-16" stroke="#16a34a" stroke-width="1.2"/>
+    </g>
+    <!-- Range 9: 3 V / +10 dB (Pro Line Nominal: Green - Active Default) -->
+    <g class="range-dial-tick zone-pro active" data-range-idx="9" data-tier="pro">
+      <text x="36" y="-10" fill="#16a34a" font-weight="900">3</text><text x="58" y="-10" fill="#16a34a" font-weight="900">+10</text>
+      <line x1="32" y1="-10" x2="28" y2="-8" stroke="#16a34a" stroke-width="2"/>
+    </g>
+    <!-- Range 10: 10 V / +20 dB (Headroom: Red) -->
+    <g class="range-dial-tick zone-headroom" data-range-idx="10" data-tier="headroom">
+      <text x="36" y="2" fill="#dc2626">10</text><text x="58" y="2" fill="#dc2626">+20</text>
+      <line x1="32" y1="2" x2="28" y2="2" stroke="#dc2626" stroke-width="1.2"/>
+    </g>
+    <!-- Range 11: 30 V / +30 dB (Headroom: Red) -->
+    <g class="range-dial-tick zone-headroom" data-range-idx="11" data-tier="headroom">
+      <text x="36" y="14" fill="#dc2626">30</text><text x="58" y="14" fill="#dc2626">+30</text>
+      <line x1="32" y1="14" x2="28" y2="10" stroke="#dc2626" stroke-width="1.2"/>
+    </g>
+    <!-- Range 12: 100 V / +40 dB (Headroom: Red) -->
+    <g class="range-dial-tick zone-headroom" data-range-idx="12" data-tier="headroom">
+      <text x="36" y="26" fill="#dc2626">100</text><text x="58" y="26" fill="#dc2626">+40</text>
+      <line x1="32" y1="26" x2="26" y2="18" stroke="#dc2626" stroke-width="1.2"/>
+    </g>
+    <!-- Range 13: 300 V / +50 dB (Headroom: Red) -->
+    <g class="range-dial-tick zone-headroom" data-range-idx="13" data-tier="headroom">
+      <text x="36" y="38" fill="#dc2626">300</text><text x="58" y="38" fill="#dc2626">+50</text>
+      <line x1="32" y1="38" x2="22" y2="26" stroke="#dc2626" stroke-width="1.2"/>
+    </g>
   </g>
 
-  <!-- Large Fluted Phenolic Range Knob -->
-  <circle cx="0" cy="0" r="23" fill="url(#pp-knob-base)" stroke="#090d16" stroke-width="2"/>
-  <circle cx="0" cy="0" r="21" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
-  <circle cx="0" cy="0" r="11" fill="url(#pp-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
-  <line x1="0" y1="0" x2="16" y2="-12" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-  <circle cx="0" cy="0" r="3.5" fill="#f8fafc"/>
+  <!-- Interactive Rotary Knob Rotor -->
+  <g id="pp-range-knob-rotor" class="range-knob-rotor" style="transform-origin: 0px 0px; cursor: grab; transform: rotate(-15.9deg);" data-range-idx="9">
+    <circle cx="0" cy="0" r="23" fill="url(#pp-knob-base)" stroke="#090d16" stroke-width="2"/>
+    <circle cx="0" cy="0" r="21" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
+    <circle cx="0" cy="0" r="11" fill="url(#pp-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
+    <!-- Range Pointer Indicator Line (pointing at angle along positive X) -->
+    <line x1="0" y1="0" x2="19" y2="0" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="3.5" fill="#f8fafc"/>
+  </g>
 </g>
 
 <!-- ================= Right: LINE Power Switch & Jewel Pilot Lamp ================= -->
@@ -4915,6 +5071,14 @@
         <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 0.4rem 0.8rem; margin-top: 0.5rem; font-size: 0.82rem; color: #fbbf24;">
           <span>📁</span>
           <strong>Posted to SC-05-05 Repository:</strong> October 3, 2025 &bull; by Richard Cabot, Chair &bull; for AES SC-05-05 Group Members
+        </div>
+        <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="#contributor-cabot" class="alignment-contributor-badge"><span>👤 Archive Compiler:</span> <strong>Richard Cabot, Chair</strong> &rarr;</a>
+          <a href="#contributor-olson" class="alignment-contributor-badge"><span>👤 Standards Governance:</span> <strong>Bruce Olson (AESSC Chair)</strong> &rarr;</a>
+          <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Co-Author:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
+          <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 Seminal Papers:</span> <strong>Bill Whitlock</strong> &rarr;</a>
+          <a href="#contributor-hess" class="alignment-contributor-badge"><span>👤 Working Group Drafts:</span> <strong>Richard L. Hess</strong> &rarr;</a>
+        </div>
         </div>
         <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
           <a href="#contributor-cabot" class="alignment-contributor-badge"><span>👤 Archive Compiler:</span> <strong>Richard Cabot, Chair</strong> &rarr;</a>

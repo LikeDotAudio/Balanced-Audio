@@ -4951,3 +4951,160 @@ body.probe-cursor-active * {
   box-sizing: border-box !important;
 }
 
+/* =====================================================================
+   Dynamic Range Pyramid & Calibrated Voltmeter Bidirectional Alignment
+   ===================================================================== */
+.pyramid-tier {
+  cursor: pointer;
+  transition: opacity 0.25s ease, filter 0.25s ease, transform 0.2s ease;
+  outline: none;
+}
+
+.pyramid-tier:hover {
+  filter: brightness(1.25) drop-shadow(0 0 8px currentColor);
+}
+
+.pyramid-tier.tier-active {
+  opacity: 1 !important;
+  filter: brightness(1.35) drop-shadow(0 0 12px currentColor);
+}
+
+.pyramid-tier.tier-active .pyramid-tier-poly,
+.pyramid-tier.tier-active polygon {
+  stroke-width: 3.5px !important;
+}
+
+.pyramid-tier.tier-dimmed {
+  opacity: 0.35;
+  filter: grayscale(0.5);
+}
+
+.pyramid-tier.tier-dimmed:hover {
+  opacity: 0.85;
+  filter: grayscale(0.1);
+}
+
+/* Pyramid & Voltmeter Alignment HUD */
+.pyramid-meter-alignment-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  background: #090e18;
+  border: 1.5px solid #1e293b;
+  border-radius: 6px;
+  padding: 0.65rem 1rem;
+  margin-top: 0.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.pyr-hud-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.pyr-hud-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.5rem;
+  background: #1e293b;
+  color: #94a3b8;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  text-transform: uppercase;
+}
+
+.pyr-hud-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.pyr-hud-range-pill {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.15rem 0.55rem;
+  background: #0f172a;
+  border: 1.5px solid #10b981;
+  color: #10b981;
+  border-radius: 4px;
+  transition: all 0.25s ease;
+}
+
+.pyr-hud-arrow {
+  color: #475569;
+  font-weight: 900;
+}
+
+.pyr-hud-indicator-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  transition: all 0.25s ease;
+}
+
+.pyr-hud-domain-name {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #34d399;
+  letter-spacing: 0.03em;
+  transition: color 0.25s ease;
+}
+
+.pyr-hud-right {
+  display: flex;
+  align-items: center;
+}
+
+.pyr-hud-hint {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* Meter Dial Face Scale Curve Zone Highlighting */
+.meter-scale-zone {
+  opacity: 0.25;
+  transition: opacity 0.25s ease, stroke-width 0.25s ease, filter 0.25s ease;
+}
+
+.meter-scale-zone.active {
+  opacity: 1 !important;
+  stroke-width: 5.5px !important;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.range-dial-tick {
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.range-dial-tick:hover text {
+  font-weight: 900;
+  filter: drop-shadow(0 0 3px currentColor);
+}
+
+.range-dial-tick.active text {
+  font-weight: 900;
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+.range-dial-tick.active line {
+  stroke-width: 2.4px;
+  filter: drop-shadow(0 0 3px currentColor);
+}
+
+

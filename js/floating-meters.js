@@ -108,26 +108,37 @@ class FloatingMeterDock {
 
       <!-- Instrument View Switcher Tabs -->
       <div class="dock-view-tabs">
-        <button id="dock-tab-scope" class="dock-tab-btn active">📈 CRT O-Scope</button>
-        <button id="dock-tab-dmm" class="dock-tab-btn">📊 DMM &amp; Voltmeter</button>
+        <button id="dock-tab-scope" class="dock-tab-btn active">📈 4-CH Scope</button>
+        <button id="dock-tab-dmm" class="dock-tab-btn">📊 Lucky DMM</button>
+        <button id="dock-tab-hp353a" class="dock-tab-btn">🎛️ HP 353A</button>
+        <button id="dock-tab-chart" class="dock-tab-btn">📉 Trend Graph</button>
         <button id="dock-tab-dual" class="dock-tab-btn">🔲 Dual View</button>
       </div>
 
-      <!-- ================= 1. CRT Oscilloscope Bay ================= -->
+      <!-- ================= 1. CRT Oscilloscope Bay (4-Channel) ================= -->
       <div id="dock-panel-scope" class="dock-instrument-panel">
         <div class="dock-scope-card">
           <div class="dock-meter-label">
             <span style="color: #4ade80; display: flex; align-items: center; gap: 5px;">
               <span class="crt-glow-dot"></span>
-              TEKTRONIX / HP 1970 CRT SCOPE
+              TEKTRONIX / HP 4-CH CRT SCOPE
             </span>
             <span id="dock-scope-telemetry-badge" class="badge-mini green">1.0V/div &bull; 0.5ms</span>
           </div>
           <div class="dock-scope-bezel">
             <canvas id="dock-scope-canvas" width="300" height="150" class="dock-scope-canvas"></canvas>
           </div>
+
+          <!-- 4-Channel Trace Toggles -->
+          <div class="scope-ch-toggles">
+            <button class="scope-ch-btn ch1 active" data-ch="1" title="CH1: Generator Audio Drive Reference (Yellow)">CH1: Ref</button>
+            <button class="scope-ch-btn ch2 active" data-ch="2" title="CH2: Pin 2 Hot Output (Cyan)">CH2: +VE</button>
+            <button class="scope-ch-btn ch3 active" data-ch="3" title="CH3: Pin 3 Cold Output (Pink)">CH3: -VE</button>
+            <button class="scope-ch-btn ch4 active" data-ch="4" title="CH4: Differential Load Summation (Green)">CH4: Diff</button>
+          </div>
+
           <!-- Oscilloscope Front-Panel Controls -->
-          <div class="dock-scope-controls">
+          <div class="dock-scope-controls" style="margin-top: 0.35rem;">
             <div class="scope-ctrl-group">
               <span class="scope-ctrl-label">VOLTS/DIV:</span>
               <div class="scope-btn-group">
@@ -151,7 +162,7 @@ class FloatingMeterDock {
         </div>
       </div>
 
-      <!-- ================= 2. DMM & HP Voltmeter Bay ================= -->
+      <!-- ================= 2. DMM & APK Voltmeter Bay ================= -->
       <div id="dock-panel-dmm" class="dock-instrument-panel">
         <!-- Meter 1: APK Precision AC Voltmeter -->
         <div id="dock-meter-hp" class="dock-meter-card" title="Click to open APK Voltmeter calibration settings">
@@ -164,26 +175,99 @@ class FloatingMeterDock {
           </div>
         </div>
 
-        <!-- Meter 2: Fluke 8050A True RMS DMM -->
-        <div id="dock-meter-fluke" class="dock-meter-card" style="margin-top: 0.5rem;" title="Click to open Fluke 8050A settings">
+        <!-- Meter 2: LUCKY 8050A True RMS DMM (Yellow Font) -->
+        <div id="dock-meter-fluke" class="dock-meter-card" style="margin-top: 0.5rem;" title="Click to open Lucky 8050A settings">
           <div class="dock-meter-label">
-            <span>FLUKE 8050A TRUE RMS DMM</span>
-            <span id="dock-dmm-mode-badge" class="badge-mini cyan">AC V</span>
+            <span style="color: #facc15; font-weight: 800;">LUCKY 8050A TRUE RMS DMM</span>
+            <span id="dock-dmm-mode-badge" class="badge-mini" style="background: rgba(250, 204, 21, 0.2); color: #facc15; border: 1px solid #facc15;">+VE HOT</span>
           </div>
-          <div class="dock-dmm-vfd-display">
+          <div class="dmm-mode-switcher" style="margin-top: 0.35rem;">
+            <button class="dmm-mode-btn active yellow-mode" data-dock-dmm-mode="hot">+VE HOT</button>
+            <button class="dmm-mode-btn" data-dock-dmm-mode="cold">-VE COLD</button>
+            <button class="dmm-mode-btn" data-dock-dmm-mode="thd">THD / DIST</button>
+            <button class="dmm-mode-btn" data-dock-dmm-mode="multi">MULTI</button>
+          </div>
+          <div class="dock-dmm-vfd-display" style="border: 2px solid #ca8a04;">
             <div class="dmm-vfd-row">
-              <span class="dmm-vfd-label">V_DIFF (AC RMS):</span>
-              <span id="dock-dmm-vdiff" class="dmm-vfd-number">1.228 V</span>
+              <span id="dock-dmm-lbl-1" class="dmm-vfd-label">V_HOT (RMS):</span>
+              <span id="dock-dmm-vdiff" class="dmm-vfd-number lucky-yellow">1.228 V</span>
             </div>
             <div class="dmm-vfd-row">
-              <span class="dmm-vfd-label">I_LOAD (CURRENT):</span>
-              <span id="dock-dmm-iload" class="dmm-vfd-number">2.05 mA</span>
+              <span id="dock-dmm-lbl-2" class="dmm-vfd-label">AUDIO LEVEL:</span>
+              <span id="dock-dmm-iload" class="dmm-vfd-number lucky-yellow">+4.0 dBu</span>
             </div>
             <div class="dmm-vfd-row">
-              <span class="dmm-vfd-label">LINE BALANCE:</span>
-              <span id="dock-dmm-status" class="dmm-vfd-status">SYMMETRIC</span>
+              <span id="dock-dmm-lbl-3" class="dmm-vfd-label">LINE STATUS:</span>
+              <span id="dock-dmm-status" class="dmm-vfd-status lucky-yellow">SYMMETRIC</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- ================= 3. HP 353A Patch Panel Bay ================= -->
+      <div id="dock-panel-hp353a" class="dock-instrument-panel" style="display: none;">
+        <div class="hp353a-panel-card" style="margin-top: 0;">
+          <div class="hp353a-header">
+            <div class="hp353a-badge">
+              <span class="hp353a-hp-logo">hp</span>
+              <span class="hp353a-title">353A PATCH PANEL</span>
+            </div>
+            <span style="font-size: 0.65rem; color: #94a3b8; font-family: monospace;">MANUAL 00353-90003</span>
+          </div>
+          <div class="hp353a-grid">
+            <div class="hp353a-ctrl-col">
+              <span class="hp353a-ctrl-title">OUTPUT Z</span>
+              <div class="hp353a-rotary-dial hp353a-outz-dial" title="Click to cycle Output Impedance (135, 600, 900 Ω)">
+                <div class="hp353a-rotary-pointer"></div>
+              </div>
+              <span class="hp353a-value-readout hp353a-outz-val">600 Ω</span>
+            </div>
+            <div class="hp353a-ctrl-col">
+              <span class="hp353a-ctrl-title">INPUT TERM Z</span>
+              <div class="hp353a-rotary-dial hp353a-inz-dial" title="Click to cycle Input Termination (135, 600, 900, 10k Ω)">
+                <div class="hp353a-rotary-pointer"></div>
+              </div>
+              <span class="hp353a-value-readout hp353a-inz-val">10 kΩ</span>
+            </div>
+            <div class="hp353a-ctrl-col">
+              <span class="hp353a-ctrl-title">ATTEN 10 dB</span>
+              <div class="hp353a-rotary-dial hp353a-atten10-dial" title="Click to step 10 dB Attenuation (0 - 100 dB)">
+                <div class="hp353a-rotary-pointer"></div>
+              </div>
+              <span class="hp353a-value-readout hp353a-atten10-val">0 dB</span>
+            </div>
+            <div class="hp353a-ctrl-col">
+              <span class="hp353a-ctrl-title">ATTEN 1 dB</span>
+              <div class="hp353a-rotary-dial hp353a-atten1-dial" title="Click to step 1 dB Attenuation (0 - 10 dB)">
+                <div class="hp353a-rotary-pointer"></div>
+              </div>
+              <span class="hp353a-value-readout hp353a-atten1-val">0 dB</span>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.65rem; padding-top: 0.5rem; border-top: 1px solid #334155;">
+            <button class="hp353a-switch-btn hp353a-toggle-meas active" title="Toggle MEAS (circuit under test) vs CAL (oscillator reference)">MODE: MEAS</button>
+            <span class="hp353a-atten-total" style="font-family: monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 800;">0 dB Loss</span>
+            <button class="hp353a-switch-btn hp353a-toggle-freq" title="Toggle FREQ (<5kHz audio vs >5kHz carrier)">FREQ: &lt;5kHz</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 4. Trend Recorder Bay ================= -->
+      <div id="dock-panel-chart" class="dock-instrument-panel" style="display: none;">
+        <div class="trend-recorder-card" style="margin-top: 0;">
+          <div class="trend-toolbar">
+            <span class="trend-title">📉 TREND RECORDER</span>
+            <div class="trend-legend">
+              <span class="trend-legend-pill" style="color: #facc15;"><span class="trend-dot yellow"></span> +VE</span>
+              <span class="trend-legend-pill" style="color: #38bdf8;"><span class="trend-dot cyan"></span> -VE</span>
+              <span class="trend-legend-pill" style="color: #10b981;"><span class="trend-dot green"></span> DIFF</span>
+            </div>
+            <div class="trend-btn-group">
+              <button class="trend-btn trend-btn-run active">PAUSE</button>
+              <button class="trend-btn trend-btn-clear">CLEAR</button>
+            </div>
+          </div>
+          <canvas id="dock-trend-canvas" width="300" height="150" class="trend-canvas"></canvas>
         </div>
       </div>
 
@@ -308,10 +392,41 @@ class FloatingMeterDock {
       });
     }
 
+    // 4-Channel Trace Toggles
+    this.scopeChannels = { ch1: true, ch2: true, ch3: true, ch4: true };
+    dock.querySelectorAll(".scope-ch-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const ch = "ch" + btn.getAttribute("data-ch");
+        this.scopeChannels[ch] = !this.scopeChannels[ch];
+        btn.classList.toggle("active", this.scopeChannels[ch]);
+      });
+    });
+
     // View tabs
     dock.querySelector("#dock-tab-scope")?.addEventListener("click", () => this.updateDisplayMode("scope"));
     dock.querySelector("#dock-tab-dmm")?.addEventListener("click", () => this.updateDisplayMode("dmm"));
+    dock.querySelector("#dock-tab-hp353a")?.addEventListener("click", () => this.updateDisplayMode("hp353a"));
+    dock.querySelector("#dock-tab-chart")?.addEventListener("click", () => this.updateDisplayMode("chart"));
     dock.querySelector("#dock-tab-dual")?.addEventListener("click", () => this.updateDisplayMode("dual"));
+
+    // Dock DMM Mode Switcher
+    this.dockDmmMode = "hot";
+    dock.querySelectorAll("[data-dock-dmm-mode]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const mode = btn.getAttribute("data-dock-dmm-mode");
+        this.dockDmmMode = mode;
+        dock.querySelectorAll("[data-dock-dmm-mode]").forEach(b => {
+          const match = b.getAttribute("data-dock-dmm-mode") === mode;
+          b.classList.toggle("active", match);
+          b.classList.toggle("yellow-mode", match);
+        });
+        const badge = dock.querySelector("#dock-dmm-mode-badge");
+        if (badge) {
+          badge.textContent = mode === "hot" ? "+VE HOT" : (mode === "cold" ? "-VE COLD" : (mode === "thd" ? "THD / DIST" : "MULTI"));
+        }
+        this.updateFromActiveCircuit();
+      });
+    });
 
     // Quick target selector
     dock.querySelector("#dock-probe-select")?.addEventListener("change", (e) => {
@@ -397,24 +512,35 @@ class FloatingMeterDock {
     this.displayMode = mode;
     const tabScope = this.dock.querySelector("#dock-tab-scope");
     const tabDmm = this.dock.querySelector("#dock-tab-dmm");
+    const tabHp = this.dock.querySelector("#dock-tab-hp353a");
+    const tabChart = this.dock.querySelector("#dock-tab-chart");
     const tabDual = this.dock.querySelector("#dock-tab-dual");
+
     const panelScope = this.dock.querySelector("#dock-panel-scope");
     const panelDmm = this.dock.querySelector("#dock-panel-dmm");
+    const panelHp = this.dock.querySelector("#dock-panel-hp353a");
+    const panelChart = this.dock.querySelector("#dock-panel-chart");
 
     tabScope?.classList.toggle("active", mode === "scope");
     tabDmm?.classList.toggle("active", mode === "dmm");
+    tabHp?.classList.toggle("active", mode === "hp353a");
+    tabChart?.classList.toggle("active", mode === "chart");
     tabDual?.classList.toggle("active", mode === "dual");
 
+    [panelScope, panelDmm, panelHp, panelChart].forEach(p => { if (p) p.style.display = "none"; });
+
     if (mode === "scope") {
-      panelScope.style.display = "block";
-      panelDmm.style.display = "none";
+      if (panelScope) panelScope.style.display = "block";
     } else if (mode === "dmm") {
-      panelScope.style.display = "none";
-      panelDmm.style.display = "block";
+      if (panelDmm) panelDmm.style.display = "block";
+    } else if (mode === "hp353a") {
+      if (panelHp) panelHp.style.display = "block";
+    } else if (mode === "chart") {
+      if (panelChart) panelChart.style.display = "block";
     } else {
       // dual view
-      panelScope.style.display = "block";
-      panelDmm.style.display = "block";
+      if (panelScope) panelScope.style.display = "block";
+      if (panelDmm) panelDmm.style.display = "block";
     }
   }
 
