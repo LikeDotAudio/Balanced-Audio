@@ -117,5 +117,5 @@ def bundle(timestamp=None):
         print(f"Bundled successfully -> {os.path.basename(path)} ({sz:,} bytes / {sz / 1024 / 1024:.2f} MB)")
 
 if __name__ == "__main__":
-    ts = sys.argv[1] if len(sys.argv) > 1 else None
+    ts = sys.argv[1] if len(sys.argv) > 1 else datetime.now().strftime("%Y%m%d-%H%M")
     bundle(ts)
