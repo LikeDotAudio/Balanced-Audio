@@ -993,6 +993,13 @@ class CircuitSimulator {
     this.setProbe("pp-svg-probe-p2", `${(iPin2 * 1000).toFixed(1)} mA / ${vPin2.toFixed(2)} V`);
     this.setProbe("pp-svg-probe-p3", `${(iPin3 * 1000).toFixed(1)} mA / ${vPin3.toFixed(2)} V`);
 
+    // Live SVG Measurement Data Points (MDP) Badges with Pointers
+    const dBuP2 = 20 * Math.log10(Math.max(0.001, vPin2 / 0.775));
+    this.setProbe("mdp-val-6-1-vin", `${vin.toFixed(2)} V RMS`);
+    this.setProbe("mdp-val-6-1-p2", `${vPin2.toFixed(2)} V RMS (${dBuP2 >= 0 ? '+' : ''}${dBuP2.toFixed(1)} dBu)`);
+    this.setProbe("mdp-val-6-1-p3", shortPin3 ? "0.00 V (SHORTED)" : `${vPin3.toFixed(2)} V RMS (180°)`);
+    this.setProbe("mdp-val-6-1-load", `${vDiff.toFixed(2)} V / ${(iLoad * 1000).toFixed(1)} mA`);
+
     // Dynamic Sizing & Wire Visualization in SVG:
     // If voltage is increased, signal wire gets larger in the drawing!
     const driveWire = document.getElementById("pp-svg-wire-drive");
@@ -1089,6 +1096,12 @@ class CircuitSimulator {
     this.setProbe("ib-svg-rload", `${rload >= 1000 ? (rload / 1000).toFixed(1) + ' kΩ' : rload + ' Ω'}`);
     this.setProbe("ib-svg-p2-probe", `${vPin2.toFixed(2)} V / ${dBu >= 0 ? '+' : ''}${dBu.toFixed(1)} dBu`);
     this.setProbe("ib-svg-p3-probe", shortPin3 ? "0.00 V (Grounded)" : `0.00 V / ${rout} Ω to 0V`);
+
+    // Live SVG Measurement Data Points (MDP) Badges with Pointers
+    this.setProbe("mdp-val-6-2-vin", `${vin.toFixed(2)} V RMS`);
+    this.setProbe("mdp-val-6-2-p2", `${vPin2.toFixed(2)} V RMS (ACTIVE)`);
+    this.setProbe("mdp-val-6-2-p3", shortPin3 ? "0.00 V (Direct Short)" : `0.00 V (${rout}Ω PASSIVE)`);
+    this.setProbe("mdp-val-6-2-load", `${vDiff.toFixed(2)} V / 100% CMRR`);
 
     // LUCKY 8050A Precision DMM readouts (Yellow Font & Multi-Mode)
     this.updateLuckyDmmDisplay(vPin2, vPin3, vDiff, iLoad, shortPin3, false);
@@ -1828,7 +1841,11 @@ class CircuitSimulator {
       badge.addEventListener("click", () => {
         const target = badge.getAttribute("data-probe-target");
         if (target && window.floatingMeterDock) {
-          window.floatingMeterDock.setProbeTarget(target);
+          if (window.floatingMeterDock.selectProbeTarget) {
+            window.floatingMeterDock.selectProbeTarget(target);
+          } else if (window.floatingMeterDock.setProbeTarget) {
+            window.floatingMeterDock.setProbeTarget(target);
+          }
         }
       });
     });

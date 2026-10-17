@@ -768,23 +768,83 @@ class FloatingMeterDock {
     }, 2500);
   }
 
-  updateLiveReadings(vDiff, iLoad, dBu, status = "SYMMETRIC") {
+  updateLiveReadings(vDiffOrData, iLoad = 0.002, dBu = 0, status = "SYMMETRIC") {
+    let data;
+    if (typeof vDiffOrData === "object" && vDiffOrData !== null) {
+      data = vDiffOrData;
+    } else {
+      const v = typeof vDiffOrData === "number" ? vDiffOrData : 1.2;
+      data = {
+        vHot: v,
+        vCold: status.includes("PASSIVE") || status.includes("SHORT") ? 0.0 : v,
+        vDiff: v,
+        iLoad: iLoad,
+        dBu: dBu,
+        status: status,
+        thd: 0.003,
+        cmrr: 90.0
+      };
+    }
+
     const range = this.hpRangeVolts || 3.0;
+    const vDiff = data.vDiff || 1.2;
     const relativeDb = 20 * Math.log10(Math.max(0.00005, vDiff / range));
     this.targetNeedleDbu = relativeDb;
 
-    const vdiffEl = document.getElementById("dock-dmm-vdiff");
-    if (vdiffEl) vdiffEl.textContent = `${vDiff.toFixed(2)} V`;
+    const lbl1 = document.getElementById("dock-dmm-lbl-1");
+    const val1 = document.getElementById("dock-dmm-vdiff");
+    const lbl2 = document.getElementById("dock-dmm-lbl-2");
+    const val2 = document.getElementById("dock-dmm-iload");
+    const lbl3 = document.getElementById("dock-dmm-lbl-3");
+    const val3 = document.getElementById("dock-dmm-status");
 
-    const iloadEl = document.getElementById("dock-dmm-iload");
-    if (iloadEl) iloadEl.textContent = `${(iLoad * 1000).toFixed(1)} mA`;
+    const mode = this.dockDmmMode || "hot";
 
-    const statusEl = document.getElementById("dock-dmm-status");
-    if (statusEl) {
-      statusEl.textContent = status;
-      statusEl.className = status.includes("OVERLOAD") || status.includes("CLIP") || status.includes("IMBALANCE")
-        ? "dmm-vfd-status amber"
-        : "dmm-vfd-status";
+    if (mode === "hot") {
+      if (lbl1) lbl1.textContent = "V_+VE (HOT RMS):";
+      if (val1) val1.textContent = `${data.vHot.toFixed(3)} V`;
+      if (lbl2) lbl2.textContent = "AUDIO LEVEL:";
+      const dbuHot = 20 * Math.log10(Math.max(0.0001, data.vHot / 0.775));
+      if (val2) val2.textContent = `${dbuHot >= 0 ? "+" : ""}${dbuHot.toFixed(1)} dBu`;
+      if (lbl3) lbl3.textContent = "LINE STATUS:";
+      if (val3) {
+        val3.textContent = data.status;
+        val3.className = data.status.includes("CLIP") || data.status.includes("ERROR") || data.status.includes("SHORT")
+          ? "dmm-vfd-status amber"
+          : "dmm-vfd-status lucky-yellow";
+      }
+    } else if (mode === "cold") {
+      if (lbl1) lbl1.textContent = "V_-VE (COLD RMS):";
+      if (val1) val1.textContent = `${data.vCold.toFixed(3)} V`;
+      if (lbl2) lbl2.textContent = "PHASE RELATION:";
+      const phaseTxt = data.vCold < 0.005 ? "0.0° (PASSIVE 0V)" : "180.0° (INVERTED)";
+      if (val2) val2.textContent = phaseTxt;
+      if (lbl3) lbl3.textContent = "IMPEDANCE Z:";
+      if (val3) {
+        val3.textContent = "50.0 Ω BALANCED";
+        val3.className = "dmm-vfd-status lucky-yellow";
+      }
+    } else if (mode === "thd") {
+      if (lbl1) lbl1.textContent = "THD+N HARMONICS:";
+      if (val1) val1.textContent = `${(data.thd || 0.003).toFixed(3)} %`;
+      if (lbl2) lbl2.textContent = "DISTORTION RATIO:";
+      const distDb = -20 * Math.log10(Math.max(0.00001, ((data.thd || 0.003) / 100)));
+      if (val2) val2.textContent = `-${distDb.toFixed(1)} dB`;
+      if (lbl3) lbl3.textContent = "CMRR REJECTION:";
+      if (val3) {
+        val3.textContent = `>${(data.cmrr || 90).toFixed(1)} dB`;
+        val3.className = "dmm-vfd-status lucky-yellow";
+      }
+    } else { // "multi"
+      if (lbl1) lbl1.textContent = "+VE / -VE RMS:";
+      if (val1) val1.textContent = `${data.vHot.toFixed(2)}V / ${data.vCold.toFixed(2)}V`;
+      if (lbl2) lbl2.textContent = "V_DIFF / I_LOAD:";
+      if (val2) val2.textContent = `${data.vDiff.toFixed(2)}V / ${(data.iLoad * 1000).toFixed(1)}mA`;
+      if (lbl3) lbl3.textContent = "CMRR / THD:";
+      if (val3) {
+        val3.textContent = `${(data.cmrr || 90).toFixed(0)}dB / ${(data.thd || 0.003).toFixed(3)}%`;
+        val3.className = "dmm-vfd-status lucky-yellow";
+      }
     }
   }
 
@@ -986,10 +1046,109 @@ class FloatingMeterDock {
     return { freq, vRms, vPk, phase, shape, status, iLoad };
   }
 
+  getCircuitChannelData() {
+    const key = this.activeProbeTarget || "6-1-p2";
+    let freq = 1000.0;
+    let ch1 = { name: "CH1 Ref (Vin)", vPk: 1.2 * Math.SQRT2, phase: 0, shape: "sine" };
+    let ch2 = { name: "CH2 +VE (Hot)", vPk: 1.2 * Math.SQRT2, phase: 0, shape: "sine" };
+    let ch3 = { name: "CH3 -VE (Cold)", vPk: 1.2 * Math.SQRT2, phase: Math.PI, shape: "sine" };
+    let ch4 = { name: "CH4 Diff", vPk: 2.4 * Math.SQRT2, phase: 0, shape: "sine" };
+    let vHot = 1.2, vCold = 1.2, vDiff = 2.4, iLoad = 0.002, thd = 0.003, cmrr = 90.0, status = "NORMAL SYMMETRICAL";
+
+    if (key.startsWith("6-2") || (!key.startsWith("6-1") && !key.startsWith("6-3") && !key.startsWith("meyer") && document.getElementById("ib-vin"))) {
+      const vin = parseFloat(document.getElementById("ib-vin")?.value || 1.2);
+      const rout = parseFloat(document.getElementById("ib-rout")?.value || 50);
+      const rload = parseFloat(document.getElementById("ib-rload")?.value || 10000);
+      const shortPin3 = document.getElementById("ib-short-pin3")?.checked || false;
+      iLoad = vin / (rout + rload);
+      vHot = iLoad * rload;
+      vCold = 0.0;
+      vDiff = vHot;
+      cmrr = 110.0;
+      thd = 0.0018;
+      status = "ACTIVE IMPEDANCE-BALANCED";
+
+      ch1.vPk = vin * Math.SQRT2;
+      ch2.vPk = vHot * Math.SQRT2;
+      ch3.vPk = 0;
+      ch3.shape = "flatline";
+      ch4.vPk = vDiff * Math.SQRT2;
+    } else if (key.startsWith("6-3")) {
+      const vin = parseFloat(document.getElementById("tx-vin")?.value || 15.0);
+      const ratio = parseFloat(document.getElementById("tx-ratio")?.value || 1.0);
+      const rload = parseFloat(document.getElementById("tx-rload")?.value || 600);
+      const groundPin3 = document.getElementById("tx-ground-pin3")?.checked || false;
+      const vSec = vin * ratio;
+      iLoad = vSec / (40 + rload);
+      vDiff = iLoad * rload;
+      vHot = groundPin3 ? vDiff : vDiff / 2;
+      vCold = groundPin3 ? 0 : vDiff / 2;
+      cmrr = 120.0;
+      thd = 0.045;
+      status = groundPin3 ? "PIN 3 GROUNDED" : "GALVANIC FLOATING";
+
+      ch1.vPk = vin * Math.SQRT2;
+      ch2.vPk = vHot * Math.SQRT2;
+      ch3.vPk = groundPin3 ? 0 : vCold * Math.SQRT2;
+      ch3.shape = groundPin3 ? "flatline" : "sine";
+      ch3.phase = Math.PI;
+      ch4.vPk = vDiff * Math.SQRT2;
+    } else if (key.startsWith("meyer")) {
+      const vpo = parseFloat(document.getElementById("meyer-vpo")?.value || 1.23);
+      const vgvd = parseFloat(document.getElementById("meyer-vgvd")?.value || 10.0);
+      const zpo = parseFloat(document.getElementById("meyer-zpo")?.value || 50);
+      const zro = parseFloat(document.getElementById("meyer-zro")?.value || 50);
+      const deltaZ = Math.abs(zpo - zro);
+      const vErr = vgvd * (deltaZ / 20000);
+      vHot = vpo;
+      vCold = vpo;
+      vDiff = vpo + vErr;
+      cmrr = deltaZ === 0 ? 120 : 20 * Math.log10(20000 / Math.max(0.01, deltaZ));
+      thd = Math.min(100, (vErr / (vpo + 0.001)) * 100);
+      status = deltaZ === 0 ? "INFINITE REJECTION" : "GROUND LOOP ERROR";
+      ch1.vPk = vpo * Math.SQRT2;
+      ch2.vPk = (vpo + vgvd * 0.1) * Math.SQRT2;
+      ch2.shape = "hum-riding";
+      ch3.vPk = (vpo + vgvd * 0.1) * Math.SQRT2;
+      ch3.shape = "hum-riding";
+      ch4.vPk = vDiff * Math.SQRT2;
+    } else {
+      const vin = parseFloat(document.getElementById("pp-vin")?.value || 1.2);
+      const rout = parseFloat(document.getElementById("pp-rout")?.value || 50);
+      const rload = parseFloat(document.getElementById("pp-rload")?.value || 600);
+      const shortPin3 = document.getElementById("pp-short-pin3")?.checked || false;
+      if (!shortPin3) {
+        iLoad = (2 * vin) / (2 * rout + rload);
+        vHot = vin - iLoad * rout;
+        vCold = vHot;
+        vDiff = 2 * vHot;
+        cmrr = 95.0;
+        thd = 0.0025;
+        status = "NORMAL SYMMETRICAL";
+        ch3.vPk = vCold * Math.SQRT2;
+        ch3.shape = "sine";
+      } else {
+        iLoad = vin / (rout + rload);
+        vHot = vin - iLoad * rout;
+        vCold = 0;
+        vDiff = vHot;
+        cmrr = 48.0;
+        thd = iLoad > 0.05 ? 12.5 : 0.085;
+        status = iLoad > 0.05 ? "CURRENT LIMIT CLIP" : "TS SHORTED";
+        ch3.vPk = 0;
+        ch3.shape = "flatline";
+      }
+      ch1.vPk = vin * Math.SQRT2;
+      ch2.vPk = vHot * Math.SQRT2;
+      ch4.vPk = vDiff * Math.SQRT2;
+    }
+
+    return { freq, ch1, ch2, ch3, ch4, vHot, vCold, vDiff, iLoad, thd, cmrr, status };
+  }
+
   updateFromActiveCircuit() {
-    const data = this.getProbedSignalData();
-    const dBu = 20 * Math.log10(Math.max(0.0001, data.vRms / 0.775));
-    this.updateLiveReadings(data.vRms, data.iLoad, dBu, data.status);
+    const channelData = this.getCircuitChannelData();
+    this.updateLiveReadings(channelData);
   }
 
   startMainInstrumentLoop() {
@@ -1012,7 +1171,7 @@ class FloatingMeterDock {
   }
 
   /**
-   * 1970s Tektronix / HP CRT Oscilloscope Rendering Engine
+   * 1970s Tektronix / HP CRT Oscilloscope Rendering Engine (4-Channel)
    */
   renderOscilloscope() {
     if (!this.scopeCtx) return;
@@ -1023,7 +1182,7 @@ class FloatingMeterDock {
     // Advance timebase
     this.scopeTime += 0.0005;
 
-    // Phosphor decay persistence (draw transparent mask instead of clearRect)
+    // Phosphor decay persistence
     ctx.fillStyle = "rgba(2, 20, 8, 0.28)";
     ctx.fillRect(0, 0, w, h);
 
@@ -1062,63 +1221,67 @@ class FloatingMeterDock {
     }
     ctx.stroke();
 
-    // Compute waveform from probed node
-    const sig = this.getProbedSignalData();
-    const voltsPerDiv = this.scopeVoltsDiv; // e.g. 1.0 V/div
-    const timePerDiv = this.scopeTimeDiv * 0.001; // e.g. 0.0005 s/div
+    // Compute waveform channel data
+    const cData = this.getCircuitChannelData();
+    const voltsPerDiv = this.scopeVoltsDiv;
+    const timePerDiv = this.scopeTimeDiv * 0.001;
     const totalTimeSpan = 10 * timePerDiv;
-
-    // Draw Live Green Phosphor CRT Trace
-    ctx.save();
-    ctx.strokeStyle = "#4ade80";
-    ctx.shadowColor = "#22c55e";
-    ctx.shadowBlur = 8;
-    ctx.lineWidth = 2.2;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    ctx.beginPath();
     const numSamples = 240;
 
-    for (let s = 0; s < numSamples; s++) {
-      const px = (s / (numSamples - 1)) * w;
-      const tPoint = (s / (numSamples - 1)) * totalTimeSpan;
-      
-      // Auto-trigger sync locks phase so wave is stationary on CRT
-      const t = this.scopeTriggerMode === "AUTO" ? tPoint : this.scopeTime + tPoint;
+    const channelsToRender = [
+      { id: "ch1", label: "CH1 Ref", color: "#facc15", glow: "#eab308", data: cData.ch1 },
+      { id: "ch2", label: "CH2 +VE", color: "#38bdf8", glow: "#0284c7", data: cData.ch2 },
+      { id: "ch3", label: "CH3 -VE", color: "#f43f5e", glow: "#e11d48", data: cData.ch3 },
+      { id: "ch4", label: "CH4 Diff", color: "#4ade80", glow: "#22c55e", data: cData.ch4 }
+    ];
 
-      let v = 0;
-      const omega = 2 * Math.PI * sig.freq;
+    channelsToRender.forEach(ch => {
+      if (!this.scopeChannels[ch.id]) return;
 
-      if (sig.shape === "sine") {
-        v = sig.vPk * Math.sin(omega * t + sig.phase);
-      } else if (sig.shape === "flatline") {
-        v = 0;
-      } else if (sig.shape === "clipped") {
-        const raw = 14.0 * Math.sin(omega * t + sig.phase);
-        v = Math.max(-5.0, Math.min(5.0, raw)); // Hard clipping saturation
-      } else if (sig.shape === "hum") {
-        // 60Hz mains hum + 120Hz / 180Hz rectifier spikes
-        const w60 = 2 * Math.PI * 60;
-        v = sig.vPk * (0.8 * Math.sin(w60 * t) + 0.25 * Math.sin(2 * w60 * t) + 0.1 * Math.sin(3 * w60 * t));
-      } else if (sig.shape === "hum-riding") {
-        const w1k = 2 * Math.PI * 1000;
-        const w60 = 2 * Math.PI * 60;
-        v = sig.vPk * Math.sin(w1k * t) + 0.4 * Math.sin(w60 * t);
+      ctx.save();
+      ctx.strokeStyle = ch.color;
+      ctx.shadowColor = ch.glow;
+      ctx.shadowBlur = 6;
+      ctx.lineWidth = 1.9;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.beginPath();
+
+      for (let s = 0; s < numSamples; s++) {
+        const px = (s / (numSamples - 1)) * w;
+        const tPoint = (s / (numSamples - 1)) * totalTimeSpan;
+        const t = this.scopeTriggerMode === "AUTO" ? tPoint : this.scopeTime + tPoint;
+
+        let v = 0;
+        const omega = 2 * Math.PI * cData.freq;
+        const shape = ch.data.shape;
+
+        if (shape === "sine") {
+          v = ch.data.vPk * Math.sin(omega * t + ch.data.phase);
+        } else if (shape === "flatline") {
+          v = 0;
+        } else if (shape === "hum-riding") {
+          const w60 = 2 * Math.PI * 60;
+          v = ch.data.vPk * Math.sin(omega * t) + 0.35 * Math.sin(w60 * t);
+        } else if (shape === "clipped") {
+          const raw = 14.0 * Math.sin(omega * t + ch.data.phase);
+          v = Math.max(-5.0, Math.min(5.0, raw));
+        } else {
+          v = ch.data.vPk * Math.sin(omega * t + ch.data.phase);
+        }
+
+        const py = midY - (v / (4 * voltsPerDiv)) * midY;
+        const clampedY = Math.max(4, Math.min(h - 4, py));
+
+        if (s === 0) {
+          ctx.moveTo(px, clampedY);
+        } else {
+          ctx.lineTo(px, clampedY);
+        }
       }
-
-      // Map voltage to CRT Y coordinate (midY is 0V, positive is up)
-      const py = midY - (v / (4 * voltsPerDiv)) * midY;
-      const clampedY = Math.max(4, Math.min(h - 4, py));
-
-      if (s === 0) {
-        ctx.moveTo(px, clampedY);
-      } else {
-        ctx.lineTo(px, clampedY);
-      }
-    }
-    ctx.stroke();
-    ctx.restore();
+      ctx.stroke();
+      ctx.restore();
+    });
 
     // On-Screen CRT Display (OSD) Telemetry
     ctx.font = "bold 9px 'Courier New', monospace";
@@ -1126,9 +1289,15 @@ class FloatingMeterDock {
     ctx.shadowColor = "#22c55e";
     ctx.shadowBlur = 4;
 
-    // Top Header: CH1 scale, Timebase & Trigger
+    // Top Header: Channel Indicators & Timebase
     ctx.textAlign = "left";
-    ctx.fillText(`CH1: ${voltsPerDiv.toFixed(1)}V/DIV  ${this.scopeCoupling}`, 8, 14);
+    let activeTags = [];
+    if (this.scopeChannels.ch1) activeTags.push("CH1:REF");
+    if (this.scopeChannels.ch2) activeTags.push("CH2:+VE");
+    if (this.scopeChannels.ch3) activeTags.push("CH3:-VE");
+    if (this.scopeChannels.ch4) activeTags.push("CH4:DIFF");
+    const tagStr = activeTags.join(" ") || "ALL OFF";
+    ctx.fillText(`${tagStr} | ${voltsPerDiv.toFixed(1)}V/DIV`, 8, 14);
 
     ctx.textAlign = "right";
     ctx.fillText(`TIME: ${this.scopeTimeDiv.toFixed(1)}ms/DIV`, w - 24, 14);
@@ -1138,16 +1307,12 @@ class FloatingMeterDock {
     ctx.arc(w - 12, 11, 3.5, 0, Math.PI * 2);
     ctx.fill();
 
-    // Bottom Footer: Vp-p, V_RMS, Frequency
+    // Bottom Footer: +VE, -VE, Diff telemetry
     ctx.textAlign = "left";
-    ctx.fillText(`Vp-p: ${(sig.vPk * 2).toFixed(2)}V`, 8, h - 8);
-
-    ctx.textAlign = "center";
-    ctx.fillText(`Vrms: ${sig.vRms.toFixed(2)}V`, w / 2, h - 8);
+    ctx.fillText(`+VE: ${cData.vHot.toFixed(2)}V  -VE: ${cData.vCold.toFixed(2)}V`, 8, h - 8);
 
     ctx.textAlign = "right";
-    const freqTxt = sig.freq >= 1000 ? `${(sig.freq / 1000).toFixed(2)} kHz` : `${sig.freq.toFixed(0)} Hz`;
-    ctx.fillText(`FREQ: ${freqTxt}`, w - 8, h - 8);
+    ctx.fillText(`DIFF: ${cData.vDiff.toFixed(2)}V  1.0kHz`, w - 8, h - 8);
   }
 
   /**

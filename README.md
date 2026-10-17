@@ -67,22 +67,71 @@ The portal is packaged into a 100% self-contained, standalone single-file distri
 
 ---
 
-## APK Precision AC Voltmeter & Calibrated Range Sensitivity
+## LUCKY 8050A True RMS Digital Multimeter (Yellow Phosphor)
 
-The test bench features the **APK Precision AC Voltmeter** (designed by Anthony Peter Kuzub, replacing the legacy 400FL designation):
-- **14 Calibrated Ranges**:
-  - `mV / dB`: `.1 mV` (-80 dB), `.3 mV` (-70 dB), `1 mV` (-60 dB), `3 mV` (-50 dB), `10 mV` (-40 dB), `30 mV` (-30 dB), `100 mV` (-20 dB).
-  - `V / dB`: `.3 V` (-10 dB), `1 V` (0 dB), `3 V` (+10 dB nominal studio default), `10 V` (+20 dB), `30 V` (+30 dB), `100 V` (+40 dB), `300 V` (+50 dB).
-- **Interactive Rotary Controls**:
-  - **Click**: Click the fluted rotor to advance through ranges; Shift-click or secondary click to step backwards.
-  - **Mouse Wheel**: Scroll directly over the knob or dial face to cycle ranges up or down.
-  - **Drag**: Click and drag around the knob center to rotate naturally to any calibrated angle.
-  - **Direct Tick Selection**: Click directly on any dial tick text or label (`1V`, `3V`, `10V`, `+10`, etc.) to jump the selector immediately.
-- **True Physical Sensitivity**:
-  - Needle deflection scales dynamically against the selected full-scale range: $f = V_{rms} / V_{range}$.
-  - Overload signals ($V > 1.15 \times V_{range}$) deflect into the red $+2\text{ dB}$ overload region and peg against the mechanical stop at $+41^\circ$.
-  - Higher voltage ranges attenuate deflection down toward mechanical zero ($-36^\circ$), replicating authentic moving-coil meter ballistics.
-  - The breakaway floating test dock synchronizes with bench range settings and updates live sensitivity in real time.
+The benchtop multimeter is faithfully modeled after the iconic 1970s bench DMM, rebranded as **LUCKY 8050A**:
+- **Yellow Phosphor Display**: Rendered with high-visibility amber/yellow glowing vacuum-fluorescent typography (`#facc15`).
+- **Auto & Selectable Ranges**:
+  - Automatically ranges between millivolts and volts (`AUTO` mode active by default).
+  - Selectable pushbuttons: `AUTO`, `200mV`, `2V`, `20V`, and `200V`.
+  - True physical overload detection with vintage `O.L.` display.
+- **4-Way Measurement Modes**:
+  - **`+VE HOT (PIN 2)`**: Probes Pin 2 non-inverting audio signal, reporting $V_{RMS}$ and calibrated audio level in $\text{dBu}$.
+  - **`-VE COLD (PIN 3)`**: Probes Pin 3 cold leg, revealing the $180^\circ$ inverted wave in push-pull circuits, or the flatline $0\text{ V}$ condition in impedance-balanced circuits.
+  - **`THD & CMRR`**: Precision harmonic distortion ratio (THD+N %), distortion attenuation ($\text{dB}$), and common-mode rejection ratio ($>90\text{ dB}$).
+  - **`MULTI`**: Simultaneous multi-parameter readout showing $+VE / -VE$, Differential Load Voltage / Current, and CMRR / THD metrics.
+
+---
+
+## Hewlett-Packard 353A Patch Panel (Manual 00353-90003)
+
+Faithfully implemented from the official Hewlett-Packard Operating and Service Manual (HP Part No. 00353-90003):
+- **Impedance Matching & Bridging Network**:
+  - **Output Impedance ($Z_{OUT}$)**: 135 $\Omega$, 600 $\Omega$, 900 $\Omega$ selectable rotary switch.
+  - **Input Termination ($Z_{IN}$)**: 135 $\Omega$, 600 $\Omega$, 900 $\Omega$, and 10 k$\Omega$ high-impedance bridging termination.
+- **Dual Stepped Attenuators (0 to 110 dB)**:
+  - 10 dB per step attenuator (0 to 100 dB).
+  - 1 dB per step attenuator (0 to 10 dB).
+  - Directly alters generator drive level and circuit attenuation in real time.
+- **Pushbutton Mode Switches**:
+  - **MEAS / CAL**: Toggles between measuring the circuit under test (MEAS) and referencing the direct calibration oscillator (CAL).
+  - **FREQ**: Audio frequency range optimization ($<5\text{ kHz}$ vs $>5\text{ kHz}$).
+
+---
+
+## 4-Channel CRT Oscilloscope
+
+The vintage CRT oscilloscope engine supports simultaneous 4-channel acquisition with individual channel toggles:
+- **Channel Allocation**:
+  - **CH1 (Ref)**: Audio Generator Input Reference ($V_{in}$) — Yellow (`#facc15`)
+  - **CH2 (+VE)**: Pin 2 Hot Output Conductor ($V_{hot}$) — Cyan (`#38bdf8`)
+  - **CH3 (-VE)**: Pin 3 Cold Output Conductor ($V_{cold}$) — Pink (`#f43f5e`)
+  - **CH4 (Diff)**: Differential Signal across Load ($V_{diff}$) — Green (`#4ade80`)
+- **Features**:
+  - Individual channel pushbuttons to view 1, 2, 3, or all 4 traces simultaneously.
+  - Dual timebase (.2ms, .5ms, 1ms, 2ms) and voltage scaling (.1V, .2V, .5V, 1V, 2V, 5V per division).
+  - Realistic green phosphor persistence decay and graticule crosshair ticks.
+
+---
+
+## Time-Series Strip-Chart Trend Recorder
+
+Integrated multi-channel strip-chart recorder logging measurement history over time:
+- **Live Traces**: Plots +VE Hot (Yellow), -VE Cold (Cyan), and Differential Load (Green) signals in real time.
+- **Auto-Scaling**: Dynamically adjusts vertical scale span ($\pm 2\text{V}$, $\pm 5\text{V}$, $\pm 10\text{V}$, $\pm 20\text{V}$).
+- **Controls**: Interactive `PAUSE`/`REC` toggle and `CLEAR` buffer reset button.
+
+---
+
+## Measurement Data Points (MDP) with Dynamic Pointers
+
+Interactive vector schematic callout system across Circuit 6.1 (Push-Pull) and Circuit 6.2 (Impedance-Balanced):
+- **Visual Leader Pointers**: Distinct color-coded leader lines with pointer arrowheads pointing directly to circuit nodes:
+  - **MDP-0**: Audio Drive Generator Input
+  - **MDP-1**: Pin 2 (+VE Hot Terminal)
+  - **MDP-2**: Pin 3 (-VE Cold Terminal)
+  - **MDP-3**: Differential Load Terminals ($R_{LOAD}$)
+- **Interactive Probing**: Clicking any MDP badge or pointer arrow automatically directs the test bench DMM and 4-channel oscilloscope to probe that specific node.
 
 ---
 

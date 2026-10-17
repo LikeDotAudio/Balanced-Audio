@@ -7356,29 +7356,36 @@ body.probe-cursor-active * {
   </svg>
 </div>
 
-          <!-- Fluke 8050A Precision Benchtop DMM -->
+          <!-- LUCKY 8050A Precision Benchtop DMM (Yellow Font) -->
           <div class="dmm-display-card">
-            <div class="dmm-plate">
-              <span class="dmm-plate-title">FLUKE 8050A DIGITAL MULTIMETER</span>
-              <span class="dmm-plate-sub">TRUE RMS &bull; 4&frac12; DIGIT AUDIO BENCH</span>
+            <div class="dmm-plate" style="border-bottom: 2px solid #ca8a04;">
+              <span class="dmm-plate-title" style="color: #facc15;">LUCKY 8050A DIGITAL MULTIMETER</span>
+              <span class="dmm-plate-sub">TRUE RMS &bull; 4&frac12; DIGIT AUDIO BENCH &bull; HIGH SENSITIVITY</span>
             </div>
-            <div class="dmm-bezel">
+            <!-- DMM Mode Switcher: +VE, -VE, THD/DIST, MULTI -->
+            <div class="dmm-mode-switcher" style="padding: 0.4rem 0.6rem; background: #0f172a; display: flex; gap: 0.35rem;">
+              <button class="dmm-mode-btn active yellow-mode" data-dmm-mode="hot">+VE HOT (PIN 2)</button>
+              <button class="dmm-mode-btn" data-dmm-mode="cold">-VE COLD (PIN 3)</button>
+              <button class="dmm-mode-btn" data-dmm-mode="thd">THD &amp; DISTORTION</button>
+              <button class="dmm-mode-btn" data-dmm-mode="multi">MULTI-READOUT</button>
+            </div>
+            <div class="dmm-bezel" style="border-color: #ca8a04;">
               <div class="dmm-header">
-                <span class="dmm-model">VACUUM FLUORESCENT DISPLAY</span>
-                <span class="dmm-badge">&#9679; AC RMS ACTIVE</span>
+                <span class="dmm-model" style="color: #facc15;">VACUUM FLUORESCENT DISPLAY</span>
+                <span id="dmm-active-badge" class="dmm-badge" style="background: rgba(250, 204, 21, 0.2); color: #facc15; border: 1px solid #facc15;">&#9679; AC RMS ACTIVE</span>
               </div>
               <div class="dmm-grid">
                 <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">V_RMS (VOLTAGE)</div>
-                  <div id="dmm-vrms-val" class="dmm-readout-value cyan">1.228 V</div>
+                  <div id="dmm-lbl-1" class="dmm-readout-label">V_+VE (VOLTAGE RMS)</div>
+                  <div id="dmm-vrms-val" class="dmm-readout-value lucky-yellow">1.228 V</div>
                 </div>
                 <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">AUDIO LEVEL (dBu)</div>
-                  <div id="dmm-dbu-val" class="dmm-readout-value green">+4.0 dBu</div>
+                  <div id="dmm-lbl-2" class="dmm-readout-label">AUDIO LEVEL (dBu)</div>
+                  <div id="dmm-dbu-val" class="dmm-readout-value lucky-yellow">+4.0 dBu</div>
                 </div>
                 <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">V_PEAK (CREST)</div>
-                  <div id="dmm-vpeak-val" class="dmm-readout-value amber">1.737 V</div>
+                  <div id="dmm-lbl-3" class="dmm-readout-label">LINE STATUS / THD</div>
+                  <div id="dmm-vpeak-val" class="dmm-readout-value lucky-yellow">0.003% / 95dB</div>
                 </div>
               </div>
             </div>
@@ -7388,10 +7395,11 @@ body.probe-cursor-active * {
               <div class="dmm-key">AC mA</div>
               <div class="dmm-key">DC mA</div>
               <div class="dmm-key">k&Omega;</div>
-              <div class="dmm-key">200mV</div>
-              <div class="dmm-key active">2V</div>
-              <div class="dmm-key">20V</div>
-              <div class="dmm-key">200V</div>
+              <div class="dmm-key active key-range-auto" data-dmm-range="AUTO">AUTO</div>
+              <div class="dmm-key" data-dmm-range="0.2">200mV</div>
+              <div class="dmm-key" data-dmm-range="2">2V</div>
+              <div class="dmm-key" data-dmm-range="20">20V</div>
+              <div class="dmm-key" data-dmm-range="200">200V</div>
               <div class="dmm-key key-red">POWER</div>
             </div>
             <div class="dmm-terminals">
@@ -7408,6 +7416,72 @@ body.probe-cursor-active * {
                 <span class="dmm-jack-label">mA</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Hewlett-Packard 353A Patch Panel & Strip-Chart Trend Recorder Row -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem; margin-bottom: 1.25rem;">
+          <!-- Hewlett-Packard 353A Patch Panel (Manual 00353-90003) -->
+          <div class="hp353a-panel-card" style="margin-top: 0;">
+            <div class="hp353a-header">
+              <div class="hp353a-badge">
+                <span class="hp353a-hp-logo">hp</span>
+                <span class="hp353a-title">353A PATCH PANEL</span>
+              </div>
+              <span style="font-size: 0.65rem; color: #94a3b8; font-family: monospace;">MANUAL 00353-90003</span>
+            </div>
+            <div class="hp353a-grid">
+              <div class="hp353a-ctrl-col">
+                <span class="hp353a-ctrl-title">OUTPUT Z</span>
+                <div class="hp353a-rotary-dial hp353a-outz-dial" title="Click to cycle Output Impedance (135, 600, 900 Ω)">
+                  <div class="hp353a-rotary-pointer"></div>
+                </div>
+                <span class="hp353a-value-readout hp353a-outz-val">600 Ω</span>
+              </div>
+              <div class="hp353a-ctrl-col">
+                <span class="hp353a-ctrl-title">INPUT TERM Z</span>
+                <div class="hp353a-rotary-dial hp353a-inz-dial" title="Click to cycle Input Termination (135, 600, 900, 10k Ω)">
+                  <div class="hp353a-rotary-pointer"></div>
+                </div>
+                <span class="hp353a-value-readout hp353a-inz-val">10 kΩ</span>
+              </div>
+              <div class="hp353a-ctrl-col">
+                <span class="hp353a-ctrl-title">ATTEN 10 dB</span>
+                <div class="hp353a-rotary-dial hp353a-atten10-dial" title="Click to step 10 dB Attenuation (0 - 100 dB)">
+                  <div class="hp353a-rotary-pointer"></div>
+                </div>
+                <span class="hp353a-value-readout hp353a-atten10-val">0 dB</span>
+              </div>
+              <div class="hp353a-ctrl-col">
+                <span class="hp353a-ctrl-title">ATTEN 1 dB</span>
+                <div class="hp353a-rotary-dial hp353a-atten1-dial" title="Click to step 1 dB Attenuation (0 - 10 dB)">
+                  <div class="hp353a-rotary-pointer"></div>
+                </div>
+                <span class="hp353a-value-readout hp353a-atten1-val">0 dB</span>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.65rem; padding-top: 0.5rem; border-top: 1px solid #334155;">
+              <button class="hp353a-switch-btn hp353a-toggle-meas active" title="Toggle MEAS (circuit under test) vs CAL (oscillator reference)">MODE: MEAS</button>
+              <span class="hp353a-atten-total" style="font-family: monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 800;">0 dB Loss</span>
+              <button class="hp353a-switch-btn hp353a-toggle-freq" title="Toggle FREQ (<5kHz audio vs >5kHz carrier)">FREQ: &lt;5kHz</button>
+            </div>
+          </div>
+
+          <!-- Time-Series Strip-Chart Trend Recorder -->
+          <div class="trend-recorder-card" style="margin-top: 0;">
+            <div class="trend-toolbar">
+              <span class="trend-title">📉 MULTI-CHANNEL TREND RECORDER</span>
+              <div class="trend-legend">
+                <span class="trend-legend-pill" style="color: #facc15;"><span class="trend-dot yellow"></span> +VE</span>
+                <span class="trend-legend-pill" style="color: #38bdf8;"><span class="trend-dot cyan"></span> -VE</span>
+                <span class="trend-legend-pill" style="color: #10b981;"><span class="trend-dot green"></span> DIFF</span>
+              </div>
+              <div class="trend-btn-group">
+                <button class="trend-btn trend-btn-run active">PAUSE</button>
+                <button class="trend-btn trend-btn-clear">CLEAR</button>
+              </div>
+            </div>
+            <canvas id="dmm-trend-canvas" width="400" height="150" class="trend-canvas"></canvas>
           </div>
         </div>
 
@@ -7991,29 +8065,36 @@ body.probe-cursor-active * {
   </svg>
 </div>
 
-              <!-- Fluke 8050A Precision Benchtop DMM -->
+              <!-- LUCKY 8050A Precision Benchtop DMM (Yellow Font) -->
               <div class="dmm-display-card">
-                <div class="dmm-plate">
-                  <span class="dmm-plate-title">FLUKE 8050A DIGITAL MULTIMETER</span>
-                  <span class="dmm-plate-sub">TRUE RMS &bull; SYSTEM DIFFERENTIAL LOAD MONITOR</span>
+                <div class="dmm-plate" style="border-bottom: 2px solid #ca8a04;">
+                  <span class="dmm-plate-title" style="color: #facc15;">LUCKY 8050A DIGITAL MULTIMETER</span>
+                  <span class="dmm-plate-sub">TRUE RMS &bull; SYSTEM DIFFERENTIAL LOAD MONITOR &bull; HIGH SENSITIVITY</span>
                 </div>
-                <div class="dmm-bezel">
+                <!-- DMM Mode Switcher: +VE, -VE, THD/DIST, MULTI -->
+                <div class="dmm-mode-switcher" style="padding: 0.4rem 0.6rem; background: #0f172a; display: flex; gap: 0.35rem;">
+                  <button class="dmm-mode-btn active yellow-mode" data-dmm-mode="hot">+VE HOT</button>
+                  <button class="dmm-mode-btn" data-dmm-mode="cold">-VE COLD</button>
+                  <button class="dmm-mode-btn" data-dmm-mode="thd">THD &amp; CMRR</button>
+                  <button class="dmm-mode-btn" data-dmm-mode="multi">MULTI</button>
+                </div>
+                <div class="dmm-bezel" style="border-color: #ca8a04;">
                   <div class="dmm-header">
-                    <span class="dmm-model">VACUUM FLUORESCENT DISPLAY</span>
-                    <span class="dmm-badge">&#9679; DIFFERENTIAL LOAD ACTIVE</span>
+                    <span class="dmm-model" style="color: #facc15;">VACUUM FLUORESCENT DISPLAY</span>
+                    <span class="dmm-badge" style="background: rgba(250, 204, 21, 0.2); color: #facc15; border: 1px solid #facc15;">&#9679; DIFFERENTIAL LOAD ACTIVE</span>
                   </div>
                   <div class="dmm-grid">
                     <div class="dmm-readout-item">
-                      <div class="dmm-readout-label">V_DIFF (AC RMS)</div>
-                      <div id="pp-dmm-vdiff" class="dmm-readout-value cyan">2.06 V</div>
+                      <div id="pp-dmm-lbl-1" class="dmm-readout-label">V_DIFF (AC RMS)</div>
+                      <div id="pp-dmm-vdiff" class="dmm-readout-value lucky-yellow">2.06 V</div>
                     </div>
                     <div class="dmm-readout-item">
-                      <div class="dmm-readout-label">I_LOAD (CURRENT)</div>
-                      <div id="pp-dmm-iload" class="dmm-readout-value green">3.4 mA</div>
+                      <div id="pp-dmm-lbl-2" class="dmm-readout-label">I_LOAD (CURRENT)</div>
+                      <div id="pp-dmm-iload" class="dmm-readout-value lucky-yellow">3.4 mA</div>
                     </div>
                     <div class="dmm-readout-item">
-                      <div class="dmm-readout-label">LINE BALANCE</div>
-                      <div id="pp-dmm-status" class="dmm-readout-value">SYMMETRIC</div>
+                      <div id="pp-dmm-lbl-3" class="dmm-readout-label">LINE BALANCE</div>
+                      <div id="pp-dmm-status" class="dmm-readout-value lucky-yellow">SYMMETRIC</div>
                     </div>
                   </div>
                 </div>
@@ -8023,10 +8104,11 @@ body.probe-cursor-active * {
                   <div class="dmm-key active">AC mA</div>
                   <div class="dmm-key">DC mA</div>
                   <div class="dmm-key">k&Omega;</div>
-                  <div class="dmm-key">200mV</div>
-                  <div class="dmm-key active">2V</div>
-                  <div class="dmm-key">20V</div>
-                  <div class="dmm-key">200V</div>
+                  <div class="dmm-key active key-range-auto" data-dmm-range="AUTO">AUTO</div>
+                  <div class="dmm-key" data-dmm-range="0.2">200mV</div>
+                  <div class="dmm-key" data-dmm-range="2">2V</div>
+                  <div class="dmm-key" data-dmm-range="20">20V</div>
+                  <div class="dmm-key" data-dmm-range="200">200V</div>
                   <div class="dmm-key key-red">POWER</div>
                 </div>
                 <div class="dmm-terminals">
@@ -8046,6 +8128,72 @@ body.probe-cursor-active * {
               </div>
             </div>
 
+            <!-- Hewlett-Packard 353A Patch Panel & Strip-Chart Trend Recorder Row for Circuit 6.1 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem;">
+              <!-- Hewlett-Packard 353A Patch Panel -->
+              <div class="hp353a-panel-card" style="margin-top: 0;">
+                <div class="hp353a-header">
+                  <div class="hp353a-badge">
+                    <span class="hp353a-hp-logo">hp</span>
+                    <span class="hp353a-title">353A PATCH PANEL</span>
+                  </div>
+                  <span style="font-size: 0.65rem; color: #94a3b8; font-family: monospace;">MANUAL 00353-90003</span>
+                </div>
+                <div class="hp353a-grid">
+                  <div class="hp353a-ctrl-col">
+                    <span class="hp353a-ctrl-title">OUTPUT Z</span>
+                    <div class="hp353a-rotary-dial hp353a-outz-dial" title="Click to cycle Output Impedance (135, 600, 900 Ω)">
+                      <div class="hp353a-rotary-pointer"></div>
+                    </div>
+                    <span class="hp353a-value-readout hp353a-outz-val">600 Ω</span>
+                  </div>
+                  <div class="hp353a-ctrl-col">
+                    <span class="hp353a-ctrl-title">INPUT TERM Z</span>
+                    <div class="hp353a-rotary-dial hp353a-inz-dial" title="Click to cycle Input Termination (135, 600, 900, 10k Ω)">
+                      <div class="hp353a-rotary-pointer"></div>
+                    </div>
+                    <span class="hp353a-value-readout hp353a-inz-val">10 kΩ</span>
+                  </div>
+                  <div class="hp353a-ctrl-col">
+                    <span class="hp353a-ctrl-title">ATTEN 10 dB</span>
+                    <div class="hp353a-rotary-dial hp353a-atten10-dial" title="Click to step 10 dB Attenuation (0 - 100 dB)">
+                      <div class="hp353a-rotary-pointer"></div>
+                    </div>
+                    <span class="hp353a-value-readout hp353a-atten10-val">0 dB</span>
+                  </div>
+                  <div class="hp353a-ctrl-col">
+                    <span class="hp353a-ctrl-title">ATTEN 1 dB</span>
+                    <div class="hp353a-rotary-dial hp353a-atten1-dial" title="Click to step 1 dB Attenuation (0 - 10 dB)">
+                      <div class="hp353a-rotary-pointer"></div>
+                    </div>
+                    <span class="hp353a-value-readout hp353a-atten1-val">0 dB</span>
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.65rem; padding-top: 0.5rem; border-top: 1px solid #334155;">
+                  <button class="hp353a-switch-btn hp353a-toggle-meas active" title="Toggle MEAS (circuit under test) vs CAL (oscillator reference)">MODE: MEAS</button>
+                  <span class="hp353a-atten-total" style="font-family: monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 800;">0 dB Loss</span>
+                  <button class="hp353a-switch-btn hp353a-toggle-freq" title="Toggle FREQ (<5kHz audio vs >5kHz carrier)">FREQ: &lt;5kHz</button>
+                </div>
+              </div>
+
+              <!-- Time-Series Strip-Chart Trend Recorder -->
+              <div class="trend-recorder-card" style="margin-top: 0;">
+                <div class="trend-toolbar">
+                  <span class="trend-title">📉 MULTI-CHANNEL TREND RECORDER</span>
+                  <div class="trend-legend">
+                    <span class="trend-legend-pill" style="color: #facc15;"><span class="trend-dot yellow"></span> +VE</span>
+                    <span class="trend-legend-pill" style="color: #38bdf8;"><span class="trend-dot cyan"></span> -VE</span>
+                    <span class="trend-legend-pill" style="color: #10b981;"><span class="trend-dot green"></span> DIFF</span>
+                  </div>
+                  <div class="trend-btn-group">
+                    <button class="trend-btn trend-btn-run active">PAUSE</button>
+                    <button class="trend-btn trend-btn-clear">CLEAR</button>
+                  </div>
+                </div>
+                <canvas id="pp-trend-canvas" width="400" height="150" class="trend-canvas"></canvas>
+              </div>
+            </div>
+
             <!-- Live Falstad-Style Probes -->
             <div class="probe-badge-panel" style="margin-top: 1rem;">
               <span class="probe-pill">Generator In: <strong id="pp-probe-gen">0.85 VRMS / 0.1 mA</strong></span>
@@ -8058,6 +8206,21 @@ body.probe-cursor-active * {
           <!-- Vector Schematic SVG with Dynamic Wires and Overlaid Values -->
           <div class="svg-diagram-wrapper">
             <svg viewBox="0 0 850 300" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="mdp-arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+                </marker>
+                <marker id="mdp-arrow-rose" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e"/>
+                </marker>
+                <marker id="mdp-arrow-cyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+                </marker>
+                <marker id="mdp-arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7"/>
+                </marker>
+              </defs>
+
               <rect width="850" height="300" fill="var(--bg-secondary)" rx="8"/>
               
               <!-- Input Signal Wire with Dynamic Stroke -->
@@ -8097,7 +8260,7 @@ body.probe-cursor-active * {
               <line x1="385" y1="90" x2="630" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
               <circle cx="630" cy="90" r="7" fill="#10b981"/>
               <circle cx="630" cy="90" r="3" class="solder-lug"/>
-              <text x="655" y="95" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
+              <text x="645" y="80" fill="#10b981" font-size="12" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <text id="pp-svg-probe-p2" x="490" y="80" fill="#10b981" font-size="10" font-weight="600">3.4 mA / 1.03 V</text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 260,90 L 630,90" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
@@ -8111,7 +8274,7 @@ body.probe-cursor-active * {
               <line x1="385" y1="210" x2="630" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
               <circle cx="630" cy="210" r="7" fill="#ef4444"/>
               <circle cx="630" cy="210" r="3" class="solder-lug"/>
-              <text x="655" y="215" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
+              <text x="645" y="228" fill="#ef4444" font-size="12" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
               <text id="pp-svg-probe-p3" x="490" y="228" fill="#ef4444" font-size="10" font-weight="600">3.4 mA / -1.03 V</text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 630,210 L 260,210" fill="none" stroke="#ef4444" stroke-width="2.5"/>
 
@@ -8119,8 +8282,8 @@ body.probe-cursor-active * {
               <line x1="630" y1="90" x2="630" y2="120" stroke="#f59e0b" stroke-width="2"/>
               <circle cx="630" cy="120" r="3" class="solder-lug"/>
               <rect id="pp-svg-rload-rect" x="622" y="120" width="16" height="60" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
-              <text x="655" y="152" fill="#f59e0b" font-size="10" font-weight="600">R_Load</text>
-              <text id="pp-svg-rload" x="655" y="172" fill="#f59e0b" font-size="11" font-weight="700">600 &Omega;</text>
+              <text x="645" y="145" fill="#f59e0b" font-size="10" font-weight="600">R_Load</text>
+              <text id="pp-svg-rload" x="645" y="160" fill="#f59e0b" font-size="11" font-weight="700">600 &Omega;</text>
               <circle cx="630" cy="180" r="3" class="solder-lug"/>
               <line x1="630" y1="180" x2="630" y2="210" stroke="#f59e0b" stroke-width="2"/>
 
@@ -8131,8 +8294,41 @@ body.probe-cursor-active * {
                 <circle cx="630" cy="260" r="3" class="solder-lug"/>
                 <line x1="420" y1="260" x2="630" y2="260" stroke="#94a3b8" stroke-width="2"/>
                 <path d="M 410,260 L 430,260 M 415,265 L 425,265 M 418,270 L 422,270" stroke="#94a3b8" stroke-width="2"/>
-                <text id="pp-svg-ts-text" x="580" y="248" fill="#94a3b8" font-size="10" font-weight="600">TS Ground Short Link (Open)</text>
-                <text x="655" y="265" fill="#94a3b8" font-size="13" font-weight="700">Pin 1 (CHASSIS)</text>
+                <text id="pp-svg-ts-text" x="540" y="252" fill="#94a3b8" font-size="9" font-weight="600">TS Ground Short Link</text>
+                <text x="645" y="270" fill="#94a3b8" font-size="11" font-weight="700">Pin 1 (CHASSIS)</text>
+              </g>
+
+              <!-- ================= Measurement Data Points (MDP) Leader Pointers ================= -->
+              <!-- MDP 0: Audio In Drive -->
+              <g class="circuit-mdp-badge" data-probe-target="6-1-vin" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 20,40 L 60,40 L 88,140" stroke="#a855f7" stroke-width="1.8" fill="none" marker-end="url(#mdp-arrow-purple)"/>
+                <rect x="15" y="15" width="120" height="28" rx="4" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
+                <text x="24" y="27" fill="#a855f7" font-size="8.5" font-weight="800">MDP-0: AUDIO DRIVE</text>
+                <text id="mdp-val-6-1-vin" x="24" y="38" fill="#facc15" font-size="8.5" font-weight="700">1.20 V RMS</text>
+              </g>
+
+              <!-- MDP 1: Pin 2 Hot Leader Pointer -->
+              <g class="circuit-mdp-badge" data-probe-target="6-1-p2" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 720,45 L 675,45 L 636,84" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#mdp-arrow-green)"/>
+                <rect x="715" y="30" width="125" height="30" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+                <text x="725" y="44" fill="#10b981" font-size="8.5" font-weight="800">MDP-1: PIN 2 (+VE HOT)</text>
+                <text id="mdp-val-6-1-p2" x="725" y="55" fill="#facc15" font-size="8.5" font-weight="700">1.03 V RMS (+2.5 dBu)</text>
+              </g>
+
+              <!-- MDP 3: Differential Load Leader Pointer -->
+              <g class="circuit-mdp-badge" data-probe-target="6-1-load" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 720,130 L 675,130 L 640,148" stroke="#38bdf8" stroke-width="1.8" fill="none" marker-end="url(#mdp-arrow-cyan)"/>
+                <rect x="715" y="115" width="125" height="30" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="725" y="129" fill="#38bdf8" font-size="8.5" font-weight="800">MDP-3: DIFF LOAD</text>
+                <text id="mdp-val-6-1-load" x="725" y="140" fill="#facc15" font-size="8.5" font-weight="700">2.06 V / 3.4 mA</text>
+              </g>
+
+              <!-- MDP 2: Pin 3 Cold Leader Pointer -->
+              <g class="circuit-mdp-badge" data-probe-target="6-1-p3" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 720,210 L 638,210" stroke="#f43f5e" stroke-width="1.8" fill="none" marker-end="url(#mdp-arrow-rose)"/>
+                <rect x="715" y="195" width="125" height="30" rx="4" fill="#0f172a" stroke="#f43f5e" stroke-width="1.5"/>
+                <text x="725" y="209" fill="#f43f5e" font-size="8.5" font-weight="800">MDP-2: PIN 3 (-VE COLD)</text>
+                <text id="mdp-val-6-1-p3" x="725" y="220" fill="#facc15" font-size="8.5" font-weight="700">-1.03 V RMS (180°)</text>
               </g>
             </svg>
           </div>
@@ -8232,6 +8428,21 @@ body.probe-cursor-active * {
           </div>
           <div class="svg-diagram-wrapper">
             <svg viewBox="0 0 850 280" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="mdp2-arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+                </marker>
+                <marker id="mdp2-arrow-rose" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e"/>
+                </marker>
+                <marker id="mdp2-arrow-cyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+                </marker>
+                <marker id="mdp2-arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7"/>
+                </marker>
+              </defs>
+
               <rect width="850" height="280" fill="var(--bg-secondary)" rx="8"/>
 
               <text x="30" y="85" fill="#38bdf8" font-size="13" font-weight="700">Audio In</text>
@@ -8245,7 +8456,7 @@ body.probe-cursor-active * {
               <text x="360" y="84" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">R_PO (50&Omega;)</text>
               <line x1="390" y1="80" x2="640" y2="80" stroke="#10b981" stroke-width="2.5"/>
               <circle cx="640" cy="80" r="7" fill="#10b981"/>
-              <text x="665" y="85" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
+              <text x="655" y="75" fill="#10b981" font-size="12" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 250,80 L 640,80" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
               <!-- Passive Resistor Termination to Ground (Pin 3) -->
@@ -8255,7 +8466,7 @@ body.probe-cursor-active * {
               <text x="360" y="184" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">R_RO (50&Omega;)</text>
               <line x1="390" y1="180" x2="640" y2="180" stroke="#94a3b8" stroke-width="2.5"/>
               <circle cx="640" cy="180" r="7" fill="#ef4444"/>
-              <text x="665" y="185" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
+              <text x="655" y="195" fill="#ef4444" font-size="12" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
               <text x="440" y="165" fill="#94a3b8" font-size="10" font-weight="600">Zero Audio Signal Voltage (Passive Balance)</text>
 
               <!-- Bridging Load Resistor -->
@@ -8267,7 +8478,40 @@ body.probe-cursor-active * {
               <!-- Pin 1 Shield -->
               <line x1="210" y1="230" x2="640" y2="230" stroke="#94a3b8" stroke-width="2"/>
               <circle cx="640" cy="230" r="7" fill="#94a3b8"/>
-              <text x="665" y="235" fill="#94a3b8" font-size="14" font-weight="700">Pin 1 (CHASSIS)</text>
+              <text x="655" y="240" fill="#94a3b8" font-size="12" font-weight="700">Pin 1 (CHASSIS)</text>
+
+              <!-- ================= Measurement Data Points (MDP) Leader Pointers ================= -->
+              <!-- MDP 0: Audio In Drive -->
+              <g class="circuit-mdp-badge" data-probe-target="6-2-vin" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 20,35 L 60,35 L 88,75" stroke="#a855f7" stroke-width="1.8" fill="none" marker-end="url(#mdp2-arrow-purple)"/>
+                <rect x="15" y="15" width="120" height="28" rx="4" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
+                <text x="24" y="27" fill="#a855f7" font-size="8.5" font-weight="800">MDP-0: AUDIO DRIVE</text>
+                <text id="mdp-val-6-2-vin" x="24" y="38" fill="#facc15" font-size="8.5" font-weight="700">1.20 V RMS</text>
+              </g>
+
+              <!-- MDP 1: Pin 2 Hot Leader Pointer -->
+              <g class="circuit-mdp-badge" data-probe-target="6-2-p2" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 720,40 L 675,40 L 646,74" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#mdp2-arrow-green)"/>
+                <rect x="715" y="25" width="125" height="30" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+                <text x="725" y="39" fill="#10b981" font-size="8.5" font-weight="800">MDP-1: PIN 2 (+VE HOT)</text>
+                <text id="mdp-val-6-2-p2" x="725" y="50" fill="#facc15" font-size="8.5" font-weight="700">1.19 V RMS (ACTIVE)</text>
+              </g>
+
+              <!-- MDP 3: Differential Load Leader Pointer -->
+              <g class="circuit-mdp-badge" data-probe-target="6-2-load" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 720,115 L 675,115 L 646,128" stroke="#38bdf8" stroke-width="1.8" fill="none" marker-end="url(#mdp2-arrow-cyan)"/>
+                <rect x="715" y="100" width="125" height="30" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="725" y="114" fill="#38bdf8" font-size="8.5" font-weight="800">MDP-3: DIFF LOAD</text>
+                <text id="mdp-val-6-2-load" x="725" y="125" fill="#facc15" font-size="8.5" font-weight="700">1.19 V / 100% CMRR</text>
+              </g>
+
+              <!-- MDP 2: Pin 3 Cold Leader Pointer -->
+              <g class="circuit-mdp-badge" data-probe-target="6-2-p3" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 720,185 L 648,180" stroke="#f43f5e" stroke-width="1.8" fill="none" marker-end="url(#mdp2-arrow-rose)"/>
+                <rect x="715" y="170" width="125" height="30" rx="4" fill="#0f172a" stroke="#f43f5e" stroke-width="1.5"/>
+                <text x="725" y="184" fill="#f43f5e" font-size="8.5" font-weight="800">MDP-2: PIN 3 (-VE COLD)</text>
+                <text id="mdp-val-6-2-p3" x="725" y="195" fill="#facc15" font-size="8.5" font-weight="700">0.00 V (50&Omega; PASSIVE)</text>
+              </g>
             </svg>
           </div>
         </div>
@@ -13519,23 +13763,83 @@ class FloatingMeterDock {
     }, 2500);
   }
 
-  updateLiveReadings(vDiff, iLoad, dBu, status = "SYMMETRIC") {
+  updateLiveReadings(vDiffOrData, iLoad = 0.002, dBu = 0, status = "SYMMETRIC") {
+    let data;
+    if (typeof vDiffOrData === "object" && vDiffOrData !== null) {
+      data = vDiffOrData;
+    } else {
+      const v = typeof vDiffOrData === "number" ? vDiffOrData : 1.2;
+      data = {
+        vHot: v,
+        vCold: status.includes("PASSIVE") || status.includes("SHORT") ? 0.0 : v,
+        vDiff: v,
+        iLoad: iLoad,
+        dBu: dBu,
+        status: status,
+        thd: 0.003,
+        cmrr: 90.0
+      };
+    }
+
     const range = this.hpRangeVolts || 3.0;
+    const vDiff = data.vDiff || 1.2;
     const relativeDb = 20 * Math.log10(Math.max(0.00005, vDiff / range));
     this.targetNeedleDbu = relativeDb;
 
-    const vdiffEl = document.getElementById("dock-dmm-vdiff");
-    if (vdiffEl) vdiffEl.textContent = `${vDiff.toFixed(2)} V`;
+    const lbl1 = document.getElementById("dock-dmm-lbl-1");
+    const val1 = document.getElementById("dock-dmm-vdiff");
+    const lbl2 = document.getElementById("dock-dmm-lbl-2");
+    const val2 = document.getElementById("dock-dmm-iload");
+    const lbl3 = document.getElementById("dock-dmm-lbl-3");
+    const val3 = document.getElementById("dock-dmm-status");
 
-    const iloadEl = document.getElementById("dock-dmm-iload");
-    if (iloadEl) iloadEl.textContent = `${(iLoad * 1000).toFixed(1)} mA`;
+    const mode = this.dockDmmMode || "hot";
 
-    const statusEl = document.getElementById("dock-dmm-status");
-    if (statusEl) {
-      statusEl.textContent = status;
-      statusEl.className = status.includes("OVERLOAD") || status.includes("CLIP") || status.includes("IMBALANCE")
-        ? "dmm-vfd-status amber"
-        : "dmm-vfd-status";
+    if (mode === "hot") {
+      if (lbl1) lbl1.textContent = "V_+VE (HOT RMS):";
+      if (val1) val1.textContent = `${data.vHot.toFixed(3)} V`;
+      if (lbl2) lbl2.textContent = "AUDIO LEVEL:";
+      const dbuHot = 20 * Math.log10(Math.max(0.0001, data.vHot / 0.775));
+      if (val2) val2.textContent = `${dbuHot >= 0 ? "+" : ""}${dbuHot.toFixed(1)} dBu`;
+      if (lbl3) lbl3.textContent = "LINE STATUS:";
+      if (val3) {
+        val3.textContent = data.status;
+        val3.className = data.status.includes("CLIP") || data.status.includes("ERROR") || data.status.includes("SHORT")
+          ? "dmm-vfd-status amber"
+          : "dmm-vfd-status lucky-yellow";
+      }
+    } else if (mode === "cold") {
+      if (lbl1) lbl1.textContent = "V_-VE (COLD RMS):";
+      if (val1) val1.textContent = `${data.vCold.toFixed(3)} V`;
+      if (lbl2) lbl2.textContent = "PHASE RELATION:";
+      const phaseTxt = data.vCold < 0.005 ? "0.0° (PASSIVE 0V)" : "180.0° (INVERTED)";
+      if (val2) val2.textContent = phaseTxt;
+      if (lbl3) lbl3.textContent = "IMPEDANCE Z:";
+      if (val3) {
+        val3.textContent = "50.0 Ω BALANCED";
+        val3.className = "dmm-vfd-status lucky-yellow";
+      }
+    } else if (mode === "thd") {
+      if (lbl1) lbl1.textContent = "THD+N HARMONICS:";
+      if (val1) val1.textContent = `${(data.thd || 0.003).toFixed(3)} %`;
+      if (lbl2) lbl2.textContent = "DISTORTION RATIO:";
+      const distDb = -20 * Math.log10(Math.max(0.00001, ((data.thd || 0.003) / 100)));
+      if (val2) val2.textContent = `-${distDb.toFixed(1)} dB`;
+      if (lbl3) lbl3.textContent = "CMRR REJECTION:";
+      if (val3) {
+        val3.textContent = `>${(data.cmrr || 90).toFixed(1)} dB`;
+        val3.className = "dmm-vfd-status lucky-yellow";
+      }
+    } else { // "multi"
+      if (lbl1) lbl1.textContent = "+VE / -VE RMS:";
+      if (val1) val1.textContent = `${data.vHot.toFixed(2)}V / ${data.vCold.toFixed(2)}V`;
+      if (lbl2) lbl2.textContent = "V_DIFF / I_LOAD:";
+      if (val2) val2.textContent = `${data.vDiff.toFixed(2)}V / ${(data.iLoad * 1000).toFixed(1)}mA`;
+      if (lbl3) lbl3.textContent = "CMRR / THD:";
+      if (val3) {
+        val3.textContent = `${(data.cmrr || 90).toFixed(0)}dB / ${(data.thd || 0.003).toFixed(3)}%`;
+        val3.className = "dmm-vfd-status lucky-yellow";
+      }
     }
   }
 
@@ -13737,10 +14041,109 @@ class FloatingMeterDock {
     return { freq, vRms, vPk, phase, shape, status, iLoad };
   }
 
+  getCircuitChannelData() {
+    const key = this.activeProbeTarget || "6-1-p2";
+    let freq = 1000.0;
+    let ch1 = { name: "CH1 Ref (Vin)", vPk: 1.2 * Math.SQRT2, phase: 0, shape: "sine" };
+    let ch2 = { name: "CH2 +VE (Hot)", vPk: 1.2 * Math.SQRT2, phase: 0, shape: "sine" };
+    let ch3 = { name: "CH3 -VE (Cold)", vPk: 1.2 * Math.SQRT2, phase: Math.PI, shape: "sine" };
+    let ch4 = { name: "CH4 Diff", vPk: 2.4 * Math.SQRT2, phase: 0, shape: "sine" };
+    let vHot = 1.2, vCold = 1.2, vDiff = 2.4, iLoad = 0.002, thd = 0.003, cmrr = 90.0, status = "NORMAL SYMMETRICAL";
+
+    if (key.startsWith("6-2") || (!key.startsWith("6-1") && !key.startsWith("6-3") && !key.startsWith("meyer") && document.getElementById("ib-vin"))) {
+      const vin = parseFloat(document.getElementById("ib-vin")?.value || 1.2);
+      const rout = parseFloat(document.getElementById("ib-rout")?.value || 50);
+      const rload = parseFloat(document.getElementById("ib-rload")?.value || 10000);
+      const shortPin3 = document.getElementById("ib-short-pin3")?.checked || false;
+      iLoad = vin / (rout + rload);
+      vHot = iLoad * rload;
+      vCold = 0.0;
+      vDiff = vHot;
+      cmrr = 110.0;
+      thd = 0.0018;
+      status = "ACTIVE IMPEDANCE-BALANCED";
+
+      ch1.vPk = vin * Math.SQRT2;
+      ch2.vPk = vHot * Math.SQRT2;
+      ch3.vPk = 0;
+      ch3.shape = "flatline";
+      ch4.vPk = vDiff * Math.SQRT2;
+    } else if (key.startsWith("6-3")) {
+      const vin = parseFloat(document.getElementById("tx-vin")?.value || 15.0);
+      const ratio = parseFloat(document.getElementById("tx-ratio")?.value || 1.0);
+      const rload = parseFloat(document.getElementById("tx-rload")?.value || 600);
+      const groundPin3 = document.getElementById("tx-ground-pin3")?.checked || false;
+      const vSec = vin * ratio;
+      iLoad = vSec / (40 + rload);
+      vDiff = iLoad * rload;
+      vHot = groundPin3 ? vDiff : vDiff / 2;
+      vCold = groundPin3 ? 0 : vDiff / 2;
+      cmrr = 120.0;
+      thd = 0.045;
+      status = groundPin3 ? "PIN 3 GROUNDED" : "GALVANIC FLOATING";
+
+      ch1.vPk = vin * Math.SQRT2;
+      ch2.vPk = vHot * Math.SQRT2;
+      ch3.vPk = groundPin3 ? 0 : vCold * Math.SQRT2;
+      ch3.shape = groundPin3 ? "flatline" : "sine";
+      ch3.phase = Math.PI;
+      ch4.vPk = vDiff * Math.SQRT2;
+    } else if (key.startsWith("meyer")) {
+      const vpo = parseFloat(document.getElementById("meyer-vpo")?.value || 1.23);
+      const vgvd = parseFloat(document.getElementById("meyer-vgvd")?.value || 10.0);
+      const zpo = parseFloat(document.getElementById("meyer-zpo")?.value || 50);
+      const zro = parseFloat(document.getElementById("meyer-zro")?.value || 50);
+      const deltaZ = Math.abs(zpo - zro);
+      const vErr = vgvd * (deltaZ / 20000);
+      vHot = vpo;
+      vCold = vpo;
+      vDiff = vpo + vErr;
+      cmrr = deltaZ === 0 ? 120 : 20 * Math.log10(20000 / Math.max(0.01, deltaZ));
+      thd = Math.min(100, (vErr / (vpo + 0.001)) * 100);
+      status = deltaZ === 0 ? "INFINITE REJECTION" : "GROUND LOOP ERROR";
+      ch1.vPk = vpo * Math.SQRT2;
+      ch2.vPk = (vpo + vgvd * 0.1) * Math.SQRT2;
+      ch2.shape = "hum-riding";
+      ch3.vPk = (vpo + vgvd * 0.1) * Math.SQRT2;
+      ch3.shape = "hum-riding";
+      ch4.vPk = vDiff * Math.SQRT2;
+    } else {
+      const vin = parseFloat(document.getElementById("pp-vin")?.value || 1.2);
+      const rout = parseFloat(document.getElementById("pp-rout")?.value || 50);
+      const rload = parseFloat(document.getElementById("pp-rload")?.value || 600);
+      const shortPin3 = document.getElementById("pp-short-pin3")?.checked || false;
+      if (!shortPin3) {
+        iLoad = (2 * vin) / (2 * rout + rload);
+        vHot = vin - iLoad * rout;
+        vCold = vHot;
+        vDiff = 2 * vHot;
+        cmrr = 95.0;
+        thd = 0.0025;
+        status = "NORMAL SYMMETRICAL";
+        ch3.vPk = vCold * Math.SQRT2;
+        ch3.shape = "sine";
+      } else {
+        iLoad = vin / (rout + rload);
+        vHot = vin - iLoad * rout;
+        vCold = 0;
+        vDiff = vHot;
+        cmrr = 48.0;
+        thd = iLoad > 0.05 ? 12.5 : 0.085;
+        status = iLoad > 0.05 ? "CURRENT LIMIT CLIP" : "TS SHORTED";
+        ch3.vPk = 0;
+        ch3.shape = "flatline";
+      }
+      ch1.vPk = vin * Math.SQRT2;
+      ch2.vPk = vHot * Math.SQRT2;
+      ch4.vPk = vDiff * Math.SQRT2;
+    }
+
+    return { freq, ch1, ch2, ch3, ch4, vHot, vCold, vDiff, iLoad, thd, cmrr, status };
+  }
+
   updateFromActiveCircuit() {
-    const data = this.getProbedSignalData();
-    const dBu = 20 * Math.log10(Math.max(0.0001, data.vRms / 0.775));
-    this.updateLiveReadings(data.vRms, data.iLoad, dBu, data.status);
+    const channelData = this.getCircuitChannelData();
+    this.updateLiveReadings(channelData);
   }
 
   startMainInstrumentLoop() {
@@ -13763,7 +14166,7 @@ class FloatingMeterDock {
   }
 
   /**
-   * 1970s Tektronix / HP CRT Oscilloscope Rendering Engine
+   * 1970s Tektronix / HP CRT Oscilloscope Rendering Engine (4-Channel)
    */
   renderOscilloscope() {
     if (!this.scopeCtx) return;
@@ -13774,7 +14177,7 @@ class FloatingMeterDock {
     // Advance timebase
     this.scopeTime += 0.0005;
 
-    // Phosphor decay persistence (draw transparent mask instead of clearRect)
+    // Phosphor decay persistence
     ctx.fillStyle = "rgba(2, 20, 8, 0.28)";
     ctx.fillRect(0, 0, w, h);
 
@@ -13813,63 +14216,67 @@ class FloatingMeterDock {
     }
     ctx.stroke();
 
-    // Compute waveform from probed node
-    const sig = this.getProbedSignalData();
-    const voltsPerDiv = this.scopeVoltsDiv; // e.g. 1.0 V/div
-    const timePerDiv = this.scopeTimeDiv * 0.001; // e.g. 0.0005 s/div
+    // Compute waveform channel data
+    const cData = this.getCircuitChannelData();
+    const voltsPerDiv = this.scopeVoltsDiv;
+    const timePerDiv = this.scopeTimeDiv * 0.001;
     const totalTimeSpan = 10 * timePerDiv;
-
-    // Draw Live Green Phosphor CRT Trace
-    ctx.save();
-    ctx.strokeStyle = "#4ade80";
-    ctx.shadowColor = "#22c55e";
-    ctx.shadowBlur = 8;
-    ctx.lineWidth = 2.2;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    ctx.beginPath();
     const numSamples = 240;
 
-    for (let s = 0; s < numSamples; s++) {
-      const px = (s / (numSamples - 1)) * w;
-      const tPoint = (s / (numSamples - 1)) * totalTimeSpan;
-      
-      // Auto-trigger sync locks phase so wave is stationary on CRT
-      const t = this.scopeTriggerMode === "AUTO" ? tPoint : this.scopeTime + tPoint;
+    const channelsToRender = [
+      { id: "ch1", label: "CH1 Ref", color: "#facc15", glow: "#eab308", data: cData.ch1 },
+      { id: "ch2", label: "CH2 +VE", color: "#38bdf8", glow: "#0284c7", data: cData.ch2 },
+      { id: "ch3", label: "CH3 -VE", color: "#f43f5e", glow: "#e11d48", data: cData.ch3 },
+      { id: "ch4", label: "CH4 Diff", color: "#4ade80", glow: "#22c55e", data: cData.ch4 }
+    ];
 
-      let v = 0;
-      const omega = 2 * Math.PI * sig.freq;
+    channelsToRender.forEach(ch => {
+      if (!this.scopeChannels[ch.id]) return;
 
-      if (sig.shape === "sine") {
-        v = sig.vPk * Math.sin(omega * t + sig.phase);
-      } else if (sig.shape === "flatline") {
-        v = 0;
-      } else if (sig.shape === "clipped") {
-        const raw = 14.0 * Math.sin(omega * t + sig.phase);
-        v = Math.max(-5.0, Math.min(5.0, raw)); // Hard clipping saturation
-      } else if (sig.shape === "hum") {
-        // 60Hz mains hum + 120Hz / 180Hz rectifier spikes
-        const w60 = 2 * Math.PI * 60;
-        v = sig.vPk * (0.8 * Math.sin(w60 * t) + 0.25 * Math.sin(2 * w60 * t) + 0.1 * Math.sin(3 * w60 * t));
-      } else if (sig.shape === "hum-riding") {
-        const w1k = 2 * Math.PI * 1000;
-        const w60 = 2 * Math.PI * 60;
-        v = sig.vPk * Math.sin(w1k * t) + 0.4 * Math.sin(w60 * t);
+      ctx.save();
+      ctx.strokeStyle = ch.color;
+      ctx.shadowColor = ch.glow;
+      ctx.shadowBlur = 6;
+      ctx.lineWidth = 1.9;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.beginPath();
+
+      for (let s = 0; s < numSamples; s++) {
+        const px = (s / (numSamples - 1)) * w;
+        const tPoint = (s / (numSamples - 1)) * totalTimeSpan;
+        const t = this.scopeTriggerMode === "AUTO" ? tPoint : this.scopeTime + tPoint;
+
+        let v = 0;
+        const omega = 2 * Math.PI * cData.freq;
+        const shape = ch.data.shape;
+
+        if (shape === "sine") {
+          v = ch.data.vPk * Math.sin(omega * t + ch.data.phase);
+        } else if (shape === "flatline") {
+          v = 0;
+        } else if (shape === "hum-riding") {
+          const w60 = 2 * Math.PI * 60;
+          v = ch.data.vPk * Math.sin(omega * t) + 0.35 * Math.sin(w60 * t);
+        } else if (shape === "clipped") {
+          const raw = 14.0 * Math.sin(omega * t + ch.data.phase);
+          v = Math.max(-5.0, Math.min(5.0, raw));
+        } else {
+          v = ch.data.vPk * Math.sin(omega * t + ch.data.phase);
+        }
+
+        const py = midY - (v / (4 * voltsPerDiv)) * midY;
+        const clampedY = Math.max(4, Math.min(h - 4, py));
+
+        if (s === 0) {
+          ctx.moveTo(px, clampedY);
+        } else {
+          ctx.lineTo(px, clampedY);
+        }
       }
-
-      // Map voltage to CRT Y coordinate (midY is 0V, positive is up)
-      const py = midY - (v / (4 * voltsPerDiv)) * midY;
-      const clampedY = Math.max(4, Math.min(h - 4, py));
-
-      if (s === 0) {
-        ctx.moveTo(px, clampedY);
-      } else {
-        ctx.lineTo(px, clampedY);
-      }
-    }
-    ctx.stroke();
-    ctx.restore();
+      ctx.stroke();
+      ctx.restore();
+    });
 
     // On-Screen CRT Display (OSD) Telemetry
     ctx.font = "bold 9px 'Courier New', monospace";
@@ -13877,9 +14284,15 @@ class FloatingMeterDock {
     ctx.shadowColor = "#22c55e";
     ctx.shadowBlur = 4;
 
-    // Top Header: CH1 scale, Timebase & Trigger
+    // Top Header: Channel Indicators & Timebase
     ctx.textAlign = "left";
-    ctx.fillText(`CH1: ${voltsPerDiv.toFixed(1)}V/DIV  ${this.scopeCoupling}`, 8, 14);
+    let activeTags = [];
+    if (this.scopeChannels.ch1) activeTags.push("CH1:REF");
+    if (this.scopeChannels.ch2) activeTags.push("CH2:+VE");
+    if (this.scopeChannels.ch3) activeTags.push("CH3:-VE");
+    if (this.scopeChannels.ch4) activeTags.push("CH4:DIFF");
+    const tagStr = activeTags.join(" ") || "ALL OFF";
+    ctx.fillText(`${tagStr} | ${voltsPerDiv.toFixed(1)}V/DIV`, 8, 14);
 
     ctx.textAlign = "right";
     ctx.fillText(`TIME: ${this.scopeTimeDiv.toFixed(1)}ms/DIV`, w - 24, 14);
@@ -13889,16 +14302,12 @@ class FloatingMeterDock {
     ctx.arc(w - 12, 11, 3.5, 0, Math.PI * 2);
     ctx.fill();
 
-    // Bottom Footer: Vp-p, V_RMS, Frequency
+    // Bottom Footer: +VE, -VE, Diff telemetry
     ctx.textAlign = "left";
-    ctx.fillText(`Vp-p: ${(sig.vPk * 2).toFixed(2)}V`, 8, h - 8);
-
-    ctx.textAlign = "center";
-    ctx.fillText(`Vrms: ${sig.vRms.toFixed(2)}V`, w / 2, h - 8);
+    ctx.fillText(`+VE: ${cData.vHot.toFixed(2)}V  -VE: ${cData.vCold.toFixed(2)}V`, 8, h - 8);
 
     ctx.textAlign = "right";
-    const freqTxt = sig.freq >= 1000 ? `${(sig.freq / 1000).toFixed(2)} kHz` : `${sig.freq.toFixed(0)} Hz`;
-    ctx.fillText(`FREQ: ${freqTxt}`, w - 8, h - 8);
+    ctx.fillText(`DIFF: ${cData.vDiff.toFixed(2)}V  1.0kHz`, w - 8, h - 8);
   }
 
   /**
@@ -16495,6 +16904,13 @@ class CircuitSimulator {
     this.setProbe("pp-svg-probe-p2", `${(iPin2 * 1000).toFixed(1)} mA / ${vPin2.toFixed(2)} V`);
     this.setProbe("pp-svg-probe-p3", `${(iPin3 * 1000).toFixed(1)} mA / ${vPin3.toFixed(2)} V`);
 
+    // Live SVG Measurement Data Points (MDP) Badges with Pointers
+    const dBuP2 = 20 * Math.log10(Math.max(0.001, vPin2 / 0.775));
+    this.setProbe("mdp-val-6-1-vin", `${vin.toFixed(2)} V RMS`);
+    this.setProbe("mdp-val-6-1-p2", `${vPin2.toFixed(2)} V RMS (${dBuP2 >= 0 ? '+' : ''}${dBuP2.toFixed(1)} dBu)`);
+    this.setProbe("mdp-val-6-1-p3", shortPin3 ? "0.00 V (SHORTED)" : `${vPin3.toFixed(2)} V RMS (180°)`);
+    this.setProbe("mdp-val-6-1-load", `${vDiff.toFixed(2)} V / ${(iLoad * 1000).toFixed(1)} mA`);
+
     // Dynamic Sizing & Wire Visualization in SVG:
     // If voltage is increased, signal wire gets larger in the drawing!
     const driveWire = document.getElementById("pp-svg-wire-drive");
@@ -16591,6 +17007,12 @@ class CircuitSimulator {
     this.setProbe("ib-svg-rload", `${rload >= 1000 ? (rload / 1000).toFixed(1) + ' kΩ' : rload + ' Ω'}`);
     this.setProbe("ib-svg-p2-probe", `${vPin2.toFixed(2)} V / ${dBu >= 0 ? '+' : ''}${dBu.toFixed(1)} dBu`);
     this.setProbe("ib-svg-p3-probe", shortPin3 ? "0.00 V (Grounded)" : `0.00 V / ${rout} Ω to 0V`);
+
+    // Live SVG Measurement Data Points (MDP) Badges with Pointers
+    this.setProbe("mdp-val-6-2-vin", `${vin.toFixed(2)} V RMS`);
+    this.setProbe("mdp-val-6-2-p2", `${vPin2.toFixed(2)} V RMS (ACTIVE)`);
+    this.setProbe("mdp-val-6-2-p3", shortPin3 ? "0.00 V (Direct Short)" : `0.00 V (${rout}Ω PASSIVE)`);
+    this.setProbe("mdp-val-6-2-load", `${vDiff.toFixed(2)} V / 100% CMRR`);
 
     // LUCKY 8050A Precision DMM readouts (Yellow Font & Multi-Mode)
     this.updateLuckyDmmDisplay(vPin2, vPin3, vDiff, iLoad, shortPin3, false);
@@ -17330,7 +17752,11 @@ class CircuitSimulator {
       badge.addEventListener("click", () => {
         const target = badge.getAttribute("data-probe-target");
         if (target && window.floatingMeterDock) {
-          window.floatingMeterDock.setProbeTarget(target);
+          if (window.floatingMeterDock.selectProbeTarget) {
+            window.floatingMeterDock.selectProbeTarget(target);
+          } else if (window.floatingMeterDock.setProbeTarget) {
+            window.floatingMeterDock.setProbeTarget(target);
+          }
         }
       });
     });

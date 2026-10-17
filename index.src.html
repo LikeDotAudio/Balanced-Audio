@@ -2244,29 +2244,36 @@
   </svg>
 </div>
 
-          <!-- Fluke 8050A Precision Benchtop DMM -->
+          <!-- LUCKY 8050A Precision Benchtop DMM (Yellow Font) -->
           <div class="dmm-display-card">
-            <div class="dmm-plate">
-              <span class="dmm-plate-title">FLUKE 8050A DIGITAL MULTIMETER</span>
-              <span class="dmm-plate-sub">TRUE RMS &bull; 4&frac12; DIGIT AUDIO BENCH</span>
+            <div class="dmm-plate" style="border-bottom: 2px solid #ca8a04;">
+              <span class="dmm-plate-title" style="color: #facc15;">LUCKY 8050A DIGITAL MULTIMETER</span>
+              <span class="dmm-plate-sub">TRUE RMS &bull; 4&frac12; DIGIT AUDIO BENCH &bull; HIGH SENSITIVITY</span>
             </div>
-            <div class="dmm-bezel">
+            <!-- DMM Mode Switcher: +VE, -VE, THD/DIST, MULTI -->
+            <div class="dmm-mode-switcher" style="padding: 0.4rem 0.6rem; background: #0f172a; display: flex; gap: 0.35rem;">
+              <button class="dmm-mode-btn active yellow-mode" data-dmm-mode="hot">+VE HOT (PIN 2)</button>
+              <button class="dmm-mode-btn" data-dmm-mode="cold">-VE COLD (PIN 3)</button>
+              <button class="dmm-mode-btn" data-dmm-mode="thd">THD &amp; DISTORTION</button>
+              <button class="dmm-mode-btn" data-dmm-mode="multi">MULTI-READOUT</button>
+            </div>
+            <div class="dmm-bezel" style="border-color: #ca8a04;">
               <div class="dmm-header">
-                <span class="dmm-model">VACUUM FLUORESCENT DISPLAY</span>
-                <span class="dmm-badge">&#9679; AC RMS ACTIVE</span>
+                <span class="dmm-model" style="color: #facc15;">VACUUM FLUORESCENT DISPLAY</span>
+                <span id="dmm-active-badge" class="dmm-badge" style="background: rgba(250, 204, 21, 0.2); color: #facc15; border: 1px solid #facc15;">&#9679; AC RMS ACTIVE</span>
               </div>
               <div class="dmm-grid">
                 <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">V_RMS (VOLTAGE)</div>
-                  <div id="dmm-vrms-val" class="dmm-readout-value cyan">1.228 V</div>
+                  <div id="dmm-lbl-1" class="dmm-readout-label">V_+VE (VOLTAGE RMS)</div>
+                  <div id="dmm-vrms-val" class="dmm-readout-value lucky-yellow">1.228 V</div>
                 </div>
                 <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">AUDIO LEVEL (dBu)</div>
-                  <div id="dmm-dbu-val" class="dmm-readout-value green">+4.0 dBu</div>
+                  <div id="dmm-lbl-2" class="dmm-readout-label">AUDIO LEVEL (dBu)</div>
+                  <div id="dmm-dbu-val" class="dmm-readout-value lucky-yellow">+4.0 dBu</div>
                 </div>
                 <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">V_PEAK (CREST)</div>
-                  <div id="dmm-vpeak-val" class="dmm-readout-value amber">1.737 V</div>
+                  <div id="dmm-lbl-3" class="dmm-readout-label">LINE STATUS / THD</div>
+                  <div id="dmm-vpeak-val" class="dmm-readout-value lucky-yellow">0.003% / 95dB</div>
                 </div>
               </div>
             </div>
@@ -2276,10 +2283,11 @@
               <div class="dmm-key">AC mA</div>
               <div class="dmm-key">DC mA</div>
               <div class="dmm-key">k&Omega;</div>
-              <div class="dmm-key">200mV</div>
-              <div class="dmm-key active">2V</div>
-              <div class="dmm-key">20V</div>
-              <div class="dmm-key">200V</div>
+              <div class="dmm-key active key-range-auto" data-dmm-range="AUTO">AUTO</div>
+              <div class="dmm-key" data-dmm-range="0.2">200mV</div>
+              <div class="dmm-key" data-dmm-range="2">2V</div>
+              <div class="dmm-key" data-dmm-range="20">20V</div>
+              <div class="dmm-key" data-dmm-range="200">200V</div>
               <div class="dmm-key key-red">POWER</div>
             </div>
             <div class="dmm-terminals">
@@ -2296,6 +2304,72 @@
                 <span class="dmm-jack-label">mA</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Hewlett-Packard 353A Patch Panel & Strip-Chart Trend Recorder Row -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem; margin-bottom: 1.25rem;">
+          <!-- Hewlett-Packard 353A Patch Panel (Manual 00353-90003) -->
+          <div class="hp353a-panel-card" style="margin-top: 0;">
+            <div class="hp353a-header">
+              <div class="hp353a-badge">
+                <span class="hp353a-hp-logo">hp</span>
+                <span class="hp353a-title">353A PATCH PANEL</span>
+              </div>
+              <span style="font-size: 0.65rem; color: #94a3b8; font-family: monospace;">MANUAL 00353-90003</span>
+            </div>
+            <div class="hp353a-grid">
+              <div class="hp353a-ctrl-col">
+                <span class="hp353a-ctrl-title">OUTPUT Z</span>
+                <div class="hp353a-rotary-dial hp353a-outz-dial" title="Click to cycle Output Impedance (135, 600, 900 Ω)">
+                  <div class="hp353a-rotary-pointer"></div>
+                </div>
+                <span class="hp353a-value-readout hp353a-outz-val">600 Ω</span>
+              </div>
+              <div class="hp353a-ctrl-col">
+                <span class="hp353a-ctrl-title">INPUT TERM Z</span>
+                <div class="hp353a-rotary-dial hp353a-inz-dial" title="Click to cycle Input Termination (135, 600, 900, 10k Ω)">
+                  <div class="hp353a-rotary-pointer"></div>
+                </div>
+                <span class="hp353a-value-readout hp353a-inz-val">10 kΩ</span>
+              </div>
+              <div class="hp353a-ctrl-col">
+                <span class="hp353a-ctrl-title">ATTEN 10 dB</span>
+                <div class="hp353a-rotary-dial hp353a-atten10-dial" title="Click to step 10 dB Attenuation (0 - 100 dB)">
+                  <div class="hp353a-rotary-pointer"></div>
+                </div>
+                <span class="hp353a-value-readout hp353a-atten10-val">0 dB</span>
+              </div>
+              <div class="hp353a-ctrl-col">
+                <span class="hp353a-ctrl-title">ATTEN 1 dB</span>
+                <div class="hp353a-rotary-dial hp353a-atten1-dial" title="Click to step 1 dB Attenuation (0 - 10 dB)">
+                  <div class="hp353a-rotary-pointer"></div>
+                </div>
+                <span class="hp353a-value-readout hp353a-atten1-val">0 dB</span>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.65rem; padding-top: 0.5rem; border-top: 1px solid #334155;">
+              <button class="hp353a-switch-btn hp353a-toggle-meas active" title="Toggle MEAS (circuit under test) vs CAL (oscillator reference)">MODE: MEAS</button>
+              <span class="hp353a-atten-total" style="font-family: monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 800;">0 dB Loss</span>
+              <button class="hp353a-switch-btn hp353a-toggle-freq" title="Toggle FREQ (<5kHz audio vs >5kHz carrier)">FREQ: &lt;5kHz</button>
+            </div>
+          </div>
+
+          <!-- Time-Series Strip-Chart Trend Recorder -->
+          <div class="trend-recorder-card" style="margin-top: 0;">
+            <div class="trend-toolbar">
+              <span class="trend-title">📉 MULTI-CHANNEL TREND RECORDER</span>
+              <div class="trend-legend">
+                <span class="trend-legend-pill" style="color: #facc15;"><span class="trend-dot yellow"></span> +VE</span>
+                <span class="trend-legend-pill" style="color: #38bdf8;"><span class="trend-dot cyan"></span> -VE</span>
+                <span class="trend-legend-pill" style="color: #10b981;"><span class="trend-dot green"></span> DIFF</span>
+              </div>
+              <div class="trend-btn-group">
+                <button class="trend-btn trend-btn-run active">PAUSE</button>
+                <button class="trend-btn trend-btn-clear">CLEAR</button>
+              </div>
+            </div>
+            <canvas id="dmm-trend-canvas" width="400" height="150" class="trend-canvas"></canvas>
           </div>
         </div>
 
@@ -2879,29 +2953,36 @@
   </svg>
 </div>
 
-              <!-- Fluke 8050A Precision Benchtop DMM -->
+              <!-- LUCKY 8050A Precision Benchtop DMM (Yellow Font) -->
               <div class="dmm-display-card">
-                <div class="dmm-plate">
-                  <span class="dmm-plate-title">FLUKE 8050A DIGITAL MULTIMETER</span>
-                  <span class="dmm-plate-sub">TRUE RMS &bull; SYSTEM DIFFERENTIAL LOAD MONITOR</span>
+                <div class="dmm-plate" style="border-bottom: 2px solid #ca8a04;">
+                  <span class="dmm-plate-title" style="color: #facc15;">LUCKY 8050A DIGITAL MULTIMETER</span>
+                  <span class="dmm-plate-sub">TRUE RMS &bull; SYSTEM DIFFERENTIAL LOAD MONITOR &bull; HIGH SENSITIVITY</span>
                 </div>
-                <div class="dmm-bezel">
+                <!-- DMM Mode Switcher: +VE, -VE, THD/DIST, MULTI -->
+                <div class="dmm-mode-switcher" style="padding: 0.4rem 0.6rem; background: #0f172a; display: flex; gap: 0.35rem;">
+                  <button class="dmm-mode-btn active yellow-mode" data-dmm-mode="hot">+VE HOT</button>
+                  <button class="dmm-mode-btn" data-dmm-mode="cold">-VE COLD</button>
+                  <button class="dmm-mode-btn" data-dmm-mode="thd">THD &amp; CMRR</button>
+                  <button class="dmm-mode-btn" data-dmm-mode="multi">MULTI</button>
+                </div>
+                <div class="dmm-bezel" style="border-color: #ca8a04;">
                   <div class="dmm-header">
-                    <span class="dmm-model">VACUUM FLUORESCENT DISPLAY</span>
-                    <span class="dmm-badge">&#9679; DIFFERENTIAL LOAD ACTIVE</span>
+                    <span class="dmm-model" style="color: #facc15;">VACUUM FLUORESCENT DISPLAY</span>
+                    <span class="dmm-badge" style="background: rgba(250, 204, 21, 0.2); color: #facc15; border: 1px solid #facc15;">&#9679; DIFFERENTIAL LOAD ACTIVE</span>
                   </div>
                   <div class="dmm-grid">
                     <div class="dmm-readout-item">
-                      <div class="dmm-readout-label">V_DIFF (AC RMS)</div>
-                      <div id="pp-dmm-vdiff" class="dmm-readout-value cyan">2.06 V</div>
+                      <div id="pp-dmm-lbl-1" class="dmm-readout-label">V_DIFF (AC RMS)</div>
+                      <div id="pp-dmm-vdiff" class="dmm-readout-value lucky-yellow">2.06 V</div>
                     </div>
                     <div class="dmm-readout-item">
-                      <div class="dmm-readout-label">I_LOAD (CURRENT)</div>
-                      <div id="pp-dmm-iload" class="dmm-readout-value green">3.4 mA</div>
+                      <div id="pp-dmm-lbl-2" class="dmm-readout-label">I_LOAD (CURRENT)</div>
+                      <div id="pp-dmm-iload" class="dmm-readout-value lucky-yellow">3.4 mA</div>
                     </div>
                     <div class="dmm-readout-item">
-                      <div class="dmm-readout-label">LINE BALANCE</div>
-                      <div id="pp-dmm-status" class="dmm-readout-value">SYMMETRIC</div>
+                      <div id="pp-dmm-lbl-3" class="dmm-readout-label">LINE BALANCE</div>
+                      <div id="pp-dmm-status" class="dmm-readout-value lucky-yellow">SYMMETRIC</div>
                     </div>
                   </div>
                 </div>
@@ -2911,10 +2992,11 @@
                   <div class="dmm-key active">AC mA</div>
                   <div class="dmm-key">DC mA</div>
                   <div class="dmm-key">k&Omega;</div>
-                  <div class="dmm-key">200mV</div>
-                  <div class="dmm-key active">2V</div>
-                  <div class="dmm-key">20V</div>
-                  <div class="dmm-key">200V</div>
+                  <div class="dmm-key active key-range-auto" data-dmm-range="AUTO">AUTO</div>
+                  <div class="dmm-key" data-dmm-range="0.2">200mV</div>
+                  <div class="dmm-key" data-dmm-range="2">2V</div>
+                  <div class="dmm-key" data-dmm-range="20">20V</div>
+                  <div class="dmm-key" data-dmm-range="200">200V</div>
                   <div class="dmm-key key-red">POWER</div>
                 </div>
                 <div class="dmm-terminals">
@@ -2934,6 +3016,72 @@
               </div>
             </div>
 
+            <!-- Hewlett-Packard 353A Patch Panel & Strip-Chart Trend Recorder Row for Circuit 6.1 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem;">
+              <!-- Hewlett-Packard 353A Patch Panel -->
+              <div class="hp353a-panel-card" style="margin-top: 0;">
+                <div class="hp353a-header">
+                  <div class="hp353a-badge">
+                    <span class="hp353a-hp-logo">hp</span>
+                    <span class="hp353a-title">353A PATCH PANEL</span>
+                  </div>
+                  <span style="font-size: 0.65rem; color: #94a3b8; font-family: monospace;">MANUAL 00353-90003</span>
+                </div>
+                <div class="hp353a-grid">
+                  <div class="hp353a-ctrl-col">
+                    <span class="hp353a-ctrl-title">OUTPUT Z</span>
+                    <div class="hp353a-rotary-dial hp353a-outz-dial" title="Click to cycle Output Impedance (135, 600, 900 Ω)">
+                      <div class="hp353a-rotary-pointer"></div>
+                    </div>
+                    <span class="hp353a-value-readout hp353a-outz-val">600 Ω</span>
+                  </div>
+                  <div class="hp353a-ctrl-col">
+                    <span class="hp353a-ctrl-title">INPUT TERM Z</span>
+                    <div class="hp353a-rotary-dial hp353a-inz-dial" title="Click to cycle Input Termination (135, 600, 900, 10k Ω)">
+                      <div class="hp353a-rotary-pointer"></div>
+                    </div>
+                    <span class="hp353a-value-readout hp353a-inz-val">10 kΩ</span>
+                  </div>
+                  <div class="hp353a-ctrl-col">
+                    <span class="hp353a-ctrl-title">ATTEN 10 dB</span>
+                    <div class="hp353a-rotary-dial hp353a-atten10-dial" title="Click to step 10 dB Attenuation (0 - 100 dB)">
+                      <div class="hp353a-rotary-pointer"></div>
+                    </div>
+                    <span class="hp353a-value-readout hp353a-atten10-val">0 dB</span>
+                  </div>
+                  <div class="hp353a-ctrl-col">
+                    <span class="hp353a-ctrl-title">ATTEN 1 dB</span>
+                    <div class="hp353a-rotary-dial hp353a-atten1-dial" title="Click to step 1 dB Attenuation (0 - 10 dB)">
+                      <div class="hp353a-rotary-pointer"></div>
+                    </div>
+                    <span class="hp353a-value-readout hp353a-atten1-val">0 dB</span>
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.65rem; padding-top: 0.5rem; border-top: 1px solid #334155;">
+                  <button class="hp353a-switch-btn hp353a-toggle-meas active" title="Toggle MEAS (circuit under test) vs CAL (oscillator reference)">MODE: MEAS</button>
+                  <span class="hp353a-atten-total" style="font-family: monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 800;">0 dB Loss</span>
+                  <button class="hp353a-switch-btn hp353a-toggle-freq" title="Toggle FREQ (<5kHz audio vs >5kHz carrier)">FREQ: &lt;5kHz</button>
+                </div>
+              </div>
+
+              <!-- Time-Series Strip-Chart Trend Recorder -->
+              <div class="trend-recorder-card" style="margin-top: 0;">
+                <div class="trend-toolbar">
+                  <span class="trend-title">📉 MULTI-CHANNEL TREND RECORDER</span>
+                  <div class="trend-legend">
+                    <span class="trend-legend-pill" style="color: #facc15;"><span class="trend-dot yellow"></span> +VE</span>
+                    <span class="trend-legend-pill" style="color: #38bdf8;"><span class="trend-dot cyan"></span> -VE</span>
+                    <span class="trend-legend-pill" style="color: #10b981;"><span class="trend-dot green"></span> DIFF</span>
+                  </div>
+                  <div class="trend-btn-group">
+                    <button class="trend-btn trend-btn-run active">PAUSE</button>
+                    <button class="trend-btn trend-btn-clear">CLEAR</button>
+                  </div>
+                </div>
+                <canvas id="pp-trend-canvas" width="400" height="150" class="trend-canvas"></canvas>
+              </div>
+            </div>
+
             <!-- Live Falstad-Style Probes -->
             <div class="probe-badge-panel" style="margin-top: 1rem;">
               <span class="probe-pill">Generator In: <strong id="pp-probe-gen">0.85 VRMS / 0.1 mA</strong></span>
@@ -2946,6 +3094,21 @@
           <!-- Vector Schematic SVG with Dynamic Wires and Overlaid Values -->
           <div class="svg-diagram-wrapper">
             <svg viewBox="0 0 850 300" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="mdp-arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+                </marker>
+                <marker id="mdp-arrow-rose" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e"/>
+                </marker>
+                <marker id="mdp-arrow-cyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+                </marker>
+                <marker id="mdp-arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7"/>
+                </marker>
+              </defs>
+
               <rect width="850" height="300" fill="var(--bg-secondary)" rx="8"/>
               
               <!-- Input Signal Wire with Dynamic Stroke -->
@@ -2985,7 +3148,7 @@
               <line x1="385" y1="90" x2="630" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
               <circle cx="630" cy="90" r="7" fill="#10b981"/>
               <circle cx="630" cy="90" r="3" class="solder-lug"/>
-              <text x="655" y="95" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
+              <text x="645" y="80" fill="#10b981" font-size="12" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <text id="pp-svg-probe-p2" x="490" y="80" fill="#10b981" font-size="10" font-weight="600">3.4 mA / 1.03 V</text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 260,90 L 630,90" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
@@ -2999,7 +3162,7 @@
               <line x1="385" y1="210" x2="630" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
               <circle cx="630" cy="210" r="7" fill="#ef4444"/>
               <circle cx="630" cy="210" r="3" class="solder-lug"/>
-              <text x="655" y="215" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
+              <text x="645" y="228" fill="#ef4444" font-size="12" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
               <text id="pp-svg-probe-p3" x="490" y="228" fill="#ef4444" font-size="10" font-weight="600">3.4 mA / -1.03 V</text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 630,210 L 260,210" fill="none" stroke="#ef4444" stroke-width="2.5"/>
 
@@ -3007,8 +3170,8 @@
               <line x1="630" y1="90" x2="630" y2="120" stroke="#f59e0b" stroke-width="2"/>
               <circle cx="630" cy="120" r="3" class="solder-lug"/>
               <rect id="pp-svg-rload-rect" x="622" y="120" width="16" height="60" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
-              <text x="655" y="152" fill="#f59e0b" font-size="10" font-weight="600">R_Load</text>
-              <text id="pp-svg-rload" x="655" y="172" fill="#f59e0b" font-size="11" font-weight="700">600 &Omega;</text>
+              <text x="645" y="145" fill="#f59e0b" font-size="10" font-weight="600">R_Load</text>
+              <text id="pp-svg-rload" x="645" y="160" fill="#f59e0b" font-size="11" font-weight="700">600 &Omega;</text>
               <circle cx="630" cy="180" r="3" class="solder-lug"/>
               <line x1="630" y1="180" x2="630" y2="210" stroke="#f59e0b" stroke-width="2"/>
 
@@ -3019,8 +3182,41 @@
                 <circle cx="630" cy="260" r="3" class="solder-lug"/>
                 <line x1="420" y1="260" x2="630" y2="260" stroke="#94a3b8" stroke-width="2"/>
                 <path d="M 410,260 L 430,260 M 415,265 L 425,265 M 418,270 L 422,270" stroke="#94a3b8" stroke-width="2"/>
-                <text id="pp-svg-ts-text" x="580" y="248" fill="#94a3b8" font-size="10" font-weight="600">TS Ground Short Link (Open)</text>
-                <text x="655" y="265" fill="#94a3b8" font-size="13" font-weight="700">Pin 1 (CHASSIS)</text>
+                <text id="pp-svg-ts-text" x="540" y="252" fill="#94a3b8" font-size="9" font-weight="600">TS Ground Short Link</text>
+                <text x="645" y="270" fill="#94a3b8" font-size="11" font-weight="700">Pin 1 (CHASSIS)</text>
+              </g>
+
+              <!-- ================= Measurement Data Points (MDP) Leader Pointers ================= -->
+              <!-- MDP 0: Audio In Drive -->
+              <g class="circuit-mdp-badge" data-probe-target="6-1-vin" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 20,40 L 60,40 L 88,140" stroke="#a855f7" stroke-width="1.8" fill="none" marker-end="url(#mdp-arrow-purple)"/>
+                <rect x="15" y="15" width="120" height="28" rx="4" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
+                <text x="24" y="27" fill="#a855f7" font-size="8.5" font-weight="800">MDP-0: AUDIO DRIVE</text>
+                <text id="mdp-val-6-1-vin" x="24" y="38" fill="#facc15" font-size="8.5" font-weight="700">1.20 V RMS</text>
+              </g>
+
+              <!-- MDP 1: Pin 2 Hot Leader Pointer -->
+              <g class="circuit-mdp-badge" data-probe-target="6-1-p2" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 720,45 L 675,45 L 636,84" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#mdp-arrow-green)"/>
+                <rect x="715" y="30" width="125" height="30" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+                <text x="725" y="44" fill="#10b981" font-size="8.5" font-weight="800">MDP-1: PIN 2 (+VE HOT)</text>
+                <text id="mdp-val-6-1-p2" x="725" y="55" fill="#facc15" font-size="8.5" font-weight="700">1.03 V RMS (+2.5 dBu)</text>
+              </g>
+
+              <!-- MDP 3: Differential Load Leader Pointer -->
+              <g class="circuit-mdp-badge" data-probe-target="6-1-load" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 720,130 L 675,130 L 640,148" stroke="#38bdf8" stroke-width="1.8" fill="none" marker-end="url(#mdp-arrow-cyan)"/>
+                <rect x="715" y="115" width="125" height="30" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="725" y="129" fill="#38bdf8" font-size="8.5" font-weight="800">MDP-3: DIFF LOAD</text>
+                <text id="mdp-val-6-1-load" x="725" y="140" fill="#facc15" font-size="8.5" font-weight="700">2.06 V / 3.4 mA</text>
+              </g>
+
+              <!-- MDP 2: Pin 3 Cold Leader Pointer -->
+              <g class="circuit-mdp-badge" data-probe-target="6-1-p3" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 720,210 L 638,210" stroke="#f43f5e" stroke-width="1.8" fill="none" marker-end="url(#mdp-arrow-rose)"/>
+                <rect x="715" y="195" width="125" height="30" rx="4" fill="#0f172a" stroke="#f43f5e" stroke-width="1.5"/>
+                <text x="725" y="209" fill="#f43f5e" font-size="8.5" font-weight="800">MDP-2: PIN 3 (-VE COLD)</text>
+                <text id="mdp-val-6-1-p3" x="725" y="220" fill="#facc15" font-size="8.5" font-weight="700">-1.03 V RMS (180°)</text>
               </g>
             </svg>
           </div>
@@ -3120,6 +3316,21 @@
           </div>
           <div class="svg-diagram-wrapper">
             <svg viewBox="0 0 850 280" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="mdp2-arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+                </marker>
+                <marker id="mdp2-arrow-rose" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e"/>
+                </marker>
+                <marker id="mdp2-arrow-cyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+                </marker>
+                <marker id="mdp2-arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7"/>
+                </marker>
+              </defs>
+
               <rect width="850" height="280" fill="var(--bg-secondary)" rx="8"/>
 
               <text x="30" y="85" fill="#38bdf8" font-size="13" font-weight="700">Audio In</text>
@@ -3133,7 +3344,7 @@
               <text x="360" y="84" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">R_PO (50&Omega;)</text>
               <line x1="390" y1="80" x2="640" y2="80" stroke="#10b981" stroke-width="2.5"/>
               <circle cx="640" cy="80" r="7" fill="#10b981"/>
-              <text x="665" y="85" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
+              <text x="655" y="75" fill="#10b981" font-size="12" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 250,80 L 640,80" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
               <!-- Passive Resistor Termination to Ground (Pin 3) -->
@@ -3143,7 +3354,7 @@
               <text x="360" y="184" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">R_RO (50&Omega;)</text>
               <line x1="390" y1="180" x2="640" y2="180" stroke="#94a3b8" stroke-width="2.5"/>
               <circle cx="640" cy="180" r="7" fill="#ef4444"/>
-              <text x="665" y="185" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
+              <text x="655" y="195" fill="#ef4444" font-size="12" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
               <text x="440" y="165" fill="#94a3b8" font-size="10" font-weight="600">Zero Audio Signal Voltage (Passive Balance)</text>
 
               <!-- Bridging Load Resistor -->
@@ -3155,7 +3366,40 @@
               <!-- Pin 1 Shield -->
               <line x1="210" y1="230" x2="640" y2="230" stroke="#94a3b8" stroke-width="2"/>
               <circle cx="640" cy="230" r="7" fill="#94a3b8"/>
-              <text x="665" y="235" fill="#94a3b8" font-size="14" font-weight="700">Pin 1 (CHASSIS)</text>
+              <text x="655" y="240" fill="#94a3b8" font-size="12" font-weight="700">Pin 1 (CHASSIS)</text>
+
+              <!-- ================= Measurement Data Points (MDP) Leader Pointers ================= -->
+              <!-- MDP 0: Audio In Drive -->
+              <g class="circuit-mdp-badge" data-probe-target="6-2-vin" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 20,35 L 60,35 L 88,75" stroke="#a855f7" stroke-width="1.8" fill="none" marker-end="url(#mdp2-arrow-purple)"/>
+                <rect x="15" y="15" width="120" height="28" rx="4" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
+                <text x="24" y="27" fill="#a855f7" font-size="8.5" font-weight="800">MDP-0: AUDIO DRIVE</text>
+                <text id="mdp-val-6-2-vin" x="24" y="38" fill="#facc15" font-size="8.5" font-weight="700">1.20 V RMS</text>
+              </g>
+
+              <!-- MDP 1: Pin 2 Hot Leader Pointer -->
+              <g class="circuit-mdp-badge" data-probe-target="6-2-p2" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 720,40 L 675,40 L 646,74" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#mdp2-arrow-green)"/>
+                <rect x="715" y="25" width="125" height="30" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+                <text x="725" y="39" fill="#10b981" font-size="8.5" font-weight="800">MDP-1: PIN 2 (+VE HOT)</text>
+                <text id="mdp-val-6-2-p2" x="725" y="50" fill="#facc15" font-size="8.5" font-weight="700">1.19 V RMS (ACTIVE)</text>
+              </g>
+
+              <!-- MDP 3: Differential Load Leader Pointer -->
+              <g class="circuit-mdp-badge" data-probe-target="6-2-load" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 720,115 L 675,115 L 646,128" stroke="#38bdf8" stroke-width="1.8" fill="none" marker-end="url(#mdp2-arrow-cyan)"/>
+                <rect x="715" y="100" width="125" height="30" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="725" y="114" fill="#38bdf8" font-size="8.5" font-weight="800">MDP-3: DIFF LOAD</text>
+                <text id="mdp-val-6-2-load" x="725" y="125" fill="#facc15" font-size="8.5" font-weight="700">1.19 V / 100% CMRR</text>
+              </g>
+
+              <!-- MDP 2: Pin 3 Cold Leader Pointer -->
+              <g class="circuit-mdp-badge" data-probe-target="6-2-p3" style="cursor: pointer;">
+                <path class="circuit-mdp-pointer" d="M 720,185 L 648,180" stroke="#f43f5e" stroke-width="1.8" fill="none" marker-end="url(#mdp2-arrow-rose)"/>
+                <rect x="715" y="170" width="125" height="30" rx="4" fill="#0f172a" stroke="#f43f5e" stroke-width="1.5"/>
+                <text x="725" y="184" fill="#f43f5e" font-size="8.5" font-weight="800">MDP-2: PIN 3 (-VE COLD)</text>
+                <text id="mdp-val-6-2-p3" x="725" y="195" fill="#facc15" font-size="8.5" font-weight="700">0.00 V (50&Omega; PASSIVE)</text>
+              </g>
             </svg>
           </div>
         </div>
