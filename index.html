@@ -351,6 +351,166 @@
         </div>
       </div>
 
+      <!-- Interactive Snake & QTP Shield & Cable Fault Simulator -->
+      <div class="qtp-sim-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+          <div>
+            <h3 style="margin: 0; color: #38bdf8; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🐍 Multi-Pair Snake &amp; QTP Shield Interactive Fault Simulator</span>
+              <span class="badge badge-accent" style="font-size: 0.72rem;">AES72-4E &bull; AES48</span>
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.35rem 0 0;">
+              Simulate phase inversion, open conductor drops (1 to 4 pins), dead pair loss, and overall shield discontinuity in real time.
+            </p>
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; background: rgba(15, 23, 42, 0.7); border: 1px solid #334155; padding: 0.4rem 0.65rem; border-radius: 4px;">
+            <strong style="color: #38bdf8;">TIA-568-B Rule:</strong> Pins 2, 4, 6, 8 = Hot (+)
+          </div>
+        </div>
+
+        <!-- TIA-568-B Pair Color Mnemonic Bar (SUN, SKY, GRASS, EARTH) -->
+        <div class="tia-mnemonic-bar">
+          <div class="tia-pair-pill sun">
+            <div>
+              <strong style="color: #f97316;">☀️ SUN (Pair 2)</strong>
+              <div style="font-size: 0.72rem; color: #94a3b8;">Solid Orange / Wht-Org</div>
+            </div>
+            <div style="text-align: right; font-weight: 700;">
+              <span style="color: #f97316;">Pin 2 (+)</span><br>
+              <span style="color: #fdba74; font-size: 0.72rem;">Pin 1 (&minus;)</span>
+            </div>
+          </div>
+          <div class="tia-pair-pill sky">
+            <div>
+              <strong style="color: #38bdf8;">☁️ SKY (Pair 1)</strong>
+              <div style="font-size: 0.72rem; color: #94a3b8;">Solid Blue / Wht-Blu</div>
+            </div>
+            <div style="text-align: right; font-weight: 700;">
+              <span style="color: #38bdf8;">Pin 4 (+)</span><br>
+              <span style="color: #7dd3fc; font-size: 0.72rem;">Pin 5 (&minus;)</span>
+            </div>
+          </div>
+          <div class="tia-pair-pill grass">
+            <div>
+              <strong style="color: #10b981;">🌱 GRASS (Pair 3)</strong>
+              <div style="font-size: 0.72rem; color: #94a3b8;">Solid Green / Wht-Grn</div>
+            </div>
+            <div style="text-align: right; font-weight: 700;">
+              <span style="color: #10b981;">Pin 6 (+)</span><br>
+              <span style="color: #6ee7b7; font-size: 0.72rem;">Pin 3 (&minus;)</span>
+            </div>
+          </div>
+          <div class="tia-pair-pill earth">
+            <div>
+              <strong style="color: #ca8a04;">🌍 EARTH (Pair 4)</strong>
+              <div style="font-size: 0.72rem; color: #94a3b8;">Solid Brown / Wht-Brn</div>
+            </div>
+            <div style="text-align: right; font-weight: 700;">
+              <span style="color: #ca8a04;">Pin 8 (+)</span><br>
+              <span style="color: #fde047; font-size: 0.72rem;">Pin 7 (&minus;)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fault Mode Buttons -->
+        <div style="margin-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: #94a3b8;">
+          Inject Fault Condition into Multi-Pair Snake / QTP Line:
+        </div>
+        <div class="fault-btn-grid">
+          <button class="fault-btn active" data-fault="normal">✓ Normal Balanced (Optimal)</button>
+          <button class="fault-btn" data-fault="phase_flip">⚡ Phase Flip (180° Polarity Inverted)</button>
+          <button class="fault-btn" data-fault="pin_dropped_1">⚠️ 1 Pin Dropped (Pin 2 Hot Open)</button>
+          <button class="fault-btn" data-fault="pin_dropped_2">⚠️ 2 Pins Dropped (Pins 1 &amp; 3 Cold Open)</button>
+          <button class="fault-btn" data-fault="pin_dropped_3">❌ 3 Pins Dropped (Multi-Conductor Open)</button>
+          <button class="fault-btn" data-fault="pin_dropped_4">❌ 4 Pins Dropped (Quad Trunk Open)</button>
+          <button class="fault-btn" data-fault="pair_dropped">🚫 1 Pair Dropped (Channel Mute)</button>
+          <button class="fault-btn" data-fault="shield_lifted">🛡️ Shield Lifted / Dropped (P48 Fails!)</button>
+        </div>
+
+        <!-- Dynamic Snake / QTP Shield SVG Diagram Container -->
+        <div id="qtp-sim-svg-container" style="overflow-x: auto;"></div>
+
+        <!-- Real-Time Metrics & Diagnostic Readouts -->
+        <div class="qtp-meter-grid">
+          <div class="qtp-meter-item">
+            <div class="qtp-meter-label">Differential Output (V_DIFF)</div>
+            <div class="qtp-meter-val" id="qtp-sim-vdiff" style="color: #38bdf8;">+4.0 dBu (1.228 V)</div>
+          </div>
+          <div class="qtp-meter-item">
+            <div class="qtp-meter-label">Phase Coherence</div>
+            <div class="qtp-meter-val" id="qtp-sim-phase" style="color: #10b981;">0° In-Phase</div>
+          </div>
+          <div class="qtp-meter-item">
+            <div class="qtp-meter-label">Common-Mode Rejection (CMRR)</div>
+            <div class="qtp-meter-val" id="qtp-sim-cmrr" style="color: #10b981;">&gt; 92 dB</div>
+          </div>
+          <div class="qtp-meter-item">
+            <div class="qtp-meter-label">Phantom Power Bus (P48)</div>
+            <div class="qtp-meter-val" id="qtp-sim-p48" style="color: #10b981;">48.0 VDC</div>
+          </div>
+        </div>
+
+        <!-- Diagnostic commentary box -->
+        <div style="margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(15, 23, 42, 0.95); border-left: 3px solid #38bdf8; border-radius: 4px; font-size: 0.86rem; color: #cbd5e1; line-height: 1.5;">
+          <strong style="color: #38bdf8;">Live Signal Analysis:</strong>
+          <span id="qtp-sim-diag-text" style="margin-left: 0.35rem;">
+            Normal Balanced Transmission: Conforms fully to AES72-4E and AES48. Balanced line rejects common-mode noise. All 4 pairs carry differential audio.
+          </span>
+        </div>
+      </div>
+
+      <!-- Always Accessible AES59 8-Channel Master Matrix Card -->
+      <div class="aes59-always-accessible-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.85rem;">
+          <div>
+            <h3 style="margin: 0; color: #a855f7; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🎛️ AES59 Master 8-Channel Pinout Matrix (Always Accessible)</span>
+              <span class="badge badge-accent" style="font-size: 0.72rem; background: rgba(168, 85, 247, 0.2); color: #c084fc;">AES59 &bull; Tascam Standard</span>
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.35rem 0 0;">
+              Normative 8-channel differential contact assignments for all 8 balanced lines, inputs, outputs, and RJ45 breakout links. 
+              <strong>Pin 13 is strictly NC (No Connect).</strong>
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <span class="badge" style="background: rgba(30, 41, 59, 0.8); border: 1px solid #475569; color: #e2e8f0; font-size: 0.75rem;">
+              Equipment In: <strong>DB25 Female (Sockets)</strong>
+            </span>
+            <span class="badge" style="background: rgba(30, 41, 59, 0.8); border: 1px solid #475569; color: #e2e8f0; font-size: 0.75rem;">
+              Equipment Out: <strong>DB25 Female (Sockets)</strong>
+            </span>
+            <span class="badge" style="background: rgba(30, 41, 59, 0.8); border: 1px solid #475569; color: #e2e8f0; font-size: 0.75rem;">
+              Cable Snake: <strong>DB25 Male (Pins)</strong>
+            </span>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="aes-spec-table" style="font-size: 0.84rem; width: 100%;">
+            <thead>
+              <tr>
+                <th style="width: 100px;">Channel</th>
+                <th>Hot Pin (+)</th>
+                <th>Cold Pin (&minus;)</th>
+                <th>Ground / Shield Pin</th>
+                <th>Equipment Input Gender</th>
+                <th>Equipment Output Gender</th>
+                <th>AES72-4E QTP Link &amp; Color</th>
+              </tr>
+            </thead>
+            <tbody id="aes59-master-tbody"></tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: 0.85rem; padding: 0.65rem 0.9rem; background: rgba(168, 85, 247, 0.08); border-left: 3px solid #a855f7; border-radius: 4px; font-size: 0.82rem; color: #cbd5e1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <span>
+            <strong style="color: #c084fc;">Fast Memory Map:</strong>
+            Ch 1 (24/12/25) &bull; Ch 2 (10/23/11) &bull; Ch 3 (21/9/22) &bull; Ch 4 (7/20/8) &bull; Ch 5 (18/6/19) &bull; Ch 6 (4/17/5) &bull; Ch 7 (15/3/16) &bull; Ch 8 (1/14/2) &bull; <strong style="color: #ef4444;">Pin 13: NC</strong>
+          </span>
+          <span style="color: #94a3b8; font-family: var(--font-mono); font-size: 0.75rem;">All 8 Channels Always Accessible</span>
+        </div>
+      </div>
+
     </div>
   </section>
 

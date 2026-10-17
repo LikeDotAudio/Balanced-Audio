@@ -2909,4 +2909,133 @@ code, pre {
   font-weight: 700;
 }
 
+/* ==========================================================================
+   Snake & QTP Shield & Cable Fault Simulator & TIA-568-B Mnemonic
+   ========================================================================== */
+.qtp-sim-card {
+  background: #090d16;
+  border: 1.5px solid #334155;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.fault-btn-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+}
+
+.fault-btn {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid #475569;
+  color: #cbd5e1;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fault-btn:hover {
+  border-color: #38bdf8;
+  color: #f8fafc;
+  background: rgba(30, 41, 59, 0.95);
+}
+
+.fault-btn.active {
+  background: #38bdf8;
+  color: #0b0f19;
+  border-color: #38bdf8;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+.fault-btn.active.danger {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+.fault-btn.active.amber {
+  background: #f59e0b;
+  color: #0b0f19;
+  border-color: #f59e0b;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+.tia-mnemonic-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.tia-pair-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid #334155;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.tia-pair-pill.sun {
+  border-left: 4px solid #f97316;
+}
+.tia-pair-pill.sky {
+  border-left: 4px solid #38bdf8;
+}
+.tia-pair-pill.grass {
+  border-left: 4px solid #10b981;
+}
+.tia-pair-pill.earth {
+  border-left: 4px solid #ca8a04;
+}
+
+.qtp-meter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.qtp-meter-item {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  text-align: center;
+}
+
+.qtp-meter-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.qtp-meter-val {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.aes59-always-accessible-card {
+  background: #090d16;
+  border: 1.5px solid #334155;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+}
+
 
