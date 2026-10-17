@@ -47,6 +47,10 @@ class CircuitSimulator {
     this.updateTypeZ();
     this.updatePyramid();
     this.updateMeyerModel();
+
+    // 1960s Military & 1970s Laboratory Equipment Handlers
+    this.initMilitaryControls();
+    this.initLevelConverter();
   }
 
   bindInputs(ids, callback) {
@@ -54,6 +58,143 @@ class CircuitSimulator {
       const el = document.getElementById(id);
       if (el) el.addEventListener("input", callback);
     });
+  }
+
+  // Helper: Rotate 1970s test equipment dial knob
+  updateKnob(knobId, val, min, max) {
+    const knob = document.getElementById(knobId);
+    if (!knob) return;
+    const clamped = Math.max(min, Math.min(max, val));
+    const angle = -135 + ((clamped - min) / (max - min)) * 270;
+    knob.style.transform = `rotate(${angle.toFixed(1)}deg)`;
+  }
+
+  // Helper: Deflect 1970s Analogue VU meter needle (-20 to +3 VU)
+  updateVuMeter(needleId, dBu) {
+    const needle = document.getElementById(needleId);
+    if (!needle) return;
+    // Map -20 dBu -> -45deg, 0 dBu -> 0deg, +3 dBu -> +45deg
+    let angle;
+    if (dBu <= -20) {
+      angle = -48;
+    } else if (dBu >= 3) {
+      angle = 48;
+    } else {
+      angle = -45 + ((dBu - (-20)) / (3 - (-20))) * 90;
+    }
+    needle.style.transform = `rotate(${angle.toFixed(1)}deg)`;
+  }
+
+  // 1960s Military Step Presets & Manual Exact Value Binding
+  initMilitaryControls() {
+    const bindPresetAndManual = (sliderId, presetId, manualId, updateFn) => {
+      const slider = document.getElementById(sliderId);
+      const preset = document.getElementById(presetId);
+      const manual = document.getElementById(manualId);
+      if (!slider) return;
+
+      if (preset) {
+        preset.addEventListener("change", (e) => {
+          if (e.target.value !== "custom") {
+            const val = parseFloat(e.target.value);
+            slider.value = val;
+            if (manual) manual.value = val;
+            updateFn();
+          }
+        });
+      }
+
+      if (manual) {
+        manual.addEventListener("input", (e) => {
+          const val = parseFloat(e.target.value);
+          if (!isNaN(val)) {
+            slider.value = val;
+            if (preset) preset.value = "custom";
+            updateFn();
+          }
+        });
+      }
+    };
+
+    bindPresetAndManual("pp-vin", "pp-vin-preset", "pp-vin-manual", () => this.updatePushPull());
+    bindPresetAndManual("pp-rout", "pp-rout-preset", "pp-rout-manual", () => this.updatePushPull());
+    bindPresetAndManual("pp-rload", "pp-rload-preset", "pp-rload-manual", () => this.updatePushPull());
+  }
+
+  // 1970s Laboratory Audio Level Converter & DMM LCD Driver
+  initLevelConverter() {
+    const dbuEl = document.getElementById("calc-dbu");
+    const dbvEl = document.getElementById("calc-dbv");
+    const vrmsEl = document.getElementById("calc-vrms");
+    const vpeakEl = document.getElementById("calc-vpeak");
+    const presetSelect = document.getElementById("pyr-preset-select");
+
+    const syncFromDbu = (dbu) => {
+      const vrms = 0.775 * Math.pow(10, dbu / 20);
+      const dbv = 20 * Math.log10(Math.max(0.0001, vrms / 1.0));
+      const vpeak = vrms * Math.SQRT2;
+
+      if (dbuEl && document.activeElement !== dbuEl) dbuEl.value = dbu.toFixed(2);
+      if (dbvEl && document.activeElement !== dbvEl) dbvEl.value = dbv.toFixed(2);
+      if (vrmsEl && document.activeElement !== vrmsEl) vrmsEl.value = vrms >= 1.0 ? vrms.toFixed(3) : vrms.toFixed(4);
+      if (vpeakEl) vpeakEl.value = vpeak >= 1.0 ? vpeak.toFixed(3) : vpeak.toFixed(4);
+
+      // 1970s DMM Fluorescent LCD readout
+      const dmmVrms = document.getElementById("dmm-vrms-val");
+      if (dmmVrms) dmmVrms.textContent = `${vrms >= 1.0 ? vrms.toFixed(3) : (vrms * 1000).toFixed(1) + ' m'}V`;
+      const dmmDbu = document.getElementById("dmm-dbu-val");
+      if (dmmDbu) dmmDbu.textContent = `${dbu >= 0 ? '+' : ''}${dbu.toFixed(1)} dBu`;
+      const dmmPeak = document.getElementById("dmm-vpeak-val");
+      if (dmmPeak) dmmPeak.textContent = `${vpeak >= 1.0 ? vpeak.toFixed(3) : (vpeak * 1000).toFixed(1) + ' m'}V`;
+
+      // 1970s Analogue VU meter needle deflection
+      this.updateVuMeter("pyr-vu-needle", dbu);
+    };
+
+    if (dbuEl) {
+      dbuEl.addEventListener("input", () => {
+        const dbu = parseFloat(dbuEl.value);
+        if (!isNaN(dbu)) {
+          if (presetSelect) presetSelect.value = "custom";
+          syncFromDbu(dbu);
+        }
+      });
+    }
+
+    if (dbvEl) {
+      dbvEl.addEventListener("input", () => {
+        const dbv = parseFloat(dbvEl.value);
+        if (!isNaN(dbv)) {
+          const vrms = Math.pow(10, dbv / 20);
+          const dbu = 20 * Math.log10(vrms / 0.775);
+          if (presetSelect) presetSelect.value = "custom";
+          syncFromDbu(dbu);
+        }
+      });
+    }
+
+    if (vrmsEl) {
+      vrmsEl.addEventListener("input", () => {
+        const vrms = parseFloat(vrmsEl.value);
+        if (!isNaN(vrms) && vrms > 0) {
+          const dbu = 20 * Math.log10(vrms / 0.775);
+          if (presetSelect) presetSelect.value = "custom";
+          syncFromDbu(dbu);
+        }
+      });
+    }
+
+    if (presetSelect) {
+      presetSelect.addEventListener("change", (e) => {
+        if (e.target.value !== "custom") {
+          const dbu = parseFloat(e.target.value);
+          if (!isNaN(dbu)) syncFromDbu(dbu);
+        }
+      });
+    }
+
+    // Initialize with +4.0 dBu studio standard
+    syncFromDbu(4.0);
   }
 
   // ==========================================
@@ -69,7 +210,20 @@ class CircuitSimulator {
 
     document.getElementById("pp-vin-val").textContent = `${vin.toFixed(1)} V`;
     document.getElementById("pp-rout-val").textContent = `${rout} Ω`;
-    document.getElementById("pp-rload-val").textContent = `${rload} Ω`;
+    document.getElementById("pp-rload-val").textContent = `${rload >= 1000 ? (rload / 1000).toFixed(1) + ' kΩ' : rload + ' Ω'}`;
+
+    // Synchronize 1970s rotary knob dials
+    this.updateKnob("pp-vin-knob", vin, 0.1, 5.0);
+    this.updateKnob("pp-rout-knob", rout, 10, 200);
+    this.updateKnob("pp-rload-knob", rload, 150, 10000);
+
+    // Synchronize manual number inputs if not actively focused
+    const vinMan = document.getElementById("pp-vin-manual");
+    if (vinMan && document.activeElement !== vinMan) vinMan.value = vin.toFixed(1);
+    const routMan = document.getElementById("pp-rout-manual");
+    if (routMan && document.activeElement !== routMan) routMan.value = Math.round(rout);
+    const rloadMan = document.getElementById("pp-rload-manual");
+    if (rloadMan && document.activeElement !== rloadMan) rloadMan.value = Math.round(rload);
 
     let vPin2, vPin3, iPin2, iPin3, vDiff, iLoad, isClipped = false;
 
@@ -100,6 +254,24 @@ class CircuitSimulator {
     this.setProbe("pp-probe-p3", `${(iPin3 * 1000).toFixed(1)} mA / ${vPin3.toFixed(2)} V`);
     this.setProbe("pp-probe-load", `V_diff: ${vDiff.toFixed(2)} V | I_load: ${(iLoad * 1000).toFixed(1)} mA`);
 
+    // 1970s Analogue VU meter needle on Circuit 6.1
+    const dBuOut = 20 * Math.log10(Math.max(0.001, vDiff / 0.775));
+    this.updateVuMeter("pp-vu-needle", dBuOut);
+
+    // 1970s DMM Fluorescent LCD screen readouts
+    this.setProbe("pp-dmm-vdiff", `${vDiff.toFixed(2)} V`);
+    this.setProbe("pp-dmm-iload", `${(iLoad * 1000).toFixed(1)} mA`);
+    const dmmStatus = document.getElementById("pp-dmm-status");
+    if (dmmStatus) {
+      if (shortPin3) {
+        dmmStatus.textContent = isClipped ? "OVERLOAD CLIP" : "TS SHORTED";
+        dmmStatus.className = "dmm-readout-value amber";
+      } else {
+        dmmStatus.textContent = "SYMMETRIC";
+        dmmStatus.className = "dmm-readout-value";
+      }
+    }
+
     // Live SVG schematic component fader value overlays
     this.setProbe("pp-svg-vin", `${vin.toFixed(1)} V`);
     this.setProbe("pp-svg-zpo", `${rout} Ω`);
@@ -107,6 +279,21 @@ class CircuitSimulator {
     this.setProbe("pp-svg-rload", `${rload >= 1000 ? (rload / 1000).toFixed(1) + ' kΩ' : rload + ' Ω'}`);
     this.setProbe("pp-svg-probe-p2", `${(iPin2 * 1000).toFixed(1)} mA / ${vPin2.toFixed(2)} V`);
     this.setProbe("pp-svg-probe-p3", `${(iPin3 * 1000).toFixed(1)} mA / ${vPin3.toFixed(2)} V`);
+
+    // Dynamic Sizing & Wire Visualization in SVG:
+    // If voltage is increased, signal wire gets larger in the drawing!
+    const driveWire = document.getElementById("pp-svg-wire-drive");
+    if (driveWire) {
+      const w = 2.0 + (vin / 5.0) * 3.5;
+      driveWire.setAttribute("stroke-width", w.toFixed(1));
+    }
+    // Load resistor rectangle scales with R_Load
+    const loadRect = document.getElementById("pp-svg-rload-rect");
+    if (loadRect) {
+      const rw = Math.min(28, Math.max(14, 14 + (rload / 10000) * 14));
+      loadRect.setAttribute("width", rw.toFixed(0));
+      loadRect.setAttribute("x", (630 - rw / 2).toFixed(0));
+    }
 
     // TS Short toggle visual feedback in SVG
     const shortGroup = document.getElementById("svg-pp-short-group");

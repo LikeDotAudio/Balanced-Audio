@@ -1324,6 +1324,13 @@ code, pre {
   margin: 1.5rem 0;
 }
 
+.rules-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
 .rule-card {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
@@ -1333,9 +1340,20 @@ code, pre {
   transition: all 0.2s ease;
 }
 
+.rule-card.rule-card-cyan {
+  border-left-color: var(--accent-cyan);
+}
+
+.rule-card.rule-card-emerald {
+  border-left-color: var(--accent-emerald);
+}
+
+.rule-card.rule-card-amber {
+  border-left-color: var(--accent-amber);
+}
+
 .rule-card:hover {
   transform: translateY(-2px);
-  border-left-color: var(--accent-emerald);
   box-shadow: var(--shadow-sm);
 }
 
