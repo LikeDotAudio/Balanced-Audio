@@ -1,0 +1,5 @@
+# Environment directories and files
+.env/
+.env
+.env.*
+!.env.example
