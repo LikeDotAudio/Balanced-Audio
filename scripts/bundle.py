@@ -3,14 +3,18 @@
 scripts/bundle.py — AES-X152 Single-File Self-Contained HTML Bundler
 (c) 2026 Audio Engineering Society SC-05-05 Standards Working Group
 
-Compiles the modular source files (css/style.css, js/*.js, and index.html markup)
-into a 100% self-contained, standalone single-file distribution: index.htm (and index.html).
+Compiles modular source files (css/style.css, js/*.js, and index.src.html markup)
+into 100% self-contained, standalone single-file distribution artifacts:
+  - INDEX.htm-YYYYMMDD-HHMM.html  (Timestamped standalone distribution snapshot)
+  - index.htm                     (Standard offline distribution)
+  - index.html                    (Standard root distribution)
 
 All stylesheets, JavaScript engines, SVG icons, and datasets (including the 2,290-term
 Dennis Bohn PAR Glossary and complete X152 paper dossier) are embedded inline so the
 resulting file runs everywhere offline with zero external network or file dependencies.
 """
 
+from datetime import datetime
 import os
 import re
 import sys
@@ -38,9 +42,11 @@ SCRIPTS_ORDER = [
     "js/main.js",
 ]
 
-def bundle():
+def bundle(timestamp=None):
     css_path = os.path.join(BASE_DIR, "css", "style.css")
-    source_html_path = os.path.join(BASE_DIR, "index.html")
+    source_html_path = os.path.join(BASE_DIR, "index.src.html")
+    if not os.path.exists(source_html_path):
+        source_html_path = os.path.join(BASE_DIR, "index.html")
 
     if not os.path.exists(css_path):
         print(f"Error: {css_path} not found.")
@@ -68,7 +74,12 @@ def bundle():
     css_link = '<link rel="stylesheet" href="css/style.css">'
     if css_link in html:
         html = html.replace(css_link, f'<style id="bundled-style">\n{css_content}\n</style>')
-    elif '<style id="bundled-style">' not in html:
+    elif '<style id="bundled-style">' in html:
+        # Replace existing bundled style
+        before = html.split('<style id="bundled-style">')[0]
+        after = html.split('</style>')[1]  # first </style>
+        html = before + f'<style id="bundled-style">\n{css_content}\n</style>' + after
+    else:
         print("Warning: css_link not found and bundled-style not present.")
 
     # 2. Replace separate <script src="js/..."> tags with single bundled script
@@ -84,27 +95,27 @@ def bundle():
         bundled_html = html[:start_idx] + script_replacement + html[end_idx:]
     elif '<script id="bundled-application-logic">' in html:
         # Already bundled, replace script tag content
-        before = html.split('<script id="bundled-application-logic">')[0]
+        before = html.split('  <script id="bundled-application-logic">')[0]
         after = html.split('</script>')[-1]
-        bundled_html = before + f'<script id="bundled-application-logic">\n{all_js}\n  </script>' + after
+        bundled_html = before + f'  <script id="bundled-application-logic">\n{all_js}\n  </script>' + after
     else:
         print("Error: Could not locate script block markers in HTML source.")
         sys.exit(1)
 
-    # 3. Write out both index.htm and index.html
-    out_htm = os.path.join(BASE_DIR, "index.htm")
-    out_html = os.path.join(BASE_DIR, "index.html")
+    # 3. Write out index.htm, index.html, and optional snapshot
+    out_paths = [
+        os.path.join(BASE_DIR, "index.htm"),
+        os.path.join(BASE_DIR, "index.html"),
+    ]
+    if timestamp:
+        out_paths.append(os.path.join(BASE_DIR, f"INDEX.htm-{timestamp}.html"))
 
-    with open(out_htm, "w", encoding="utf-8") as f:
-        f.write(bundled_html)
-
-    with open(out_html, "w", encoding="utf-8") as f:
-        f.write(bundled_html)
-
-    htm_size = os.path.getsize(out_htm)
-    print(f"Bundled successfully:")
-    print(f"  -> {out_htm} ({htm_size} bytes / {htm_size / 1024 / 1024:.2f} MB)")
-    print(f"  -> {out_html} ({htm_size} bytes / {htm_size / 1024 / 1024:.2f} MB)")
+    for path in out_paths:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(bundled_html)
+        sz = os.path.getsize(path)
+        print(f"Bundled successfully -> {os.path.basename(path)} ({sz:,} bytes / {sz / 1024 / 1024:.2f} MB)")
 
 if __name__ == "__main__":
-    bundle()
+    ts = sys.argv[1] if len(sys.argv) > 1 else None
+    bundle(ts)

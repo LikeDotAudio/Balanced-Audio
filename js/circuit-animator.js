@@ -52,6 +52,7 @@ class CircuitSimulator {
     this.initMilitaryControls();
     this.initLevelConverter();
     this.initLTPFaders();
+    this.initVoltmeterControls();
   }
 
   bindInputs(ids, callback) {
@@ -70,36 +71,187 @@ class CircuitSimulator {
     knob.style.transform = `rotate(${angle.toFixed(1)}deg)`;
   }
 
-  // Helper: Deflect 1970s HP 400FL Precision AC Voltmeter needle (-20 to +2 dB / 0 to 1.0 V RMS)
-  updateVuMeter(needleId, dBu) {
+  // Helper: Deflect APK Precision AC Voltmeter needle (-20 to +2 dB / 0 to 1.0 & 0 to 3.0 scales)
+  updateVuMeter(needleId, dBu, vRms) {
     const needle = document.getElementById(needleId);
     if (!needle) return;
-    
-    // HP 400FL Precision AC Voltmeter movement calibration:
+
+    let v = vRms;
+    if (v === undefined || v === null) {
+      if (dBu !== undefined && dBu !== null) {
+        v = 0.775 * Math.pow(10, dBu / 20);
+      } else {
+        v = 0;
+      }
+    }
+
+    const range = this.activeRangeVolts || 3.0;
+    const vFrac = Math.max(0.0, v / range);
+
+    // APK Precision AC Voltmeter movement calibration:
     // Moving-coil galvanometer pivot is at cx=190, cy=250.
-    // Rest stop (no signal / <= -24 dB): -36 deg
-    // 0.1 V (-20 dB): -30 deg
-    // 0.316 V (-10 dB): -17 deg
-    // 0.5 V (-6 dB): -6 deg
-    // 0.775 V (0 dBu): +10.5 deg
-    // 1.0 V (0 dB on 1V scale): +24 deg
-    // 1.228 V (+4 dBu / +2 dBFS relative): +37.7 deg
-    // Mechanical full-scale stop: +41 deg
+    // Mechanical rest stop (no signal / <= 0.002 FS): -36 deg
+    // Mechanical overload peg stop (>= 1.25 FS): +41 deg
+    // 0 to 1.0 FS linear movement spans 60 deg (-36 deg to +24 deg)
     let angle;
-    if (dBu <= -24) {
+    if (vFrac <= 0.002) {
       angle = -36;
-    } else if (dBu >= 3.5) {
+    } else if (vFrac >= 1.25) {
       angle = 41;
     } else {
-      const v = 0.775 * Math.pow(10, dBu / 20);
-      const vNorm = Math.min(1.28, Math.max(0.0, v));
-      angle = -36 + vNorm * 60;
+      angle = -36 + vFrac * 60;
     }
-    
+
     needle.setAttribute("transform", `rotate(${angle.toFixed(2)} 190 250)`);
     needle.style.transformOrigin = "190px 250px";
     needle.style.transform = `rotate(${angle.toFixed(2)}deg)`;
   }
+
+  // APK Precision AC Voltmeter: 14 Calibrated Ranges & Sensitivity Physics
+  initVoltmeterControls() {
+    this.activeRangeIndex = 9; // Default nominal 3V (+10 dB)
+    this.activeRangeVolts = 3.0;
+
+    const ranges = [
+      { idx: 0, label: ".1 mV", db: "-80 dB", v: 0.0001, angle: 130.2 },
+      { idx: 1, label: ".3 mV", db: "-70 dB", v: 0.0003, angle: 145.3 },
+      { idx: 2, label: "1 mV",  db: "-60 dB", v: 0.001,  angle: 160.3 },
+      { idx: 3, label: "3 mV",  db: "-50 dB", v: 0.003,  angle: 175.9 },
+      { idx: 4, label: "10 mV", db: "-40 dB", v: 0.010,  angle: -164.1 },
+      { idx: 5, label: "30 mV", db: "-30 dB", v: 0.030,  angle: -148.4 },
+      { idx: 6, label: "100 mV",db: "-20 dB", v: 0.100,  angle: -132.5 },
+      { idx: 7, label: ".3 V",  db: "-10 dB", v: 0.3,    angle: -47.5 },
+      { idx: 8, label: "1 V",   db: "0 dB",   v: 1.0,    angle: -31.6 },
+      { idx: 9, label: "3 V",   db: "+10 dB", v: 3.0,    angle: -15.9 },
+      { idx: 10, label: "10 V",  db: "+20 dB", v: 10.0,   angle: 4.1 },
+      { idx: 11, label: "30 V",  db: "+30 dB", v: 30.0,   angle: 19.7 },
+      { idx: 12, label: "100 V", db: "+40 dB", v: 100.0,  angle: 34.7 },
+      { idx: 13, label: "300 V", db: "+50 dB", v: 300.0,  angle: 49.8 }
+    ];
+    this.voltmeterRanges = ranges;
+    window.APK_VOLTMETER_RANGES = ranges;
+
+    const setRange = (idx) => {
+      idx = Math.max(0, Math.min(ranges.length - 1, idx));
+      this.activeRangeIndex = idx;
+      this.activeRangeVolts = ranges[idx].v;
+
+      const r = ranges[idx];
+      // Rotate rotors on both Section 3 and Section 4 voltmeters
+      const rotors = document.querySelectorAll(".range-knob-rotor");
+      rotors.forEach(rotor => {
+        rotor.setAttribute("transform", `rotate(${r.angle.toFixed(1)})`);
+        rotor.style.transform = `rotate(${r.angle.toFixed(1)}deg)`;
+        rotor.setAttribute("data-range-idx", idx);
+      });
+
+      // Highlight active tick marks
+      document.querySelectorAll(".range-dial-tick").forEach(tick => {
+        const tIdx = parseInt(tick.getAttribute("data-range-idx"), 10);
+        tick.classList.toggle("active", tIdx === idx);
+      });
+
+      // Synchronize floating meter dock
+      if (window.floatingMeterDock && typeof window.floatingMeterDock.setHpRange === "function") {
+        window.floatingMeterDock.setHpRange(r.v, r.db);
+      }
+
+      // Re-render active meter needles with new sensitivity immediately
+      if (this.lastPyrVrms !== undefined) {
+        this.updateVuMeter("pyr-vu-needle", null, this.lastPyrVrms);
+      }
+      if (this.lastPpVdiff !== undefined) {
+        this.updateVuMeter("pp-vu-needle", null, this.lastPpVdiff);
+      }
+    };
+    this.setVoltmeterRange = setRange;
+    window.setVoltmeterRange = setRange;
+
+    // Direct clicks on dial ticks
+    document.querySelectorAll(".range-dial-tick").forEach(tick => {
+      tick.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const idx = parseInt(tick.getAttribute("data-range-idx"), 10);
+        if (!isNaN(idx)) setRange(idx);
+      });
+    });
+
+    // Rotor clicks, dragging, and wheel events
+    const knobRotors = [document.getElementById("pyr-range-knob-rotor"), document.getElementById("pp-range-knob-rotor")];
+    knobRotors.forEach(rotor => {
+      if (!rotor) return;
+
+      // Click to cycle next/prev
+      rotor.addEventListener("click", (e) => {
+        e.preventDefault();
+        const step = (e.shiftKey || e.button === 2) ? -1 : 1;
+        let nextIdx = (this.activeRangeIndex + step + ranges.length) % ranges.length;
+        setRange(nextIdx);
+      });
+
+      // Mouse wheel to rotate
+      rotor.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const step = e.deltaY > 0 ? 1 : -1;
+        let nextIdx = Math.max(0, Math.min(ranges.length - 1, this.activeRangeIndex + step));
+        setRange(nextIdx);
+      }, { passive: false });
+
+      // Drag to rotate
+      let isDragging = false;
+      let startAngle = 0;
+      let startIdx = 0;
+
+      const getAngleFromCenter = (evt) => {
+        const rect = rotor.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const clientX = evt.clientX || (evt.touches && evt.touches[0].clientX) || 0;
+        const clientY = evt.clientY || (evt.touches && evt.touches[0].clientY) || 0;
+        return Math.atan2(clientY - cy, clientX - cx) * 180 / Math.PI;
+      };
+
+      const onPointerDown = (evt) => {
+        isDragging = true;
+        startAngle = getAngleFromCenter(evt);
+        startIdx = this.activeRangeIndex;
+        rotor.style.cursor = "grabbing";
+        window.addEventListener("pointermove", onPointerMove);
+        window.addEventListener("pointerup", onPointerUp);
+      };
+
+      const onPointerMove = (evt) => {
+        if (!isDragging) return;
+        const currAngle = getAngleFromCenter(evt);
+        let closestIdx = startIdx;
+        let minDiff = Infinity;
+        ranges.forEach((rng, i) => {
+          let diff = Math.abs(currAngle - rng.angle);
+          if (diff > 180) diff = 360 - diff;
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestIdx = i;
+          }
+        });
+        if (closestIdx !== this.activeRangeIndex) {
+          setRange(closestIdx);
+        }
+      };
+
+      const onPointerUp = () => {
+        isDragging = false;
+        rotor.style.cursor = "grab";
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerUp);
+      };
+
+      rotor.addEventListener("pointerdown", onPointerDown);
+    });
+
+    // Set initial range (3V / +10 dB)
+    setRange(9);
+  }
+
 
   // 1960s Military Step Presets & Manual Exact Value Binding
   initMilitaryControls() {
@@ -339,8 +491,9 @@ class CircuitSimulator {
       const dmmPeak = document.getElementById("dmm-vpeak-val");
       if (dmmPeak) dmmPeak.textContent = `${vpeak >= 1.0 ? vpeak.toFixed(3) : (vpeak * 1000).toFixed(1) + ' m'}V`;
 
-      // 1970s Analogue VU meter needle deflection
-      this.updateVuMeter("pyr-vu-needle", dbu);
+      // APK Precision AC Voltmeter needle deflection
+      this.lastPyrVrms = vrms;
+      this.updateVuMeter("pyr-vu-needle", dbu, vrms);
     };
 
     if (dbuEl) {
@@ -446,9 +599,10 @@ class CircuitSimulator {
     this.setProbe("pp-probe-p3", `${(iPin3 * 1000).toFixed(1)} mA / ${vPin3.toFixed(2)} V`);
     this.setProbe("pp-probe-load", `V_diff: ${vDiff.toFixed(2)} V | I_load: ${(iLoad * 1000).toFixed(1)} mA`);
 
-    // 1970s Analogue VU meter needle on Circuit 6.1
+    // APK Precision AC Voltmeter needle on Circuit 6.1
+    this.lastPpVdiff = vDiff;
     const dBuOut = 20 * Math.log10(Math.max(0.001, vDiff / 0.775));
-    this.updateVuMeter("pp-vu-needle", dBuOut);
+    this.updateVuMeter("pp-vu-needle", dBuOut, vDiff);
 
     // 1970s DMM Fluorescent LCD screen readouts
     this.setProbe("pp-dmm-vdiff", `${vDiff.toFixed(2)} V`);

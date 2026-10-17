@@ -51,9 +51,44 @@ The included modern HTML5/CSS3/JavaScript web portal includes:
 
 ---
 
+---
+
+## Standalone Single-File Distribution (`INDEX.htm-YYYYMMDD-HHMM.html`)
+
+The portal is packaged into a 100% self-contained, standalone single-file distribution:
+- **Snapshot File**: `INDEX.htm-YYYYMMDD-HHMM.html` (e.g., `INDEX.htm-20261017-1907.html`, ~1.69 MB).
+- **Aliases**: `index.htm` and `index.html`.
+- **Zero External Dependencies**: All CSS stylesheets, JavaScript application engines, SVG schematics, interactive LTP faders, CRT oscilloscope graphics, 20 AES-X152 working draft papers, and the 2,290-term Dennis Bohn Pro Audio Reference (PAR) glossary are fully embedded inline.
+- **Offline Capable**: File sizes between 1.2 MB and 10 MB run offline anywhere directly via `file://` with no web server or internet connection required.
+- **Rebuilding the Bundle**:
+  ```bash
+  python3 scripts/bundle.py [YYYYMMDD-HHMM]
+  ```
+
+---
+
+## APK Precision AC Voltmeter & Calibrated Range Sensitivity
+
+The test bench features the **APK Precision AC Voltmeter** (designed by Anthony Peter Kuzub, replacing the legacy 400FL designation):
+- **14 Calibrated Ranges**:
+  - `mV / dB`: `.1 mV` (-80 dB), `.3 mV` (-70 dB), `1 mV` (-60 dB), `3 mV` (-50 dB), `10 mV` (-40 dB), `30 mV` (-30 dB), `100 mV` (-20 dB).
+  - `V / dB`: `.3 V` (-10 dB), `1 V` (0 dB), `3 V` (+10 dB nominal studio default), `10 V` (+20 dB), `30 V` (+30 dB), `100 V` (+40 dB), `300 V` (+50 dB).
+- **Interactive Rotary Controls**:
+  - **Click**: Click the fluted rotor to advance through ranges; Shift-click or secondary click to step backwards.
+  - **Mouse Wheel**: Scroll directly over the knob or dial face to cycle ranges up or down.
+  - **Drag**: Click and drag around the knob center to rotate naturally to any calibrated angle.
+  - **Direct Tick Selection**: Click directly on any dial tick text or label (`1V`, `3V`, `10V`, `+10`, etc.) to jump the selector immediately.
+- **True Physical Sensitivity**:
+  - Needle deflection scales dynamically against the selected full-scale range: $f = V_{rms} / V_{range}$.
+  - Overload signals ($V > 1.15 \times V_{range}$) deflect into the red $+2\text{ dB}$ overload region and peg against the mechanical stop at $+41^\circ$.
+  - Higher voltage ranges attenuate deflection down toward mechanical zero ($-36^\circ$), replicating authentic moving-coil meter ballistics.
+  - The breakaway floating test dock synchronizes with bench range settings and updates live sensitivity in real time.
+
+---
+
 ## Local Development & Viewing
 
-Open [`index.html`](index.html) directly in any modern web browser, or serve it locally using Python:
+Open [`index.html`](index.html), [`index.htm`](index.htm), or any `INDEX.htm-YYYYMMDD-HHMM.html` file directly in any modern web browser, or serve it locally using Python:
 
 ```bash
 python3 -m http.server 8000

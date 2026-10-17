@@ -2496,7 +2496,7 @@ code, pre {
 
 /* ==========================================================================
    Authentic 1960s/1970s Laboratory Bench Test Equipment
-   Hewlett-Packard 400FL / 400D AC Voltmeter & Fluke 8050A Benchtop DMM
+   APK Precision AC Voltmeter & Fluke 8050A Benchtop DMM
    ========================================================================== */
 
 .vintage-test-bench {
@@ -4129,6 +4129,353 @@ code, pre {
   margin-top: 0.2rem;
 }
 
+/* ==========================================================================
+   APK Precision AC Voltmeter Range Selector Rotary & Ticks
+   ========================================================================== */
+.range-dial-tick {
+  cursor: pointer;
+  transition: opacity 0.15s ease, filter 0.15s ease;
+}
+
+.range-dial-tick text {
+  transition: fill 0.15s ease, font-weight 0.15s ease;
+}
+
+.range-dial-tick line {
+  transition: stroke 0.15s ease, stroke-width 0.15s ease;
+}
+
+.range-dial-tick:hover text {
+  fill: #0284c7 !important;
+  font-weight: 900 !important;
+}
+
+.range-dial-tick:hover line {
+  stroke: #0284c7 !important;
+  stroke-width: 1.5 !important;
+}
+
+.range-dial-tick.active text {
+  fill: #0284c7 !important;
+  font-weight: 900 !important;
+}
+
+.range-dial-tick.active line {
+  stroke: #0284c7 !important;
+  stroke-width: 1.6 !important;
+}
+
+.range-knob-rotor {
+  cursor: grab;
+  transform-origin: 0px 0px;
+  transition: transform 0.14s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.range-knob-rotor:active {
+  cursor: grabbing;
+}
+
+
+/* ==========================================================================
+   Laboratory Oscilloscope CRT & Universal Circuit Probe Styles
+   ========================================================================== */
+
+.dock-tool-picker {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 0.2rem;
+}
+
+.tool-pick-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid #475569;
+  border-radius: 4px;
+  color: #cbd5e1;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.35rem 0.4rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.tool-pick-btn:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  color: #fff;
+}
+
+.tool-pick-btn.active {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+  color: #4ade80;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+.tool-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tool-dot.green {
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+
+.tool-dot.red {
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+.tool-arm-btn {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid #f59e0b;
+  color: #fbbf24;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.35rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.tool-arm-btn:hover,
+.tool-arm-btn.active {
+  background: #f59e0b;
+  color: #0f172a;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+  animation: probePulse 1.2s infinite;
+}
+
+@keyframes probePulse {
+  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
+.probe-lead.green {
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #86efac;
+}
+
+.probe-tip-led.green-led {
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+}
+
+/* View Switcher Tabs */
+.dock-view-tabs {
+  display: flex;
+  gap: 0.25rem;
+  background: #090d16;
+  padding: 2px;
+  border-radius: 5px;
+  border: 1px solid #334155;
+}
+
+.dock-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  color: #94a3b8;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.25rem 0.2rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.dock-tab-btn:hover {
+  color: #f8fafc;
+}
+
+.dock-tab-btn.active {
+  background: #1e293b;
+  color: #38bdf8;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Oscilloscope Bay */
+.dock-scope-card {
+  background: #06110a;
+  border: 1.5px solid #166534;
+  border-radius: 8px;
+  padding: 0.55rem;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 16px rgba(34, 197, 94, 0.15);
+}
+
+.crt-glow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px #4ade80;
+  display: inline-block;
+  animation: crtBlink 2s infinite ease-in-out;
+}
+
+@keyframes crtBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.dock-scope-bezel {
+  background: #021408;
+  border: 2px solid #0f2e1b;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.95);
+}
+
+.dock-scope-canvas {
+  width: 100%;
+  height: 145px;
+  display: block;
+}
+
+.dock-scope-controls {
+  margin-top: 0.45rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.scope-ctrl-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.scope-ctrl-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #86efac;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+.scope-btn-group {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.scope-btn {
+  background: #0f2e1b;
+  border: 1px solid #166534;
+  color: #86efac;
+  border-radius: 3px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 0.15rem 0.3rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.scope-btn:hover {
+  background: #15803d;
+  color: #fff;
+}
+
+.scope-btn.active {
+  background: #22c55e;
+  border-color: #4ade80;
+  color: #022c22;
+  font-weight: 800;
+  box-shadow: 0 0 6px #22c55e;
+}
+
+/* Armed Probe Crosshairs Cursor */
+body.probe-cursor-active,
+body.probe-cursor-active * {
+  cursor: crosshair !important;
+}
+
+/* Visual Physical Probe Pin Marker */
+.live-probe-marker-pin {
+  position: absolute;
+  z-index: 999;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: probeDropIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes probeDropIn {
+  from {
+    transform: translateY(-20px) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.probe-needle-tip {
+  width: 2.5px;
+  height: 18px;
+  background: linear-gradient(180deg, #94a3b8 0%, #f8fafc 80%, #fbbf24 100%);
+  box-shadow: 0 0 6px rgba(251, 191, 36, 0.8);
+  margin-top: -2px;
+}
+
+.probe-body-collar {
+  background: #0f172a;
+  border: 1.5px solid #22c55e;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: #4ade80;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8), 0 0 8px rgba(34, 197, 94, 0.5);
+  font-family: var(--font-mono);
+}
+
+.live-probe-marker-pin.red .probe-body-collar {
+  border-color: #ef4444;
+  color: #fca5a5;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8), 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+/* Floating HUD Toast Notification */
+.probe-hud-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(30px);
+  background: rgba(15, 23, 42, 0.95);
+  border: 1.5px solid #38bdf8;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  color: #f8fafc;
+  font-size: 0.78rem;
+  font-weight: 700;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), 0 0 15px rgba(56, 189, 248, 0.3);
+  z-index: 1001;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.probe-hud-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+
 </style>
   
   <!-- Google Fonts: Inter & JetBrains Mono -->
@@ -4258,7 +4605,7 @@ code, pre {
             <rect width="1000" height="320" fill="var(--bg-secondary)" rx="8"/>
             
             <!-- Box 1: Transmitter Enclosure -->
-            <rect id="svg-box-tx" class="enclosure-box" x="40" y="40" width="260" height="230" rx="10" 
+            <rect id="svg-box-tx" data-probe-target="enc-chassisa" data-probe-label="Equipment A Chassis Ground" class="probe-clickable-node" title="Click to Probe: Equipment A Chassis Ground" class="enclosure-box" x="40" y="40" width="260" height="230" rx="10" 
                   fill="#1e293b" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="none"/>
             <text id="svg-tx-title" x="170" y="70" fill="#38bdf8" font-size="14" font-weight="700" text-anchor="middle">TRANSMITTER ENCLOSURE</text>
             <text id="svg-tx-sub" x="170" y="90" fill="#94a3b8" font-size="11" text-anchor="middle">Metal Chassis Shield Entry</text>
@@ -4278,7 +4625,7 @@ code, pre {
             </g>
 
             <!-- Chassis Bond Line (AES48 Pin 1 Direct to Enclosure Entry - Shortest Path) -->
-            <path id="svg-tx-pin1-bond" d="M 280,161 L 300,161 L 300,270" fill="none" stroke="#10b981" stroke-width="3"/>
+            <path id="svg-tx-pin1-bond" data-probe-target="enc-pin1bond" data-probe-label="AES48 Pin 1 Direct Chassis Bond" class="probe-clickable-node" title="Click to Probe: AES48 Pin 1 Direct Chassis Bond" d="M 280,161 L 300,161 L 300,270" fill="none" stroke="#10b981" stroke-width="3"/>
             <circle cx="280" cy="161" r="3" fill="#10b981"/>
             <circle cx="300" cy="161" r="4" fill="#10b981"/>
             <path d="M 295,190 L 305,190 M 297,194 L 303,194 M 299,198 L 301,198" stroke="#10b981" stroke-width="1.8"/>
@@ -4286,7 +4633,7 @@ code, pre {
             <text x="235" y="233" fill="#6ee7b7" font-size="9" text-anchor="middle">(Right to Chassis &bull; 0mm Lead)</text>
 
             <!-- Cable Medium (Balanced Twisted Pair + Shield) -->
-            <rect id="svg-cable-body" class="cable-sheath" x="320" y="125" width="360" height="40" rx="6" fill="rgba(30, 41, 59, 0.8)" stroke="#64748b" stroke-width="1.5"/>
+            <rect id="svg-cable-body" data-probe-target="enc-shield" data-probe-label="Cable Overall Shield" class="probe-clickable-node" title="Click to Probe: Cable Overall Shield" class="cable-sheath" x="320" y="125" width="360" height="40" rx="6" fill="rgba(30, 41, 59, 0.8)" stroke="#64748b" stroke-width="1.5"/>
             <line x1="300" y1="133" x2="700" y2="133" stroke="#10b981" stroke-width="2.5"/>
             <line x1="300" y1="147" x2="700" y2="147" stroke="#ef4444" stroke-width="2.5"/>
             <line x1="300" y1="161" x2="700" y2="161" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,4"/>
@@ -4298,7 +4645,7 @@ code, pre {
             <path class="animated-current-flow" data-flow-speed="1.8" d="M 840,147 L 700,147 L 300,147 L 160,147" fill="none" stroke="#ef4444" stroke-width="2.5"/>
 
             <!-- Box 2: Receiver Enclosure -->
-            <rect id="svg-box-rx" class="enclosure-box" x="700" y="40" width="260" height="230" rx="10" 
+            <rect id="svg-box-rx" data-probe-target="enc-chassisb" data-probe-label="Equipment B Chassis Ground" class="probe-clickable-node" title="Click to Probe: Equipment B Chassis Ground" class="enclosure-box" x="700" y="40" width="260" height="230" rx="10" 
                   fill="#1e293b" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="none"/>
             <text id="svg-rx-title" x="830" y="70" fill="#38bdf8" font-size="14" font-weight="700" text-anchor="middle">RECEIVER ENCLOSURE</text>
             <text id="svg-rx-sub" x="830" y="90" fill="#94a3b8" font-size="11" text-anchor="middle">Differential Bridging Input</text>
@@ -4677,6 +5024,14 @@ code, pre {
           <a href="#contributor-kenny" class="alignment-contributor-badge"><span>👤 AES72 QTP Research:</span> <strong>Richard Kenny</strong> &rarr;</a>
           <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Grounding:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
           <a href="#contributor-schmidt" class="alignment-contributor-badge"><span>👤 Multichannel Snakes:</span> <strong>John Schmidt (Whirlwind)</strong> &rarr;</a>
+          <a href="#contributor-celli" class="alignment-contributor-badge"><span>👤 Snake Shield Continuity:</span> <strong>John Celli</strong> &rarr;</a>
+          <a href="#contributor-brito" class="alignment-contributor-badge"><span>👤 Standards Implementation:</span> <strong>Joel Brito</strong> &rarr;</a>
+          <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 SCIN Physics:</span> <strong>Bill Whitlock</strong> &rarr;</a>
+        </div>
+        <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="#contributor-kenny" class="alignment-contributor-badge"><span>👤 AES72 QTP Research:</span> <strong>Richard Kenny</strong> &rarr;</a>
+          <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Grounding:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
+          <a href="#contributor-schmidt" class="alignment-contributor-badge"><span>👤 Multichannel Snakes:</span> <strong>John Schmidt (Whirlwind)</strong> &rarr;</a>
           <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 SCIN Physics:</span> <strong>Bill Whitlock</strong> &rarr;</a>
         </div>
         </p>
@@ -4933,6 +5288,7 @@ code, pre {
 
     </div>
   </section>
+
 
 
 
@@ -6444,9 +6800,8 @@ code, pre {
                   </div>
                 </div>
 
-                <!-- Linear Travelling Potentiometer (LTP) Canvas -->
-                <div id="pp-vin-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
-                <input type="range" id="pp-vin" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.2" style="display: none;" />
+                <!-- 1960s Knurled Fader Slider -->
+                <input type="range" id="pp-vin" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.2" style="margin-top: 0.5rem;" />
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
                   <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
@@ -6487,9 +6842,8 @@ code, pre {
                   </div>
                 </div>
 
-                <!-- Linear Travelling Potentiometer (LTP) Canvas -->
-                <div id="pp-rout-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
-                <input type="range" id="pp-rout" class="range-slider" min="10" max="200" step="5" value="50" style="display: none;" />
+                <!-- Knurled Fader Slider -->
+                <input type="range" id="pp-rout" class="range-slider" min="10" max="200" step="5" value="50" style="margin-top: 0.5rem;" />
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
                   <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
@@ -6529,9 +6883,8 @@ code, pre {
                   </div>
                 </div>
 
-                <!-- Linear Travelling Potentiometer (LTP) Canvas -->
-                <div id="pp-rload-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
-                <input type="range" id="pp-rload" class="range-slider" min="150" max="20000" step="50" value="600" style="display: none;" />
+                <!-- Knurled Fader Slider -->
+                <input type="range" id="pp-rload" class="range-slider" min="150" max="20000" step="50" value="600" style="margin-top: 0.5rem;" />
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
                   <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
@@ -6881,145 +7234,82 @@ code, pre {
 
           <!-- Vector Schematic SVG with Dynamic Wires and Overlaid Values -->
           <div class="svg-diagram-wrapper">
-            <svg viewBox="0 0 880 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-              <rect width="880" height="320" fill="var(--bg-secondary)" rx="8"/>
-
-              <!-- 0V Circuit Common (Signal Ground) Reference Rail in Center -->
-              <line x1="80" y1="150" x2="280" y2="150" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,4"/>
-              <path d="M 80,150 L 80,165 M 72,165 L 88,165 M 75,169 L 85,169 M 78,173 L 82,173" stroke="#64748b" stroke-width="1.5"/>
-              <text x="96" y="166" fill="#64748b" font-size="9.5" font-weight="600">0V Signal Ground</text>
-
-              <!-- Audio Input Signal Source -->
-              <text x="30" y="84" fill="#38bdf8" font-size="13" font-weight="700">Audio In</text>
-              <line id="pp-svg-wire-drive" x1="90" y1="78" x2="140" y2="78" stroke="#38bdf8" stroke-width="2.5"/>
-              <path class="animated-current-flow" data-flow-speed="2.2" d="M 90,78 L 140,78" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
-              <circle cx="140" cy="78" r="4" fill="#38bdf8" data-probe-target="6-1-vin" class="probe-clickable-node" title="Click to Probe: Audio In Drive"/>
-              <text id="pp-svg-vin" x="115" y="68" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle" data-probe-target="6-1-vin" class="probe-clickable-node">1.2 V</text>
-
-              <!-- Branch 1: Non-Inverting Driver A1 (Hot / Pin 2) -->
-              <!-- Line directly enters the non-inverting (+) input at y=78 -->
-              <line x1="140" y1="78" x2="200" y2="78" stroke="#38bdf8" stroke-width="2.5"/>
-              <circle cx="200" cy="78" r="3" class="solder-lug"/>
+            <svg viewBox="0 0 850 300" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="300" fill="var(--bg-secondary)" rx="8"/>
               
-              <!-- Top Op-Amp A1 (Non-inverting Buffer) -->
-              <!-- Triangle vertices: (200, 55), (200, 115), (260, 85) -->
-              <polygon points="200,55 200,115 260,85" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
-              <text x="210" y="82" fill="#38bdf8" font-size="14" font-weight="800">+</text>
-              <text x="210" y="106" fill="#94a3b8" font-size="14" font-weight="800">&minus;</text>
-              <text x="235" y="72" fill="#94a3b8" font-size="9.5" font-weight="700">A1 (+1)</text>
+              <!-- Input Signal Wire with Dynamic Stroke -->
+              <text x="30" y="150" fill="#38bdf8" font-size="13" font-weight="700">Audio In</text>
+              <line id="pp-svg-wire-drive" x1="90" y1="145" x2="160" y2="145" stroke="#38bdf8" stroke-width="2.5"/>
+              <path class="animated-current-flow" data-flow-speed="2.2" d="M 90,145 L 160,145" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="160" cy="145" r="4" fill="#38bdf8"/>
+              <text id="pp-svg-vin" x="125" y="135" fill="#38bdf8" font-size="11" font-weight="700">1.2 V</text>
 
-              <!-- A1 Negative Feedback Loop: Output (260, 85) loops back to inverting input (200, 102) -->
-              <line x1="260" y1="85" x2="275" y2="85" stroke="#38bdf8" stroke-width="2"/>
-              <circle cx="275" cy="85" r="3" class="solder-lug"/>
-              <path d="M 275,85 L 275,124 L 185,124 L 185,102 L 200,102" fill="none" stroke="#64748b" stroke-width="1.8"/>
-              <circle cx="200" cy="102" r="2.5" fill="#64748b"/>
+              <!-- Branch to Top OpAmp -->
+              <line x1="160" y1="145" x2="160" y2="90" stroke="#38bdf8" stroke-width="2"/>
+              <line x1="160" y1="90" x2="210" y2="90" stroke="#38bdf8" stroke-width="2"/>
+              <circle cx="210" cy="90" r="3" class="solder-lug"/>
 
-              <!-- Branch 2: Inverting Driver A2 (Cold / Pin 3) -->
-              <!-- Signal branches down from (140, 78) to inverting input network at y=222 -->
-              <line x1="140" y1="78" x2="140" y2="222" stroke="#38bdf8" stroke-width="2"/>
-              <line x1="140" y1="222" x2="160" y2="222" stroke="#38bdf8" stroke-width="2"/>
-              <!-- Input Resistor Rin (10k) -->
-              <rect x="160" y="215" width="28" height="14" rx="2" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
-              <text x="174" y="225" fill="#94a3b8" font-size="8" font-weight="700" text-anchor="middle">10k</text>
-              <line x1="188" y1="222" x2="200" y2="222" stroke="#38bdf8" stroke-width="2"/>
-              <circle cx="200" cy="222" r="3" class="solder-lug"/>
+              <!-- Branch to Bottom Inverting OpAmp -->
+              <line x1="160" y1="145" x2="160" y2="210" stroke="#38bdf8" stroke-width="2"/>
+              <line x1="160" y1="210" x2="210" y2="210" stroke="#38bdf8" stroke-width="2"/>
+              <circle cx="210" cy="210" r="3" class="solder-lug"/>
 
-              <!-- Bottom Op-Amp A2 (Inverting Gain = -1) -->
-              <!-- Triangle vertices: (200, 175), (200, 235), (260, 205) -->
-              <polygon points="200,175 200,235 260,205" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
-              <text x="210" y="198" fill="#94a3b8" font-size="14" font-weight="800">+</text>
-              <text x="210" y="226" fill="#38bdf8" font-size="14" font-weight="800">&minus;</text>
-              <text x="235" y="225" fill="#94a3b8" font-size="9.5" font-weight="700">A2 (&minus;1)</text>
+              <!-- Top OpAmp (Non-inverting / Hot) -->
+              <polygon points="210,65 210,115 260,90" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+              <text x="222" y="82" fill="#38bdf8" font-size="12" font-weight="700">+</text>
+              <text x="222" y="105" fill="#94a3b8" font-size="12" font-weight="700">&minus;</text>
 
-              <!-- A2 Non-Inverting (+) Input tied directly to 0V Signal Ground -->
-              <line x1="200" y1="194" x2="180" y2="194" stroke="#64748b" stroke-width="1.8"/>
-              <line x1="180" y1="194" x2="180" y2="150" stroke="#64748b" stroke-width="1.8"/>
-              <circle cx="180" cy="150" r="3" class="solder-lug"/>
+              <!-- Bottom OpAmp (Inverting / Cold) -->
+              <polygon points="210,185 210,235 260,210" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+              <text x="222" y="202" fill="#94a3b8" font-size="12" font-weight="700">+</text>
+              <text x="222" y="225" fill="#38bdf8" font-size="12" font-weight="700">&minus;</text>
 
-              <!-- A2 Feedback Loop with Feedback Resistor Rf (10k) -->
-              <line x1="260" y1="205" x2="275" y2="205" stroke="#38bdf8" stroke-width="2"/>
-              <circle cx="275" cy="205" r="3" class="solder-lug"/>
-              <path d="M 275,205 L 275,248 L 220,248" fill="none" stroke="#64748b" stroke-width="1.8"/>
-              <rect x="192" y="241" width="28" height="14" rx="2" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
-              <text x="206" y="251" fill="#94a3b8" font-size="8" font-weight="700" text-anchor="middle">10k</text>
-              <path d="M 192,248 L 175,248 L 175,222 L 200,222" fill="none" stroke="#64748b" stroke-width="1.8"/>
+              <!-- Top Output Resistor Z_PO -->
+              <line x1="260" y1="90" x2="330" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="330" cy="90" r="3" class="solder-lug"/>
+              <rect x="330" y="82" width="55" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="357" y="94" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">Z_PO</text>
+              <text id="pp-svg-zpo" x="357" y="112" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle">50 &Omega;</text>
+              <circle cx="385" cy="90" r="3" class="solder-lug"/>
+              <line x1="385" y1="90" x2="630" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="630" cy="90" r="7" fill="#10b981"/>
+              <circle cx="630" cy="90" r="3" class="solder-lug"/>
+              <text x="655" y="95" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
+              <text id="pp-svg-probe-p2" x="490" y="80" fill="#10b981" font-size="10" font-weight="600">3.4 mA / 1.03 V</text>
+              <path class="animated-current-flow" data-flow-speed="1.8" d="M 260,90 L 630,90" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
-              <!-- Output Conductor 1: Pin 2 Hot Leg -->
-              <line x1="275" y1="85" x2="335" y2="85" stroke="#38bdf8" stroke-width="2.5"/>
-              <!-- Animated current flow (segmented so it stops at resistor boundaries) -->
-              <path class="animated-current-flow" data-flow-speed="1.8" d="M 275,85 L 335,85 M 410,85 L 630,85" fill="none" stroke="#10b981" stroke-width="2.5"/>
-              
-              <!-- Resistor Z_PO -->
-              <rect x="335" y="72" width="75" height="26" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
-              <text x="372" y="65" fill="#38bdf8" font-size="10.5" font-weight="700" text-anchor="middle">Z_PO (Source Z)</text>
-              <text id="pp-svg-zpo" x="372" y="89" fill="#38bdf8" font-size="11" font-weight="800" text-anchor="middle">50 &Omega;</text>
-              <circle cx="335" cy="85" r="3" class="solder-lug"/>
-              <circle cx="410" cy="85" r="3" class="solder-lug"/>
-              <line x1="410" y1="85" x2="630" y2="85" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Bottom Output Resistor Z_RO -->
+              <line x1="260" y1="210" x2="330" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="330" cy="210" r="3" class="solder-lug"/>
+              <rect x="330" y="202" width="55" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="357" y="214" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">Z_RO</text>
+              <text id="pp-svg-zro" x="357" y="232" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle">50 &Omega;</text>
+              <circle cx="385" cy="210" r="3" class="solder-lug"/>
+              <line x1="385" y1="210" x2="630" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="630" cy="210" r="7" fill="#ef4444"/>
+              <circle cx="630" cy="210" r="3" class="solder-lug"/>
+              <text x="655" y="215" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
+              <text id="pp-svg-probe-p3" x="490" y="228" fill="#ef4444" font-size="10" font-weight="600">3.4 mA / -1.03 V</text>
+              <path class="animated-current-flow" data-flow-speed="1.8" d="M 630,210 L 260,210" fill="none" stroke="#ef4444" stroke-width="2.5"/>
 
-              <!-- On-Wire Falstad-Style Probe Badge for Pin 2 -->
-              <g class="probe-tag probe-clickable-node" transform="translate(465, 57)" data-probe-target="6-1-p2" title="Click to Probe: Pin 2 Hot">
-                <rect x="0" y="0" width="130" height="20" rx="4" fill="#022c22" stroke="#10b981" stroke-width="1.2"/>
-                <text id="pp-svg-probe-p2" x="65" y="14" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">3.4 mA / 1.03 V</text>
-              </g>
+              <!-- Differential Load Resistor (Scales Dynamically) -->
+              <line x1="630" y1="90" x2="630" y2="120" stroke="#f59e0b" stroke-width="2"/>
+              <circle cx="630" cy="120" r="3" class="solder-lug"/>
+              <rect id="pp-svg-rload-rect" x="622" y="120" width="16" height="60" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+              <text x="655" y="152" fill="#f59e0b" font-size="10" font-weight="600">R_Load</text>
+              <text id="pp-svg-rload" x="655" y="172" fill="#f59e0b" font-size="11" font-weight="700">600 &Omega;</text>
+              <circle cx="630" cy="180" r="3" class="solder-lug"/>
+              <line x1="630" y1="180" x2="630" y2="210" stroke="#f59e0b" stroke-width="2"/>
 
-              <!-- Pin 2 Terminal Node -->
-              <circle cx="630" cy="85" r="7" fill="#10b981" data-probe-target="6-1-p2" class="probe-clickable-node" title="Click to Probe: Pin 2 Hot"/>
-              <circle cx="630" cy="85" r="3" fill="#ecfdf5" data-probe-target="6-1-p2" class="probe-clickable-node"/>
-              <text x="655" y="90" fill="#10b981" font-size="13.5" font-weight="800"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
-
-              <!-- Output Conductor 2: Pin 3 Cold Leg -->
-              <line x1="275" y1="205" x2="335" y2="205" stroke="#38bdf8" stroke-width="2.5"/>
-              <!-- Animated current flow (segmented so it stops at resistor boundaries) -->
-              <path class="animated-current-flow" data-flow-speed="1.8" d="M 630,205 L 410,205 M 335,205 L 275,205" fill="none" stroke="#ef4444" stroke-width="2.5"/>
-              
-              <!-- Resistor Z_RO -->
-              <rect x="335" y="192" width="75" height="26" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
-              <text x="372" y="233" fill="#38bdf8" font-size="10.5" font-weight="700" text-anchor="middle">Z_RO (Source Z)</text>
-              <text id="pp-svg-zro" x="372" y="209" fill="#38bdf8" font-size="11" font-weight="800" text-anchor="middle">50 &Omega;</text>
-              <circle cx="335" cy="205" r="3" class="solder-lug"/>
-              <circle cx="410" cy="205" r="3" class="solder-lug"/>
-              <line x1="410" y1="205" x2="630" y2="205" stroke="#38bdf8" stroke-width="2.5"/>
-
-              <!-- On-Wire Falstad-Style Probe Badge for Pin 3 -->
-              <g class="probe-tag probe-clickable-node" transform="translate(465, 218)" data-probe-target="6-1-p3" title="Click to Probe: Pin 3 Cold">
-                <rect x="0" y="0" width="130" height="20" rx="4" fill="#450a0a" stroke="#ef4444" stroke-width="1.2"/>
-                <text id="pp-svg-probe-p3" x="65" y="14" fill="#f87171" font-size="10" font-weight="700" text-anchor="middle">3.4 mA / -1.03 V</text>
-              </g>
-
-              <!-- Pin 3 Terminal Node -->
-              <circle cx="630" cy="205" r="7" fill="#ef4444" data-probe-target="6-1-p3" class="probe-clickable-node" title="Click to Probe: Pin 3 Cold"/>
-              <circle cx="630" cy="205" r="3" fill="#fff1f2" data-probe-target="6-1-p3" class="probe-clickable-node"/>
-              <text x="655" y="210" fill="#ef4444" font-size="13.5" font-weight="800"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
-
-              <!-- Differential Load Resistor R_Load between Pin 2 and Pin 3 -->
-              <line x1="630" y1="85" x2="630" y2="115" stroke="#f59e0b" stroke-width="2.5"/>
-              <rect id="pp-svg-rload-rect" x="621" y="115" width="18" height="60" rx="3" fill="#0f172a" stroke="#f59e0b" stroke-width="2" data-probe-target="6-1-load" class="probe-clickable-node" title="Click to Probe: Differential Load"/>
-              <circle cx="630" cy="115" r="3" class="solder-lug"/>
-              <circle cx="630" cy="175" r="3" class="solder-lug"/>
-              <line x1="630" y1="175" x2="630" y2="205" stroke="#f59e0b" stroke-width="2.5"/>
-
-              <!-- Clean Load Labels positioned to the right of load resistor -->
-              <text x="655" y="142" fill="#f59e0b" font-size="10.5" font-weight="700" data-probe-target="6-1-load" class="probe-clickable-node">R_LOAD</text>
-              <text id="pp-svg-rload" x="655" y="160" fill="#f59e0b" font-size="12" font-weight="800" data-probe-target="6-1-load" class="probe-clickable-node">600 &Omega;</text>
-
-              <!-- Chassis Ground Reference Rail (AES48 Ground Plane) -->
-              <line x1="380" y1="275" x2="630" y2="275" stroke="#94a3b8" stroke-width="2"/>
-              <path d="M 380,275 L 380,290 M 368,290 L 392,290 M 372,295 L 388,295 M 376,300 L 384,300" stroke="#94a3b8" stroke-width="2"/>
-              <text x="350" y="288" fill="#94a3b8" font-size="10.5" font-weight="700" text-anchor="end">Chassis Ground (AES48)</text>
-
-              <!-- Pin 1 Terminal Node -->
-              <circle cx="630" cy="275" r="7" fill="#64748b"/>
-              <circle cx="630" cy="275" r="3" class="solder-lug"/>
-              <text x="655" y="280" fill="#94a3b8" font-size="13" font-weight="700">Pin 1 (CHASSIS)</text>
-
-              <!-- Pin 3 Short to Ground Link (Interactive Knife Switch / Ground Fault) -->
-              <g id="svg-pp-short-group" opacity="0.6">
-                <line id="pp-svg-short-dash" x1="630" y1="205" x2="630" y2="275" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4,4"/>
-                <g transform="translate(500, 230)">
-                  <rect x="0" y="0" width="115" height="18" rx="4" fill="rgba(15, 23, 42, 0.9)" stroke="#64748b" stroke-width="1"/>
-                  <text id="pp-svg-ts-text" x="57" y="13" fill="#94a3b8" font-size="9" font-weight="700" text-anchor="middle">TS Short: OPEN</text>
-                </g>
+              <!-- Pin 3 Short to Ground Link (Visible & Highlighted when toggled) -->
+              <g id="svg-pp-short-group" opacity="0.3">
+                <line id="pp-svg-short-dash" x1="630" y1="210" x2="630" y2="260" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4,4"/>
+                <circle cx="630" cy="260" r="5" fill="#94a3b8"/>
+                <circle cx="630" cy="260" r="3" class="solder-lug"/>
+                <line x1="420" y1="260" x2="630" y2="260" stroke="#94a3b8" stroke-width="2"/>
+                <path d="M 410,260 L 430,260 M 415,265 L 425,265 M 418,270 L 422,270" stroke="#94a3b8" stroke-width="2"/>
+                <text id="pp-svg-ts-text" x="580" y="248" fill="#94a3b8" font-size="10" font-weight="600">TS Ground Short Link (Open)</text>
+                <text x="655" y="265" fill="#94a3b8" font-size="13" font-weight="700">Pin 1 (CHASSIS)</text>
               </g>
             </svg>
           </div>
@@ -7046,8 +7336,7 @@ code, pre {
                   <span>Input Voltage (V<sub>IN</sub>)</span>
                   <span id="ib-vin-val" class="control-value">1.2 V</span>
                 </label>
-                <div id="ib-vin-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
-                <input type="range" id="ib-vin" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.2" style="display: none;" />
+                <input type="range" id="ib-vin" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.2" />
               </div>
 
               <div class="control-group" style="margin-bottom: 0;">
@@ -7055,8 +7344,7 @@ code, pre {
                   <span>Output Impedance (R<sub>OUT</sub>)</span>
                   <span id="ib-rout-val" class="control-value">50 &Omega;</span>
                 </label>
-                <div id="ib-rout-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
-                <input type="range" id="ib-rout" class="range-slider" min="10" max="200" step="5" value="50" style="display: none;" />
+                <input type="range" id="ib-rout" class="range-slider" min="10" max="200" step="5" value="50" />
               </div>
 
               <div class="control-group" style="margin-bottom: 0;">
@@ -7064,8 +7352,7 @@ code, pre {
                   <span>Load Resistance (R<sub>L</sub>)</span>
                   <span id="ib-rload-val" class="control-value">10000 &Omega;</span>
                 </label>
-                <div id="ib-rload-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
-                <input type="range" id="ib-rload" class="range-slider" min="600" max="20000" step="200" value="10000" style="display: none;" />
+                <input type="range" id="ib-rload" class="range-slider" min="600" max="20000" step="200" value="10000" />
               </div>
 
               <div>
@@ -7086,100 +7373,43 @@ code, pre {
           </div>
 
           <div class="svg-diagram-wrapper">
-            <svg viewBox="0 0 880 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-              <rect width="880" height="320" fill="var(--bg-secondary)" rx="8"/>
+            <svg viewBox="0 0 850 280" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="280" fill="var(--bg-secondary)" rx="8"/>
 
-              <!-- Audio Input Signal Source -->
-              <text x="30" y="84" fill="#38bdf8" font-size="13" font-weight="700">Audio In</text>
-              <line x1="90" y1="78" x2="140" y2="78" stroke="#38bdf8" stroke-width="2.5"/>
-              <path class="animated-current-flow" data-flow-speed="2.2" d="M 90,78 L 140,78" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
-              <circle cx="140" cy="78" r="4" fill="#38bdf8"/>
-              <text id="ib-svg-vin" x="115" y="68" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">1.2 V</text>
+              <text x="30" y="85" fill="#38bdf8" font-size="13" font-weight="700">Audio In</text>
+              <line x1="90" y1="80" x2="200" y2="80" stroke="#38bdf8" stroke-width="2.5"/>
+              <polygon points="200,55 200,105 250,80" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+              <text x="212" y="73" fill="#38bdf8" font-size="12" font-weight="700">+</text>
+              <text x="212" y="96" fill="#94a3b8" font-size="12" font-weight="700">&minus;</text>
 
-              <!-- Line enters non-inverting (+) input at y=78 -->
-              <line x1="140" y1="78" x2="200" y2="78" stroke="#38bdf8" stroke-width="2.5"/>
-              <circle cx="200" cy="78" r="3" class="solder-lug"/>
+              <line x1="250" y1="80" x2="330" y2="80" stroke="#38bdf8" stroke-width="2.5"/>
+              <rect x="330" y="72" width="60" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="360" y="84" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">R_PO (50&Omega;)</text>
+              <line x1="390" y1="80" x2="640" y2="80" stroke="#10b981" stroke-width="2.5"/>
+              <circle cx="640" cy="80" r="7" fill="#10b981"/>
+              <text x="665" y="85" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
+              <path class="animated-current-flow" data-flow-speed="1.8" d="M 250,80 L 640,80" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
-              <!-- Active Driver Op-Amp A1 -->
-              <polygon points="200,55 200,115 260,85" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
-              <text x="210" y="82" fill="#38bdf8" font-size="14" font-weight="800">+</text>
-              <text x="210" y="106" fill="#94a3b8" font-size="14" font-weight="800">&minus;</text>
-              <text x="235" y="72" fill="#94a3b8" font-size="9.5" font-weight="700">A1 (+1)</text>
+              <!-- Passive Resistor Termination to Ground (Pin 3) -->
+              <path d="M 200,180 L 220,180 M 205,185 L 215,185 M 208,190 L 212,190" stroke="#94a3b8" stroke-width="2"/>
+              <line x1="210" y1="180" x2="330" y2="180" stroke="#94a3b8" stroke-width="2.5"/>
+              <rect x="330" y="172" width="60" height="16" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+              <text x="360" y="184" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">R_RO (50&Omega;)</text>
+              <line x1="390" y1="180" x2="640" y2="180" stroke="#94a3b8" stroke-width="2.5"/>
+              <circle cx="640" cy="180" r="7" fill="#ef4444"/>
+              <text x="665" y="185" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
+              <text x="440" y="165" fill="#94a3b8" font-size="10" font-weight="600">Zero Audio Signal Voltage (Passive Balance)</text>
 
-              <!-- Negative Feedback Loop for Unity-Gain Buffer -->
-              <line x1="260" y1="85" x2="275" y2="85" stroke="#38bdf8" stroke-width="2"/>
-              <circle cx="275" cy="85" r="3" class="solder-lug"/>
-              <path d="M 275,85 L 275,124 L 185,124 L 185,102 L 200,102" fill="none" stroke="#64748b" stroke-width="1.8"/>
-              <circle cx="200" cy="102" r="2.5" fill="#64748b"/>
+              <!-- Bridging Load Resistor -->
+              <line x1="640" y1="80" x2="640" y2="110" stroke="#f59e0b" stroke-width="2"/>
+              <rect x="632" y="110" width="16" height="40" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+              <text x="655" y="135" fill="#f59e0b" font-size="10" font-weight="600">10k &Omega;</text>
+              <line x1="640" y1="150" x2="640" y2="180" stroke="#f59e0b" stroke-width="2"/>
 
-              <!-- Output Conductor 1: Pin 2 Hot Leg -->
-              <line x1="275" y1="85" x2="335" y2="85" stroke="#38bdf8" stroke-width="2.5"/>
-              <!-- Segmented animated flow path: stops at resistor boundary -->
-              <path class="animated-current-flow" data-flow-speed="1.8" d="M 275,85 L 335,85 M 410,85 L 630,85" fill="none" stroke="#10b981" stroke-width="2.5"/>
-
-              <!-- Active Leg Resistor R_PO -->
-              <rect x="335" y="72" width="75" height="26" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
-              <text x="372" y="65" fill="#38bdf8" font-size="10.5" font-weight="700" text-anchor="middle">R_PO (Active Driver Z)</text>
-              <text id="ib-svg-rpo" x="372" y="89" fill="#38bdf8" font-size="11" font-weight="800" text-anchor="middle">50 &Omega;</text>
-              <circle cx="335" cy="85" r="3" class="solder-lug"/>
-              <circle cx="410" cy="85" r="3" class="solder-lug"/>
-              <line x1="410" y1="85" x2="630" y2="85" stroke="#38bdf8" stroke-width="2.5"/>
-
-              <!-- On-Wire Falstad-Style Probe Badge for Pin 2 -->
-              <g class="probe-tag probe-clickable-node" transform="translate(465, 57)" data-probe-target="6-2-p2" title="Click to Probe: Pin 2 Hot">
-                <rect x="0" y="0" width="135" height="20" rx="4" fill="#022c22" stroke="#10b981" stroke-width="1.2"/>
-                <text id="ib-svg-p2-probe" x="67" y="14" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">1.19 V / +3.7 dBu</text>
-              </g>
-
-              <!-- Pin 2 Terminal Node -->
-              <circle cx="630" cy="85" r="7" fill="#10b981" data-probe-target="6-2-p2" class="probe-clickable-node" title="Click to Probe: Pin 2 Hot"/>
-              <circle cx="630" cy="85" r="3" fill="#ecfdf5" data-probe-target="6-2-p2" class="probe-clickable-node"/>
-              <text x="655" y="90" fill="#10b981" font-size="13.5" font-weight="800"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
-
-              <!-- Passive Leg (Pin 3): Terminated purely to 0V Circuit Signal Ground -->
-              <path d="M 180,205 L 180,220 M 172,220 L 188,220 M 175,224 L 185,224 M 178,228 L 182,228" stroke="#64748b" stroke-width="1.8"/>
-              <text x="180" y="240" fill="#64748b" font-size="9" font-weight="600" text-anchor="middle">0V Ground</text>
-              <line x1="180" y1="205" x2="335" y2="205" stroke="#94a3b8" stroke-width="2.5"/>
-
-              <!-- Passive Resistor R_RO (Precision matched to R_PO) -->
-              <rect x="335" y="192" width="75" height="26" rx="4" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
-              <text x="372" y="233" fill="#94a3b8" font-size="10.5" font-weight="700" text-anchor="middle">R_RO (Passive Match Z)</text>
-              <text id="ib-svg-rro" x="372" y="209" fill="#94a3b8" font-size="11" font-weight="800" text-anchor="middle">50 &Omega;</text>
-              <circle cx="335" cy="205" r="3" class="solder-lug"/>
-              <circle cx="410" cy="205" r="3" class="solder-lug"/>
-              <line x1="410" y1="205" x2="630" y2="205" stroke="#94a3b8" stroke-width="2.5"/>
-
-              <!-- On-Wire Probe Badge for Pin 3 -->
-              <g class="probe-tag probe-clickable-node" transform="translate(450, 180)" data-probe-target="6-2-p3" title="Click to Probe: Pin 3 Cold">
-                <rect x="0" y="0" width="165" height="20" rx="4" fill="rgba(30, 41, 59, 0.9)" stroke="#94a3b8" stroke-width="1.2"/>
-                <text id="ib-svg-p3-probe" x="82" y="14" fill="#94a3b8" font-size="9.5" font-weight="700" text-anchor="middle">0.00 V / 50.0 &Omega; to 0V</text>
-              </g>
-
-              <!-- Pin 3 Terminal Node -->
-              <circle cx="630" cy="205" r="7" fill="#ef4444" data-probe-target="6-2-p3" class="probe-clickable-node" title="Click to Probe: Pin 3 Cold"/>
-              <circle cx="630" cy="205" r="3" fill="#fff1f2" data-probe-target="6-2-p3" class="probe-clickable-node"/>
-              <text x="655" y="210" fill="#ef4444" font-size="13.5" font-weight="800"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
-
-              <!-- Bridging Load Resistor R_Load between Pin 2 and Pin 3 -->
-              <line x1="630" y1="85" x2="630" y2="115" stroke="#f59e0b" stroke-width="2.5"/>
-              <rect x="621" y="115" width="18" height="60" rx="3" fill="#0f172a" stroke="#f59e0b" stroke-width="2" data-probe-target="6-2-load" class="probe-clickable-node" title="Click to Probe: Differential Load"/>
-              <circle cx="630" cy="115" r="3" class="solder-lug"/>
-              <circle cx="630" cy="175" r="3" class="solder-lug"/>
-              <line x1="630" y1="175" x2="630" y2="205" stroke="#f59e0b" stroke-width="2.5"/>
-
-              <!-- Clean Load Labels positioned to the right of load resistor -->
-              <text x="655" y="142" fill="#f59e0b" font-size="10.5" font-weight="700" data-probe-target="6-2-load" class="probe-clickable-node">R_LOAD (Bridging)</text>
-              <text id="ib-svg-rload" x="655" y="160" fill="#f59e0b" font-size="12" font-weight="800" data-probe-target="6-2-load" class="probe-clickable-node">10 k&Omega;</text>
-
-              <!-- Chassis Ground Reference Rail (AES48 Ground Plane) -->
-              <line x1="380" y1="275" x2="630" y2="275" stroke="#94a3b8" stroke-width="2"/>
-              <path d="M 380,275 L 380,290 M 368,290 L 392,290 M 372,295 L 388,295 M 376,300 L 384,300" stroke="#94a3b8" stroke-width="2"/>
-              <text x="350" y="288" fill="#94a3b8" font-size="10.5" font-weight="700" text-anchor="end">Chassis Ground (AES48)</text>
-
-              <!-- Pin 1 Terminal Node -->
-              <circle cx="630" cy="275" r="7" fill="#64748b"/>
-              <circle cx="630" cy="275" r="3" class="solder-lug"/>
-              <text x="655" y="280" fill="#94a3b8" font-size="13" font-weight="700">Pin 1 (CHASSIS)</text>
+              <!-- Pin 1 Shield -->
+              <line x1="210" y1="230" x2="640" y2="230" stroke="#94a3b8" stroke-width="2"/>
+              <circle cx="640" cy="230" r="7" fill="#94a3b8"/>
+              <text x="665" y="235" fill="#94a3b8" font-size="14" font-weight="700">Pin 1 (CHASSIS)</text>
             </svg>
           </div>
         </div>
@@ -7205,8 +7435,7 @@ code, pre {
                   <span>Primary Voltage (V<sub>IN</sub>)</span>
                   <span id="tx-vin-val" class="control-value">15.0 V</span>
                 </label>
-                <div id="tx-vin-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
-                <input type="range" id="tx-vin" class="range-slider" min="1" max="25" step="0.5" value="15" style="display: none;" />
+                <input type="range" id="tx-vin" class="range-slider" min="1" max="25" step="0.5" value="15" />
               </div>
 
               <div class="control-group" style="margin-bottom: 0;">
@@ -7214,8 +7443,7 @@ code, pre {
                   <span>Transformer Turns Ratio</span>
                   <span id="tx-ratio-val" class="control-value">1 : 1.0</span>
                 </label>
-                <div id="tx-ratio-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
-                <input type="range" id="tx-ratio" class="range-slider" min="0.5" max="2.0" step="0.1" value="1.0" style="display: none;" />
+                <input type="range" id="tx-ratio" class="range-slider" min="0.5" max="2.0" step="0.1" value="1.0" />
               </div>
 
               <div class="control-group" style="margin-bottom: 0;">
@@ -7223,8 +7451,7 @@ code, pre {
                   <span>Load Resistance (R<sub>L</sub>)</span>
                   <span id="tx-rload-val" class="control-value">600 &Omega;</span>
                 </label>
-                <div id="tx-rload-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
-                <input type="range" id="tx-rload" class="range-slider" min="150" max="5000" step="50" value="600" style="display: none;" />
+                <input type="range" id="tx-rload" class="range-slider" min="150" max="5000" step="50" value="600" />
               </div>
 
               <div>
@@ -7250,7 +7477,7 @@ code, pre {
               <rect width="850" height="320" fill="var(--bg-secondary)" rx="8"/>
               
               <!-- Primary Input Wires (Strictly Horizontal at y=120 and y=210) -->
-              <text x="30" y="165" fill="#38bdf8" font-size="13" font-weight="700" data-probe-target="6-3-pri" class="probe-clickable-node" title="Click to Probe: Primary Driver In">Driver In</text>
+              <text x="30" y="165" fill="#38bdf8" font-size="13" font-weight="700">Driver In</text>
               <line x1="90" y1="120" x2="250" y2="120" stroke="#38bdf8" stroke-width="2.5"/>
               <line x1="90" y1="210" x2="250" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
               <path class="animated-current-flow" data-flow-speed="2.0" d="M 90,120 L 250,120 L 250,210 L 90,210" fill="none" stroke="#10b981" stroke-width="2.5"/>
@@ -7267,13 +7494,13 @@ code, pre {
 
               <!-- Secondary Top Wire (Strictly Horizontal at y=120) -->
               <line x1="320" y1="120" x2="680" y2="120" stroke="#10b981" stroke-width="2.5"/>
-              <circle cx="680" cy="120" r="7" fill="#10b981" data-probe-target="6-3-sec" class="probe-clickable-node" title="Click to Probe: Secondary Across Pins 2 & 3"/>
+              <circle cx="680" cy="120" r="7" fill="#10b981"/>
               <text x="705" y="125" fill="#10b981" font-size="13" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 320,120 L 680,120" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
               <!-- Secondary Bottom Wire (Strictly Horizontal at y=210) -->
               <line x1="320" y1="210" x2="680" y2="210" stroke="#ef4444" stroke-width="2.5"/>
-              <circle cx="680" cy="210" r="7" fill="#ef4444" data-probe-target="6-3-sec" class="probe-clickable-node" title="Click to Probe: Secondary Across Pins 2 & 3"/>
+              <circle cx="680" cy="210" r="7" fill="#ef4444"/>
               <text x="705" y="215" fill="#ef4444" font-size="13" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 680,210 L 320,210" fill="none" stroke="#ef4444" stroke-width="2.5"/>
 
@@ -7472,97 +7699,6 @@ code, pre {
             <span class="probe-pill">DC Isolation: <strong>&gt; 500 V Galvanic Barrier</strong></span>
             <span class="probe-pill">Faraday Shield: <strong>Tied directly to Connector Pin 1 Chassis</strong></span>
             <span class="probe-pill">CMRR: <strong>&gt; 115 dB @ 60 Hz | &gt; 100 dB @ 20 kHz</strong></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Interactive Real-Time Audio Spectrum Analyzer & CMRR Engine -->
-      <div id="audio-analyzer-demo" class="audio-analyzer-card">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
-          <div>
-            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
-              <span style="font-size: 1.3rem;">🔬</span>
-              <h3 style="margin: 0; color: var(--accent-cyan); font-size: 1.25rem;">Real-Time Audio Spectrum Analyzer &amp; CMRR Engine</h3>
-              <span class="badge badge-accent">OPEN-AIR Engine &bull; 2048-pt FFT</span>
-            </div>
-            <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; max-width: 780px;">
-              Live dual-trace Web Audio API FFT spectrum analyzer comparing the differential audio passband (<span style="color: #06b6d4; font-weight: 700;">Cyan Trace</span>) against common-mode noise &amp; ground loop hum residuals (<span style="color: #f59e0b; font-weight: 700;">Amber Trace</span>). Observe real-time CMRR degradation as source impedance balance varies.
-            </p>
-          </div>
-          <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <button id="analyzer-power-btn" class="btn btn-primary" style="font-weight: 700; background: linear-gradient(135deg, #0284c7, #06b6d4); border: none;">
-              ⚡ Engage Signal Generator
-            </button>
-          </div>
-        </div>
-
-        <!-- Real-Time Scope Display Canvas -->
-        <div class="analyzer-scope-wrapper">
-          <canvas id="audio-analyzer-canvas" height="260" style="width: 100%; height: 260px; display: block;"></canvas>
-        </div>
-
-        <!-- Generator Controls & Live Measurements Grid -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.25rem;">
-          <!-- Left: Virtual Signal Generator Console -->
-          <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid #1e293b; border-radius: 8px; padding: 1rem;">
-            <div style="font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
-              Test Tone Generator
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 1rem;">
-              <button class="drawer-btn active analyzer-tone-btn" data-tone="sine1k">1 kHz Sine (+4 dBu)</button>
-              <button class="drawer-btn analyzer-tone-btn" data-tone="hum">60 Hz Mains + Harmonics</button>
-              <button class="drawer-btn analyzer-tone-btn" data-tone="sweep">20 Hz – 20 kHz Sweep</button>
-              <button class="drawer-btn analyzer-tone-btn" data-tone="pink">Pink Noise</button>
-            </div>
-
-            <!-- Generator Parameter Faders -->
-            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-              <div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #cbd5e1; margin-bottom: 0.25rem;">
-                  <span>Output Level (dBu):</span>
-                  <span id="analyzer-level-val" style="font-family: monospace; font-weight: 700; color: #38bdf8;">+4.0 dBu</span>
-                </div>
-                <input type="range" id="analyzer-level-slider" min="-20" max="24" step="0.5" value="4" class="range-slider" />
-              </div>
-
-              <div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #cbd5e1; margin-bottom: 0.25rem;">
-                  <span>Source Impedance Imbalance (&Delta;Z):</span>
-                  <span id="analyzer-deltaz-val" style="font-family: monospace; font-weight: 700; color: #f59e0b;">0.00 &Omega; (Balanced)</span>
-                </div>
-                <input type="range" id="analyzer-deltaz-slider" min="0" max="50" step="0.5" value="0" class="range-slider" />
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: Live Laboratory Metrics VFD -->
-          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <div class="analyzer-badge-grid" style="margin-top: 0;">
-              <div class="analyzer-badge-cell">
-                <span class="analyzer-badge-title">Measured CMRR (Immunity)</span>
-                <span id="analyzer-cmrr-val" class="analyzer-badge-val" style="color: #10b981;">100.0 dB</span>
-                <span style="font-size: 0.68rem; color: #64748b; margin-top: 0.2rem;">Common-mode noise rejection</span>
-              </div>
-              <div class="analyzer-badge-cell">
-                <span class="analyzer-badge-title">Total Harmonic Distortion</span>
-                <span id="analyzer-thd-val" class="analyzer-badge-val">0.0003%</span>
-                <span style="font-size: 0.68rem; color: #64748b; margin-top: 0.2rem;">THD+N @ 1 kHz fundamental</span>
-              </div>
-              <div class="analyzer-badge-cell">
-                <span class="analyzer-badge-title">Differential Payload</span>
-                <span id="analyzer-vdiff-val" class="analyzer-badge-val" style="color: #06b6d4;">+4.0 dBu</span>
-                <span style="font-size: 0.68rem; color: #64748b; margin-top: 0.2rem;">1.228 VRMS across load</span>
-              </div>
-              <div class="analyzer-badge-cell">
-                <span class="analyzer-badge-title">Ground Hum Residual</span>
-                <span id="analyzer-hum-val" class="analyzer-badge-val" style="color: #94a3b8;">&lt; -96 dB</span>
-                <span style="font-size: 0.68rem; color: #64748b; margin-top: 0.2rem;">Bleed due to &Delta;Z imbalance</span>
-              </div>
-            </div>
-
-            <div style="background: rgba(15, 23, 42, 0.4); border: 1px dashed #334155; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; color: #94a3b8; line-height: 1.4;">
-              💡 <strong>Observation Note:</strong> Increase the <em>Source Impedance Imbalance (&Delta;Z)</em> slider. As &Delta;Z deviates from 0&Omega;, common-mode rejection drops dramatically from &gt;100 dB down to ~45 dB, and the 60 Hz hum residual rises into the audible passband, exactly demonstrating Bill Whitlock's core thesis in AES Paper 4372.
-            </div>
           </div>
         </div>
       </div>
@@ -7930,8 +8066,8 @@ code, pre {
           <div class="probe-badge-panel">
             <span class="probe-pill">Impedance Imbalance (&Delta;Z): <strong id="meyer-probe-deltaz">0.0 &Omega; (0.00%)</strong></span>
             <span class="probe-pill">Ground Loop Current: <strong id="meyer-probe-ignd">3.8 mA</strong></span>
-            <span class="probe-pill probe-clickable-node" data-probe-target="meyer-diff" title="Click to Probe: Differential Audio Signal">Diff Audio Signal: <strong id="meyer-probe-vdiff">1.96 V</strong></span>
-            <span class="probe-pill probe-clickable-node" data-probe-target="meyer-verr" title="Click to Probe: Converted Hum Error Voltage">Converted Hum Error: <strong id="meyer-probe-verror" style="color: #10b981;">0.00 mV (Infinite CMRR)</strong></span>
+            <span class="probe-pill">Diff Audio Signal: <strong id="meyer-probe-vdiff">1.96 V</strong></span>
+            <span class="probe-pill">Converted Hum Error: <strong id="meyer-probe-verror" style="color: #10b981;">0.00 mV (Infinite CMRR)</strong></span>
             <span class="probe-pill">Calculated Thevenin CMRR: <strong id="meyer-probe-cmrr" style="color: #10b981;">&infin; dB</strong></span>
           </div>
         </div>
@@ -7945,35 +8081,50 @@ code, pre {
             <rect x="30" y="30" width="280" height="280" rx="8" fill="rgba(30, 41, 59, 0.5)" stroke="#38bdf8" stroke-width="2"/>
             <text x="170" y="60" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle">EQUIPMENT A (SOURCE)</text>
 
-            <!-- Audio Signal Generators -->
-            <circle cx="90" cy="110" r="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
-            <path d="M 82,110 Q 86,102 90,110 T 98,110" fill="none" stroke="#38bdf8" stroke-width="2"/>
-            <text x="90" y="90" fill="#38bdf8" font-size="10" font-weight="600" text-anchor="middle">V_PO</text>
+            <!-- Audio Signal Generators (Interactive Probe Points) -->
+            <g data-probe-target="meyer-vpo" data-probe-label="Generator V_PO (Hot Leg)" class="probe-clickable-node" title="Click to Probe: Hot Signal Generator V_PO">
+              <circle cx="90" cy="110" r="18" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="90" cy="110" r="24" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2,3" opacity="0.6"/>
+              <path d="M 82,110 Q 86,102 90,110 T 98,110" fill="none" stroke="#38bdf8" stroke-width="2"/>
+              <text x="90" y="88" fill="#38bdf8" font-size="11" font-weight="800" text-anchor="middle">V_PO</text>
+            </g>
 
-            <circle cx="90" cy="220" r="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
-            <path d="M 82,220 Q 86,228 90,220 T 98,220" fill="none" stroke="#38bdf8" stroke-width="2"/>
-            <text x="90" y="250" fill="#38bdf8" font-size="10" font-weight="600" text-anchor="middle">V_RO</text>
+            <g data-probe-target="meyer-vro" data-probe-label="Generator V_RO (Cold Leg)" class="probe-clickable-node" title="Click to Probe: Cold Signal Generator V_RO">
+              <circle cx="90" cy="220" r="18" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="90" cy="220" r="24" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2,3" opacity="0.6"/>
+              <path d="M 82,220 Q 86,228 90,220 T 98,220" fill="none" stroke="#38bdf8" stroke-width="2"/>
+              <text x="90" y="252" fill="#38bdf8" font-size="11" font-weight="800" text-anchor="middle">V_RO</text>
+            </g>
 
             <!-- Internal Star Connection to Chassis via CMZ_OUT -->
-            <line x1="90" y1="126" x2="90" y2="150" stroke="#38bdf8" stroke-width="2"/>
-            <line x1="90" y1="204" x2="90" y2="180" stroke="#38bdf8" stroke-width="2"/>
+            <line x1="90" y1="128" x2="90" y2="150" stroke="#38bdf8" stroke-width="2"/>
+            <line x1="90" y1="202" x2="90" y2="180" stroke="#38bdf8" stroke-width="2"/>
             <line x1="90" y1="165" x2="140" y2="165" stroke="#94a3b8" stroke-width="2"/>
-            <rect x="140" y="157" width="45" height="16" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
-            <text x="162" y="169" fill="#f8fafc" font-size="9" text-anchor="middle">CMZ_OUT</text>
+            <g data-probe-target="meyer-cmzout" data-probe-label="Source CM Return (CMZ_OUT)" class="probe-clickable-node" title="Click to Probe: CMZ_OUT">
+              <rect x="140" y="155" width="45" height="20" rx="3" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+              <text x="162" y="169" fill="#f8fafc" font-size="9.5" font-weight="700" text-anchor="middle">CMZ_OUT</text>
+            </g>
             <line x1="185" y1="165" x2="220" y2="165" stroke="#94a3b8" stroke-width="2"/>
             <line x1="220" y1="165" x2="220" y2="290" stroke="#94a3b8" stroke-width="2"/>
-            <circle cx="220" cy="290" r="4" fill="#94a3b8"/>
-            <text x="220" y="305" fill="#94a3b8" font-size="10" text-anchor="middle">Chassis A</text>
+            <g data-probe-target="meyer-chassisa" data-probe-label="Chassis A Ground Star Point" class="probe-clickable-node" title="Click to Probe: Chassis A Ground">
+              <circle cx="220" cy="290" r="8" fill="#94a3b8"/>
+              <circle cx="220" cy="290" r="4" fill="#0f172a"/>
+              <text x="220" y="308" fill="#94a3b8" font-size="10.5" font-weight="700" text-anchor="middle">Chassis A</text>
+            </g>
 
             <!-- Output Resistors Z_PO and Z_RO -->
-            <line x1="106" y1="110" x2="190" y2="110" stroke="#38bdf8" stroke-width="2.5"/>
-            <rect x="190" y="102" width="50" height="16" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
-            <text x="215" y="114" fill="#10b981" font-size="10" font-weight="700" text-anchor="middle">Z_PO</text>
+            <line x1="108" y1="110" x2="190" y2="110" stroke="#38bdf8" stroke-width="2.5"/>
+            <g data-probe-target="meyer-zpo" data-probe-label="Source Hot Impedance Z_PO" class="probe-clickable-node" title="Click to Probe: Z_PO Node">
+              <rect x="190" y="99" width="50" height="22" rx="3" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+              <text x="215" y="114" fill="#10b981" font-size="10.5" font-weight="800" text-anchor="middle">Z_PO</text>
+            </g>
             <line x1="240" y1="110" x2="310" y2="110" stroke="#10b981" stroke-width="2.5"/>
 
-            <line x1="106" y1="220" x2="190" y2="220" stroke="#38bdf8" stroke-width="2.5"/>
-            <rect x="190" y="212" width="50" height="16" fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
-            <text x="215" y="224" fill="#ef4444" font-size="10" font-weight="700" text-anchor="middle">Z_RO</text>
+            <line x1="108" y1="220" x2="190" y2="220" stroke="#38bdf8" stroke-width="2.5"/>
+            <g data-probe-target="meyer-zro" data-probe-label="Source Cold Impedance Z_RO" class="probe-clickable-node" title="Click to Probe: Z_RO Node">
+              <rect x="190" y="209" width="50" height="22" rx="3" fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+              <text x="215" y="224" fill="#ef4444" font-size="10.5" font-weight="800" text-anchor="middle">Z_RO</text>
+            </g>
             <line x1="240" y1="220" x2="310" y2="220" stroke="#ef4444" stroke-width="2.5"/>
 
             <!-- CABLE SECTION (STP) -->
@@ -7981,37 +8132,54 @@ code, pre {
             <text x="480" y="92" fill="#94a3b8" font-size="11" font-weight="600" text-anchor="middle">SHIELDED TWISTED PAIR CABLE (C_PS Parasitics)</text>
 
             <!-- Line 2 (Hot) Conductor -->
-            <line x1="310" y1="110" x2="650" y2="110" stroke="#10b981" stroke-width="2.5"/>
-            <circle cx="310" cy="110" r="5" fill="#10b981"/>
-            <circle cx="650" cy="110" r="5" fill="#10b981"/>
-            <text x="310" y="100" fill="#10b981" font-size="10" font-weight="700">Pin 2</text>
+            <g data-probe-target="meyer-p2" data-probe-label="Cable Pin 2 Hot Line" class="probe-clickable-node" title="Click to Probe: Pin 2 Hot">
+              <line x1="310" y1="110" x2="650" y2="110" stroke="#10b981" stroke-width="2.5"/>
+              <circle cx="310" cy="110" r="8" fill="#10b981"/>
+              <circle cx="310" cy="110" r="4" fill="#f8fafc"/>
+              <circle cx="650" cy="110" r="8" fill="#10b981"/>
+              <circle cx="650" cy="110" r="4" fill="#f8fafc"/>
+              <text x="310" y="98" fill="#10b981" font-size="11" font-weight="800">Pin 2</text>
+            </g>
             <path class="animated-current-flow" data-flow-speed="1.8" d="M 240,110 L 650,110" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
             <!-- Line 3 (Cold) Conductor -->
-            <line x1="310" y1="220" x2="650" y2="220" stroke="#ef4444" stroke-width="2.5"/>
-            <circle cx="310" cy="220" r="5" fill="#ef4444"/>
-            <circle cx="650" cy="220" r="5" fill="#ef4444"/>
-            <text x="310" y="238" fill="#ef4444" font-size="10" font-weight="700">Pin 3</text>
+            <g data-probe-target="meyer-p3" data-probe-label="Cable Pin 3 Cold Line" class="probe-clickable-node" title="Click to Probe: Pin 3 Cold">
+              <line x1="310" y1="220" x2="650" y2="220" stroke="#ef4444" stroke-width="2.5"/>
+              <circle cx="310" cy="220" r="8" fill="#ef4444"/>
+              <circle cx="310" cy="220" r="4" fill="#f8fafc"/>
+              <circle cx="650" cy="220" r="8" fill="#ef4444"/>
+              <circle cx="650" cy="220" r="4" fill="#f8fafc"/>
+              <text x="310" y="240" fill="#ef4444" font-size="11" font-weight="800">Pin 3</text>
+            </g>
             <path class="animated-current-flow" data-flow-speed="1.8" d="M 650,220 L 240,220" fill="none" stroke="#ef4444" stroke-width="2.5"/>
 
             <!-- Cable Shield Line & Chassis Bonds -->
-            <line x1="310" y1="260" x2="650" y2="260" stroke="#94a3b8" stroke-width="3"/>
-            <circle cx="310" cy="260" r="5" fill="#94a3b8"/>
-            <circle cx="650" cy="260" r="5" fill="#94a3b8"/>
-            <text x="480" y="252" fill="#94a3b8" font-size="10" text-anchor="middle">Cable Shield (Pin 1 to Pin 1)</text>
+            <g data-probe-target="meyer-shield" data-probe-label="Cable Shield (Pin 1 to Pin 1)" class="probe-clickable-node" title="Click to Probe: Cable Shield Continuity">
+              <line x1="310" y1="260" x2="650" y2="260" stroke="#94a3b8" stroke-width="3"/>
+              <circle cx="310" cy="260" r="7" fill="#94a3b8"/>
+              <circle cx="650" cy="260" r="7" fill="#94a3b8"/>
+              <rect x="390" y="242" width="180" height="18" rx="4" fill="#0f172a" stroke="#94a3b8" stroke-width="1"/>
+              <text x="480" y="255" fill="#cbd5e1" font-size="10" font-weight="700" text-anchor="middle">Cable Shield (Pin 1 to Pin 1)</text>
+            </g>
 
             <!-- Shunt Capacitances C_PS (Core-to-Shield) -->
             <line x1="450" y1="110" x2="450" y2="150" stroke="#64748b" stroke-width="1.5"/>
             <line x1="440" y1="150" x2="460" y2="150" stroke="#f59e0b" stroke-width="2"/>
             <line x1="440" y1="156" x2="460" y2="156" stroke="#f59e0b" stroke-width="2"/>
             <line x1="450" y1="156" x2="450" y2="260" stroke="#64748b" stroke-width="1.5"/>
-            <text x="475" y="156" fill="#f59e0b" font-size="9">C_PS1</text>
+            <g data-probe-target="meyer-cps1" data-probe-label="Shunt Capacitance C_PS1" class="probe-clickable-node" title="Click to Probe: C_PS1">
+              <rect x="470" y="145" width="36" height="16" rx="3" fill="#0f172a" stroke="#f59e0b" stroke-width="1"/>
+              <text x="488" y="157" fill="#f59e0b" font-size="9" font-weight="700" text-anchor="middle">C_PS1</text>
+            </g>
 
             <line x1="520" y1="220" x2="520" y2="180" stroke="#64748b" stroke-width="1.5"/>
             <line x1="510" y1="180" x2="530" y2="180" stroke="#f59e0b" stroke-width="2"/>
             <line x1="510" y1="174" x2="530" y2="174" stroke="#f59e0b" stroke-width="2"/>
             <line x1="520" y1="174" x2="520" y2="260" stroke="#64748b" stroke-width="1.5"/>
-            <text x="545" y="180" fill="#f59e0b" font-size="9">C_PS2</text>
+            <g data-probe-target="meyer-cps2" data-probe-label="Shunt Capacitance C_PS2" class="probe-clickable-node" title="Click to Probe: C_PS2">
+              <rect x="540" y="170" width="36" height="16" rx="3" fill="#0f172a" stroke="#f59e0b" stroke-width="1"/>
+              <text x="558" y="182" fill="#f59e0b" font-size="9" font-weight="700" text-anchor="middle">C_PS2</text>
+            </g>
 
             <!-- Enclosure 2 Box (Receiver Chassis) -->
             <rect x="650" y="30" width="280" height="280" rx="8" fill="rgba(30, 41, 59, 0.5)" stroke="#38bdf8" stroke-width="2"/>
@@ -8019,38 +8187,50 @@ code, pre {
 
             <!-- Receiver Differential Input Resistors Z_PI and Z_RI -->
             <line x1="650" y1="110" x2="720" y2="110" stroke="#10b981" stroke-width="2.5"/>
-            <rect x="720" y="102" width="50" height="16" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
-            <text x="745" y="114" fill="#10b981" font-size="10" font-weight="700" text-anchor="middle">Z_PI</text>
+            <g data-probe-target="meyer-zpi" data-probe-label="Receiver Input Impedance Z_PI" class="probe-clickable-node" title="Click to Probe: Z_PI">
+              <rect x="720" y="99" width="50" height="22" rx="3" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+              <text x="745" y="114" fill="#10b981" font-size="10.5" font-weight="800" text-anchor="middle">Z_PI</text>
+            </g>
             <line x1="770" y1="110" x2="820" y2="110" stroke="#10b981" stroke-width="2.5"/>
 
             <line x1="650" y1="220" x2="720" y2="220" stroke="#ef4444" stroke-width="2.5"/>
-            <rect x="720" y="212" width="50" height="16" fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
-            <text x="745" y="224" fill="#ef4444" font-size="10" font-weight="700" text-anchor="middle">Z_RI</text>
+            <g data-probe-target="meyer-zri" data-probe-label="Receiver Input Impedance Z_RI" class="probe-clickable-node" title="Click to Probe: Z_RI">
+              <rect x="720" y="209" width="50" height="22" rx="3" fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+              <text x="745" y="224" fill="#ef4444" font-size="10.5" font-weight="800" text-anchor="middle">Z_RI</text>
+            </g>
             <line x1="770" y1="220" x2="820" y2="220" stroke="#ef4444" stroke-width="2.5"/>
 
-            <!-- Differential Amplifier Block -->
-            <polygon points="820,80 820,250 900,165" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
-            <text x="835" y="115" fill="#10b981" font-size="14" font-weight="700">+</text>
-            <text x="835" y="225" fill="#ef4444" font-size="14" font-weight="700">&minus;</text>
-            <line x1="900" y1="165" x2="940" y2="165" stroke="#38bdf8" stroke-width="2.5"/>
-            <text x="920" y="155" fill="#38bdf8" font-size="11" font-weight="700">Audio Out</text>
+            <!-- Differential Amplifier Block & Audio Out -->
+            <g data-probe-target="meyer-diff" data-probe-label="Receiver Audio Out (Differential)" class="probe-clickable-node" title="Click to Probe: Receiver Audio Output">
+              <polygon points="820,80 820,250 900,165" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+              <text x="835" y="115" fill="#10b981" font-size="14" font-weight="700">+</text>
+              <text x="835" y="225" fill="#ef4444" font-size="14" font-weight="700">&minus;</text>
+              <line x1="900" y1="165" x2="940" y2="165" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="940" cy="165" r="5" fill="#38bdf8"/>
+              <text x="920" y="155" fill="#38bdf8" font-size="11" font-weight="700">Audio Out</text>
+            </g>
 
             <!-- Receiver Common-Mode Return CMZ_IN -->
-            <line x1="745" y1="118" x2="745" y2="150" stroke="#64748b" stroke-width="1.5"/>
-            <line x1="745" y1="212" x2="745" y2="180" stroke="#64748b" stroke-width="1.5"/>
+            <line x1="745" y1="121" x2="745" y2="150" stroke="#64748b" stroke-width="1.5"/>
+            <line x1="745" y1="209" x2="745" y2="180" stroke="#64748b" stroke-width="1.5"/>
             <line x1="745" y1="165" x2="775" y2="165" stroke="#94a3b8" stroke-width="2"/>
-            <rect x="775" y="157" width="45" height="16" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
-            <text x="797" y="169" fill="#f8fafc" font-size="9" text-anchor="middle">CMZ_IN</text>
+            <g data-probe-target="meyer-cmzin" data-probe-label="Receiver CM Return (CMZ_IN)" class="probe-clickable-node" title="Click to Probe: CMZ_IN">
+              <rect x="775" y="155" width="45" height="20" rx="3" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+              <text x="797" y="169" fill="#f8fafc" font-size="9.5" font-weight="700" text-anchor="middle">CMZ_IN</text>
+            </g>
             <line x1="820" y1="165" x2="850" y2="165" stroke="#94a3b8" stroke-width="2"/>
             <line x1="850" y1="165" x2="850" y2="290" stroke="#94a3b8" stroke-width="2"/>
-            <circle cx="850" cy="290" r="4" fill="#94a3b8"/>
-            <text x="850" y="305" fill="#94a3b8" font-size="10" text-anchor="middle">Chassis B</text>
+            <g data-probe-target="meyer-chassisb" data-probe-label="Chassis B Ground Star Point" class="probe-clickable-node" title="Click to Probe: Chassis B Ground">
+              <circle cx="850" cy="290" r="8" fill="#94a3b8"/>
+              <circle cx="850" cy="290" r="4" fill="#0f172a"/>
+              <text x="850" y="308" fill="#94a3b8" font-size="10.5" font-weight="700" text-anchor="middle">Chassis B</text>
+            </g>
 
             <!-- Ground Potential Difference V_GVD generator (Ground Loop Path) -->
             <line x1="220" y1="350" x2="450" y2="350" stroke="#f59e0b" stroke-width="2"/>
-            <circle cx="480" cy="350" r="18" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5" data-probe-target="meyer-vgvd" class="probe-clickable-node" title="Click to Probe: Ground Voltage Difference (V_GVD)"/>
-            <text x="480" y="345" fill="#f59e0b" font-size="11" font-weight="700" text-anchor="middle" data-probe-target="meyer-vgvd" class="probe-clickable-node">V_GVD</text>
-            <text x="480" y="360" fill="#f59e0b" font-size="9" text-anchor="middle" data-probe-target="meyer-vgvd" class="probe-clickable-node">Ground Hum</text>
+            <circle cx="480" cy="350" r="18" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5"/>
+            <text x="480" y="345" fill="#f59e0b" font-size="11" font-weight="700" text-anchor="middle">V_GVD</text>
+            <text x="480" y="360" fill="#f59e0b" font-size="9" text-anchor="middle">Ground Hum</text>
             <line x1="510" y1="350" x2="850" y2="350" stroke="#f59e0b" stroke-width="2"/>
 
             <!-- Ground loop flow arrows -->
@@ -8273,6 +8453,7 @@ code, pre {
         </div>
 
       </div>
+    </div>
 
       <!-- Interactive Vector SVG Adapter Wiring Schematics Suite -->
       <div id="adapter-wiring-suite" class="adapter-hub-card">
@@ -9006,6 +9187,14 @@ code, pre {
         <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 0.4rem 0.8rem; margin-top: 0.5rem; font-size: 0.82rem; color: #fbbf24;">
           <span>📁</span>
           <strong>Posted to SC-05-05 Repository:</strong> October 3, 2025 &bull; by Richard Cabot, Chair &bull; for AES SC-05-05 Group Members
+        </div>
+        <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="#contributor-cabot" class="alignment-contributor-badge"><span>👤 Archive Compiler:</span> <strong>Richard Cabot, Chair</strong> &rarr;</a>
+          <a href="#contributor-olson" class="alignment-contributor-badge"><span>👤 Standards Governance:</span> <strong>Bruce Olson (AESSC Chair)</strong> &rarr;</a>
+          <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Co-Author:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
+          <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 Seminal Papers:</span> <strong>Bill Whitlock</strong> &rarr;</a>
+          <a href="#contributor-hess" class="alignment-contributor-badge"><span>👤 Working Group Drafts:</span> <strong>Richard L. Hess</strong> &rarr;</a>
+        </div>
         </div>
         <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
           <a href="#contributor-cabot" class="alignment-contributor-badge"><span>👤 Archive Compiler:</span> <strong>Richard Cabot, Chair</strong> &rarr;</a>
@@ -9994,10 +10183,8 @@ code, pre {
     </div>
   </section>
 
-  <!-- Section 12: SC-05-05 Working Group Roster & Key Contributors -->
-  <section id="roster-section" class="section" style="padding-top: 1rem;">
-    <div class="container">
-      <div id="sc0505-roster" class="detail-card" style="border: 1.5px solid #38bdf8; background: #090d16;">
+      <!-- SC-05-05 Working Group Roster & Key Contributors Card -->
+      <div id="sc0505-roster" class="detail-card" style="margin-top: 2.5rem; border: 1.5px solid #38bdf8; background: #090d16;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
           <div>
             <h3 style="margin: 0; color: #38bdf8; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -11559,36 +11746,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* ===== BUNDLED: js/floating-meters.js ===== */
 /**
- * floating-meters.js — Breakaway Floating Instrument Dock & Universal Circuit Probing
+ * floating-meters.js — Breakaway Floating Instrument Dock, Oscilloscope CRT & Universal Circuit Probing
  *
- * Requirements:
- * - When scrolling past the laboratory bench, the two meters (HP 400FL AC Voltmeter at top,
- *   Fluke 8050A DMM at bottom) break away and float pinned on the right.
- * - Universal Probes: Red (+) and Black (−) test leads with glowing tips.
- * - Interactive Probing: Clicking any circuit terminal across the page connects the
- *   floating meters to that exact test point. Values update in real time as knobs/LTP faders move!
- * - Click Meter to Open Calibration: Clicking either meter expands its calibration settings.
+ * Features:
+ * 1. Dual Probe Modes: Pick between a DMM Probe (Red/Black Leads) and an Oscilloscope Probe (10X BNC with Ground Clip).
+ * 2. 1970s Laboratory CRT Oscilloscope: Live animated green phosphor CRT trace with 8x10 division graticule,
+ *    trigger stabilization, volts/div, time/div, on-screen CRT readouts, and true circuit physics waveforms.
+ * 3. Universal "Poke Any Circuit": Click any terminal, conductor, resistor, shield bond, or ground loop node
+ *    across ALL schematics on the page to snap test probes and view real-time signals.
+ * 4. APK Precision AC Voltmeter & Fluke 8050A True RMS DMM fully synchronized to probed nodes.
  */
 
 class FloatingMeterDock {
   constructor() {
     this.dock = null;
     this.isFloating = false;
-    this.activeProbeTarget = "circuit-6-1-p2"; // Default probing Pin 2 on Circuit 6.1
-    this.probeLabel = "Pin 2 Hot (Circuit 6.1)";
-    this.activeCircuit = "6-1";
-    this.animFrame = null;
+    this.toolMode = "scope"; // 'dmm' | 'scope'
+    this.displayMode = "dual"; // 'dmm' | 'scope' | 'dual'
+    this.isArmed = false; // "Poke Circuit" crosshair mode
 
-    // Needle physics ballistics ported from NeedleMeter.jsx
+    // Probe state
+    this.activeProbeTarget = "6-1-p2"; // Default Pin 2 Hot (Circuit 6.1)
+    this.activeReferenceTarget = "chassis"; // Default Pin 1 Chassis Ground
+    this.probeLabel = "Pin 2 Hot (Circuit 6.1 Dual Push-Pull)";
+
+    // Oscilloscope settings
+    this.scopeVoltsDiv = 1.0; // Volts per division
+    this.scopeTimeDiv = 0.5; // Milliseconds per division
+    this.scopeCoupling = "AC"; // AC | DC | GND
+    this.scopeTriggerMode = "AUTO"; // AUTO | NORM
+    this.scopeCanvas = null;
+    this.scopeCtx = null;
+    this.scopeTime = 0;
+
+    // HP Voltmeter needle physics ballistics
     this.currentNeedleDbu = 4.0;
     this.targetNeedleDbu = 4.0;
-    this.peakHoldDbu = 4.0;
-    this.lastSampleDbu = 4.0;
     this.attackRate = 0.28;
     this.releaseRate = 0.08;
+    this.hpRangeVolts = 3.0;
 
     // Settings drawer states
-    this.settingsOpen = null; // 'hp' | 'fluke' | null
+    this.settingsOpen = null; // 'hp' | 'scope' | 'fluke' | null
+    this.animFrame = null;
 
     this.init();
   }
@@ -11597,7 +11797,7 @@ class FloatingMeterDock {
     this.createDockDOM();
     this.setupScrollTrigger();
     this.setupGlobalProbeHooks();
-    this.startBallisticsLoop();
+    this.startMainInstrumentLoop();
   }
 
   createDockDOM() {
@@ -11609,7 +11809,7 @@ class FloatingMeterDock {
     const dock = document.createElement("div");
     dock.id = "floating-meter-dock";
     dock.className = "floating-meter-dock";
-    dock.setAttribute("aria-label", "Breakaway Laboratory Meter Dock");
+    dock.setAttribute("aria-label", "Laboratory Bench Probes & Oscilloscope Dock");
 
     dock.innerHTML = `
       <!-- Dock Control Header -->
@@ -11617,7 +11817,7 @@ class FloatingMeterDock {
         <div class="dock-title-group">
           <span class="dock-icon">⚡</span>
           <div>
-            <div class="dock-title">LABORATORY BENCH PROBES</div>
+            <div class="dock-title">LAB BENCH PROBES &amp; OSCILLOSCOPE</div>
             <div id="dock-probe-status" class="dock-probe-status">Probing: Pin 2 Hot (+4.0 dBu)</div>
           </div>
         </div>
@@ -11628,91 +11828,174 @@ class FloatingMeterDock {
         </div>
       </div>
 
-      <!-- Test Probe Leads Bar -->
+      <!-- Interactive Probe Mode & Tool Picker -->
+      <div class="dock-tool-picker">
+        <button id="dock-pick-scope-btn" class="tool-pick-btn active" title="Select Oscilloscope 10X Probe">
+          <span class="tool-dot green"></span> O-Scope Probe
+        </button>
+        <button id="dock-pick-dmm-btn" class="tool-pick-btn" title="Select DMM Red (+) Lead">
+          <span class="tool-dot red"></span> DMM Probe
+        </button>
+        <button id="dock-arm-probe-btn" class="tool-arm-btn" title="Click anywhere on any circuit to poke it!">
+          🎯 Poke Circuit
+        </button>
+      </div>
+
+      <!-- Test Probe Leads Telemetry Bar -->
       <div class="dock-probes-bar">
-        <div class="probe-lead red active">
-          <span class="probe-tip-led"></span>
-          <span>Red (+) Probe: <strong id="dock-probe-red-target">Pin 2 Hot</strong></span>
+        <div id="dock-lead-signal" class="probe-lead green active">
+          <span id="dock-lead-dot" class="probe-tip-led green-led"></span>
+          <span>Probe: <strong id="dock-probe-signal-target">Pin 2 Hot (10X)</strong></span>
         </div>
-        <div class="probe-lead black active">
+        <div id="dock-lead-ref" class="probe-lead black active">
           <span class="probe-tip-led black-led"></span>
-          <span>Black (&minus;) Probe: <strong id="dock-probe-black-target">Pin 1 Chassis</strong></span>
+          <span>Ref: <strong id="dock-probe-ref-target">Chassis / Pin 1</strong></span>
         </div>
       </div>
 
-      <!-- Meter 1: HP 400FL Precision AC Voltmeter (TOP) -->
-      <div id="dock-meter-hp" class="dock-meter-card" title="Click to open HP 400FL calibration settings">
-        <div class="dock-meter-label">
-          <span>HEWLETT &bull; PACKARD 400FL AC VOLTMETER</span>
-          <span id="dock-hp-range-badge" class="badge-mini">3V / +10 dB</span>
-        </div>
-        <div class="dock-meter-face-wrapper">
-          <canvas id="dock-hp-canvas" width="300" height="150" class="dock-canvas"></canvas>
+      <!-- Instrument View Switcher Tabs -->
+      <div class="dock-view-tabs">
+        <button id="dock-tab-scope" class="dock-tab-btn active">📈 CRT O-Scope</button>
+        <button id="dock-tab-dmm" class="dock-tab-btn">📊 DMM &amp; Voltmeter</button>
+        <button id="dock-tab-dual" class="dock-tab-btn">🔲 Dual View</button>
+      </div>
+
+      <!-- ================= 1. CRT Oscilloscope Bay ================= -->
+      <div id="dock-panel-scope" class="dock-instrument-panel">
+        <div class="dock-scope-card">
+          <div class="dock-meter-label">
+            <span style="color: #4ade80; display: flex; align-items: center; gap: 5px;">
+              <span class="crt-glow-dot"></span>
+              TEKTRONIX / HP 1970 CRT SCOPE
+            </span>
+            <span id="dock-scope-telemetry-badge" class="badge-mini green">1.0V/div &bull; 0.5ms</span>
+          </div>
+          <div class="dock-scope-bezel">
+            <canvas id="dock-scope-canvas" width="300" height="150" class="dock-scope-canvas"></canvas>
+          </div>
+          <!-- Oscilloscope Front-Panel Controls -->
+          <div class="dock-scope-controls">
+            <div class="scope-ctrl-group">
+              <span class="scope-ctrl-label">VOLTS/DIV:</span>
+              <div class="scope-btn-group">
+                <button class="scope-btn" data-vdiv="0.2">.2V</button>
+                <button class="scope-btn" data-vdiv="0.5">.5V</button>
+                <button class="scope-btn active" data-vdiv="1.0">1V</button>
+                <button class="scope-btn" data-vdiv="2.0">2V</button>
+                <button class="scope-btn" data-vdiv="5.0">5V</button>
+              </div>
+            </div>
+            <div class="scope-ctrl-group">
+              <span class="scope-ctrl-label">TIME/DIV:</span>
+              <div class="scope-btn-group">
+                <button class="scope-btn" data-tdiv="0.2">.2ms</button>
+                <button class="scope-btn active" data-tdiv="0.5">.5ms</button>
+                <button class="scope-btn" data-tdiv="1.0">1ms</button>
+                <button class="scope-btn" data-tdiv="2.0">2ms</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Meter 2: Fluke 8050A True RMS DMM (BOTTOM) -->
-      <div id="dock-meter-fluke" class="dock-meter-card" title="Click to open Fluke 8050A multimeter settings">
-        <div class="dock-meter-label">
-          <span>FLUKE 8050A TRUE RMS DMM</span>
-          <span id="dock-dmm-mode-badge" class="badge-mini cyan">AC V</span>
+      <!-- ================= 2. DMM & HP Voltmeter Bay ================= -->
+      <div id="dock-panel-dmm" class="dock-instrument-panel">
+        <!-- Meter 1: APK Precision AC Voltmeter -->
+        <div id="dock-meter-hp" class="dock-meter-card" title="Click to open APK Voltmeter calibration settings">
+          <div class="dock-meter-label">
+            <span>APK PRECISION AC VOLTMETER</span>
+            <span id="dock-hp-range-badge" class="badge-mini">3V / +10 dB</span>
+          </div>
+          <div class="dock-meter-face-wrapper">
+            <canvas id="dock-hp-canvas" width="300" height="135" class="dock-canvas"></canvas>
+          </div>
         </div>
-        <div class="dock-dmm-vfd-display">
-          <div class="dmm-vfd-row">
-            <span class="dmm-vfd-label">V_DIFF (AC RMS):</span>
-            <span id="dock-dmm-vdiff" class="dmm-vfd-number">1.228 V</span>
+
+        <!-- Meter 2: Fluke 8050A True RMS DMM -->
+        <div id="dock-meter-fluke" class="dock-meter-card" style="margin-top: 0.5rem;" title="Click to open Fluke 8050A settings">
+          <div class="dock-meter-label">
+            <span>FLUKE 8050A TRUE RMS DMM</span>
+            <span id="dock-dmm-mode-badge" class="badge-mini cyan">AC V</span>
           </div>
-          <div class="dmm-vfd-row">
-            <span class="dmm-vfd-label">I_LOAD (CURRENT):</span>
-            <span id="dock-dmm-iload" class="dmm-vfd-number">2.05 mA</span>
-          </div>
-          <div class="dmm-vfd-row">
-            <span class="dmm-vfd-label">LINE BALANCE:</span>
-            <span id="dock-dmm-status" class="dmm-vfd-status">SYMMETRIC</span>
+          <div class="dock-dmm-vfd-display">
+            <div class="dmm-vfd-row">
+              <span class="dmm-vfd-label">V_DIFF (AC RMS):</span>
+              <span id="dock-dmm-vdiff" class="dmm-vfd-number">1.228 V</span>
+            </div>
+            <div class="dmm-vfd-row">
+              <span class="dmm-vfd-label">I_LOAD (CURRENT):</span>
+              <span id="dock-dmm-iload" class="dmm-vfd-number">2.05 mA</span>
+            </div>
+            <div class="dmm-vfd-row">
+              <span class="dmm-vfd-label">LINE BALANCE:</span>
+              <span id="dock-dmm-status" class="dmm-vfd-status">SYMMETRIC</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Interactive Quick Probe Target Selector -->
+      <!-- Quick Probe Target Dropdown -->
       <div class="dock-target-selector">
-        <label style="font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Move Probes to Test Point:</label>
+        <label style="font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">
+          Move Probes To Test Point (Or Click Schematic Directly):
+        </label>
         <select id="dock-probe-select" class="dock-probe-dropdown">
           <optgroup label="Circuit 6.1 (Dual Push-Pull)">
             <option value="6-1-p2" selected>Pin 2 Hot (Output +)</option>
             <option value="6-1-p3">Pin 3 Cold (Output &minus;)</option>
             <option value="6-1-load">Differential Across Load</option>
             <option value="6-1-vin">Audio Input Drive</option>
+            <option value="6-1-op1">Op-Amp A1 Output (Hot)</option>
+            <option value="6-1-op2">Op-Amp A2 Output (Inverting)</option>
+            <option value="6-1-p1">Pin 1 Chassis Ground</option>
           </optgroup>
           <optgroup label="Circuit 6.2 (Active Impedance-Balanced)">
-            <option value="6-2-p2">Pin 2 Hot (Active Out)</option>
+            <option value="6-2-p2">Pin 2 Hot (Active Driven Out)</option>
             <option value="6-2-p3">Pin 3 Cold (Passive 0V Match)</option>
             <option value="6-2-load">Differential Across Load</option>
+            <option value="6-2-vin">Audio Input Drive</option>
           </optgroup>
           <optgroup label="Circuit 6.3 (Transformer Floating)">
             <option value="6-3-sec">Secondary Across Pins 2 &amp; 3</option>
+            <option value="6-3-p2">Secondary Pin 2 (Hot)</option>
+            <option value="6-3-p3">Secondary Pin 3 (Cold)</option>
             <option value="6-3-pri">Primary Audio Drive</option>
           </optgroup>
-          <optgroup label="Section 5.0 (Meyer Thevenin Ground Loop)">
-            <option value="meyer-vgvd">Ground Loop Voltage (V_GVD)</option>
-            <option value="meyer-verr">CM-to-DM Error Voltage</option>
-            <option value="meyer-diff">Differential Output</option>
+          <optgroup label="Section 5.0 (Jim Meyer Thevenin Ground Loop)">
+            <option value="meyer-vgvd">Ground Loop Voltage (V_GVD 60Hz)</option>
+            <option value="meyer-vpo">Generator V_PO (Hot Leg)</option>
+            <option value="meyer-vro">Generator V_RO (Cold Leg)</option>
+            <option value="meyer-p2">Cable Pin 2 Hot Line</option>
+            <option value="meyer-p3">Cable Pin 3 Cold Line</option>
+            <option value="meyer-shield">Cable Shield (Pin 1 to Pin 1)</option>
+            <option value="meyer-verr">CM-to-DM Noise Error (V_err)</option>
+            <option value="meyer-diff">Receiver Differential Audio Out</option>
+          </optgroup>
+          <optgroup label="Section 0 (Enclosure &amp; AES48 Grounding)">
+            <option value="enc-chassisa">Equipment A Chassis Ground</option>
+            <option value="enc-pin1bond">AES48 Direct Chassis Bond (0V Clean)</option>
+            <option value="enc-pin1fault">Pin 1 Routed to Audio Board Ground (120Hz Buzz)</option>
+            <option value="enc-shield">Cable Shield Outside Shell</option>
           </optgroup>
         </select>
       </div>
 
-      <!-- Settings / Calibration Slide-out Drawer -->
+      <!-- Settings / Calibration Drawer -->
       <div id="dock-settings-drawer" class="dock-settings-drawer">
         <div class="drawer-header">
-          <span id="drawer-title" style="font-weight: 700; color: var(--accent-cyan);">HP 400FL Calibration</span>
+          <span id="drawer-title" style="font-weight: 700; color: var(--accent-cyan);">APK Voltmeter Calibration &amp; Sensitivity</span>
           <button id="drawer-close-btn" class="drawer-close-btn">&times;</button>
         </div>
         <div id="drawer-content" class="drawer-content">
           <div style="font-size: 0.75rem; color: #94a3b8; line-height: 1.4;">
-            <strong>Range Selection:</strong>
+            <strong>APK Voltmeter Range &amp; Sensitivity:</strong>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35rem; margin: 0.4rem 0;">
-              <button class="drawer-btn active" onclick="window.floatingMeterDock.setHpRange(3, '+10 dB')">3V (+10dB)</button>
-              <button class="drawer-btn" onclick="window.floatingMeterDock.setHpRange(1, '0 dB')">1V (0dB)</button>
-              <button class="drawer-btn" onclick="window.floatingMeterDock.setHpRange(10, '+20 dB')">10V (+20dB)</button>
+              <button class="drawer-btn active" onclick="if(window.setVoltmeterRange) window.setVoltmeterRange(9); else window.floatingMeterDock.setHpRange(3, '+10 dB');">3V (+10dB)</button>
+              <button class="drawer-btn" onclick="if(window.setVoltmeterRange) window.setVoltmeterRange(8); else window.floatingMeterDock.setHpRange(1, '0 dB');">1V (0dB)</button>
+              <button class="drawer-btn" onclick="if(window.setVoltmeterRange) window.setVoltmeterRange(10); else window.floatingMeterDock.setHpRange(10, '+20 dB');">10V (+20dB)</button>
+              <button class="drawer-btn" onclick="if(window.setVoltmeterRange) window.setVoltmeterRange(7); else window.floatingMeterDock.setHpRange(0.3, '-10 dB');">.3V (-10dB)</button>
+              <button class="drawer-btn" onclick="if(window.setVoltmeterRange) window.setVoltmeterRange(11); else window.floatingMeterDock.setHpRange(30, '+30 dB');">30V (+30dB)</button>
+              <button class="drawer-btn" onclick="if(window.setVoltmeterRange) window.setVoltmeterRange(6); else window.floatingMeterDock.setHpRange(0.1, '-20 dB');">100mV (-20dB)</button>
             </div>
             <strong>Needle Ballistics Damping:</strong>
             <div style="display: flex; gap: 0.35rem; margin: 0.4rem 0;">
@@ -11728,10 +12011,17 @@ class FloatingMeterDock {
     document.body.appendChild(dock);
     this.dock = dock;
 
-    // Attach button listeners
-    const closeBtn = dock.querySelector("#dock-close-btn");
-    if (closeBtn) closeBtn.addEventListener("click", () => this.dockBack());
+    this.attachEventListeners();
+    this.initHpCanvas();
+    this.initScopeCanvas();
+    this.updateDisplayMode("dual");
+  }
 
+  attachEventListeners() {
+    const dock = this.dock;
+
+    // Window controls
+    dock.querySelector("#dock-close-btn")?.addEventListener("click", () => this.dockBack());
     const minBtn = dock.querySelector("#dock-minimize-btn");
     if (minBtn) {
       minBtn.addEventListener("click", () => {
@@ -11739,52 +12029,175 @@ class FloatingMeterDock {
         minBtn.textContent = dock.classList.contains("minimized") ? "□" : "_";
       });
     }
+    dock.querySelector("#dock-expand-btn")?.addEventListener("click", () => this.toggleSettings("hp"));
+    dock.querySelector("#dock-meter-hp")?.addEventListener("click", () => this.toggleSettings("hp"));
+    dock.querySelector("#dock-meter-fluke")?.addEventListener("click", () => this.toggleSettings("fluke"));
+    dock.querySelector("#drawer-close-btn")?.addEventListener("click", () => this.closeSettings());
 
-    const expandBtn = dock.querySelector("#dock-expand-btn");
-    if (expandBtn) expandBtn.addEventListener("click", () => this.toggleSettings("hp"));
+    // Probe Mode Pickers
+    const scopePickBtn = dock.querySelector("#dock-pick-scope-btn");
+    const dmmPickBtn = dock.querySelector("#dock-pick-dmm-btn");
+    const armBtn = dock.querySelector("#dock-arm-probe-btn");
 
-    const hpCard = dock.querySelector("#dock-meter-hp");
-    if (hpCard) hpCard.addEventListener("click", () => this.toggleSettings("hp"));
-
-    const flukeCard = dock.querySelector("#dock-meter-fluke");
-    if (flukeCard) flukeCard.addEventListener("click", () => this.toggleSettings("fluke"));
-
-    const drawerClose = dock.querySelector("#drawer-close-btn");
-    if (drawerClose) drawerClose.addEventListener("click", () => this.closeSettings());
-
-    const select = dock.querySelector("#dock-probe-select");
-    if (select) {
-      select.addEventListener("change", (e) => {
-        this.selectProbeTarget(e.target.value);
+    if (scopePickBtn) {
+      scopePickBtn.addEventListener("click", () => {
+        this.setToolMode("scope");
+      });
+    }
+    if (dmmPickBtn) {
+      dmmPickBtn.addEventListener("click", () => {
+        this.setToolMode("dmm");
+      });
+    }
+    if (armBtn) {
+      armBtn.addEventListener("click", () => {
+        this.toggleArmProbe();
       });
     }
 
-    this.initHpCanvas();
+    // View tabs
+    dock.querySelector("#dock-tab-scope")?.addEventListener("click", () => this.updateDisplayMode("scope"));
+    dock.querySelector("#dock-tab-dmm")?.addEventListener("click", () => this.updateDisplayMode("dmm"));
+    dock.querySelector("#dock-tab-dual")?.addEventListener("click", () => this.updateDisplayMode("dual"));
+
+    // Quick target selector
+    dock.querySelector("#dock-probe-select")?.addEventListener("change", (e) => {
+      this.selectProbeTarget(e.target.value);
+    });
+
+    // Scope controls (Volts/Div & Time/Div)
+    dock.querySelectorAll(".scope-btn[data-vdiv]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        dock.querySelectorAll(".scope-btn[data-vdiv]").forEach(b => b.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+        this.scopeVoltsDiv = parseFloat(e.currentTarget.getAttribute("data-vdiv"));
+        this.updateScopeBadge();
+      });
+    });
+
+    dock.querySelectorAll(".scope-btn[data-tdiv]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        dock.querySelectorAll(".scope-btn[data-tdiv]").forEach(b => b.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+        this.scopeTimeDiv = parseFloat(e.currentTarget.getAttribute("data-tdiv"));
+        this.updateScopeBadge();
+      });
+    });
+  }
+
+  setToolMode(mode) {
+    this.toolMode = mode;
+    const scopeBtn = this.dock.querySelector("#dock-pick-scope-btn");
+    const dmmBtn = this.dock.querySelector("#dock-pick-dmm-btn");
+    const leadSignal = this.dock.querySelector("#dock-lead-signal");
+    const leadDot = this.dock.querySelector("#dock-lead-dot");
+    const signalTarget = this.dock.querySelector("#dock-probe-signal-target");
+
+    if (mode === "scope") {
+      scopeBtn?.classList.add("active");
+      dmmBtn?.classList.remove("active");
+      if (leadSignal) {
+        leadSignal.className = "probe-lead green active";
+      }
+      if (leadDot) {
+        leadDot.className = "probe-tip-led green-led";
+      }
+      if (signalTarget) {
+        signalTarget.textContent = `${this.activeProbeTarget.toUpperCase()} (10X Scope)`;
+      }
+      if (this.displayMode === "dmm") {
+        this.updateDisplayMode("scope");
+      }
+    } else {
+      dmmBtn?.classList.add("active");
+      scopeBtn?.classList.remove("active");
+      if (leadSignal) {
+        leadSignal.className = "probe-lead red active";
+      }
+      if (leadDot) {
+        leadDot.className = "probe-tip-led";
+      }
+      if (signalTarget) {
+        signalTarget.textContent = `${this.activeProbeTarget.toUpperCase()} (DMM +)`;
+      }
+      if (this.displayMode === "scope") {
+        this.updateDisplayMode("dmm");
+      }
+    }
+    this.updateFromActiveCircuit();
+  }
+
+  toggleArmProbe() {
+    this.isArmed = !this.isArmed;
+    const armBtn = this.dock.querySelector("#dock-arm-probe-btn");
+    if (this.isArmed) {
+      document.body.classList.add("probe-cursor-active");
+      armBtn?.classList.add("active");
+      this.showToast(`🎯 Probing Armed: Click ANY circuit wire, pin, or component to poke it!`);
+    } else {
+      document.body.classList.remove("probe-cursor-active");
+      armBtn?.classList.remove("active");
+    }
+  }
+
+  updateDisplayMode(mode) {
+    this.displayMode = mode;
+    const tabScope = this.dock.querySelector("#dock-tab-scope");
+    const tabDmm = this.dock.querySelector("#dock-tab-dmm");
+    const tabDual = this.dock.querySelector("#dock-tab-dual");
+    const panelScope = this.dock.querySelector("#dock-panel-scope");
+    const panelDmm = this.dock.querySelector("#dock-panel-dmm");
+
+    tabScope?.classList.toggle("active", mode === "scope");
+    tabDmm?.classList.toggle("active", mode === "dmm");
+    tabDual?.classList.toggle("active", mode === "dual");
+
+    if (mode === "scope") {
+      panelScope.style.display = "block";
+      panelDmm.style.display = "none";
+    } else if (mode === "dmm") {
+      panelScope.style.display = "none";
+      panelDmm.style.display = "block";
+    } else {
+      // dual view
+      panelScope.style.display = "block";
+      panelDmm.style.display = "block";
+    }
+  }
+
+  updateScopeBadge() {
+    const badge = this.dock.querySelector("#dock-scope-telemetry-badge");
+    if (badge) {
+      badge.textContent = `${this.scopeVoltsDiv}V/div • ${this.scopeTimeDiv}ms`;
+    }
   }
 
   initHpCanvas() {
     this.hpCanvas = document.getElementById("dock-hp-canvas");
-    if (!this.hpCanvas) return;
-    this.hpCtx = this.hpCanvas.getContext("2d");
-    this.renderHpMeter(this.currentNeedleDbu);
+    if (this.hpCanvas) {
+      this.hpCtx = this.hpCanvas.getContext("2d");
+      this.renderHpMeter(this.currentNeedleDbu);
+    }
+  }
+
+  initScopeCanvas() {
+    this.scopeCanvas = document.getElementById("dock-scope-canvas");
+    if (this.scopeCanvas) {
+      this.scopeCtx = this.scopeCanvas.getContext("2d");
+    }
   }
 
   setupScrollTrigger() {
-    const labBench = document.getElementById("topologies");
+    const labBench = document.getElementById("topologies") || document.querySelector(".vintage-test-bench");
     window.addEventListener("scroll", () => {
       if (!labBench) return;
       const rect = labBench.getBoundingClientRect();
-      // Break away when scrolling past the top of the circuit section
-      if (rect.bottom < 150) {
+      if (rect.bottom < 120) {
         this.setFloating(true);
-      } else if (rect.top > 200) {
+      } else if (rect.top > 250) {
         this.setFloating(false);
       }
     }, { passive: true });
-  }
-
-  toggleFloat() {
-    this.setFloating(!this.isFloating);
   }
 
   setFloating(enable) {
@@ -11815,7 +12228,7 @@ class FloatingMeterDock {
     this.settingsOpen = type;
     drawer.classList.add("open");
     if (title) {
-      title.textContent = type === "hp" ? "HP 400FL Calibration" : "Fluke 8050A Multimeter Configuration";
+      title.textContent = type === "hp" ? "APK Voltmeter Calibration & Sensitivity" : "Fluke 8050A DMM Configuration";
     }
   }
 
@@ -11826,8 +12239,10 @@ class FloatingMeterDock {
   }
 
   setHpRange(v, dbTxt) {
+    this.hpRangeVolts = v;
     const badge = document.getElementById("dock-hp-range-badge");
     if (badge) badge.textContent = `${v}V / ${dbTxt}`;
+    this.updateFromActiveCircuit();
   }
 
   setBallistics(mode) {
@@ -11838,55 +12253,146 @@ class FloatingMeterDock {
       this.attackRate = 0.15;
       this.releaseRate = 0.12;
     } else {
-      // standard VU 300ms
       this.attackRate = 0.28;
       this.releaseRate = 0.08;
     }
   }
 
+  /**
+   * Universal Probe Hooks: Binds click handlers to EVERY interactive node across ALL schematics
+   */
   setupGlobalProbeHooks() {
-    // Add clickable probe handlers to any element with data-probe-point
-    document.querySelectorAll("[data-probe-target]").forEach(el => {
-      el.addEventListener("click", () => {
+    const bindTarget = (el) => {
+      el.style.cursor = "crosshair";
+      el.addEventListener("click", (e) => {
+        e.stopPropagation();
         const target = el.getAttribute("data-probe-target");
-        this.selectProbeTarget(target);
+        const label = el.getAttribute("data-probe-label") || el.getAttribute("title") || target;
+        this.selectProbeTarget(target, label, el);
       });
+    };
+
+    // Auto-discover any element with data-probe-target
+    document.querySelectorAll("[data-probe-target]").forEach(bindTarget);
+
+    // Also listen for clicks when armed mode is active
+    document.addEventListener("click", (e) => {
+      if (!this.isArmed) return;
+      const probeTargetEl = e.target.closest("[data-probe-target]");
+      if (probeTargetEl) {
+        const target = probeTargetEl.getAttribute("data-probe-target");
+        const label = probeTargetEl.getAttribute("data-probe-label") || probeTargetEl.getAttribute("title") || target;
+        this.selectProbeTarget(target, label, probeTargetEl);
+      }
     });
   }
 
-  selectProbeTarget(targetKey) {
+  selectProbeTarget(targetKey, customLabel = null, clickedEl = null) {
     this.activeProbeTarget = targetKey;
     const select = document.getElementById("dock-probe-select");
     if (select) select.value = targetKey;
 
-    const redLabel = document.getElementById("dock-probe-red-target");
+    const signalLabel = document.getElementById("dock-probe-signal-target");
     const statusLabel = document.getElementById("dock-probe-status");
 
     const targets = {
-      "6-1-p2": { red: "Pin 2 Hot", desc: "Pin 2 Hot (Circuit 6.1 Dual Push-Pull)" },
-      "6-1-p3": { red: "Pin 3 Cold", desc: "Pin 3 Cold (Circuit 6.1 Dual Push-Pull)" },
-      "6-1-load": { red: "Load Differential", desc: "Differential Across Load (Circuit 6.1)" },
-      "6-1-vin": { red: "Audio In (Drive)", desc: "Generator Drive Voltage (Circuit 6.1)" },
-      "6-2-p2": { red: "Pin 2 Hot", desc: "Pin 2 Hot (Circuit 6.2 Active Impedance)" },
-      "6-2-p3": { red: "Pin 3 Cold", desc: "Pin 3 Cold (Circuit 6.2 Passive Match 0V)" },
-      "6-2-load": { red: "Load Differential", desc: "Differential Across Load (Circuit 6.2)" },
-      "6-3-sec": { red: "Sec Pins 2-3", desc: "Secondary Floating Output (Circuit 6.3)" },
-      "6-3-pri": { red: "Primary In", desc: "Primary Driver Input (Circuit 6.3)" },
-      "meyer-vgvd": { red: "Ground V_GVD", desc: "Ground Voltage Difference (Thevenin Model)" },
-      "meyer-verr": { red: "Error V_error", desc: "CM-to-DM Conversion Error (Thevenin Model)" },
-      "meyer-diff": { red: "V_diff Output", desc: "Audio Differential Signal (Thevenin Model)" }
+      // Circuit 6.1
+      "6-1-p2": { name: "Pin 2 Hot", desc: "Circuit 6.1 Pin 2 Hot Output (0° Sine)" },
+      "6-1-p3": { name: "Pin 3 Cold", desc: "Circuit 6.1 Pin 3 Cold Output (180° Inverted Sine)" },
+      "6-1-load": { name: "Differential Load", desc: "Circuit 6.1 Differential Across R_LOAD" },
+      "6-1-vin": { name: "Audio In (Drive)", desc: "Circuit 6.1 Audio Input Generator" },
+      "6-1-op1": { name: "Op-Amp A1 Out", desc: "Circuit 6.1 Non-inverting Driver Output (+1 Buffer)" },
+      "6-1-op2": { name: "Op-Amp A2 Out", desc: "Circuit 6.1 Inverting Driver Output (-1 Inverter)" },
+      "6-1-p1": { name: "Pin 1 Chassis", desc: "Circuit 6.1 AES48 Chassis Ground Shell" },
+
+      // Circuit 6.2
+      "6-2-p2": { name: "Pin 2 Hot (Active)", desc: "Circuit 6.2 Active Impedance Pin 2 Hot (+1.2V)" },
+      "6-2-p3": { name: "Pin 3 Cold (Passive)", desc: "Circuit 6.2 Passive 0V Match (Flatline 0V, 50Ω Z)" },
+      "6-2-load": { name: "Differential Load", desc: "Circuit 6.2 Differential Across Load" },
+      "6-2-vin": { name: "Audio In", desc: "Circuit 6.2 Audio Input Drive" },
+
+      // Circuit 6.3
+      "6-3-sec": { name: "Sec Across 2-3", desc: "Circuit 6.3 Transformer Secondary Output" },
+      "6-3-p2": { name: "Secondary Pin 2", desc: "Circuit 6.3 Transformer Secondary Hot (+)" },
+      "6-3-p3": { name: "Secondary Pin 3", desc: "Circuit 6.3 Transformer Secondary Cold (-)" },
+      "6-3-pri": { name: "Primary Drive", desc: "Circuit 6.3 Transformer Primary Audio In" },
+
+      // Section 5 Meyer Thevenin Ground Loop
+      "meyer-vgvd": { name: "Ground V_GVD", desc: "Ground Potential Difference (60Hz + 120Hz Mains Buzz)" },
+      "meyer-vpo": { name: "Generator V_PO", desc: "Equipment A Source Hot Generator" },
+      "meyer-vro": { name: "Generator V_RO", desc: "Equipment A Source Cold Generator" },
+      "meyer-p2": { name: "Cable Pin 2", desc: "Twisted Pair Hot Conductor" },
+      "meyer-p3": { name: "Cable Pin 3", desc: "Twisted Pair Cold Conductor" },
+      "meyer-shield": { name: "Cable Shield Pin 1", desc: "Shield Continuity (Pin 1 to Pin 1 Chassis Bond)" },
+      "meyer-verr": { name: "Error V_err", desc: "Common-Mode to Differential Error Voltage" },
+      "meyer-diff": { name: "Audio Out (Diff)", desc: "Equipment B Receiver Differential Audio Output" },
+
+      // Section 0 Enclosure
+      "enc-chassisa": { name: "Equipment A Chassis", desc: "Equipment A Exterior Metal Enclosure" },
+      "enc-pin1bond": { name: "AES48 Direct Bond", desc: "Pin 1 Directly Bonded to Chassis (Quiet 0V)" },
+      "enc-pin1fault": { name: "Pin 1 PCB Ground", desc: "Pin 1 Problem: Shield Noise in Audio Circuit (120Hz Buzz)" },
+      "enc-shield": { name: "Cable Shield Shell", desc: "Cable Overall Braided Shield" }
     };
 
-    const info = targets[targetKey] || { red: targetKey, desc: targetKey };
-    if (redLabel) redLabel.textContent = info.red;
-    if (statusLabel) statusLabel.textContent = `Probing: ${info.desc}`;
+    const info = targets[targetKey] || { name: targetKey, desc: customLabel || targetKey };
+    if (signalLabel) {
+      const modeSuffix = this.toolMode === "scope" ? "(10X Scope)" : "(DMM +)";
+      signalLabel.textContent = `${info.name} ${modeSuffix}`;
+    }
+    if (statusLabel) {
+      statusLabel.textContent = `Probing: ${info.desc}`;
+    }
 
+    // Attach physical visual probe indicator to clicked element if available
+    this.renderProbePinMarker(clickedEl);
+
+    // Expand floating dock if not visible
     this.setFloating(true);
     this.updateFromActiveCircuit();
+
+    this.showToast(`⚡ Probing: ${info.desc}`);
+  }
+
+  renderProbePinMarker(targetEl) {
+    // Remove previous probe marker
+    document.querySelectorAll(".live-probe-marker-pin").forEach(el => el.remove());
+
+    if (!targetEl) return;
+    const rect = targetEl.getBoundingClientRect();
+    const marker = document.createElement("div");
+    marker.className = `live-probe-marker-pin ${this.toolMode === "scope" ? "green" : "red"}`;
+    marker.innerHTML = `
+      <div class="probe-needle-tip"></div>
+      <div class="probe-body-collar">
+        <span>${this.toolMode === "scope" ? "OSCOPE 10X" : "DMM (+)"}</span>
+      </div>
+    `;
+    marker.style.left = `${window.scrollX + rect.left + rect.width / 2 - 12}px`;
+    marker.style.top = `${window.scrollY + rect.top - 38}px`;
+
+    document.body.appendChild(marker);
+  }
+
+  showToast(msg) {
+    let toast = document.getElementById("probe-hud-toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "probe-hud-toast";
+      toast.className = "probe-hud-toast";
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add("visible");
+    clearTimeout(this.toastTimeout);
+    this.toastTimeout = setTimeout(() => {
+      toast.classList.remove("visible");
+    }, 2500);
   }
 
   updateLiveReadings(vDiff, iLoad, dBu, status = "SYMMETRIC") {
-    this.targetNeedleDbu = dBu;
+    const range = this.hpRangeVolts || 3.0;
+    const relativeDb = 20 * Math.log10(Math.max(0.00005, vDiff / range));
+    this.targetNeedleDbu = relativeDb;
 
     const vdiffEl = document.getElementById("dock-dmm-vdiff");
     if (vdiffEl) vdiffEl.textContent = `${vDiff.toFixed(2)} V`;
@@ -11897,107 +12403,377 @@ class FloatingMeterDock {
     const statusEl = document.getElementById("dock-dmm-status");
     if (statusEl) {
       statusEl.textContent = status;
-      statusEl.className = status.includes("OVERLOAD") || status.includes("CLIP") 
-        ? "dmm-vfd-status amber" 
+      statusEl.className = status.includes("OVERLOAD") || status.includes("CLIP") || status.includes("IMBALANCE")
+        ? "dmm-vfd-status amber"
         : "dmm-vfd-status";
     }
   }
 
-  updateFromActiveCircuit() {
-    // Read from current simulator values based on active probe target
+  /**
+   * Reads simulator parameters and computes the exact physical waveform + measurements
+   */
+  getProbedSignalData() {
     const key = this.activeProbeTarget;
+
+    // Default 1kHz parameters
+    let freq = 1000.0;
+    let vRms = 1.23;
+    let vPk = vRms * Math.SQRT2;
+    let phase = 0; // radians
+    let shape = "sine"; // 'sine' | 'clipped' | 'flatline' | 'hum' | 'noise'
+    let status = "SYMMETRIC";
+    let iLoad = 0.002;
+
     if (key.startsWith("6-1")) {
-      const vinEl = document.getElementById("pp-vin");
-      const vin = vinEl ? parseFloat(vinEl.value) : 1.2;
-      const routEl = document.getElementById("pp-rout");
-      const rout = routEl ? parseFloat(routEl.value) : 50;
-      const rloadEl = document.getElementById("pp-rload");
-      const rload = rloadEl ? parseFloat(rloadEl.value) : 600;
+      const vin = parseFloat(document.getElementById("pp-vin")?.value || 1.2);
+      const rout = parseFloat(document.getElementById("pp-rout")?.value || 50);
+      const rload = parseFloat(document.getElementById("pp-rload")?.value || 600);
       const shortPin3 = document.getElementById("pp-short-pin3")?.checked || false;
 
-      let vPin2, vPin3, iLoad, vDiff;
+      let vPin2, vPin3, vDiff;
       if (!shortPin3) {
         iLoad = (2 * vin) / (2 * rout + rload);
         vPin2 = vin - iLoad * rout;
         vPin3 = -(vin - iLoad * rout);
         vDiff = 2 * (vin - iLoad * rout);
+        status = "NORMAL SYMMETRICAL";
       } else {
         iLoad = vin / (rout + rload);
         vPin2 = vin - iLoad * rout;
         vPin3 = 0;
         vDiff = vPin2;
+        status = iLoad > 0.05 ? "CURRENT LIMIT CLIP" : "TS SHORTED";
       }
 
-      let measuredV = vDiff;
-      if (key === "6-1-p2") measuredV = vPin2;
-      else if (key === "6-1-p3") measuredV = Math.abs(vPin3);
-      else if (key === "6-1-vin") measuredV = vin;
-
-      const dBu = 20 * Math.log10(Math.max(0.001, measuredV / 0.775));
-      this.updateLiveReadings(measuredV, iLoad, dBu, shortPin3 ? "OVERLOAD CLIP" : "SYMMETRIC");
+      if (key === "6-1-p2") {
+        vRms = vPin2;
+        vPk = vRms * Math.SQRT2;
+        phase = 0;
+        shape = "sine";
+      } else if (key === "6-1-p3") {
+        if (shortPin3) {
+          vRms = 0;
+          vPk = 0;
+          shape = "flatline";
+        } else {
+          vRms = Math.abs(vPin3);
+          vPk = vRms * Math.SQRT2;
+          phase = Math.PI; // Inverted 180°
+          shape = "sine";
+        }
+      } else if (key === "6-1-load") {
+        vRms = vDiff;
+        vPk = vRms * Math.SQRT2;
+        phase = 0;
+        shape = "sine";
+      } else if (key === "6-1-vin") {
+        vRms = vin;
+        vPk = vin * Math.SQRT2;
+        phase = 0;
+        shape = "sine";
+      } else if (key === "6-1-op2") {
+        if (shortPin3) {
+          vRms = vin;
+          vPk = 14.0; // Saturated rail
+          shape = "clipped";
+        } else {
+          vRms = vin;
+          vPk = vin * Math.SQRT2;
+          phase = Math.PI;
+          shape = "sine";
+        }
+      } else if (key === "6-1-p1") {
+        vRms = 0.001;
+        vPk = 0.001;
+        shape = "flatline";
+      }
     } else if (key.startsWith("6-2")) {
-      const vinEl = document.getElementById("ib-vin");
-      const vin = vinEl ? parseFloat(vinEl.value) : 1.2;
-      const routEl = document.getElementById("ib-rout");
-      const rout = routEl ? parseFloat(routEl.value) : 50;
-      const rloadEl = document.getElementById("ib-rload");
-      const rload = rloadEl ? parseFloat(rloadEl.value) : 10000;
+      const vin = parseFloat(document.getElementById("ib-vin")?.value || 1.2);
+      const rout = parseFloat(document.getElementById("ib-rout")?.value || 50);
+      const rload = parseFloat(document.getElementById("ib-rload")?.value || 10000);
       const shortPin3 = document.getElementById("ib-short-pin3")?.checked || false;
 
-      const iLoad = vin / (rout + rload);
+      iLoad = vin / (rout + rload);
       const vPin2 = iLoad * rload;
-      const measuredV = key === "6-2-p3" ? 0 : vPin2;
-      const dBu = 20 * Math.log10(Math.max(0.001, measuredV / 0.775));
-      this.updateLiveReadings(measuredV, iLoad, dBu, shortPin3 ? "UNBALANCED SAFE" : "SYMMETRIC IMPEDANCE");
-    } else if (key.startsWith("meyer")) {
-      const vpoEl = document.getElementById("meyer-vpo");
-      const vpo = vpoEl ? parseFloat(vpoEl.value) : 1.23;
-      const vgvdEl = document.getElementById("meyer-vgvd");
-      const vgvd = vgvdEl ? parseFloat(vgvdEl.value) : 10.0;
-      const zpoEl = document.getElementById("meyer-zpo");
-      const zpo = zpoEl ? parseFloat(zpoEl.value) : 50;
-      const zroEl = document.getElementById("meyer-zro");
-      const zro = zroEl ? parseFloat(zroEl.value) : 50;
-      const deltaZ = Math.abs(zpo - zro);
 
-      const vErr = vgvd * (deltaZ / 20000);
-      const measuredV = key === "meyer-vgvd" ? vgvd : (key === "meyer-verr" ? vErr : vpo);
-      const dBu = 20 * Math.log10(Math.max(0.001, measuredV / 0.775));
-      this.updateLiveReadings(measuredV, vpo / 600, dBu, deltaZ === 0 ? "INFINITE CMRR" : "IMBALANCE NOISE");
+      if (key === "6-2-p2") {
+        vRms = vPin2;
+        vPk = vRms * Math.SQRT2;
+        phase = 0;
+        shape = "sine";
+        status = "ACTIVE DRIVEN (+)";
+      } else if (key === "6-2-p3") {
+        vRms = 0.0;
+        vPk = 0.0;
+        shape = "flatline"; // Zero signal voltage!
+        status = "PASSIVE MATCH (0V SIGNAL, 50Ω Z)";
+      } else if (key === "6-2-load") {
+        vRms = vPin2;
+        vPk = vRms * Math.SQRT2;
+        shape = "sine";
+        status = "DIFFERENTIAL LOAD OK";
+      } else {
+        vRms = vin;
+        vPk = vin * Math.SQRT2;
+        shape = "sine";
+      }
     } else if (key.startsWith("6-3")) {
-      const vinEl = document.getElementById("tx-vin");
-      const vin = vinEl ? parseFloat(vinEl.value) : 15.0;
-      const ratioEl = document.getElementById("tx-ratio");
-      const ratio = ratioEl ? parseFloat(ratioEl.value) : 1.0;
-      const rloadEl = document.getElementById("tx-rload");
-      const rload = rloadEl ? parseFloat(rloadEl.value) : 600;
+      const vin = parseFloat(document.getElementById("tx-vin")?.value || 15.0);
+      const ratio = parseFloat(document.getElementById("tx-ratio")?.value || 1.0);
+      const rload = parseFloat(document.getElementById("tx-rload")?.value || 600);
       const groundPin3 = document.getElementById("tx-ground-pin3")?.checked || false;
 
       const vSec = vin * ratio;
-      const iLoad = vSec / (40 + rload);
+      iLoad = vSec / (40 + rload);
       const vLoad = iLoad * rload;
-      const measuredV = key === "6-3-pri" ? vin : vLoad;
-      const dBu = 20 * Math.log10(Math.max(0.001, measuredV / 0.775));
-      this.updateLiveReadings(measuredV, iLoad, dBu, groundPin3 ? "EARTH-REF PIN 3" : "GALVANIC FLOATING");
+
+      if (key === "6-3-pri") {
+        vRms = vin;
+        vPk = vin * Math.SQRT2;
+        shape = "sine";
+        status = "PRIMARY GENERATOR";
+      } else if (key === "6-3-sec" || key === "6-3-p2") {
+        vRms = vLoad;
+        vPk = vLoad * Math.SQRT2;
+        shape = "sine";
+        status = groundPin3 ? "EARTHED REFERENCE" : "GALVANIC FLOATING";
+      } else if (key === "6-3-p3") {
+        if (groundPin3) {
+          vRms = 0.0;
+          vPk = 0.0;
+          shape = "flatline";
+          status = "PIN 3 EARTHED (0V)";
+        } else {
+          vRms = vLoad / 2;
+          vPk = vRms * Math.SQRT2;
+          phase = Math.PI;
+          shape = "sine";
+          status = "FLOATING BALANCED";
+        }
+      }
+    } else if (key.startsWith("meyer")) {
+      const vpo = parseFloat(document.getElementById("meyer-vpo")?.value || 1.23);
+      const vgvd = parseFloat(document.getElementById("meyer-vgvd")?.value || 10.0);
+      const zpo = parseFloat(document.getElementById("meyer-zpo")?.value || 50);
+      const zro = parseFloat(document.getElementById("meyer-zro")?.value || 50);
+      const deltaZ = Math.abs(zpo - zro);
+      const vErr = vgvd * (deltaZ / 20000);
+
+      if (key === "meyer-vgvd") {
+        freq = 60.0;
+        vRms = vgvd;
+        vPk = vgvd * Math.SQRT2;
+        shape = "hum"; // 60Hz hum + 120Hz harmonics
+        status = "GROUND LOOP MAINS HUM";
+      } else if (key === "meyer-verr") {
+        freq = 60.0;
+        vRms = vErr;
+        vPk = vErr * Math.SQRT2;
+        shape = deltaZ === 0 ? "flatline" : "hum";
+        status = deltaZ === 0 ? "INFINITE CMRR REJECTION" : "COMMON-MODE LEAKAGE";
+      } else if (key === "meyer-diff") {
+        freq = 1000.0;
+        vRms = vpo + vErr;
+        vPk = vRms * Math.SQRT2;
+        shape = deltaZ === 0 ? "sine" : "hum-riding";
+        status = deltaZ === 0 ? "PURE AUDIO (NOISE CANCELLED)" : "HUM CORRUPTED OUTPUT";
+      } else {
+        freq = 1000.0;
+        vRms = vpo;
+        vPk = vpo * Math.SQRT2;
+        shape = "sine";
+        status = "EQUIPMENT A DRIVE";
+      }
+    } else if (key.startsWith("enc")) {
+      if (key === "enc-pin1fault") {
+        freq = 120.0;
+        vRms = 0.85;
+        vPk = 1.2;
+        shape = "hum";
+        status = "PIN 1 PROBLEM (120Hz BUZZ ON PCB)";
+      } else if (key === "enc-pin1bond") {
+        vRms = 0.0001;
+        vPk = 0.0001;
+        shape = "flatline";
+        status = "AES48 CHASSIS BOND (CLEAN 0V)";
+      } else {
+        vRms = 0.05;
+        vPk = 0.08;
+        shape = "flatline";
+        status = "SHIELD CHASSIS POTENTIAL";
+      }
     }
+
+    return { freq, vRms, vPk, phase, shape, status, iLoad };
   }
 
-  startBallisticsLoop() {
-    const loop = () => {
-      // Dynamic needle physics attack & release
+  updateFromActiveCircuit() {
+    const data = this.getProbedSignalData();
+    const dBu = 20 * Math.log10(Math.max(0.0001, data.vRms / 0.775));
+    this.updateLiveReadings(data.vRms, data.iLoad, dBu, data.status);
+  }
+
+  startMainInstrumentLoop() {
+    const loop = (timestamp) => {
+      // 1. Update needle physics
       const eps = 0.02;
       if (this.currentNeedleDbu < this.targetNeedleDbu - eps) {
         this.currentNeedleDbu += (this.targetNeedleDbu - this.currentNeedleDbu) * this.attackRate;
       } else {
         this.currentNeedleDbu -= (this.currentNeedleDbu - this.targetNeedleDbu) * this.releaseRate;
       }
-
       this.renderHpMeter(this.currentNeedleDbu);
+
+      // 2. Update Oscilloscope CRT
+      this.renderOscilloscope();
+
       this.animFrame = requestAnimationFrame(loop);
     };
-    loop();
+    this.animFrame = requestAnimationFrame(loop);
   }
 
+  /**
+   * 1970s Tektronix / HP CRT Oscilloscope Rendering Engine
+   */
+  renderOscilloscope() {
+    if (!this.scopeCtx) return;
+    const ctx = this.scopeCtx;
+    const w = this.scopeCanvas.width;
+    const h = this.scopeCanvas.height;
+
+    // Advance timebase
+    this.scopeTime += 0.0005;
+
+    // Phosphor decay persistence (draw transparent mask instead of clearRect)
+    ctx.fillStyle = "rgba(2, 20, 8, 0.28)";
+    ctx.fillRect(0, 0, w, h);
+
+    // Draw Graticule Grid (8 vertical divisions, 10 horizontal divisions)
+    ctx.strokeStyle = "rgba(34, 197, 94, 0.18)";
+    ctx.lineWidth = 1;
+
+    const dx = w / 10;
+    const dy = h / 8;
+
+    ctx.beginPath();
+    for (let i = 1; i < 10; i++) {
+      ctx.moveTo(i * dx, 0);
+      ctx.lineTo(i * dx, h);
+    }
+    for (let j = 1; j < 8; j++) {
+      ctx.moveTo(0, j * dy);
+      ctx.lineTo(w, j * dy);
+    }
+    ctx.stroke();
+
+    // Central crosshair ticks (0.2 div sub-divisions)
+    ctx.strokeStyle = "rgba(74, 222, 128, 0.35)";
+    ctx.beginPath();
+    const midX = w / 2;
+    const midY = h / 2;
+    for (let j = 0; j <= 8; j += 0.2) {
+      const y = j * dy;
+      ctx.moveTo(midX - 3, y);
+      ctx.lineTo(midX + 3, y);
+    }
+    for (let i = 0; i <= 10; i += 0.2) {
+      const x = i * dx;
+      ctx.moveTo(x, midY - 3);
+      ctx.lineTo(x, midY + 3);
+    }
+    ctx.stroke();
+
+    // Compute waveform from probed node
+    const sig = this.getProbedSignalData();
+    const voltsPerDiv = this.scopeVoltsDiv; // e.g. 1.0 V/div
+    const timePerDiv = this.scopeTimeDiv * 0.001; // e.g. 0.0005 s/div
+    const totalTimeSpan = 10 * timePerDiv;
+
+    // Draw Live Green Phosphor CRT Trace
+    ctx.save();
+    ctx.strokeStyle = "#4ade80";
+    ctx.shadowColor = "#22c55e";
+    ctx.shadowBlur = 8;
+    ctx.lineWidth = 2.2;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.beginPath();
+    const numSamples = 240;
+
+    for (let s = 0; s < numSamples; s++) {
+      const px = (s / (numSamples - 1)) * w;
+      const tPoint = (s / (numSamples - 1)) * totalTimeSpan;
+      
+      // Auto-trigger sync locks phase so wave is stationary on CRT
+      const t = this.scopeTriggerMode === "AUTO" ? tPoint : this.scopeTime + tPoint;
+
+      let v = 0;
+      const omega = 2 * Math.PI * sig.freq;
+
+      if (sig.shape === "sine") {
+        v = sig.vPk * Math.sin(omega * t + sig.phase);
+      } else if (sig.shape === "flatline") {
+        v = 0;
+      } else if (sig.shape === "clipped") {
+        const raw = 14.0 * Math.sin(omega * t + sig.phase);
+        v = Math.max(-5.0, Math.min(5.0, raw)); // Hard clipping saturation
+      } else if (sig.shape === "hum") {
+        // 60Hz mains hum + 120Hz / 180Hz rectifier spikes
+        const w60 = 2 * Math.PI * 60;
+        v = sig.vPk * (0.8 * Math.sin(w60 * t) + 0.25 * Math.sin(2 * w60 * t) + 0.1 * Math.sin(3 * w60 * t));
+      } else if (sig.shape === "hum-riding") {
+        const w1k = 2 * Math.PI * 1000;
+        const w60 = 2 * Math.PI * 60;
+        v = sig.vPk * Math.sin(w1k * t) + 0.4 * Math.sin(w60 * t);
+      }
+
+      // Map voltage to CRT Y coordinate (midY is 0V, positive is up)
+      const py = midY - (v / (4 * voltsPerDiv)) * midY;
+      const clampedY = Math.max(4, Math.min(h - 4, py));
+
+      if (s === 0) {
+        ctx.moveTo(px, clampedY);
+      } else {
+        ctx.lineTo(px, clampedY);
+      }
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // On-Screen CRT Display (OSD) Telemetry
+    ctx.font = "bold 9px 'Courier New', monospace";
+    ctx.fillStyle = "#4ade80";
+    ctx.shadowColor = "#22c55e";
+    ctx.shadowBlur = 4;
+
+    // Top Header: CH1 scale, Timebase & Trigger
+    ctx.textAlign = "left";
+    ctx.fillText(`CH1: ${voltsPerDiv.toFixed(1)}V/DIV  ${this.scopeCoupling}`, 8, 14);
+
+    ctx.textAlign = "right";
+    ctx.fillText(`TIME: ${this.scopeTimeDiv.toFixed(1)}ms/DIV`, w - 24, 14);
+    // Green Trigger LED
+    ctx.fillStyle = "#22c55e";
+    ctx.beginPath();
+    ctx.arc(w - 12, 11, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Bottom Footer: Vp-p, V_RMS, Frequency
+    ctx.textAlign = "left";
+    ctx.fillText(`Vp-p: ${(sig.vPk * 2).toFixed(2)}V`, 8, h - 8);
+
+    ctx.textAlign = "center";
+    ctx.fillText(`Vrms: ${sig.vRms.toFixed(2)}V`, w / 2, h - 8);
+
+    ctx.textAlign = "right";
+    const freqTxt = sig.freq >= 1000 ? `${(sig.freq / 1000).toFixed(2)} kHz` : `${sig.freq.toFixed(0)} Hz`;
+    ctx.fillText(`FREQ: ${freqTxt}`, w - 8, h - 8);
+  }
+
+  /**
+   * APK Precision AC Voltmeter Dial Face Renderer
+   */
   renderHpMeter(dBuVal) {
     if (!this.hpCtx) return;
     const ctx = this.hpCtx;
@@ -12010,23 +12786,21 @@ class FloatingMeterDock {
     ctx.fillStyle = "#fbf9f2";
     ctx.fillRect(0, 0, w, h);
 
-    // Pivot center and arc radius
     const cx = w / 2;
-    const cy = h + 25;
-    const radius = h * 0.95;
+    const cy = h + 22;
+    const radius = h * 0.92;
 
     // Specular mirror strip to eliminate parallax
     ctx.strokeStyle = "#cbd5e1";
     ctx.lineWidth = 4;
     ctx.beginPath();
-    ctx.arc(cx, cy, radius - 16, -Math.PI * 0.78, -Math.PI * 0.22);
+    ctx.arc(cx, cy, radius - 15, -Math.PI * 0.78, -Math.PI * 0.22);
     ctx.stroke();
 
     // Red zone (> 0 dB)
     ctx.strokeStyle = "#ef4444";
     ctx.lineWidth = 3;
     ctx.beginPath();
-    // 0 dB is at approx -Math.PI * 0.44
     ctx.arc(cx, cy, radius, -Math.PI * 0.44, -Math.PI * 0.24);
     ctx.stroke();
 
@@ -12051,14 +12825,14 @@ class FloatingMeterDock {
       { db: 3,   ang: -0.24 }
     ];
 
-    ctx.font = "bold 9px 'Inter', sans-serif";
+    ctx.font = "bold 8.5px 'Inter', sans-serif";
     ctx.textAlign = "center";
     dbTicks.forEach(t => {
       const a = t.ang * Math.PI;
       const x1 = cx + (radius - 1) * Math.cos(a);
       const y1 = cy + (radius - 1) * Math.sin(a);
-      const x2 = cx + (radius - 8) * Math.cos(a);
-      const y2 = cy + (radius - 8) * Math.sin(a);
+      const x2 = cx + (radius - 7) * Math.cos(a);
+      const y2 = cy + (radius - 7) * Math.sin(a);
 
       ctx.strokeStyle = t.db > 0 ? "#ef4444" : "#0f172a";
       ctx.beginPath();
@@ -12066,13 +12840,13 @@ class FloatingMeterDock {
       ctx.lineTo(x2, y2);
       ctx.stroke();
 
-      const tx = cx + (radius - 16) * Math.cos(a);
-      const ty = cy + (radius - 16) * Math.sin(a);
+      const tx = cx + (radius - 15) * Math.cos(a);
+      const ty = cy + (radius - 15) * Math.sin(a);
       ctx.fillStyle = t.db > 0 ? "#ef4444" : "#0f172a";
       ctx.fillText(t.db > 0 ? `+${t.db}` : `${t.db}`, tx, ty);
     });
 
-    // Map current dBuVal (-20 to +3 dBu) to angle
+    // Map dBuVal (-20 to +3 dBu) to angle
     const clampedDbu = Math.max(-20, Math.min(3, dBuVal));
     const norm = (clampedDbu - (-20)) / 23;
     const needleAngle = (-0.76 + norm * 0.52) * Math.PI;
@@ -12087,7 +12861,7 @@ class FloatingMeterDock {
     const tipX = cx + tipLen * Math.cos(needleAngle);
     const tipY = cy + tipLen * Math.sin(needleAngle);
 
-    ctx.strokeStyle = "#b91c1c";
+    ctx.strokeStyle = "#dc2626";
     ctx.lineWidth = 1.8;
     ctx.lineCap = "round";
     ctx.beginPath();
@@ -12098,12 +12872,12 @@ class FloatingMeterDock {
     // Pivot cap
     ctx.fillStyle = "#1e293b";
     ctx.beginPath();
-    ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 9, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = "#b91c1c";
+    ctx.fillStyle = "#dc2626";
     ctx.beginPath();
-    ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.restore();
@@ -13650,6 +14424,7 @@ class CircuitSimulator {
     this.initMilitaryControls();
     this.initLevelConverter();
     this.initLTPFaders();
+    this.initVoltmeterControls();
   }
 
   bindInputs(ids, callback) {
@@ -13668,36 +14443,187 @@ class CircuitSimulator {
     knob.style.transform = `rotate(${angle.toFixed(1)}deg)`;
   }
 
-  // Helper: Deflect 1970s HP 400FL Precision AC Voltmeter needle (-20 to +2 dB / 0 to 1.0 V RMS)
-  updateVuMeter(needleId, dBu) {
+  // Helper: Deflect APK Precision AC Voltmeter needle (-20 to +2 dB / 0 to 1.0 & 0 to 3.0 scales)
+  updateVuMeter(needleId, dBu, vRms) {
     const needle = document.getElementById(needleId);
     if (!needle) return;
-    
-    // HP 400FL Precision AC Voltmeter movement calibration:
+
+    let v = vRms;
+    if (v === undefined || v === null) {
+      if (dBu !== undefined && dBu !== null) {
+        v = 0.775 * Math.pow(10, dBu / 20);
+      } else {
+        v = 0;
+      }
+    }
+
+    const range = this.activeRangeVolts || 3.0;
+    const vFrac = Math.max(0.0, v / range);
+
+    // APK Precision AC Voltmeter movement calibration:
     // Moving-coil galvanometer pivot is at cx=190, cy=250.
-    // Rest stop (no signal / <= -24 dB): -36 deg
-    // 0.1 V (-20 dB): -30 deg
-    // 0.316 V (-10 dB): -17 deg
-    // 0.5 V (-6 dB): -6 deg
-    // 0.775 V (0 dBu): +10.5 deg
-    // 1.0 V (0 dB on 1V scale): +24 deg
-    // 1.228 V (+4 dBu / +2 dBFS relative): +37.7 deg
-    // Mechanical full-scale stop: +41 deg
+    // Mechanical rest stop (no signal / <= 0.002 FS): -36 deg
+    // Mechanical overload peg stop (>= 1.25 FS): +41 deg
+    // 0 to 1.0 FS linear movement spans 60 deg (-36 deg to +24 deg)
     let angle;
-    if (dBu <= -24) {
+    if (vFrac <= 0.002) {
       angle = -36;
-    } else if (dBu >= 3.5) {
+    } else if (vFrac >= 1.25) {
       angle = 41;
     } else {
-      const v = 0.775 * Math.pow(10, dBu / 20);
-      const vNorm = Math.min(1.28, Math.max(0.0, v));
-      angle = -36 + vNorm * 60;
+      angle = -36 + vFrac * 60;
     }
-    
+
     needle.setAttribute("transform", `rotate(${angle.toFixed(2)} 190 250)`);
     needle.style.transformOrigin = "190px 250px";
     needle.style.transform = `rotate(${angle.toFixed(2)}deg)`;
   }
+
+  // APK Precision AC Voltmeter: 14 Calibrated Ranges & Sensitivity Physics
+  initVoltmeterControls() {
+    this.activeRangeIndex = 9; // Default nominal 3V (+10 dB)
+    this.activeRangeVolts = 3.0;
+
+    const ranges = [
+      { idx: 0, label: ".1 mV", db: "-80 dB", v: 0.0001, angle: 130.2 },
+      { idx: 1, label: ".3 mV", db: "-70 dB", v: 0.0003, angle: 145.3 },
+      { idx: 2, label: "1 mV",  db: "-60 dB", v: 0.001,  angle: 160.3 },
+      { idx: 3, label: "3 mV",  db: "-50 dB", v: 0.003,  angle: 175.9 },
+      { idx: 4, label: "10 mV", db: "-40 dB", v: 0.010,  angle: -164.1 },
+      { idx: 5, label: "30 mV", db: "-30 dB", v: 0.030,  angle: -148.4 },
+      { idx: 6, label: "100 mV",db: "-20 dB", v: 0.100,  angle: -132.5 },
+      { idx: 7, label: ".3 V",  db: "-10 dB", v: 0.3,    angle: -47.5 },
+      { idx: 8, label: "1 V",   db: "0 dB",   v: 1.0,    angle: -31.6 },
+      { idx: 9, label: "3 V",   db: "+10 dB", v: 3.0,    angle: -15.9 },
+      { idx: 10, label: "10 V",  db: "+20 dB", v: 10.0,   angle: 4.1 },
+      { idx: 11, label: "30 V",  db: "+30 dB", v: 30.0,   angle: 19.7 },
+      { idx: 12, label: "100 V", db: "+40 dB", v: 100.0,  angle: 34.7 },
+      { idx: 13, label: "300 V", db: "+50 dB", v: 300.0,  angle: 49.8 }
+    ];
+    this.voltmeterRanges = ranges;
+    window.APK_VOLTMETER_RANGES = ranges;
+
+    const setRange = (idx) => {
+      idx = Math.max(0, Math.min(ranges.length - 1, idx));
+      this.activeRangeIndex = idx;
+      this.activeRangeVolts = ranges[idx].v;
+
+      const r = ranges[idx];
+      // Rotate rotors on both Section 3 and Section 4 voltmeters
+      const rotors = document.querySelectorAll(".range-knob-rotor");
+      rotors.forEach(rotor => {
+        rotor.setAttribute("transform", `rotate(${r.angle.toFixed(1)})`);
+        rotor.style.transform = `rotate(${r.angle.toFixed(1)}deg)`;
+        rotor.setAttribute("data-range-idx", idx);
+      });
+
+      // Highlight active tick marks
+      document.querySelectorAll(".range-dial-tick").forEach(tick => {
+        const tIdx = parseInt(tick.getAttribute("data-range-idx"), 10);
+        tick.classList.toggle("active", tIdx === idx);
+      });
+
+      // Synchronize floating meter dock
+      if (window.floatingMeterDock && typeof window.floatingMeterDock.setHpRange === "function") {
+        window.floatingMeterDock.setHpRange(r.v, r.db);
+      }
+
+      // Re-render active meter needles with new sensitivity immediately
+      if (this.lastPyrVrms !== undefined) {
+        this.updateVuMeter("pyr-vu-needle", null, this.lastPyrVrms);
+      }
+      if (this.lastPpVdiff !== undefined) {
+        this.updateVuMeter("pp-vu-needle", null, this.lastPpVdiff);
+      }
+    };
+    this.setVoltmeterRange = setRange;
+    window.setVoltmeterRange = setRange;
+
+    // Direct clicks on dial ticks
+    document.querySelectorAll(".range-dial-tick").forEach(tick => {
+      tick.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const idx = parseInt(tick.getAttribute("data-range-idx"), 10);
+        if (!isNaN(idx)) setRange(idx);
+      });
+    });
+
+    // Rotor clicks, dragging, and wheel events
+    const knobRotors = [document.getElementById("pyr-range-knob-rotor"), document.getElementById("pp-range-knob-rotor")];
+    knobRotors.forEach(rotor => {
+      if (!rotor) return;
+
+      // Click to cycle next/prev
+      rotor.addEventListener("click", (e) => {
+        e.preventDefault();
+        const step = (e.shiftKey || e.button === 2) ? -1 : 1;
+        let nextIdx = (this.activeRangeIndex + step + ranges.length) % ranges.length;
+        setRange(nextIdx);
+      });
+
+      // Mouse wheel to rotate
+      rotor.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const step = e.deltaY > 0 ? 1 : -1;
+        let nextIdx = Math.max(0, Math.min(ranges.length - 1, this.activeRangeIndex + step));
+        setRange(nextIdx);
+      }, { passive: false });
+
+      // Drag to rotate
+      let isDragging = false;
+      let startAngle = 0;
+      let startIdx = 0;
+
+      const getAngleFromCenter = (evt) => {
+        const rect = rotor.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const clientX = evt.clientX || (evt.touches && evt.touches[0].clientX) || 0;
+        const clientY = evt.clientY || (evt.touches && evt.touches[0].clientY) || 0;
+        return Math.atan2(clientY - cy, clientX - cx) * 180 / Math.PI;
+      };
+
+      const onPointerDown = (evt) => {
+        isDragging = true;
+        startAngle = getAngleFromCenter(evt);
+        startIdx = this.activeRangeIndex;
+        rotor.style.cursor = "grabbing";
+        window.addEventListener("pointermove", onPointerMove);
+        window.addEventListener("pointerup", onPointerUp);
+      };
+
+      const onPointerMove = (evt) => {
+        if (!isDragging) return;
+        const currAngle = getAngleFromCenter(evt);
+        let closestIdx = startIdx;
+        let minDiff = Infinity;
+        ranges.forEach((rng, i) => {
+          let diff = Math.abs(currAngle - rng.angle);
+          if (diff > 180) diff = 360 - diff;
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestIdx = i;
+          }
+        });
+        if (closestIdx !== this.activeRangeIndex) {
+          setRange(closestIdx);
+        }
+      };
+
+      const onPointerUp = () => {
+        isDragging = false;
+        rotor.style.cursor = "grab";
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerUp);
+      };
+
+      rotor.addEventListener("pointerdown", onPointerDown);
+    });
+
+    // Set initial range (3V / +10 dB)
+    setRange(9);
+  }
+
 
   // 1960s Military Step Presets & Manual Exact Value Binding
   initMilitaryControls() {
@@ -13937,8 +14863,9 @@ class CircuitSimulator {
       const dmmPeak = document.getElementById("dmm-vpeak-val");
       if (dmmPeak) dmmPeak.textContent = `${vpeak >= 1.0 ? vpeak.toFixed(3) : (vpeak * 1000).toFixed(1) + ' m'}V`;
 
-      // 1970s Analogue VU meter needle deflection
-      this.updateVuMeter("pyr-vu-needle", dbu);
+      // APK Precision AC Voltmeter needle deflection
+      this.lastPyrVrms = vrms;
+      this.updateVuMeter("pyr-vu-needle", dbu, vrms);
     };
 
     if (dbuEl) {
@@ -14044,9 +14971,10 @@ class CircuitSimulator {
     this.setProbe("pp-probe-p3", `${(iPin3 * 1000).toFixed(1)} mA / ${vPin3.toFixed(2)} V`);
     this.setProbe("pp-probe-load", `V_diff: ${vDiff.toFixed(2)} V | I_load: ${(iLoad * 1000).toFixed(1)} mA`);
 
-    // 1970s Analogue VU meter needle on Circuit 6.1
+    // APK Precision AC Voltmeter needle on Circuit 6.1
+    this.lastPpVdiff = vDiff;
     const dBuOut = 20 * Math.log10(Math.max(0.001, vDiff / 0.775));
-    this.updateVuMeter("pp-vu-needle", dBuOut);
+    this.updateVuMeter("pp-vu-needle", dBuOut, vDiff);
 
     // 1970s DMM Fluorescent LCD screen readouts
     this.setProbe("pp-dmm-vdiff", `${vDiff.toFixed(2)} V`);
