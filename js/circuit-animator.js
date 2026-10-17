@@ -69,20 +69,35 @@ class CircuitSimulator {
     knob.style.transform = `rotate(${angle.toFixed(1)}deg)`;
   }
 
-  // Helper: Deflect 1970s Analogue VU meter needle (-20 to +3 VU)
+  // Helper: Deflect 1970s HP 400FL Precision AC Voltmeter needle (-20 to +2 dB / 0 to 1.0 V RMS)
   updateVuMeter(needleId, dBu) {
     const needle = document.getElementById(needleId);
     if (!needle) return;
-    // Map -20 dBu -> -45deg, 0 dBu -> 0deg, +3 dBu -> +45deg
+    
+    // HP 400FL Precision AC Voltmeter movement calibration:
+    // Moving-coil galvanometer pivot is at cx=190, cy=250.
+    // Rest stop (no signal / <= -24 dB): -36 deg
+    // 0.1 V (-20 dB): -30 deg
+    // 0.316 V (-10 dB): -17 deg
+    // 0.5 V (-6 dB): -6 deg
+    // 0.775 V (0 dBu): +10.5 deg
+    // 1.0 V (0 dB on 1V scale): +24 deg
+    // 1.228 V (+4 dBu / +2 dBFS relative): +37.7 deg
+    // Mechanical full-scale stop: +41 deg
     let angle;
-    if (dBu <= -20) {
-      angle = -48;
-    } else if (dBu >= 3) {
-      angle = 48;
+    if (dBu <= -24) {
+      angle = -36;
+    } else if (dBu >= 3.5) {
+      angle = 41;
     } else {
-      angle = -45 + ((dBu - (-20)) / (3 - (-20))) * 90;
+      const v = 0.775 * Math.pow(10, dBu / 20);
+      const vNorm = Math.min(1.28, Math.max(0.0, v));
+      angle = -36 + vNorm * 60;
     }
-    needle.style.transform = `rotate(${angle.toFixed(1)}deg)`;
+    
+    needle.setAttribute("transform", `rotate(${angle.toFixed(2)} 190 250)`);
+    needle.style.transformOrigin = "190px 250px";
+    needle.style.transform = `rotate(${angle.toFixed(2)}deg)`;
   }
 
   // 1960s Military Step Presets & Manual Exact Value Binding

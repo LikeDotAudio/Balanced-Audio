@@ -547,6 +547,14 @@
           <a href="#contributor-kenny" class="alignment-contributor-badge"><span>👤 AES72 QTP Research:</span> <strong>Richard Kenny</strong> &rarr;</a>
           <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Grounding:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
           <a href="#contributor-schmidt" class="alignment-contributor-badge"><span>👤 Multichannel Snakes:</span> <strong>John Schmidt (Whirlwind)</strong> &rarr;</a>
+          <a href="#contributor-celli" class="alignment-contributor-badge"><span>👤 Snake Shield Continuity:</span> <strong>John Celli</strong> &rarr;</a>
+          <a href="#contributor-brito" class="alignment-contributor-badge"><span>👤 Standards Implementation:</span> <strong>Joel Brito</strong> &rarr;</a>
+          <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 SCIN Physics:</span> <strong>Bill Whitlock</strong> &rarr;</a>
+        </div>
+        <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="#contributor-kenny" class="alignment-contributor-badge"><span>👤 AES72 QTP Research:</span> <strong>Richard Kenny</strong> &rarr;</a>
+          <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Grounding:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
+          <a href="#contributor-schmidt" class="alignment-contributor-badge"><span>👤 Multichannel Snakes:</span> <strong>John Schmidt (Whirlwind)</strong> &rarr;</a>
           <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 SCIN Physics:</span> <strong>Bill Whitlock</strong> &rarr;</a>
         </div>
         </p>
@@ -803,6 +811,7 @@
 
     </div>
   </section>
+
 
 
 
@@ -1862,47 +1871,271 @@
           <span class="badge badge-accent">Interactive Metering</span>
         </div>
 
-        <!-- Metering Row: 1970s Analogue VU Meter + 1970s Digital Multimeter (DMM) LCD Screen -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; align-items: center;">
-          <!-- Analogue VU Meter Card -->
-          <div class="analog-vu-meter-card">
-            <div class="vu-meter-header">1970s Analogue Precision VU Meter &bull; 300ms Dynamic Ballistics</div>
-            <svg class="analog-vu-meter-face" viewBox="0 0 200 110">
-              <path d="M 30,95 A 90,90 0 0,1 170,95" fill="none" stroke="#64748b" stroke-width="3"/>
-              <path d="M 142,42 A 90,90 0 0,1 170,95" fill="none" stroke="#ef4444" stroke-width="4"/>
-              
-              <!-- Scale markings -->
-              <line x1="30" y1="95" x2="25" y2="95" stroke="#94a3b8" stroke-width="1.5"/>
-              <text x="32" y="85" fill="#94a3b8" font-size="7">-20</text>
-              <line x1="50" y1="65" x2="44" y2="62" stroke="#94a3b8" stroke-width="1.5"/>
-              <text x="54" y="62" fill="#94a3b8" font-size="7">-10</text>
-              <line x1="80" y1="45" x2="77" y2="40" stroke="#94a3b8" stroke-width="1.5"/>
-              <text x="82" y="44" fill="#94a3b8" font-size="7">-5</text>
-              <line x1="100" y1="38" x2="100" y2="32" stroke="#94a3b8" stroke-width="1.5"/>
-              <text x="100" y="30" fill="#94a3b8" font-size="8" font-weight="700" text-anchor="middle">-2</text>
-              <line x1="118" y1="40" x2="120" y2="34" stroke="#94a3b8" stroke-width="2"/>
-              <text x="120" y="30" fill="#94a3b8" font-size="9" font-weight="800" text-anchor="middle">0</text>
-              <line x1="140" y1="46" x2="144" y2="41" stroke="#ef4444" stroke-width="2"/>
-              <text x="144" y="38" fill="#ef4444" font-size="8" font-weight="700">+1</text>
-              <line x1="158" y1="58" x2="164" y2="54" stroke="#ef4444" stroke-width="2"/>
-              <text x="163" y="52" fill="#ef4444" font-size="8" font-weight="700">+2</text>
-              <line x1="170" y1="95" x2="176" y2="95" stroke="#ef4444" stroke-width="2"/>
-              <text x="168" y="90" fill="#ef4444" font-size="8" font-weight="700">+3</text>
-              <text x="100" y="65" fill="#f8fafc" font-size="11" font-weight="800" letter-spacing="0.1em" text-anchor="middle">VU</text>
-              <text x="100" y="78" fill="#94a3b8" font-size="6.5" text-anchor="middle">100% MODULATION AT 0 VU (+4 dBu)</text>
-              
-              <!-- Live Deflecting Needle -->
-              <line id="pyr-vu-needle" class="vu-needle" x1="100" y1="95" x2="100" y2="20" stroke="#f59e0b" stroke-width="2"/>
-              <circle cx="100" cy="95" r="5" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
-            </svg>
-          </div>
+        <!-- Laboratory Test Bench: HP 400FL Precision AC Voltmeter + Fluke 8050A Benchtop DMM -->
+        <div class="vintage-test-bench">
+          <!-- Hewlett-Packard 400FL Precision AC Voltmeter -->
+          <div class="hp-voltmeter-card">
+  <svg class="hp-laboratory-voltmeter" viewBox="0 0 380 495" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <!-- Brushed Aluminum Side Rails Gradient -->
+  <linearGradient id="pyr-metal-rail" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#94a3b8"/>
+    <stop offset="20%" stop-color="#f8fafc"/>
+    <stop offset="45%" stop-color="#cbd5e1"/>
+    <stop offset="70%" stop-color="#e2e8f0"/>
+    <stop offset="100%" stop-color="#64748b"/>
+  </linearGradient>
 
-          <!-- 1970s DMM Fluorescent LCD segmented display -->
+  <!-- HP Sage Grey Front Panel Texture -->
+  <linearGradient id="pyr-panel-face" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#e2e7e0"/>
+    <stop offset="3%" stop-color="#d6ddd4"/>
+    <stop offset="97%" stop-color="#cbd3c9"/>
+    <stop offset="100%" stop-color="#bcc5b9"/>
+  </linearGradient>
+
+  <!-- Bezel Depth Gradient -->
+  <linearGradient id="pyr-bezel-frame" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#334155"/>
+    <stop offset="15%" stop-color="#0f172a"/>
+    <stop offset="85%" stop-color="#020617"/>
+    <stop offset="100%" stop-color="#1e293b"/>
+  </linearGradient>
+
+  <!-- Aged Laboratory Cream/Ivory Dial Face -->
+  <linearGradient id="pyr-dial-cream" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#fffefb"/>
+    <stop offset="60%" stop-color="#fbf9f2"/>
+    <stop offset="100%" stop-color="#f2ede0"/>
+  </linearGradient>
+
+  <!-- Mirror Strip Specular Chrome Gradient -->
+  <linearGradient id="pyr-mirror-strip" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#94a3b8"/>
+    <stop offset="18%" stop-color="#e2e8f0"/>
+    <stop offset="35%" stop-color="#cbd5e1"/>
+    <stop offset="50%" stop-color="#ffffff"/>
+    <stop offset="68%" stop-color="#cbd5e1"/>
+    <stop offset="85%" stop-color="#e2e8f0"/>
+    <stop offset="100%" stop-color="#94a3b8"/>
+  </linearGradient>
+
+  <!-- Phenolic Knob Gradient -->
+  <radialGradient id="pyr-knob-base" cx="45%" cy="40%" r="55%">
+    <stop offset="0%" stop-color="#334155"/>
+    <stop offset="60%" stop-color="#0f172a"/>
+    <stop offset="100%" stop-color="#020617"/>
+  </radialGradient>
+
+  <!-- Red Center Filter Knob -->
+  <radialGradient id="pyr-red-knob" cx="40%" cy="35%" r="60%">
+    <stop offset="0%" stop-color="#ef4444"/>
+    <stop offset="70%" stop-color="#dc2626"/>
+    <stop offset="100%" stop-color="#991b1b"/>
+  </radialGradient>
+
+  <!-- Red Jewel Pilot Lamp Glow Filter -->
+  <radialGradient id="pyr-jewel-glow" cx="45%" cy="40%" r="55%">
+    <stop offset="0%" stop-color="#fecaca"/>
+    <stop offset="35%" stop-color="#ef4444"/>
+    <stop offset="75%" stop-color="#b91c1c"/>
+    <stop offset="100%" stop-color="#7f1d1d"/>
+  </radialGradient>
+
+  <!-- Needle Soft Drop Shadow -->
+  <filter id="pyr-needle-shadow" x="-20%" y="-20%" width="150%" height="150%">
+    <feDropShadow dx="1.5" dy="2" stdDeviation="1.5" flood-color="#0f172a" flood-opacity="0.38"/>
+  </filter>
+
+  <!-- Glass Highlight -->
+  <linearGradient id="pyr-glass-glare" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="rgba(255,255,255,0.28)"/>
+    <stop offset="35%" stop-color="rgba(255,255,255,0.06)"/>
+    <stop offset="55%" stop-color="rgba(255,255,255,0)"/>
+    <stop offset="100%" stop-color="rgba(255,255,255,0.04)"/>
+  </linearGradient>
+</defs><!-- Top Carrying Handle -->
+<rect x="135" y="4" width="110" height="12" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+<path d="M 135,10 Q 190,6 245,10" stroke="#475569" stroke-width="2" fill="none"/>
+<rect x="126" y="6" width="12" height="10" rx="2" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
+<rect x="242" y="6" width="12" height="10" rx="2" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
+
+<!-- Left & Right Die-Cast Brushed Aluminum Side Rails -->
+<rect x="0" y="14" width="22" height="476" rx="3" fill="url(#pyr-metal-rail)" stroke="#475569" stroke-width="0.75"/>
+<rect x="358" y="14" width="22" height="476" rx="3" fill="url(#pyr-metal-rail)" stroke="#475569" stroke-width="0.75"/>
+<!-- Rail Rack Screws -->
+<circle cx="11" cy="30" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
+<line x1="9" y1="30" x2="13" y2="30" stroke="#334155" stroke-width="0.75"/>
+<circle cx="11" cy="470" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
+<line x1="9" y1="470" x2="13" y2="470" stroke="#334155" stroke-width="0.75"/>
+<circle cx="369" cy="30" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
+<line x1="367" y1="30" x2="371" y2="30" stroke="#334155" stroke-width="0.75"/>
+<circle cx="369" cy="470" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
+<line x1="367" y1="470" x2="371" y2="470" stroke="#334155" stroke-width="0.75"/>
+
+<!-- HP Vintage Sage Grey Front Panel Faceplate -->
+<rect x="22" y="16" width="336" height="472" fill="url(#pyr-panel-face)"/>
+<rect x="24" y="18" width="332" height="468" fill="none" stroke="#b2bbb0" stroke-width="1"/>
+
+<!-- Molded Black Bezel -->
+<rect x="36" y="28" width="308" height="212" rx="6" fill="url(#pyr-bezel-frame)" stroke="#090d16" stroke-width="2"/>
+<rect x="39" y="31" width="302" height="206" rx="4" fill="none" stroke="#475569" stroke-width="0.75" opacity="0.6"/>
+
+<!-- Ivory Dial Plate -->
+<rect x="46" y="38" width="288" height="186" rx="3" fill="url(#pyr-dial-cream)"/>
+<rect x="46" y="38" width="288" height="186" rx="3" fill="none" stroke="#d5cebd" stroke-width="0.75"/><!-- Anti-Parallax Mirrored Strip -->
+<path d="M 97.13,122.18 A 158,158 0 0,1 290.71,128.26 L 283.70,136.73 A 147,147 0 0,0 103.60,131.07 Z" fill="url(#pyr-mirror-strip)" stroke="#64748b" stroke-width="0.5"/><path d="M 87.14,108.42 A 175,175 0 0,1 261.18,90.13" fill="none" stroke="#0f172a" stroke-width="1.2"/><path d="M 261.18,90.13 A 175,175 0 0,1 301.55,115.16" fill="none" stroke="#dc2626" stroke-width="2.5"/><text x="190" y="60" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.1em" text-anchor="middle">DECIBELS</text><text x="190" y="68" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle">1 mW 600 Ω</text><text x="190" y="152" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.08em" text-anchor="middle">R. M. S. VOLTS</text><text x="190" y="160" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5" font-weight="600" letter-spacing="0.05em" text-anchor="middle">AVERAGE RESPONDING</text><rect x="62" y="48" width="13" height="13" rx="2" fill="#006699"/>
+<text x="68.5" y="58" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="9" text-anchor="middle">hp</text><line x1="102.50" y1="98.45" x2="106.00" y2="104.51" stroke="#0f172a" stroke-width="1.3"/><text x="108.75" y="109.27" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-20</text><line x1="115.13" y1="91.83" x2="117.05" y2="95.89" stroke="#0f172a" stroke-width="0.75"/><line x1="138.76" y1="82.67" x2="140.81" y2="89.36" stroke="#0f172a" stroke-width="1.3"/><text x="142.42" y="94.62" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-10</text><line x1="145.56" y1="80.74" x2="146.70" y2="85.09" stroke="#0f172a" stroke-width="0.75"/><line x1="153.28" y1="78.90" x2="154.75" y2="85.74" stroke="#0f172a" stroke-width="1.3"/><text x="155.90" y="91.12" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-8</text><line x1="162.02" y1="77.25" x2="162.74" y2="81.69" stroke="#0f172a" stroke-width="0.75"/><line x1="171.92" y1="75.94" x2="172.65" y2="82.90" stroke="#0f172a" stroke-width="1.3"/><text x="173.22" y="88.37" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-6</text><line x1="183.10" y1="75.14" x2="183.28" y2="79.63" stroke="#0f172a" stroke-width="0.75"/><line x1="195.67" y1="75.09" x2="195.45" y2="82.09" stroke="#0f172a" stroke-width="1.3"/><text x="195.27" y="87.59" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-4</text><line x1="209.74" y1="76.12" x2="209.23" y2="80.59" stroke="#0f172a" stroke-width="0.75"/><line x1="225.37" y1="78.61" x2="223.95" y2="85.47" stroke="#0f172a" stroke-width="1.3"/><text x="222.84" y="90.85" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-2</text><line x1="242.55" y1="83.08" x2="241.20" y2="87.37" stroke="#0f172a" stroke-width="0.75"/><line x1="261.18" y1="90.13" x2="258.33" y2="96.52" stroke="#dc2626" stroke-width="1.3"/><text x="256.09" y="101.55" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="280.97" y1="100.50" x2="277.33" y2="106.48" stroke="#dc2626" stroke-width="1.3"/><text x="274.47" y="111.18" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+1</text><line x1="301.40" y1="115.03" x2="296.94" y2="120.43" stroke="#dc2626" stroke-width="1.3"/><text x="293.44" y="124.68" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+2</text><path d="M 105.36,133.50 A 144,144 0 0,1 248.57,118.45" fill="none" stroke="#0f172a" stroke-width="1.0"/><line x1="105.36" y1="133.50" x2="108.89" y2="138.36" stroke="#0f172a" stroke-width="1.0"/><text x="111.82" y="142.40" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="118.00" y1="125.29" x2="121.00" y2="130.49" stroke="#0f172a" stroke-width="1.0"/><line x1="131.43" y1="118.45" x2="133.87" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="135.90" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.2</text><line x1="145.50" y1="113.05" x2="147.36" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="160.06" y1="109.15" x2="161.31" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="162.35" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.4</text><line x1="174.95" y1="106.79" x2="175.58" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="190.00" y1="106.00" x2="190.00" y2="112.00" stroke="#0f172a" stroke-width="1.0"/><text x="190.00" y="117.00" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.6</text><line x1="205.05" y1="106.79" x2="204.42" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="219.94" y1="109.15" x2="218.69" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="217.65" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.8</text><line x1="234.50" y1="113.05" x2="232.64" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="248.57" y1="118.45" x2="246.13" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="244.10" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">1.0</text><line x1="107.82" y1="131.75" x2="109.81" y2="134.63" stroke="#475569" stroke-width="0.5"/><line x1="110.31" y1="130.06" x2="112.25" y2="132.97" stroke="#475569" stroke-width="0.5"/><line x1="112.84" y1="128.42" x2="114.72" y2="131.37" stroke="#475569" stroke-width="0.5"/><line x1="115.40" y1="126.83" x2="117.22" y2="129.82" stroke="#475569" stroke-width="0.5"/><line x1="120.63" y1="123.81" x2="122.31" y2="126.88" stroke="#475569" stroke-width="0.5"/><line x1="123.29" y1="122.39" x2="124.91" y2="125.49" stroke="#475569" stroke-width="0.5"/><line x1="125.97" y1="121.02" x2="127.53" y2="124.15" stroke="#475569" stroke-width="0.5"/><line x1="128.69" y1="119.70" x2="130.18" y2="122.87" stroke="#475569" stroke-width="0.5"/><line x1="134.20" y1="117.25" x2="135.55" y2="120.48" stroke="#475569" stroke-width="0.5"/><line x1="136.99" y1="116.11" x2="138.28" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="139.81" y1="115.03" x2="141.03" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="142.64" y1="114.01" x2="143.79" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="148.38" y1="112.15" x2="149.39" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="151.28" y1="111.30" x2="152.22" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="154.19" y1="110.52" x2="155.06" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="157.12" y1="109.80" x2="157.92" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="163.02" y1="108.55" x2="163.67" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="165.99" y1="108.02" x2="166.57" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="168.96" y1="107.54" x2="169.48" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="171.95" y1="107.14" x2="172.39" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="177.95" y1="106.51" x2="178.24" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="180.96" y1="106.28" x2="181.18" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="183.97" y1="106.13" x2="184.12" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="186.98" y1="106.03" x2="187.06" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="193.02" y1="106.03" x2="192.94" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="196.03" y1="106.13" x2="195.88" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="199.04" y1="106.28" x2="198.82" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="202.05" y1="106.51" x2="201.76" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="208.05" y1="107.14" x2="207.61" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="211.04" y1="107.54" x2="210.52" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="214.01" y1="108.02" x2="213.43" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="216.98" y1="108.55" x2="216.33" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="222.88" y1="109.80" x2="222.08" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="225.81" y1="110.52" x2="224.94" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="228.72" y1="111.30" x2="227.78" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="231.62" y1="112.15" x2="230.61" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="237.36" y1="114.01" x2="236.21" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="240.19" y1="115.03" x2="238.97" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="243.01" y1="116.11" x2="241.72" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="245.80" y1="117.25" x2="244.45" y2="120.48" stroke="#475569" stroke-width="0.5"/><path d="M 115.94,148.06 A 126,126 0 0,1 241.25,134.89" fill="none" stroke="#0f172a" stroke-width="0.8"/><line x1="115.94" y1="148.06" x2="118.88" y2="152.11" stroke="#0f172a" stroke-width="0.9"/><text x="121.52" y="155.75" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="134.77" y1="136.75" x2="136.96" y2="141.25" stroke="#0f172a" stroke-width="0.9"/><text x="138.93" y="145.29" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0.5</text><line x1="155.27" y1="128.88" x2="156.65" y2="133.69" stroke="#0f172a" stroke-width="0.9"/><text x="157.89" y="138.01" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><line x1="176.83" y1="124.69" x2="177.35" y2="129.66" stroke="#0f172a" stroke-width="0.9"/><text x="177.82" y="134.14" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1.5</text><line x1="198.79" y1="124.31" x2="198.44" y2="129.29" stroke="#0f172a" stroke-width="0.9"/><text x="198.13" y="133.78" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><line x1="220.48" y1="127.74" x2="219.27" y2="132.59" stroke="#0f172a" stroke-width="0.9"/><text x="218.18" y="136.96" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2.5</text><line x1="241.25" y1="134.89" x2="239.22" y2="139.46" stroke="#0f172a" stroke-width="0.9"/><text x="237.38" y="143.57" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><!-- Galvanometer Pointer Needle -->
+<g id="pyr-vu-needle" class="hp-galvo-needle" filter="url(#pyr-needle-shadow)" transform="rotate(-36 190 250)">
+  <!-- Counterweight Tail -->
+  <path d="M 188.5,250 L 187,268 A 3,3 0 0,0 193,268 L 191.5,250 Z" fill="#1e293b"/>
+  <!-- Razor Knife-Edge Needle -->
+  <polygon points="189,250 189.5,100 189.8,72 190.2,72 190.5,100 191,250" fill="#dc2626"/>
+  <circle cx="190" cy="250" r="4.5" fill="#0f172a" stroke="#dc2626" stroke-width="1"/>
+</g>
+
+<!-- Glass Reflection Glare -->
+<rect x="46" y="38" width="288" height="186" rx="3" fill="url(#pyr-glass-glare)" pointer-events="none"/>
+
+<!-- Bezel Lower Mask & Mechanical Zero-Adjust Screw -->
+<path d="M 36,220 L 344,220 L 344,240 L 36,240 Z" fill="#0f172a"/>
+<!-- Mechanical Zero Screw -->
+<circle cx="190" cy="230" r="7" fill="#cbd5e1" stroke="#334155" stroke-width="1"/>
+<circle cx="190" cy="230" r="5.5" fill="#94a3b8"/>
+<line x1="185" y1="230" x2="195" y2="230" stroke="#1e293b" stroke-width="1.2"/><!-- Lower Panel Silkscreen Header -->
+<g transform="translate(42, 252)">
+  <!-- HP Logo -->
+  <rect x="0" y="0" width="18" height="18" rx="3" fill="#006699"/>
+  <text x="9" y="13" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="12" text-anchor="middle">hp</text>
+  <text x="26" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="0.1em">HEWLETT • PACKARD</text>
+  <text x="180" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="0.08em">400FL AC VOLTMETER</text>
+  <text x="96" y="25" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="0.05em">IN ~ 100kHz L.P. FILTER ~ OUT</text>
+</g>
+
+<!-- ================= Left: INPUT Section (Dual 5-Way Binding Posts) ================= -->
+<g transform="translate(44, 290)">
+  <text x="32" y="14" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">INPUT</text>
+  
+  <!-- Dual Insulating Base -->
+  <rect x="12" y="24" width="40" height="96" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+  
+  <!-- Red Binding Post (HOT / +) -->
+  <g transform="translate(32, 46)">
+    <circle cx="0" cy="0" r="14" fill="#dc2626" stroke="#991b1b" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="11" fill="#b91c1c"/>
+    <circle cx="0" cy="0" r="7" fill="#fbbf24" stroke="#d97706" stroke-width="0.75"/>
+    <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
+    <text x="22" y="4" fill="#dc2626" font-family="Arial, sans-serif" font-size="8" font-weight="800">+</text>
+  </g>
+
+  <!-- Black Binding Post (COLD / GND / -) -->
+  <g transform="translate(32, 94)">
+    <circle cx="0" cy="0" r="14" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="11" fill="#1e293b"/>
+    <circle cx="0" cy="0" r="7" fill="#cbd5e1" stroke="#64748b" stroke-width="0.75"/>
+    <circle cx="0" cy="0" r="3.5" fill="#020617"/>
+    <text x="22" y="4" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800">—</text>
+  </g>
+
+  <!-- Chassis Ground Post & Symbol -->
+  <g transform="translate(32, 134)">
+    <circle cx="0" cy="0" r="6" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
+    <line x1="-6" y1="10" x2="6" y2="10" stroke="#0f172a" stroke-width="1.2"/>
+    <line x1="-4" y1="13" x2="4" y2="13" stroke="#0f172a" stroke-width="1.2"/>
+    <line x1="-2" y1="16" x2="2" y2="16" stroke="#0f172a" stroke-width="1.2"/>
+  </g>
+</g>
+
+<!-- ================= Center: RANGE Rotary Selector ================= -->
+<g transform="translate(190, 365)">
+  <text x="0" y="-62" fill="#0f172a" font-family="Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.1em" text-anchor="middle">RANGE</text>
+  
+  <!-- Header Labels -->
+  <text x="-58" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">dB</text>
+  <text x="-36" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">mV</text>
+  <text x="36" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800">V</text>
+  <text x="58" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800">dB</text>
+
+  <!-- Left Bank (mV & dB) & Radial Ticks -->
+  <g fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
+    <text x="-58" y="-34" text-anchor="end">-20</text><text x="-36" y="-34" text-anchor="end">100</text>
+    <line x1="-32" y1="-34" x2="-22" y2="-24" stroke="#475569" stroke-width="0.8"/>
+    <text x="-58" y="-22" text-anchor="end">-30</text><text x="-36" y="-22" text-anchor="end">30</text>
+    <line x1="-32" y1="-22" x2="-26" y2="-16" stroke="#475569" stroke-width="0.8"/>
+    <text x="-58" y="-10" text-anchor="end">-40</text><text x="-36" y="-10" text-anchor="end">10</text>
+    <line x1="-32" y1="-10" x2="-28" y2="-8" stroke="#475569" stroke-width="0.8"/>
+    <text x="-58" y="2" text-anchor="end">-50</text><text x="-36" y="2" text-anchor="end">3</text>
+    <line x1="-32" y1="2" x2="-28" y2="2" stroke="#475569" stroke-width="0.8"/>
+    <text x="-58" y="14" text-anchor="end">-60</text><text x="-36" y="14" text-anchor="end">1</text>
+    <line x1="-32" y1="14" x2="-28" y2="10" stroke="#475569" stroke-width="0.8"/>
+    <text x="-58" y="26" text-anchor="end">-70</text><text x="-36" y="26" text-anchor="end">.3</text>
+    <line x1="-32" y1="26" x2="-26" y2="18" stroke="#475569" stroke-width="0.8"/>
+    <text x="-58" y="38" text-anchor="end">-80</text><text x="-36" y="38" text-anchor="end">.1</text>
+    <line x1="-32" y1="38" x2="-22" y2="26" stroke="#475569" stroke-width="0.8"/>
+  </g>
+
+  <!-- Right Bank (V & dB) & Radial Ticks -->
+  <g fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
+    <text x="36" y="-34">.3</text><text x="58" y="-34">-10</text>
+    <line x1="32" y1="-34" x2="22" y2="-24" stroke="#475569" stroke-width="0.8"/>
+    <text x="36" y="-22">1</text><text x="58" y="-22">0</text>
+    <line x1="32" y1="-22" x2="26" y2="-16" stroke="#475569" stroke-width="0.8"/>
+    <text x="36" y="-10">3</text><text x="58" y="-10">+10</text>
+    <line x1="32" y1="-10" x2="28" y2="-8" stroke="#475569" stroke-width="0.8"/>
+    <text x="36" y="2">10</text><text x="58" y="2">+20</text>
+    <line x1="32" y1="2" x2="28" y2="2" stroke="#475569" stroke-width="0.8"/>
+    <text x="36" y="14">30</text><text x="58" y="14">+30</text>
+    <line x1="32" y1="14" x2="28" y2="10" stroke="#475569" stroke-width="0.8"/>
+    <text x="36" y="26">100</text><text x="58" y="26">+40</text>
+    <line x1="32" y1="26" x2="26" y2="18" stroke="#475569" stroke-width="0.8"/>
+    <text x="36" y="38">300</text><text x="58" y="38">+50</text>
+    <line x1="32" y1="38" x2="22" y2="26" stroke="#475569" stroke-width="0.8"/>
+  </g>
+
+  <!-- Large Fluted Phenolic Range Knob -->
+  <circle cx="0" cy="0" r="23" fill="url(#pyr-knob-base)" stroke="#090d16" stroke-width="2"/>
+  <circle cx="0" cy="0" r="21" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
+  <circle cx="0" cy="0" r="11" fill="url(#pyr-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
+  <line x1="0" y1="0" x2="16" y2="-12" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="0" cy="0" r="3.5" fill="#f8fafc"/>
+</g>
+
+<!-- ================= Right: LINE Power Switch & Jewel Pilot Lamp ================= -->
+<g transform="translate(305, 305)">
+  <text x="18" y="0" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">LINE</text>
+  
+  <!-- Toggle Switch -->
+  <g transform="translate(18, 26)">
+    <polygon points="-7,-4 0,-8 7,-4 7,4 0,8 -7,4" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
+    <circle cx="0" cy="0" r="5" fill="#64748b"/>
+    <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+    <circle cx="0" cy="-13" r="3.5" fill="#e2e8f0" stroke="#64748b" stroke-width="0.75"/>
+  </g>
+
+  <!-- ON Label & Red Faceted Jewel Pilot Light -->
+  <text x="18" y="68" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800" text-anchor="middle">ON</text>
+  <g transform="translate(18, 92)">
+    <circle cx="0" cy="0" r="14" fill="#94a3b8" stroke="#475569" stroke-width="1.2"/>
+    <circle cx="0" cy="0" r="12" fill="#cbd5e1" stroke="#334155" stroke-width="0.5"/>
+    <circle cx="0" cy="0" r="11" fill="none" stroke="#64748b" stroke-dasharray="1.5,1.5" stroke-width="1"/>
+    <circle cx="0" cy="0" r="9" fill="url(#pyr-jewel-glow)" stroke="#7f1d1d" stroke-width="1" filter="drop-shadow(0 0 6px #ef4444)"/>
+    <polygon points="0,-7 6,-3 6,4 0,7 -6,4 -6,-3" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="0.75"/>
+    <circle cx="-2" cy="-2" r="2.5" fill="rgba(255,255,255,0.6)"/>
+  </g>
+</g>
+  </svg>
+</div>
+
+          <!-- Fluke 8050A Precision Benchtop DMM -->
           <div class="dmm-display-card">
+            <div class="dmm-plate">
+              <span class="dmm-plate-title">FLUKE 8050A DIGITAL MULTIMETER</span>
+              <span class="dmm-plate-sub">TRUE RMS &bull; 4&frac12; DIGIT AUDIO BENCH</span>
+            </div>
             <div class="dmm-bezel">
               <div class="dmm-header">
-                <span class="dmm-model">FLUKE/HP 1970 PRECISION DMM</span>
-                <span class="dmm-badge">TRUE RMS AUDIO DMM</span>
+                <span class="dmm-model">VACUUM FLUORESCENT DISPLAY</span>
+                <span class="dmm-badge">&#9679; AC RMS ACTIVE</span>
               </div>
               <div class="dmm-grid">
                 <div class="dmm-readout-item">
@@ -1917,6 +2150,32 @@
                   <div class="dmm-readout-label">V_PEAK (CREST)</div>
                   <div id="dmm-vpeak-val" class="dmm-readout-value amber">1.737 V</div>
                 </div>
+              </div>
+            </div>
+            <div class="dmm-keypad">
+              <div class="dmm-key active">AC V</div>
+              <div class="dmm-key">DC V</div>
+              <div class="dmm-key">AC mA</div>
+              <div class="dmm-key">DC mA</div>
+              <div class="dmm-key">k&Omega;</div>
+              <div class="dmm-key">200mV</div>
+              <div class="dmm-key active">2V</div>
+              <div class="dmm-key">20V</div>
+              <div class="dmm-key">200V</div>
+              <div class="dmm-key key-red">POWER</div>
+            </div>
+            <div class="dmm-terminals">
+              <div class="dmm-jack">
+                <div class="dmm-jack-socket red"></div>
+                <span class="dmm-jack-label">V &bull; &Omega;</span>
+              </div>
+              <div class="dmm-jack">
+                <div class="dmm-jack-socket black"></div>
+                <span class="dmm-jack-label">COMMON</span>
+              </div>
+              <div class="dmm-jack">
+                <div class="dmm-jack-socket white"></div>
+                <span class="dmm-jack-label">mA</span>
               </div>
             </div>
           </div>
@@ -2176,45 +2435,271 @@
 
             </div>
 
-            <!-- Test Equipment Metering Bay: 1970s VU Meter + 1970s DMM Fluorescent LCD Screen -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; align-items: center; border-top: 1px solid #334155; padding-top: 1.25rem;">
-              
-              <!-- 1970s Precision VU Meter -->
-              <div class="analog-vu-meter-card">
-                <div class="vu-meter-header">1970s Laboratory VU Meter &bull; Audio Output</div>
-                <svg class="analog-vu-meter-face" viewBox="0 0 200 110">
-                  <path d="M 30,95 A 90,90 0 0,1 170,95" fill="none" stroke="#64748b" stroke-width="3"/>
-                  <path d="M 142,42 A 90,90 0 0,1 170,95" fill="none" stroke="#ef4444" stroke-width="4"/>
-                  
-                  <line x1="30" y1="95" x2="25" y2="95" stroke="#94a3b8" stroke-width="1.5"/>
-                  <text x="32" y="85" fill="#94a3b8" font-size="7">-20</text>
-                  <line x1="50" y1="65" x2="44" y2="62" stroke="#94a3b8" stroke-width="1.5"/>
-                  <text x="54" y="62" fill="#94a3b8" font-size="7">-10</text>
-                  <line x1="80" y1="45" x2="77" y2="40" stroke="#94a3b8" stroke-width="1.5"/>
-                  <text x="82" y="44" fill="#94a3b8" font-size="7">-5</text>
-                  <line x1="100" y1="38" x2="100" y2="32" stroke="#94a3b8" stroke-width="1.5"/>
-                  <text x="100" y="30" fill="#94a3b8" font-size="8" font-weight="700" text-anchor="middle">-2</text>
-                  <line x1="118" y1="40" x2="120" y2="34" stroke="#94a3b8" stroke-width="2"/>
-                  <text x="120" y="30" fill="#94a3b8" font-size="9" font-weight="800" text-anchor="middle">0</text>
-                  <line x1="140" y1="46" x2="144" y2="41" stroke="#ef4444" stroke-width="2"/>
-                  <text x="144" y="38" fill="#ef4444" font-size="8" font-weight="700">+1</text>
-                  <line x1="158" y1="58" x2="164" y2="54" stroke="#ef4444" stroke-width="2"/>
-                  <text x="163" y="52" fill="#ef4444" font-size="8" font-weight="700">+2</text>
-                  <line x1="170" y1="95" x2="176" y2="95" stroke="#ef4444" stroke-width="2"/>
-                  <text x="168" y="90" fill="#ef4444" font-size="8" font-weight="700">+3</text>
-                  <text x="100" y="65" fill="#f8fafc" font-size="11" font-weight="800" letter-spacing="0.1em" text-anchor="middle">VU</text>
-                  
-                  <line id="pp-vu-needle" class="vu-needle" x1="100" y1="95" x2="100" y2="20" stroke="#f59e0b" stroke-width="2"/>
-                  <circle cx="100" cy="95" r="5" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
-                </svg>
-              </div>
+            <!-- Laboratory Test Bench: HP 400FL Precision AC Voltmeter + Fluke 8050A Benchtop DMM -->
+            <div class="vintage-test-bench" style="margin-top: 1.25rem;">
+              <!-- Hewlett-Packard 400FL Precision AC Voltmeter -->
+              <div class="hp-voltmeter-card">
+  <svg class="hp-laboratory-voltmeter" viewBox="0 0 380 495" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <!-- Brushed Aluminum Side Rails Gradient -->
+  <linearGradient id="pp-metal-rail" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#94a3b8"/>
+    <stop offset="20%" stop-color="#f8fafc"/>
+    <stop offset="45%" stop-color="#cbd5e1"/>
+    <stop offset="70%" stop-color="#e2e8f0"/>
+    <stop offset="100%" stop-color="#64748b"/>
+  </linearGradient>
 
-              <!-- 1970s Precision DMM LCD Display -->
+  <!-- HP Sage Grey Front Panel Texture -->
+  <linearGradient id="pp-panel-face" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#e2e7e0"/>
+    <stop offset="3%" stop-color="#d6ddd4"/>
+    <stop offset="97%" stop-color="#cbd3c9"/>
+    <stop offset="100%" stop-color="#bcc5b9"/>
+  </linearGradient>
+
+  <!-- Bezel Depth Gradient -->
+  <linearGradient id="pp-bezel-frame" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#334155"/>
+    <stop offset="15%" stop-color="#0f172a"/>
+    <stop offset="85%" stop-color="#020617"/>
+    <stop offset="100%" stop-color="#1e293b"/>
+  </linearGradient>
+
+  <!-- Aged Laboratory Cream/Ivory Dial Face -->
+  <linearGradient id="pp-dial-cream" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#fffefb"/>
+    <stop offset="60%" stop-color="#fbf9f2"/>
+    <stop offset="100%" stop-color="#f2ede0"/>
+  </linearGradient>
+
+  <!-- Mirror Strip Specular Chrome Gradient -->
+  <linearGradient id="pp-mirror-strip" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#94a3b8"/>
+    <stop offset="18%" stop-color="#e2e8f0"/>
+    <stop offset="35%" stop-color="#cbd5e1"/>
+    <stop offset="50%" stop-color="#ffffff"/>
+    <stop offset="68%" stop-color="#cbd5e1"/>
+    <stop offset="85%" stop-color="#e2e8f0"/>
+    <stop offset="100%" stop-color="#94a3b8"/>
+  </linearGradient>
+
+  <!-- Phenolic Knob Gradient -->
+  <radialGradient id="pp-knob-base" cx="45%" cy="40%" r="55%">
+    <stop offset="0%" stop-color="#334155"/>
+    <stop offset="60%" stop-color="#0f172a"/>
+    <stop offset="100%" stop-color="#020617"/>
+  </radialGradient>
+
+  <!-- Red Center Filter Knob -->
+  <radialGradient id="pp-red-knob" cx="40%" cy="35%" r="60%">
+    <stop offset="0%" stop-color="#ef4444"/>
+    <stop offset="70%" stop-color="#dc2626"/>
+    <stop offset="100%" stop-color="#991b1b"/>
+  </radialGradient>
+
+  <!-- Red Jewel Pilot Lamp Glow Filter -->
+  <radialGradient id="pp-jewel-glow" cx="45%" cy="40%" r="55%">
+    <stop offset="0%" stop-color="#fecaca"/>
+    <stop offset="35%" stop-color="#ef4444"/>
+    <stop offset="75%" stop-color="#b91c1c"/>
+    <stop offset="100%" stop-color="#7f1d1d"/>
+  </radialGradient>
+
+  <!-- Needle Soft Drop Shadow -->
+  <filter id="pp-needle-shadow" x="-20%" y="-20%" width="150%" height="150%">
+    <feDropShadow dx="1.5" dy="2" stdDeviation="1.5" flood-color="#0f172a" flood-opacity="0.38"/>
+  </filter>
+
+  <!-- Glass Highlight -->
+  <linearGradient id="pp-glass-glare" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="rgba(255,255,255,0.28)"/>
+    <stop offset="35%" stop-color="rgba(255,255,255,0.06)"/>
+    <stop offset="55%" stop-color="rgba(255,255,255,0)"/>
+    <stop offset="100%" stop-color="rgba(255,255,255,0.04)"/>
+  </linearGradient>
+</defs><!-- Top Carrying Handle -->
+<rect x="135" y="4" width="110" height="12" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+<path d="M 135,10 Q 190,6 245,10" stroke="#475569" stroke-width="2" fill="none"/>
+<rect x="126" y="6" width="12" height="10" rx="2" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
+<rect x="242" y="6" width="12" height="10" rx="2" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
+
+<!-- Left & Right Die-Cast Brushed Aluminum Side Rails -->
+<rect x="0" y="14" width="22" height="476" rx="3" fill="url(#pp-metal-rail)" stroke="#475569" stroke-width="0.75"/>
+<rect x="358" y="14" width="22" height="476" rx="3" fill="url(#pp-metal-rail)" stroke="#475569" stroke-width="0.75"/>
+<!-- Rail Rack Screws -->
+<circle cx="11" cy="30" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
+<line x1="9" y1="30" x2="13" y2="30" stroke="#334155" stroke-width="0.75"/>
+<circle cx="11" cy="470" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
+<line x1="9" y1="470" x2="13" y2="470" stroke="#334155" stroke-width="0.75"/>
+<circle cx="369" cy="30" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
+<line x1="367" y1="30" x2="371" y2="30" stroke="#334155" stroke-width="0.75"/>
+<circle cx="369" cy="470" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
+<line x1="367" y1="470" x2="371" y2="470" stroke="#334155" stroke-width="0.75"/>
+
+<!-- HP Vintage Sage Grey Front Panel Faceplate -->
+<rect x="22" y="16" width="336" height="472" fill="url(#pp-panel-face)"/>
+<rect x="24" y="18" width="332" height="468" fill="none" stroke="#b2bbb0" stroke-width="1"/>
+
+<!-- Molded Black Bezel -->
+<rect x="36" y="28" width="308" height="212" rx="6" fill="url(#pp-bezel-frame)" stroke="#090d16" stroke-width="2"/>
+<rect x="39" y="31" width="302" height="206" rx="4" fill="none" stroke="#475569" stroke-width="0.75" opacity="0.6"/>
+
+<!-- Ivory Dial Plate -->
+<rect x="46" y="38" width="288" height="186" rx="3" fill="url(#pp-dial-cream)"/>
+<rect x="46" y="38" width="288" height="186" rx="3" fill="none" stroke="#d5cebd" stroke-width="0.75"/><!-- Anti-Parallax Mirrored Strip -->
+<path d="M 97.13,122.18 A 158,158 0 0,1 290.71,128.26 L 283.70,136.73 A 147,147 0 0,0 103.60,131.07 Z" fill="url(#pp-mirror-strip)" stroke="#64748b" stroke-width="0.5"/><path d="M 87.14,108.42 A 175,175 0 0,1 261.18,90.13" fill="none" stroke="#0f172a" stroke-width="1.2"/><path d="M 261.18,90.13 A 175,175 0 0,1 301.55,115.16" fill="none" stroke="#dc2626" stroke-width="2.5"/><text x="190" y="60" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.1em" text-anchor="middle">DECIBELS</text><text x="190" y="68" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle">1 mW 600 Ω</text><text x="190" y="152" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.08em" text-anchor="middle">R. M. S. VOLTS</text><text x="190" y="160" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5" font-weight="600" letter-spacing="0.05em" text-anchor="middle">AVERAGE RESPONDING</text><rect x="62" y="48" width="13" height="13" rx="2" fill="#006699"/>
+<text x="68.5" y="58" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="9" text-anchor="middle">hp</text><line x1="102.50" y1="98.45" x2="106.00" y2="104.51" stroke="#0f172a" stroke-width="1.3"/><text x="108.75" y="109.27" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-20</text><line x1="115.13" y1="91.83" x2="117.05" y2="95.89" stroke="#0f172a" stroke-width="0.75"/><line x1="138.76" y1="82.67" x2="140.81" y2="89.36" stroke="#0f172a" stroke-width="1.3"/><text x="142.42" y="94.62" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-10</text><line x1="145.56" y1="80.74" x2="146.70" y2="85.09" stroke="#0f172a" stroke-width="0.75"/><line x1="153.28" y1="78.90" x2="154.75" y2="85.74" stroke="#0f172a" stroke-width="1.3"/><text x="155.90" y="91.12" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-8</text><line x1="162.02" y1="77.25" x2="162.74" y2="81.69" stroke="#0f172a" stroke-width="0.75"/><line x1="171.92" y1="75.94" x2="172.65" y2="82.90" stroke="#0f172a" stroke-width="1.3"/><text x="173.22" y="88.37" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-6</text><line x1="183.10" y1="75.14" x2="183.28" y2="79.63" stroke="#0f172a" stroke-width="0.75"/><line x1="195.67" y1="75.09" x2="195.45" y2="82.09" stroke="#0f172a" stroke-width="1.3"/><text x="195.27" y="87.59" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-4</text><line x1="209.74" y1="76.12" x2="209.23" y2="80.59" stroke="#0f172a" stroke-width="0.75"/><line x1="225.37" y1="78.61" x2="223.95" y2="85.47" stroke="#0f172a" stroke-width="1.3"/><text x="222.84" y="90.85" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-2</text><line x1="242.55" y1="83.08" x2="241.20" y2="87.37" stroke="#0f172a" stroke-width="0.75"/><line x1="261.18" y1="90.13" x2="258.33" y2="96.52" stroke="#dc2626" stroke-width="1.3"/><text x="256.09" y="101.55" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="280.97" y1="100.50" x2="277.33" y2="106.48" stroke="#dc2626" stroke-width="1.3"/><text x="274.47" y="111.18" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+1</text><line x1="301.40" y1="115.03" x2="296.94" y2="120.43" stroke="#dc2626" stroke-width="1.3"/><text x="293.44" y="124.68" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+2</text><path d="M 105.36,133.50 A 144,144 0 0,1 248.57,118.45" fill="none" stroke="#0f172a" stroke-width="1.0"/><line x1="105.36" y1="133.50" x2="108.89" y2="138.36" stroke="#0f172a" stroke-width="1.0"/><text x="111.82" y="142.40" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="118.00" y1="125.29" x2="121.00" y2="130.49" stroke="#0f172a" stroke-width="1.0"/><line x1="131.43" y1="118.45" x2="133.87" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="135.90" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.2</text><line x1="145.50" y1="113.05" x2="147.36" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="160.06" y1="109.15" x2="161.31" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="162.35" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.4</text><line x1="174.95" y1="106.79" x2="175.58" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="190.00" y1="106.00" x2="190.00" y2="112.00" stroke="#0f172a" stroke-width="1.0"/><text x="190.00" y="117.00" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.6</text><line x1="205.05" y1="106.79" x2="204.42" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="219.94" y1="109.15" x2="218.69" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="217.65" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.8</text><line x1="234.50" y1="113.05" x2="232.64" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="248.57" y1="118.45" x2="246.13" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="244.10" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">1.0</text><line x1="107.82" y1="131.75" x2="109.81" y2="134.63" stroke="#475569" stroke-width="0.5"/><line x1="110.31" y1="130.06" x2="112.25" y2="132.97" stroke="#475569" stroke-width="0.5"/><line x1="112.84" y1="128.42" x2="114.72" y2="131.37" stroke="#475569" stroke-width="0.5"/><line x1="115.40" y1="126.83" x2="117.22" y2="129.82" stroke="#475569" stroke-width="0.5"/><line x1="120.63" y1="123.81" x2="122.31" y2="126.88" stroke="#475569" stroke-width="0.5"/><line x1="123.29" y1="122.39" x2="124.91" y2="125.49" stroke="#475569" stroke-width="0.5"/><line x1="125.97" y1="121.02" x2="127.53" y2="124.15" stroke="#475569" stroke-width="0.5"/><line x1="128.69" y1="119.70" x2="130.18" y2="122.87" stroke="#475569" stroke-width="0.5"/><line x1="134.20" y1="117.25" x2="135.55" y2="120.48" stroke="#475569" stroke-width="0.5"/><line x1="136.99" y1="116.11" x2="138.28" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="139.81" y1="115.03" x2="141.03" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="142.64" y1="114.01" x2="143.79" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="148.38" y1="112.15" x2="149.39" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="151.28" y1="111.30" x2="152.22" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="154.19" y1="110.52" x2="155.06" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="157.12" y1="109.80" x2="157.92" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="163.02" y1="108.55" x2="163.67" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="165.99" y1="108.02" x2="166.57" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="168.96" y1="107.54" x2="169.48" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="171.95" y1="107.14" x2="172.39" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="177.95" y1="106.51" x2="178.24" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="180.96" y1="106.28" x2="181.18" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="183.97" y1="106.13" x2="184.12" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="186.98" y1="106.03" x2="187.06" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="193.02" y1="106.03" x2="192.94" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="196.03" y1="106.13" x2="195.88" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="199.04" y1="106.28" x2="198.82" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="202.05" y1="106.51" x2="201.76" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="208.05" y1="107.14" x2="207.61" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="211.04" y1="107.54" x2="210.52" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="214.01" y1="108.02" x2="213.43" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="216.98" y1="108.55" x2="216.33" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="222.88" y1="109.80" x2="222.08" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="225.81" y1="110.52" x2="224.94" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="228.72" y1="111.30" x2="227.78" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="231.62" y1="112.15" x2="230.61" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="237.36" y1="114.01" x2="236.21" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="240.19" y1="115.03" x2="238.97" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="243.01" y1="116.11" x2="241.72" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="245.80" y1="117.25" x2="244.45" y2="120.48" stroke="#475569" stroke-width="0.5"/><path d="M 115.94,148.06 A 126,126 0 0,1 241.25,134.89" fill="none" stroke="#0f172a" stroke-width="0.8"/><line x1="115.94" y1="148.06" x2="118.88" y2="152.11" stroke="#0f172a" stroke-width="0.9"/><text x="121.52" y="155.75" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="134.77" y1="136.75" x2="136.96" y2="141.25" stroke="#0f172a" stroke-width="0.9"/><text x="138.93" y="145.29" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0.5</text><line x1="155.27" y1="128.88" x2="156.65" y2="133.69" stroke="#0f172a" stroke-width="0.9"/><text x="157.89" y="138.01" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><line x1="176.83" y1="124.69" x2="177.35" y2="129.66" stroke="#0f172a" stroke-width="0.9"/><text x="177.82" y="134.14" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1.5</text><line x1="198.79" y1="124.31" x2="198.44" y2="129.29" stroke="#0f172a" stroke-width="0.9"/><text x="198.13" y="133.78" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><line x1="220.48" y1="127.74" x2="219.27" y2="132.59" stroke="#0f172a" stroke-width="0.9"/><text x="218.18" y="136.96" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2.5</text><line x1="241.25" y1="134.89" x2="239.22" y2="139.46" stroke="#0f172a" stroke-width="0.9"/><text x="237.38" y="143.57" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><!-- Galvanometer Pointer Needle -->
+<g id="pp-vu-needle" class="hp-galvo-needle" filter="url(#pp-needle-shadow)" transform="rotate(-36 190 250)">
+  <!-- Counterweight Tail -->
+  <path d="M 188.5,250 L 187,268 A 3,3 0 0,0 193,268 L 191.5,250 Z" fill="#1e293b"/>
+  <!-- Razor Knife-Edge Needle -->
+  <polygon points="189,250 189.5,100 189.8,72 190.2,72 190.5,100 191,250" fill="#dc2626"/>
+  <circle cx="190" cy="250" r="4.5" fill="#0f172a" stroke="#dc2626" stroke-width="1"/>
+</g>
+
+<!-- Glass Reflection Glare -->
+<rect x="46" y="38" width="288" height="186" rx="3" fill="url(#pp-glass-glare)" pointer-events="none"/>
+
+<!-- Bezel Lower Mask & Mechanical Zero-Adjust Screw -->
+<path d="M 36,220 L 344,220 L 344,240 L 36,240 Z" fill="#0f172a"/>
+<!-- Mechanical Zero Screw -->
+<circle cx="190" cy="230" r="7" fill="#cbd5e1" stroke="#334155" stroke-width="1"/>
+<circle cx="190" cy="230" r="5.5" fill="#94a3b8"/>
+<line x1="185" y1="230" x2="195" y2="230" stroke="#1e293b" stroke-width="1.2"/><!-- Lower Panel Silkscreen Header -->
+<g transform="translate(42, 252)">
+  <!-- HP Logo -->
+  <rect x="0" y="0" width="18" height="18" rx="3" fill="#006699"/>
+  <text x="9" y="13" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="12" text-anchor="middle">hp</text>
+  <text x="26" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="0.1em">HEWLETT • PACKARD</text>
+  <text x="180" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="0.08em">400FL AC VOLTMETER</text>
+  <text x="96" y="25" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="0.05em">IN ~ 100kHz L.P. FILTER ~ OUT</text>
+</g>
+
+<!-- ================= Left: INPUT Section (Dual 5-Way Binding Posts) ================= -->
+<g transform="translate(44, 290)">
+  <text x="32" y="14" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">INPUT</text>
+  
+  <!-- Dual Insulating Base -->
+  <rect x="12" y="24" width="40" height="96" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+  
+  <!-- Red Binding Post (HOT / +) -->
+  <g transform="translate(32, 46)">
+    <circle cx="0" cy="0" r="14" fill="#dc2626" stroke="#991b1b" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="11" fill="#b91c1c"/>
+    <circle cx="0" cy="0" r="7" fill="#fbbf24" stroke="#d97706" stroke-width="0.75"/>
+    <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
+    <text x="22" y="4" fill="#dc2626" font-family="Arial, sans-serif" font-size="8" font-weight="800">+</text>
+  </g>
+
+  <!-- Black Binding Post (COLD / GND / -) -->
+  <g transform="translate(32, 94)">
+    <circle cx="0" cy="0" r="14" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="11" fill="#1e293b"/>
+    <circle cx="0" cy="0" r="7" fill="#cbd5e1" stroke="#64748b" stroke-width="0.75"/>
+    <circle cx="0" cy="0" r="3.5" fill="#020617"/>
+    <text x="22" y="4" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800">—</text>
+  </g>
+
+  <!-- Chassis Ground Post & Symbol -->
+  <g transform="translate(32, 134)">
+    <circle cx="0" cy="0" r="6" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
+    <line x1="-6" y1="10" x2="6" y2="10" stroke="#0f172a" stroke-width="1.2"/>
+    <line x1="-4" y1="13" x2="4" y2="13" stroke="#0f172a" stroke-width="1.2"/>
+    <line x1="-2" y1="16" x2="2" y2="16" stroke="#0f172a" stroke-width="1.2"/>
+  </g>
+</g>
+
+<!-- ================= Center: RANGE Rotary Selector ================= -->
+<g transform="translate(190, 365)">
+  <text x="0" y="-62" fill="#0f172a" font-family="Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.1em" text-anchor="middle">RANGE</text>
+  
+  <!-- Header Labels -->
+  <text x="-58" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">dB</text>
+  <text x="-36" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">mV</text>
+  <text x="36" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800">V</text>
+  <text x="58" y="-48" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="800">dB</text>
+
+  <!-- Left Bank (mV & dB) & Radial Ticks -->
+  <g fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
+    <text x="-58" y="-34" text-anchor="end">-20</text><text x="-36" y="-34" text-anchor="end">100</text>
+    <line x1="-32" y1="-34" x2="-22" y2="-24" stroke="#475569" stroke-width="0.8"/>
+    <text x="-58" y="-22" text-anchor="end">-30</text><text x="-36" y="-22" text-anchor="end">30</text>
+    <line x1="-32" y1="-22" x2="-26" y2="-16" stroke="#475569" stroke-width="0.8"/>
+    <text x="-58" y="-10" text-anchor="end">-40</text><text x="-36" y="-10" text-anchor="end">10</text>
+    <line x1="-32" y1="-10" x2="-28" y2="-8" stroke="#475569" stroke-width="0.8"/>
+    <text x="-58" y="2" text-anchor="end">-50</text><text x="-36" y="2" text-anchor="end">3</text>
+    <line x1="-32" y1="2" x2="-28" y2="2" stroke="#475569" stroke-width="0.8"/>
+    <text x="-58" y="14" text-anchor="end">-60</text><text x="-36" y="14" text-anchor="end">1</text>
+    <line x1="-32" y1="14" x2="-28" y2="10" stroke="#475569" stroke-width="0.8"/>
+    <text x="-58" y="26" text-anchor="end">-70</text><text x="-36" y="26" text-anchor="end">.3</text>
+    <line x1="-32" y1="26" x2="-26" y2="18" stroke="#475569" stroke-width="0.8"/>
+    <text x="-58" y="38" text-anchor="end">-80</text><text x="-36" y="38" text-anchor="end">.1</text>
+    <line x1="-32" y1="38" x2="-22" y2="26" stroke="#475569" stroke-width="0.8"/>
+  </g>
+
+  <!-- Right Bank (V & dB) & Radial Ticks -->
+  <g fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
+    <text x="36" y="-34">.3</text><text x="58" y="-34">-10</text>
+    <line x1="32" y1="-34" x2="22" y2="-24" stroke="#475569" stroke-width="0.8"/>
+    <text x="36" y="-22">1</text><text x="58" y="-22">0</text>
+    <line x1="32" y1="-22" x2="26" y2="-16" stroke="#475569" stroke-width="0.8"/>
+    <text x="36" y="-10">3</text><text x="58" y="-10">+10</text>
+    <line x1="32" y1="-10" x2="28" y2="-8" stroke="#475569" stroke-width="0.8"/>
+    <text x="36" y="2">10</text><text x="58" y="2">+20</text>
+    <line x1="32" y1="2" x2="28" y2="2" stroke="#475569" stroke-width="0.8"/>
+    <text x="36" y="14">30</text><text x="58" y="14">+30</text>
+    <line x1="32" y1="14" x2="28" y2="10" stroke="#475569" stroke-width="0.8"/>
+    <text x="36" y="26">100</text><text x="58" y="26">+40</text>
+    <line x1="32" y1="26" x2="26" y2="18" stroke="#475569" stroke-width="0.8"/>
+    <text x="36" y="38">300</text><text x="58" y="38">+50</text>
+    <line x1="32" y1="38" x2="22" y2="26" stroke="#475569" stroke-width="0.8"/>
+  </g>
+
+  <!-- Large Fluted Phenolic Range Knob -->
+  <circle cx="0" cy="0" r="23" fill="url(#pp-knob-base)" stroke="#090d16" stroke-width="2"/>
+  <circle cx="0" cy="0" r="21" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
+  <circle cx="0" cy="0" r="11" fill="url(#pp-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
+  <line x1="0" y1="0" x2="16" y2="-12" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="0" cy="0" r="3.5" fill="#f8fafc"/>
+</g>
+
+<!-- ================= Right: LINE Power Switch & Jewel Pilot Lamp ================= -->
+<g transform="translate(305, 305)">
+  <text x="18" y="0" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">LINE</text>
+  
+  <!-- Toggle Switch -->
+  <g transform="translate(18, 26)">
+    <polygon points="-7,-4 0,-8 7,-4 7,4 0,8 -7,4" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
+    <circle cx="0" cy="0" r="5" fill="#64748b"/>
+    <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+    <circle cx="0" cy="-13" r="3.5" fill="#e2e8f0" stroke="#64748b" stroke-width="0.75"/>
+  </g>
+
+  <!-- ON Label & Red Faceted Jewel Pilot Light -->
+  <text x="18" y="68" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800" text-anchor="middle">ON</text>
+  <g transform="translate(18, 92)">
+    <circle cx="0" cy="0" r="14" fill="#94a3b8" stroke="#475569" stroke-width="1.2"/>
+    <circle cx="0" cy="0" r="12" fill="#cbd5e1" stroke="#334155" stroke-width="0.5"/>
+    <circle cx="0" cy="0" r="11" fill="none" stroke="#64748b" stroke-dasharray="1.5,1.5" stroke-width="1"/>
+    <circle cx="0" cy="0" r="9" fill="url(#pp-jewel-glow)" stroke="#7f1d1d" stroke-width="1" filter="drop-shadow(0 0 6px #ef4444)"/>
+    <polygon points="0,-7 6,-3 6,4 0,7 -6,4 -6,-3" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="0.75"/>
+    <circle cx="-2" cy="-2" r="2.5" fill="rgba(255,255,255,0.6)"/>
+  </g>
+</g>
+  </svg>
+</div>
+
+              <!-- Fluke 8050A Precision Benchtop DMM -->
               <div class="dmm-display-card">
+                <div class="dmm-plate">
+                  <span class="dmm-plate-title">FLUKE 8050A DIGITAL MULTIMETER</span>
+                  <span class="dmm-plate-sub">TRUE RMS &bull; SYSTEM DIFFERENTIAL LOAD MONITOR</span>
+                </div>
                 <div class="dmm-bezel">
                   <div class="dmm-header">
-                    <span class="dmm-model">PRECISION DMM 8050</span>
-                    <span class="dmm-badge">DIGITAL MULTIMETER</span>
+                    <span class="dmm-model">VACUUM FLUORESCENT DISPLAY</span>
+                    <span class="dmm-badge">&#9679; DIFFERENTIAL LOAD ACTIVE</span>
                   </div>
                   <div class="dmm-grid">
                     <div class="dmm-readout-item">
@@ -2231,8 +2716,33 @@
                     </div>
                   </div>
                 </div>
+                <div class="dmm-keypad">
+                  <div class="dmm-key active">AC V</div>
+                  <div class="dmm-key">DC V</div>
+                  <div class="dmm-key active">AC mA</div>
+                  <div class="dmm-key">DC mA</div>
+                  <div class="dmm-key">k&Omega;</div>
+                  <div class="dmm-key">200mV</div>
+                  <div class="dmm-key active">2V</div>
+                  <div class="dmm-key">20V</div>
+                  <div class="dmm-key">200V</div>
+                  <div class="dmm-key key-red">POWER</div>
+                </div>
+                <div class="dmm-terminals">
+                  <div class="dmm-jack">
+                    <div class="dmm-jack-socket red"></div>
+                    <span class="dmm-jack-label">V &bull; &Omega;</span>
+                  </div>
+                  <div class="dmm-jack">
+                    <div class="dmm-jack-socket black"></div>
+                    <span class="dmm-jack-label">COMMON</span>
+                  </div>
+                  <div class="dmm-jack">
+                    <div class="dmm-jack-socket white"></div>
+                    <span class="dmm-jack-label">mA</span>
+                  </div>
+                </div>
               </div>
-
             </div>
 
             <!-- Live Falstad-Style Probes -->
@@ -4155,6 +4665,14 @@
         <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 0.4rem 0.8rem; margin-top: 0.5rem; font-size: 0.82rem; color: #fbbf24;">
           <span>📁</span>
           <strong>Posted to SC-05-05 Repository:</strong> October 3, 2025 &bull; by Richard Cabot, Chair &bull; for AES SC-05-05 Group Members
+        </div>
+        <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="#contributor-cabot" class="alignment-contributor-badge"><span>👤 Archive Compiler:</span> <strong>Richard Cabot, Chair</strong> &rarr;</a>
+          <a href="#contributor-olson" class="alignment-contributor-badge"><span>👤 Standards Governance:</span> <strong>Bruce Olson (AESSC Chair)</strong> &rarr;</a>
+          <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Co-Author:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
+          <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 Seminal Papers:</span> <strong>Bill Whitlock</strong> &rarr;</a>
+          <a href="#contributor-hess" class="alignment-contributor-badge"><span>👤 Working Group Drafts:</span> <strong>Richard L. Hess</strong> &rarr;</a>
+        </div>
         </div>
         <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
           <a href="#contributor-cabot" class="alignment-contributor-badge"><span>👤 Archive Compiler:</span> <strong>Richard Cabot, Chair</strong> &rarr;</a>
