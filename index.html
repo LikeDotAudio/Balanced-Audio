@@ -231,145 +231,211 @@
     </div>
   </section>
 
-  <!-- Section 0.5: Universal XLR Connection Hub (AES14 Table 1 & IEC 60268-12) -->
+  <!-- Section 0.5: Universal XLR Connection Hub (AES14 Table 1 & Table 2) -->
   <section id="xlr-hub" class="section">
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Universal Interconnection Standard</span>
-        <h2 class="section-title">Universal XLR Connection Hub &amp; Pinout Standard (AES14 Table 1)</h2>
+        <h2 class="section-title">Universal XLR Connection Hub &amp; Pinout Standard (AES14 Table 1 &amp; Table 2)</h2>
         <p class="section-lead">
-          Conforming to AES14 (s2014) and IEC 60268-12. Anywhere an XLR connector appears across audio engineering, 
-          gender assignments and electrical pin functions follow rigorous normative rules: 
+          Conforming to AES14 (s2014) and IEC 60268-12. Anywhere an XLR circular connector appears across professional audio, 
+          gender assignments and electrical contact allocations follow normative rules: 
           <strong>Pin connectors (MALE) represent Equipment Outputs</strong>, and 
           <strong>Socket connectors (FEMALE) represent Equipment Inputs</strong>.
         </p>
       </div>
 
+      <!-- Mode Selector Pills -->
+      <div style="margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+        <span style="font-weight: 600; font-size: 0.85rem; color: var(--text-muted); margin-right: 0.5rem;">AES14 Table 2 Configurations:</span>
+        <button class="btn btn-outline xlr-mode-btn active" data-circuit-id="1">1. Single Balanced</button>
+        <button class="btn btn-outline xlr-mode-btn" data-circuit-id="2">2. Single Unbalanced</button>
+        <button class="btn btn-outline xlr-mode-btn" data-circuit-id="3">3. Single Phantom (P48)</button>
+        <button class="btn btn-outline xlr-mode-btn" data-circuit-id="4">4. Single A-B (T-Power)</button>
+        <button class="btn btn-outline xlr-mode-btn" data-circuit-id="5">5. Two-Ch Balanced (XLR-5)</button>
+        <button class="btn btn-outline xlr-mode-btn" data-circuit-id="6">6. Two-Ch Unbalanced (XLR-5)</button>
+        <button class="btn btn-outline xlr-mode-btn" data-circuit-id="7">7. Two-Ch Phantom (XLR-5)</button>
+        <button class="btn btn-outline xlr-mode-btn" data-circuit-id="8">8. Two-Ch A-B (XLR-5)</button>
+      </div>
+
       <div class="xlr-hub-grid">
-        <!-- Left: Official Table 1 Specification -->
-        <div class="xlr-table-card">
-          <h3 style="margin-top: 0; color: var(--accent-cyan); display: flex; align-items: center; gap: 0.5rem;">
-            <span>AES14 Table 1: Connector Designations &amp; Applications</span>
-          </h3>
-          <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
-            Connector numbers are viewed on the <em>mating face</em> of the connector.
-          </p>
-
-          <table class="aes-spec-table">
-            <thead>
-              <tr>
-                <th>Connector Contact Style</th>
-                <th>Physical Connector Gender</th>
-                <th>Standard Equipment Application</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>3-Pin Circular (XLR-3)</strong></td>
-                <td><span class="badge badge-accent">Pin Connector (MALE)</span></td>
-                <td><strong>Equipment OUTPUT</strong> (Line Out, Mic Out, DAC Out)</td>
-              </tr>
-              <tr>
-                <td><strong>3-Pin Circular (XLR-3)</strong></td>
-                <td><span class="badge badge-success">Socket Connector (FEMALE)</span></td>
-                <td><strong>Equipment INPUT</strong> (Preamp In, Line In, ADC In)</td>
-              </tr>
-              <tr>
-                <td><strong>5-Pin Circular (XLR-5)</strong></td>
-                <td><span class="badge badge-accent">Pin Connector (MALE)</span></td>
-                <td><strong>Equipment OUTPUT</strong> (Stereo / Dual Channel Out)</td>
-              </tr>
-              <tr>
-                <td><strong>5-Pin Circular (XLR-5)</strong></td>
-                <td><span class="badge badge-success">Socket Connector (FEMALE)</span></td>
-                <td><strong>Equipment INPUT</strong> (Stereo / Dual Channel In)</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(239, 68, 68, 0.08); border-left: 3px solid #ef4444; border-radius: 6px;">
-            <strong style="color: #ef4444;">AES48 Pin 1 Grounding Imperative:</strong>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 0.5rem 0 0;">
-              Pin 1 is exclusively for the cable shield. In equipment containing active electronics, Pin 1 <strong>MUST</strong> 
-              bond directly metal-to-metal to the conductive enclosure chassis at the connector entry. 
-              <strong>NEVER</strong> route Pin 1 through internal circuit board traces or audio 0V reference!
+        <!-- Left: Official Table 1 & Official Table 2 Specification -->
+        <div>
+          <!-- AES14 Table 1 -->
+          <div class="xlr-table-card" style="margin-bottom: 1.5rem;">
+            <h3 style="margin-top: 0; color: var(--accent-cyan); display: flex; align-items: center; justify-content: space-between;">
+              <span>AES14 Table 1: Connector Designations &amp; Applications</span>
+              <span class="badge badge-accent">Normative</span>
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 0.8rem;">
+              Connector contact numbers are viewed on the <em>mating face</em> of the connector.
             </p>
+
+            <table class="aes-spec-table">
+              <thead>
+                <tr>
+                  <th>Contact Style</th>
+                  <th>Physical Gender</th>
+                  <th>Equipment Application</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>3-Pin Circular (XLR-3)</strong></td>
+                  <td><span class="badge badge-accent">Pin Connector (MALE)</span></td>
+                  <td><strong>Equipment OUTPUT</strong> (Line Out, Mic Out, DAC Out)</td>
+                </tr>
+                <tr>
+                  <td><strong>3-Pin Circular (XLR-3)</strong></td>
+                  <td><span class="badge badge-success">Socket Connector (FEMALE)</span></td>
+                  <td><strong>Equipment INPUT</strong> (Preamp In, Line In, ADC In)</td>
+                </tr>
+                <tr>
+                  <td><strong>5-Pin Circular (XLR-5)</strong></td>
+                  <td><span class="badge badge-accent">Pin Connector (MALE)</span></td>
+                  <td><strong>Equipment OUTPUT</strong> (Stereo / Dual Channel Out)</td>
+                </tr>
+                <tr>
+                  <td><strong>5-Pin Circular (XLR-5)</strong></td>
+                  <td><span class="badge badge-success">Socket Connector (FEMALE)</span></td>
+                  <td><strong>Equipment INPUT</strong> (Stereo / Dual Channel In)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- AES14 Table 2 -->
+          <div class="xlr-table-card">
+            <h3 style="margin-top: 0; color: var(--accent-cyan); display: flex; align-items: center; justify-content: space-between;">
+              <span>AES14 Table 2: Connectors Pin Designations</span>
+              <span class="badge badge-accent">Interactive</span>
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 0.8rem;">
+              Click any row below to inspect its wiring pinout, DC powering, and audio polarity on the live mating face:
+            </p>
+
+            <div class="table-responsive">
+              <table class="aes-spec-table" id="aes14-table-2" style="font-size: 0.84rem;">
+                <thead>
+                  <tr>
+                    <th>Circuit type</th>
+                    <th>Contact 1</th>
+                    <th>Contact 2</th>
+                    <th>Contact 3</th>
+                    <th>Contact 4</th>
+                    <th>Contact 5</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="aes14-t2-row table-row-selected" data-circuit-id="1" style="cursor: pointer;">
+                    <td><strong>Single-channel balanced</strong></td>
+                    <td>Screen</td>
+                    <td>Positive polarity</td>
+                    <td>Return</td>
+                    <td style="color: var(--text-muted);">&mdash;</td>
+                    <td style="color: var(--text-muted);">&mdash;</td>
+                  </tr>
+                  <tr class="aes14-t2-row" data-circuit-id="2" style="cursor: pointer;">
+                    <td><strong>Single-channel unbalanced</strong></td>
+                    <td>Screen and return</td>
+                    <td>Positive polarity</td>
+                    <td style="color: #f59e0b; font-weight: 600;">See note</td>
+                    <td style="color: var(--text-muted);">&mdash;</td>
+                    <td style="color: var(--text-muted);">&mdash;</td>
+                  </tr>
+                  <tr class="aes14-t2-row" data-circuit-id="3" style="cursor: pointer;">
+                    <td><strong>Single-channel balanced, phantom supplied</strong></td>
+                    <td>Screen and negative supply</td>
+                    <td>Positive polarity; positive supply</td>
+                    <td>Return; positive supply</td>
+                    <td style="color: var(--text-muted);">&mdash;</td>
+                    <td style="color: var(--text-muted);">&mdash;</td>
+                  </tr>
+                  <tr class="aes14-t2-row" data-circuit-id="4" style="cursor: pointer;">
+                    <td><strong>Single-channel balanced, A-B supplied</strong></td>
+                    <td>Screen</td>
+                    <td>Positive polarity; positive supply</td>
+                    <td>Return; negative supply</td>
+                    <td style="color: var(--text-muted);">&mdash;</td>
+                    <td style="color: var(--text-muted);">&mdash;</td>
+                  </tr>
+                  <tr class="aes14-t2-row" data-circuit-id="5" style="cursor: pointer;">
+                    <td><strong>Two-channel balanced</strong></td>
+                    <td>Screen</td>
+                    <td>Left positive polarity</td>
+                    <td>Left return</td>
+                    <td>Right positive polarity</td>
+                    <td>Right return</td>
+                  </tr>
+                  <tr class="aes14-t2-row" data-circuit-id="6" style="cursor: pointer;">
+                    <td><strong>Two-channel unbalanced</strong></td>
+                    <td>Screen and return</td>
+                    <td>Left positive polarity</td>
+                    <td style="color: #f59e0b; font-weight: 600;">See note</td>
+                    <td>Right positive polarity</td>
+                    <td style="color: #f59e0b; font-weight: 600;">See note</td>
+                  </tr>
+                  <tr class="aes14-t2-row" data-circuit-id="7" style="cursor: pointer;">
+                    <td><strong>Two-channel balanced, phantom supplied</strong></td>
+                    <td>Screen and negative supply</td>
+                    <td>Left positive polarity; positive supply</td>
+                    <td>Left return; positive supply</td>
+                    <td>Right positive polarity; positive supply</td>
+                    <td>Right return; positive supply</td>
+                  </tr>
+                  <tr class="aes14-t2-row" data-circuit-id="8" style="cursor: pointer;">
+                    <td><strong>Two-channel balanced, A-B supplied</strong></td>
+                    <td>Screen</td>
+                    <td>Left positive polarity; positive supply</td>
+                    <td>Left return; negative supply</td>
+                    <td>Right positive polarity; positive supply</td>
+                    <td>Right return; negative supply</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Normative Table 2 Note -->
+            <div style="margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(245, 158, 11, 0.08); border-left: 3px solid #f59e0b; border-radius: 6px;">
+              <strong style="color: #fbbf24; font-size: 0.88rem;">AES14 Table 2 Normative Requirement:</strong>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0.35rem 0 0; line-height: 1.5;">
+                <strong>NOTE</strong> &mdash; <em>If an unbalanced amplifier input is to accept a balanced microphone, contact 3 (or 3 and 5) of the input shall be connected to contact 1.</em>
+              </p>
+            </div>
+
+            <!-- AES48 Grounding Note -->
+            <div style="margin-top: 0.75rem; padding: 0.85rem 1rem; background: rgba(239, 68, 68, 0.08); border-left: 3px solid #ef4444; border-radius: 6px;">
+              <strong style="color: #ef4444; font-size: 0.88rem;">AES48 Pin 1 Grounding Imperative:</strong>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0.35rem 0 0; line-height: 1.5;">
+                Contact 1 is exclusively for the cable screen. In equipment containing active electronics, Contact 1 <strong>MUST bond directly to the metal enclosure chassis</strong> at connector entry. Never route shield currents across audio 0V circuit PCB traces!
+              </p>
+            </div>
           </div>
         </div>
 
-        <!-- Right: Interactive SVG Pinout Mating Face Inspector -->
-        <div class="xlr-table-card">
-          <h3 style="margin-top: 0; color: var(--text-primary);">Connector Mating Face Pin Inspector</h3>
-          <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
-            Hover or click pins to inspect differential audio signals and chassis ground bonding.
-          </p>
-
-          <div class="svg-diagram-wrapper" style="background: #090d16; padding: 1.5rem; border-radius: 8px;">
-            <svg viewBox="0 0 500 240" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-              <!-- MALE Pin Connector (Output) -->
-              <g transform="translate(110, 110)">
-                <circle cx="0" cy="0" r="80" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/>
-                <circle cx="0" cy="0" r="88" fill="none" stroke="#64748b" stroke-width="1.5"/>
-                <!-- Alignment key notch -->
-                <path d="M 45,-60 A 10,10 0 0,1 65,-45" fill="none" stroke="#38bdf8" stroke-width="3"/>
-
-                <!-- Pin 1: Top Left -->
-                <circle cx="-40" cy="-25" r="14" fill="#334155" stroke="#94a3b8" stroke-width="2.5" class="xlr-pin-circle" id="xlr-m-pin1"/>
-                <text x="-40" y="-20" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">1</text>
-
-                <!-- Pin 2: Top Right -->
-                <circle cx="40" cy="-25" r="14" fill="#10b981" stroke="#059669" stroke-width="2.5" class="xlr-pin-circle" id="xlr-m-pin2"/>
-                <text x="40" y="-20" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">2</text>
-
-                <!-- Pin 3: Bottom Center -->
-                <circle cx="0" cy="40" r="14" fill="#ef4444" stroke="#dc2626" stroke-width="2.5" class="xlr-pin-circle" id="xlr-m-pin3"/>
-                <text x="0" y="45" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">3</text>
-
-                <text x="0" y="115" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle">PIN CONNECTOR (MALE)</text>
-                <text x="0" y="130" fill="#94a3b8" font-size="10.5" text-anchor="middle">Equipment Output (AES14)</text>
-              </g>
-
-              <!-- FEMALE Socket Connector (Input) -->
-              <g transform="translate(370, 110)">
-                <circle cx="0" cy="0" r="80" fill="#1e293b" stroke="#10b981" stroke-width="3"/>
-                <circle cx="0" cy="0" r="88" fill="none" stroke="#64748b" stroke-width="1.5"/>
-                <!-- Alignment key notch -->
-                <path d="M -45,-60 A 10,10 0 0,0 -65,-45" fill="none" stroke="#10b981" stroke-width="3"/>
-
-                <!-- Socket 1: Top Right (Mirror of male) -->
-                <circle cx="40" cy="-25" r="14" fill="#334155" stroke="#94a3b8" stroke-width="2.5"/>
-                <circle cx="40" cy="-25" r="5" fill="#0f172a"/>
-                <text x="40" y="-45" fill="#94a3b8" font-size="12" font-weight="700" text-anchor="middle">1</text>
-
-                <!-- Socket 2: Top Left -->
-                <circle cx="-40" cy="-25" r="14" fill="#10b981" stroke="#059669" stroke-width="2.5"/>
-                <circle cx="-40" cy="-25" r="5" fill="#0f172a"/>
-                <text x="-40" y="-45" fill="#10b981" font-size="12" font-weight="700" text-anchor="middle">2</text>
-
-                <!-- Socket 3: Bottom Center -->
-                <circle cx="0" cy="40" r="14" fill="#ef4444" stroke="#dc2626" stroke-width="2.5"/>
-                <circle cx="0" cy="40" r="5" fill="#0f172a"/>
-                <text x="0" y="65" fill="#ef4444" font-size="12" font-weight="700" text-anchor="middle">3</text>
-
-                <text x="0" y="115" fill="#10b981" font-size="13" font-weight="700" text-anchor="middle">SOCKET CONNECTOR (FEMALE)</text>
-                <text x="0" y="130" fill="#94a3b8" font-size="10.5" text-anchor="middle">Equipment Input (AES14)</text>
-              </g>
-            </svg>
-          </div>
-
-          <!-- Pinout Legend Badge Grid -->
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1rem;">
-            <div style="padding: 0.6rem; background: rgba(148, 163, 184, 0.1); border-radius: 6px; text-align: center;">
-              <span style="font-weight: 700; color: #94a3b8; display: block;">Pin 1: Chassis Shield</span>
-              <span style="font-size: 0.78rem; color: var(--text-secondary);">AES48 Direct Bond</span>
+        <!-- Right: Interactive Mating Face Inspector & Dynamic Insights -->
+        <div>
+          <div class="xlr-table-card">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+              <h3 style="margin: 0; color: var(--text-primary);">Connector Mating Face Pin Inspector</h3>
+              <span id="xlr-active-mode-title" class="badge badge-accent">1. Single-channel balanced</span>
             </div>
-            <div style="padding: 0.6rem; background: rgba(16, 185, 129, 0.1); border-radius: 6px; text-align: center;">
-              <span style="font-weight: 700; color: #10b981; display: block;">Pin 2: Hot / In-Phase (+)</span>
-              <span style="font-size: 0.78rem; color: var(--text-secondary);">AES26 Positive Polarity</span>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem;">
+              Mating face views showing gender conventions, audio differential polarity, and DC powering levels:
+            </p>
+
+            <div class="svg-diagram-wrapper" style="background: #090d16; padding: 1.25rem; border-radius: 8px;">
+              <div id="xlr-svg-container"></div>
             </div>
-            <div style="padding: 0.6rem; background: rgba(239, 68, 68, 0.1); border-radius: 6px; text-align: center;">
-              <span style="font-weight: 700; color: #ef4444; display: block;">Pin 3: Cold / Return (&minus;)</span>
-              <span style="font-size: 0.78rem; color: var(--text-secondary);">AES26 Inverted Polarity</span>
+
+            <!-- Pin Badges Dynamic Grid -->
+            <div id="xlr-pin-badges-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem; margin-top: 1rem;"></div>
+
+            <!-- Diagnostic Card -->
+            <div style="margin-top: 1.25rem; padding: 1rem; background: rgba(30, 41, 59, 0.6); border-radius: 8px; border: 1px solid var(--border-color);">
+              <h4 style="margin: 0 0 0.4rem; color: var(--accent-cyan); font-size: 0.95rem;">Configuration Diagnostics &amp; Circuit Insight</h4>
+              <p id="xlr-active-note" style="font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 0.5rem; font-style: italic;"></p>
+              <p id="xlr-active-insight" style="font-size: 0.85rem; color: var(--text-primary); margin: 0; line-height: 1.6;"></p>
             </div>
           </div>
         </div>
@@ -2448,6 +2514,10 @@
           <button class="par-letter-btn" data-letter="D">D</button>
           <button class="par-letter-btn" data-letter="G">G</button>
           <button class="par-letter-btn" data-letter="I">I</button>
+          <button class="par-letter-btn" data-letter="L">L</button>
+          <button class="par-letter-btn" data-letter="M">M</button>
+          <button class="par-letter-btn" data-letter="N">N</button>
+          <button class="par-letter-btn" data-letter="O">O</button>
           <button class="par-letter-btn" data-letter="P">P</button>
           <button class="par-letter-btn" data-letter="S">S</button>
           <button class="par-letter-btn" data-letter="Z">Z</button>
@@ -2712,6 +2782,7 @@
   <script src="js/tree-viewer.js"></script>
   <script src="js/simulators.js"></script>
   <script src="js/circuit-animator.js"></script>
+  <script src="js/xlr-hub.js"></script>
   <script src="js/transformer-sim.js"></script>
   <script src="js/vst-standards.js"></script>
   <script src="js/datasheet-generator.js"></script>
