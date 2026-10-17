@@ -2322,8 +2322,9 @@
                   </div>
                 </div>
 
-                <!-- 1960s Knurled Fader Slider -->
-                <input type="range" id="pp-vin" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.2" style="margin-top: 0.5rem;" />
+                <!-- Linear Travelling Potentiometer (LTP) Canvas -->
+                <div id="pp-vin-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
+                <input type="range" id="pp-vin" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.2" style="display: none;" />
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
                   <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
@@ -2364,8 +2365,9 @@
                   </div>
                 </div>
 
-                <!-- Knurled Fader Slider -->
-                <input type="range" id="pp-rout" class="range-slider" min="10" max="200" step="5" value="50" style="margin-top: 0.5rem;" />
+                <!-- Linear Travelling Potentiometer (LTP) Canvas -->
+                <div id="pp-rout-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
+                <input type="range" id="pp-rout" class="range-slider" min="10" max="200" step="5" value="50" style="display: none;" />
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
                   <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
@@ -2405,8 +2407,9 @@
                   </div>
                 </div>
 
-                <!-- Knurled Fader Slider -->
-                <input type="range" id="pp-rload" class="range-slider" min="150" max="20000" step="50" value="600" style="margin-top: 0.5rem;" />
+                <!-- Linear Travelling Potentiometer (LTP) Canvas -->
+                <div id="pp-rload-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
+                <input type="range" id="pp-rload" class="range-slider" min="150" max="20000" step="50" value="600" style="display: none;" />
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
                   <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
@@ -2768,8 +2771,8 @@
               <text x="30" y="84" fill="#38bdf8" font-size="13" font-weight="700">Audio In</text>
               <line id="pp-svg-wire-drive" x1="90" y1="78" x2="140" y2="78" stroke="#38bdf8" stroke-width="2.5"/>
               <path class="animated-current-flow" data-flow-speed="2.2" d="M 90,78 L 140,78" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
-              <circle cx="140" cy="78" r="4" fill="#38bdf8"/>
-              <text id="pp-svg-vin" x="115" y="68" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">1.2 V</text>
+              <circle cx="140" cy="78" r="4" fill="#38bdf8" data-probe-target="6-1-vin" class="probe-clickable-node" title="Click to Probe: Audio In Drive"/>
+              <text id="pp-svg-vin" x="115" y="68" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle" data-probe-target="6-1-vin" class="probe-clickable-node">1.2 V</text>
 
               <!-- Branch 1: Non-Inverting Driver A1 (Hot / Pin 2) -->
               <!-- Line directly enters the non-inverting (+) input at y=78 -->
@@ -2833,14 +2836,14 @@
               <line x1="410" y1="85" x2="630" y2="85" stroke="#38bdf8" stroke-width="2.5"/>
 
               <!-- On-Wire Falstad-Style Probe Badge for Pin 2 -->
-              <g class="probe-tag" transform="translate(465, 57)">
+              <g class="probe-tag probe-clickable-node" transform="translate(465, 57)" data-probe-target="6-1-p2" title="Click to Probe: Pin 2 Hot">
                 <rect x="0" y="0" width="130" height="20" rx="4" fill="#022c22" stroke="#10b981" stroke-width="1.2"/>
                 <text id="pp-svg-probe-p2" x="65" y="14" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">3.4 mA / 1.03 V</text>
               </g>
 
               <!-- Pin 2 Terminal Node -->
-              <circle cx="630" cy="85" r="7" fill="#10b981"/>
-              <circle cx="630" cy="85" r="3" fill="#ecfdf5"/>
+              <circle cx="630" cy="85" r="7" fill="#10b981" data-probe-target="6-1-p2" class="probe-clickable-node" title="Click to Probe: Pin 2 Hot"/>
+              <circle cx="630" cy="85" r="3" fill="#ecfdf5" data-probe-target="6-1-p2" class="probe-clickable-node"/>
               <text x="655" y="90" fill="#10b981" font-size="13.5" font-weight="800"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
 
               <!-- Output Conductor 2: Pin 3 Cold Leg -->
@@ -2857,26 +2860,26 @@
               <line x1="410" y1="205" x2="630" y2="205" stroke="#38bdf8" stroke-width="2.5"/>
 
               <!-- On-Wire Falstad-Style Probe Badge for Pin 3 -->
-              <g class="probe-tag" transform="translate(465, 218)">
+              <g class="probe-tag probe-clickable-node" transform="translate(465, 218)" data-probe-target="6-1-p3" title="Click to Probe: Pin 3 Cold">
                 <rect x="0" y="0" width="130" height="20" rx="4" fill="#450a0a" stroke="#ef4444" stroke-width="1.2"/>
                 <text id="pp-svg-probe-p3" x="65" y="14" fill="#f87171" font-size="10" font-weight="700" text-anchor="middle">3.4 mA / -1.03 V</text>
               </g>
 
               <!-- Pin 3 Terminal Node -->
-              <circle cx="630" cy="205" r="7" fill="#ef4444"/>
-              <circle cx="630" cy="205" r="3" fill="#fff1f2"/>
+              <circle cx="630" cy="205" r="7" fill="#ef4444" data-probe-target="6-1-p3" class="probe-clickable-node" title="Click to Probe: Pin 3 Cold"/>
+              <circle cx="630" cy="205" r="3" fill="#fff1f2" data-probe-target="6-1-p3" class="probe-clickable-node"/>
               <text x="655" y="210" fill="#ef4444" font-size="13.5" font-weight="800"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
 
               <!-- Differential Load Resistor R_Load between Pin 2 and Pin 3 -->
               <line x1="630" y1="85" x2="630" y2="115" stroke="#f59e0b" stroke-width="2.5"/>
-              <rect id="pp-svg-rload-rect" x="621" y="115" width="18" height="60" rx="3" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+              <rect id="pp-svg-rload-rect" x="621" y="115" width="18" height="60" rx="3" fill="#0f172a" stroke="#f59e0b" stroke-width="2" data-probe-target="6-1-load" class="probe-clickable-node" title="Click to Probe: Differential Load"/>
               <circle cx="630" cy="115" r="3" class="solder-lug"/>
               <circle cx="630" cy="175" r="3" class="solder-lug"/>
               <line x1="630" y1="175" x2="630" y2="205" stroke="#f59e0b" stroke-width="2.5"/>
 
               <!-- Clean Load Labels positioned to the right of load resistor -->
-              <text x="655" y="142" fill="#f59e0b" font-size="10.5" font-weight="700">R_LOAD</text>
-              <text id="pp-svg-rload" x="655" y="160" fill="#f59e0b" font-size="12" font-weight="800">600 &Omega;</text>
+              <text x="655" y="142" fill="#f59e0b" font-size="10.5" font-weight="700" data-probe-target="6-1-load" class="probe-clickable-node">R_LOAD</text>
+              <text id="pp-svg-rload" x="655" y="160" fill="#f59e0b" font-size="12" font-weight="800" data-probe-target="6-1-load" class="probe-clickable-node">600 &Omega;</text>
 
               <!-- Chassis Ground Reference Rail (AES48 Ground Plane) -->
               <line x1="380" y1="275" x2="630" y2="275" stroke="#94a3b8" stroke-width="2"/>
@@ -2921,7 +2924,8 @@
                   <span>Input Voltage (V<sub>IN</sub>)</span>
                   <span id="ib-vin-val" class="control-value">1.2 V</span>
                 </label>
-                <input type="range" id="ib-vin" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.2" />
+                <div id="ib-vin-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
+                <input type="range" id="ib-vin" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.2" style="display: none;" />
               </div>
 
               <div class="control-group" style="margin-bottom: 0;">
@@ -2929,7 +2933,8 @@
                   <span>Output Impedance (R<sub>OUT</sub>)</span>
                   <span id="ib-rout-val" class="control-value">50 &Omega;</span>
                 </label>
-                <input type="range" id="ib-rout" class="range-slider" min="10" max="200" step="5" value="50" />
+                <div id="ib-rout-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
+                <input type="range" id="ib-rout" class="range-slider" min="10" max="200" step="5" value="50" style="display: none;" />
               </div>
 
               <div class="control-group" style="margin-bottom: 0;">
@@ -2937,7 +2942,8 @@
                   <span>Load Resistance (R<sub>L</sub>)</span>
                   <span id="ib-rload-val" class="control-value">10000 &Omega;</span>
                 </label>
-                <input type="range" id="ib-rload" class="range-slider" min="600" max="20000" step="200" value="10000" />
+                <div id="ib-rload-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
+                <input type="range" id="ib-rload" class="range-slider" min="600" max="20000" step="200" value="10000" style="display: none;" />
               </div>
 
               <div>
@@ -2998,14 +3004,14 @@
               <line x1="410" y1="85" x2="630" y2="85" stroke="#38bdf8" stroke-width="2.5"/>
 
               <!-- On-Wire Falstad-Style Probe Badge for Pin 2 -->
-              <g class="probe-tag" transform="translate(465, 57)">
+              <g class="probe-tag probe-clickable-node" transform="translate(465, 57)" data-probe-target="6-2-p2" title="Click to Probe: Pin 2 Hot">
                 <rect x="0" y="0" width="135" height="20" rx="4" fill="#022c22" stroke="#10b981" stroke-width="1.2"/>
                 <text id="ib-svg-p2-probe" x="67" y="14" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">1.19 V / +3.7 dBu</text>
               </g>
 
               <!-- Pin 2 Terminal Node -->
-              <circle cx="630" cy="85" r="7" fill="#10b981"/>
-              <circle cx="630" cy="85" r="3" fill="#ecfdf5"/>
+              <circle cx="630" cy="85" r="7" fill="#10b981" data-probe-target="6-2-p2" class="probe-clickable-node" title="Click to Probe: Pin 2 Hot"/>
+              <circle cx="630" cy="85" r="3" fill="#ecfdf5" data-probe-target="6-2-p2" class="probe-clickable-node"/>
               <text x="655" y="90" fill="#10b981" font-size="13.5" font-weight="800"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
 
               <!-- Passive Leg (Pin 3): Terminated purely to 0V Circuit Signal Ground -->
@@ -3022,26 +3028,26 @@
               <line x1="410" y1="205" x2="630" y2="205" stroke="#94a3b8" stroke-width="2.5"/>
 
               <!-- On-Wire Probe Badge for Pin 3 -->
-              <g class="probe-tag" transform="translate(450, 180)">
+              <g class="probe-tag probe-clickable-node" transform="translate(450, 180)" data-probe-target="6-2-p3" title="Click to Probe: Pin 3 Cold">
                 <rect x="0" y="0" width="165" height="20" rx="4" fill="rgba(30, 41, 59, 0.9)" stroke="#94a3b8" stroke-width="1.2"/>
                 <text id="ib-svg-p3-probe" x="82" y="14" fill="#94a3b8" font-size="9.5" font-weight="700" text-anchor="middle">0.00 V / 50.0 &Omega; to 0V</text>
               </g>
 
               <!-- Pin 3 Terminal Node -->
-              <circle cx="630" cy="205" r="7" fill="#ef4444"/>
-              <circle cx="630" cy="205" r="3" fill="#fff1f2"/>
+              <circle cx="630" cy="205" r="7" fill="#ef4444" data-probe-target="6-2-p3" class="probe-clickable-node" title="Click to Probe: Pin 3 Cold"/>
+              <circle cx="630" cy="205" r="3" fill="#fff1f2" data-probe-target="6-2-p3" class="probe-clickable-node"/>
               <text x="655" y="210" fill="#ef4444" font-size="13.5" font-weight="800"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
 
               <!-- Bridging Load Resistor R_Load between Pin 2 and Pin 3 -->
               <line x1="630" y1="85" x2="630" y2="115" stroke="#f59e0b" stroke-width="2.5"/>
-              <rect x="621" y="115" width="18" height="60" rx="3" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+              <rect x="621" y="115" width="18" height="60" rx="3" fill="#0f172a" stroke="#f59e0b" stroke-width="2" data-probe-target="6-2-load" class="probe-clickable-node" title="Click to Probe: Differential Load"/>
               <circle cx="630" cy="115" r="3" class="solder-lug"/>
               <circle cx="630" cy="175" r="3" class="solder-lug"/>
               <line x1="630" y1="175" x2="630" y2="205" stroke="#f59e0b" stroke-width="2.5"/>
 
               <!-- Clean Load Labels positioned to the right of load resistor -->
-              <text x="655" y="142" fill="#f59e0b" font-size="10.5" font-weight="700">R_LOAD (Bridging)</text>
-              <text id="ib-svg-rload" x="655" y="160" fill="#f59e0b" font-size="12" font-weight="800">10 k&Omega;</text>
+              <text x="655" y="142" fill="#f59e0b" font-size="10.5" font-weight="700" data-probe-target="6-2-load" class="probe-clickable-node">R_LOAD (Bridging)</text>
+              <text id="ib-svg-rload" x="655" y="160" fill="#f59e0b" font-size="12" font-weight="800" data-probe-target="6-2-load" class="probe-clickable-node">10 k&Omega;</text>
 
               <!-- Chassis Ground Reference Rail (AES48 Ground Plane) -->
               <line x1="380" y1="275" x2="630" y2="275" stroke="#94a3b8" stroke-width="2"/>
@@ -3077,7 +3083,8 @@
                   <span>Primary Voltage (V<sub>IN</sub>)</span>
                   <span id="tx-vin-val" class="control-value">15.0 V</span>
                 </label>
-                <input type="range" id="tx-vin" class="range-slider" min="1" max="25" step="0.5" value="15" />
+                <div id="tx-vin-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
+                <input type="range" id="tx-vin" class="range-slider" min="1" max="25" step="0.5" value="15" style="display: none;" />
               </div>
 
               <div class="control-group" style="margin-bottom: 0;">
@@ -3085,7 +3092,8 @@
                   <span>Transformer Turns Ratio</span>
                   <span id="tx-ratio-val" class="control-value">1 : 1.0</span>
                 </label>
-                <input type="range" id="tx-ratio" class="range-slider" min="0.5" max="2.0" step="0.1" value="1.0" />
+                <div id="tx-ratio-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
+                <input type="range" id="tx-ratio" class="range-slider" min="0.5" max="2.0" step="0.1" value="1.0" style="display: none;" />
               </div>
 
               <div class="control-group" style="margin-bottom: 0;">
@@ -3093,7 +3101,8 @@
                   <span>Load Resistance (R<sub>L</sub>)</span>
                   <span id="tx-rload-val" class="control-value">600 &Omega;</span>
                 </label>
-                <input type="range" id="tx-rload" class="range-slider" min="150" max="5000" step="50" value="600" />
+                <div id="tx-rload-ltp" class="ltp-canvas-slot" style="margin: 0.5rem auto 0.25rem;"></div>
+                <input type="range" id="tx-rload" class="range-slider" min="150" max="5000" step="50" value="600" style="display: none;" />
               </div>
 
               <div>
@@ -3119,7 +3128,7 @@
               <rect width="850" height="320" fill="var(--bg-secondary)" rx="8"/>
               
               <!-- Primary Input Wires (Strictly Horizontal at y=120 and y=210) -->
-              <text x="30" y="165" fill="#38bdf8" font-size="13" font-weight="700">Driver In</text>
+              <text x="30" y="165" fill="#38bdf8" font-size="13" font-weight="700" data-probe-target="6-3-pri" class="probe-clickable-node" title="Click to Probe: Primary Driver In">Driver In</text>
               <line x1="90" y1="120" x2="250" y2="120" stroke="#38bdf8" stroke-width="2.5"/>
               <line x1="90" y1="210" x2="250" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
               <path class="animated-current-flow" data-flow-speed="2.0" d="M 90,120 L 250,120 L 250,210 L 90,210" fill="none" stroke="#10b981" stroke-width="2.5"/>
@@ -3136,13 +3145,13 @@
 
               <!-- Secondary Top Wire (Strictly Horizontal at y=120) -->
               <line x1="320" y1="120" x2="680" y2="120" stroke="#10b981" stroke-width="2.5"/>
-              <circle cx="680" cy="120" r="7" fill="#10b981"/>
+              <circle cx="680" cy="120" r="7" fill="#10b981" data-probe-target="6-3-sec" class="probe-clickable-node" title="Click to Probe: Secondary Across Pins 2 & 3"/>
               <text x="705" y="125" fill="#10b981" font-size="13" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 320,120 L 680,120" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
               <!-- Secondary Bottom Wire (Strictly Horizontal at y=210) -->
               <line x1="320" y1="210" x2="680" y2="210" stroke="#ef4444" stroke-width="2.5"/>
-              <circle cx="680" cy="210" r="7" fill="#ef4444"/>
+              <circle cx="680" cy="210" r="7" fill="#ef4444" data-probe-target="6-3-sec" class="probe-clickable-node" title="Click to Probe: Secondary Across Pins 2 & 3"/>
               <text x="705" y="215" fill="#ef4444" font-size="13" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 680,210 L 320,210" fill="none" stroke="#ef4444" stroke-width="2.5"/>
 
@@ -3341,6 +3350,97 @@
             <span class="probe-pill">DC Isolation: <strong>&gt; 500 V Galvanic Barrier</strong></span>
             <span class="probe-pill">Faraday Shield: <strong>Tied directly to Connector Pin 1 Chassis</strong></span>
             <span class="probe-pill">CMRR: <strong>&gt; 115 dB @ 60 Hz | &gt; 100 dB @ 20 kHz</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Real-Time Audio Spectrum Analyzer & CMRR Engine -->
+      <div id="audio-analyzer-demo" class="audio-analyzer-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+              <span style="font-size: 1.3rem;">🔬</span>
+              <h3 style="margin: 0; color: var(--accent-cyan); font-size: 1.25rem;">Real-Time Audio Spectrum Analyzer &amp; CMRR Engine</h3>
+              <span class="badge badge-accent">OPEN-AIR Engine &bull; 2048-pt FFT</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; max-width: 780px;">
+              Live dual-trace Web Audio API FFT spectrum analyzer comparing the differential audio passband (<span style="color: #06b6d4; font-weight: 700;">Cyan Trace</span>) against common-mode noise &amp; ground loop hum residuals (<span style="color: #f59e0b; font-weight: 700;">Amber Trace</span>). Observe real-time CMRR degradation as source impedance balance varies.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button id="analyzer-power-btn" class="btn btn-primary" style="font-weight: 700; background: linear-gradient(135deg, #0284c7, #06b6d4); border: none;">
+              ⚡ Engage Signal Generator
+            </button>
+          </div>
+        </div>
+
+        <!-- Real-Time Scope Display Canvas -->
+        <div class="analyzer-scope-wrapper">
+          <canvas id="audio-analyzer-canvas" height="260" style="width: 100%; height: 260px; display: block;"></canvas>
+        </div>
+
+        <!-- Generator Controls & Live Measurements Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.25rem;">
+          <!-- Left: Virtual Signal Generator Console -->
+          <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid #1e293b; border-radius: 8px; padding: 1rem;">
+            <div style="font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
+              Test Tone Generator
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 1rem;">
+              <button class="drawer-btn active analyzer-tone-btn" data-tone="sine1k">1 kHz Sine (+4 dBu)</button>
+              <button class="drawer-btn analyzer-tone-btn" data-tone="hum">60 Hz Mains + Harmonics</button>
+              <button class="drawer-btn analyzer-tone-btn" data-tone="sweep">20 Hz – 20 kHz Sweep</button>
+              <button class="drawer-btn analyzer-tone-btn" data-tone="pink">Pink Noise</button>
+            </div>
+
+            <!-- Generator Parameter Faders -->
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #cbd5e1; margin-bottom: 0.25rem;">
+                  <span>Output Level (dBu):</span>
+                  <span id="analyzer-level-val" style="font-family: monospace; font-weight: 700; color: #38bdf8;">+4.0 dBu</span>
+                </div>
+                <input type="range" id="analyzer-level-slider" min="-20" max="24" step="0.5" value="4" class="range-slider" />
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #cbd5e1; margin-bottom: 0.25rem;">
+                  <span>Source Impedance Imbalance (&Delta;Z):</span>
+                  <span id="analyzer-deltaz-val" style="font-family: monospace; font-weight: 700; color: #f59e0b;">0.00 &Omega; (Balanced)</span>
+                </div>
+                <input type="range" id="analyzer-deltaz-slider" min="0" max="50" step="0.5" value="0" class="range-slider" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Live Laboratory Metrics VFD -->
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div class="analyzer-badge-grid" style="margin-top: 0;">
+              <div class="analyzer-badge-cell">
+                <span class="analyzer-badge-title">Measured CMRR (Immunity)</span>
+                <span id="analyzer-cmrr-val" class="analyzer-badge-val" style="color: #10b981;">100.0 dB</span>
+                <span style="font-size: 0.68rem; color: #64748b; margin-top: 0.2rem;">Common-mode noise rejection</span>
+              </div>
+              <div class="analyzer-badge-cell">
+                <span class="analyzer-badge-title">Total Harmonic Distortion</span>
+                <span id="analyzer-thd-val" class="analyzer-badge-val">0.0003%</span>
+                <span style="font-size: 0.68rem; color: #64748b; margin-top: 0.2rem;">THD+N @ 1 kHz fundamental</span>
+              </div>
+              <div class="analyzer-badge-cell">
+                <span class="analyzer-badge-title">Differential Payload</span>
+                <span id="analyzer-vdiff-val" class="analyzer-badge-val" style="color: #06b6d4;">+4.0 dBu</span>
+                <span style="font-size: 0.68rem; color: #64748b; margin-top: 0.2rem;">1.228 VRMS across load</span>
+              </div>
+              <div class="analyzer-badge-cell">
+                <span class="analyzer-badge-title">Ground Hum Residual</span>
+                <span id="analyzer-hum-val" class="analyzer-badge-val" style="color: #94a3b8;">&lt; -96 dB</span>
+                <span style="font-size: 0.68rem; color: #64748b; margin-top: 0.2rem;">Bleed due to &Delta;Z imbalance</span>
+              </div>
+            </div>
+
+            <div style="background: rgba(15, 23, 42, 0.4); border: 1px dashed #334155; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; color: #94a3b8; line-height: 1.4;">
+              💡 <strong>Observation Note:</strong> Increase the <em>Source Impedance Imbalance (&Delta;Z)</em> slider. As &Delta;Z deviates from 0&Omega;, common-mode rejection drops dramatically from &gt;100 dB down to ~45 dB, and the 60 Hz hum residual rises into the audible passband, exactly demonstrating Bill Whitlock's core thesis in AES Paper 4372.
+            </div>
           </div>
         </div>
       </div>
@@ -3708,8 +3808,8 @@
           <div class="probe-badge-panel">
             <span class="probe-pill">Impedance Imbalance (&Delta;Z): <strong id="meyer-probe-deltaz">0.0 &Omega; (0.00%)</strong></span>
             <span class="probe-pill">Ground Loop Current: <strong id="meyer-probe-ignd">3.8 mA</strong></span>
-            <span class="probe-pill">Diff Audio Signal: <strong id="meyer-probe-vdiff">1.96 V</strong></span>
-            <span class="probe-pill">Converted Hum Error: <strong id="meyer-probe-verror" style="color: #10b981;">0.00 mV (Infinite CMRR)</strong></span>
+            <span class="probe-pill probe-clickable-node" data-probe-target="meyer-diff" title="Click to Probe: Differential Audio Signal">Diff Audio Signal: <strong id="meyer-probe-vdiff">1.96 V</strong></span>
+            <span class="probe-pill probe-clickable-node" data-probe-target="meyer-verr" title="Click to Probe: Converted Hum Error Voltage">Converted Hum Error: <strong id="meyer-probe-verror" style="color: #10b981;">0.00 mV (Infinite CMRR)</strong></span>
             <span class="probe-pill">Calculated Thevenin CMRR: <strong id="meyer-probe-cmrr" style="color: #10b981;">&infin; dB</strong></span>
           </div>
         </div>
@@ -3826,9 +3926,9 @@
 
             <!-- Ground Potential Difference V_GVD generator (Ground Loop Path) -->
             <line x1="220" y1="350" x2="450" y2="350" stroke="#f59e0b" stroke-width="2"/>
-            <circle cx="480" cy="350" r="18" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5"/>
-            <text x="480" y="345" fill="#f59e0b" font-size="11" font-weight="700" text-anchor="middle">V_GVD</text>
-            <text x="480" y="360" fill="#f59e0b" font-size="9" text-anchor="middle">Ground Hum</text>
+            <circle cx="480" cy="350" r="18" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5" data-probe-target="meyer-vgvd" class="probe-clickable-node" title="Click to Probe: Ground Voltage Difference (V_GVD)"/>
+            <text x="480" y="345" fill="#f59e0b" font-size="11" font-weight="700" text-anchor="middle" data-probe-target="meyer-vgvd" class="probe-clickable-node">V_GVD</text>
+            <text x="480" y="360" fill="#f59e0b" font-size="9" text-anchor="middle" data-probe-target="meyer-vgvd" class="probe-clickable-node">Ground Hum</text>
             <line x1="510" y1="350" x2="850" y2="350" stroke="#f59e0b" stroke-width="2"/>
 
             <!-- Ground loop flow arrows -->
@@ -5996,6 +6096,10 @@
   </footer>
 
   <!-- Scripts -->
+  <script src="js/ltp-fader.js"></script>
+  <script src="js/audio-analyzer.js"></script>
+  <script src="js/story-sidebar.js"></script>
+  <script src="js/floating-meters.js"></script>
   <script src="js/tree-data.js"></script>
   <script src="js/tree-viewer.js"></script>
   <script src="js/simulators.js"></script>

@@ -51,6 +51,7 @@ class CircuitSimulator {
     // 1960s Military & 1970s Laboratory Equipment Handlers
     this.initMilitaryControls();
     this.initLevelConverter();
+    this.initLTPFaders();
   }
 
   bindInputs(ids, callback) {
@@ -134,6 +135,182 @@ class CircuitSimulator {
     bindPresetAndManual("pp-vin", "pp-vin-preset", "pp-vin-manual", () => this.updatePushPull());
     bindPresetAndManual("pp-rout", "pp-rout-preset", "pp-rout-manual", () => this.updatePushPull());
     bindPresetAndManual("pp-rload", "pp-rload-preset", "pp-rload-manual", () => this.updatePushPull());
+  }
+
+  // LTP Fader (Linear Travelling Potentiometer) Canvas Integration
+  initLTPFaders() {
+    if (typeof LTPFader === "undefined") return;
+
+    // Circuit 6.1: Drive Level (VIN)
+    const ppVinCont = document.getElementById("pp-vin-ltp");
+    if (ppVinCont) {
+      this.ltpPpVin = new LTPFader(ppVinCont, {
+        min: 0.1,
+        max: 5.0,
+        value: 1.2,
+        step: 0.1,
+        unit: "V",
+        railColor: "#38bdf8",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("pp-vin");
+          if (s) { s.value = value; this.updatePushPull(); }
+        }
+      });
+    }
+
+    // Circuit 6.1: Output Series Impedance (Z_OUT)
+    const ppRoutCont = document.getElementById("pp-rout-ltp");
+    if (ppRoutCont) {
+      this.ltpPpRout = new LTPFader(ppRoutCont, {
+        min: 10,
+        max: 200,
+        value: 50,
+        step: 5,
+        unit: "Ω",
+        railColor: "#38bdf8",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("pp-rout");
+          if (s) { s.value = value; this.updatePushPull(); }
+        }
+      });
+    }
+
+    // Circuit 6.1: Receiver Load Impedance (R_LOAD)
+    const ppRloadCont = document.getElementById("pp-rload-ltp");
+    if (ppRloadCont) {
+      this.ltpPpRload = new LTPFader(ppRloadCont, {
+        min: 150,
+        max: 20000,
+        value: 600,
+        logarithmic: true,
+        unit: "Ω",
+        railColor: "#f59e0b",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("pp-rload");
+          if (s) { s.value = value; this.updatePushPull(); }
+        }
+      });
+    }
+
+    // Circuit 6.2: Active Leg Input Voltage
+    const ibVinCont = document.getElementById("ib-vin-ltp");
+    if (ibVinCont) {
+      this.ltpIbVin = new LTPFader(ibVinCont, {
+        min: 0.1,
+        max: 5.0,
+        value: 1.2,
+        step: 0.1,
+        unit: "V",
+        railColor: "#38bdf8",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("ib-vin");
+          if (s) { s.value = value; this.updateImpedanceBalanced(); }
+        }
+      });
+    }
+
+    // Circuit 6.2: Output Series Impedance
+    const ibRoutCont = document.getElementById("ib-rout-ltp");
+    if (ibRoutCont) {
+      this.ltpIbRout = new LTPFader(ibRoutCont, {
+        min: 10,
+        max: 200,
+        value: 50,
+        step: 5,
+        unit: "Ω",
+        railColor: "#38bdf8",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("ib-rout");
+          if (s) { s.value = value; this.updateImpedanceBalanced(); }
+        }
+      });
+    }
+
+    // Circuit 6.2: Receiver Bridging Load
+    const ibRloadCont = document.getElementById("ib-rload-ltp");
+    if (ibRloadCont) {
+      this.ltpIbRload = new LTPFader(ibRloadCont, {
+        min: 600,
+        max: 20000,
+        value: 10000,
+        logarithmic: true,
+        unit: "Ω",
+        railColor: "#f59e0b",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("ib-rload");
+          if (s) { s.value = value; this.updateImpedanceBalanced(); }
+        }
+      });
+    }
+
+    // Circuit 6.3: Transformer Primary Voltage
+    const txVinCont = document.getElementById("tx-vin-ltp");
+    if (txVinCont) {
+      this.ltpTxVin = new LTPFader(txVinCont, {
+        min: 1,
+        max: 25,
+        value: 15,
+        step: 0.5,
+        unit: "V",
+        railColor: "#38bdf8",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("tx-vin");
+          if (s) { s.value = value; this.updateTransformer(); }
+        }
+      });
+    }
+
+    // Circuit 6.3: Transformer Turns Ratio
+    const txRatioCont = document.getElementById("tx-ratio-ltp");
+    if (txRatioCont) {
+      this.ltpTxRatio = new LTPFader(txRatioCont, {
+        min: 0.5,
+        max: 2.0,
+        value: 1.0,
+        step: 0.1,
+        unit: ":1",
+        railColor: "#38bdf8",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("tx-ratio");
+          if (s) { s.value = value; this.updateTransformer(); }
+        }
+      });
+    }
+
+    // Circuit 6.3: Transformer Load Resistance
+    const txRloadCont = document.getElementById("tx-rload-ltp");
+    if (txRloadCont) {
+      this.ltpTxRload = new LTPFader(txRloadCont, {
+        min: 150,
+        max: 5000,
+        value: 600,
+        logarithmic: true,
+        unit: "Ω",
+        railColor: "#f59e0b",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("tx-rload");
+          if (s) { s.value = value; this.updateTransformer(); }
+        }
+      });
+    }
   }
 
   // 1970s Laboratory Audio Level Converter & DMM LCD Driver
@@ -287,6 +464,11 @@ class CircuitSimulator {
       }
     }
 
+    // Broadcast to Breakaway Floating Meter Dock
+    if (window.floatingMeterDock) {
+      window.floatingMeterDock.updateFromActiveCircuit();
+    }
+
     // Live SVG schematic component fader value overlays
     this.setProbe("pp-svg-vin", `${vin.toFixed(1)} V`);
     this.setProbe("pp-svg-zpo", `${rout} Ω`);
@@ -391,6 +573,10 @@ class CircuitSimulator {
     this.setProbe("ib-svg-rload", `${rload >= 1000 ? (rload / 1000).toFixed(1) + ' kΩ' : rload + ' Ω'}`);
     this.setProbe("ib-svg-p2-probe", `${vPin2.toFixed(2)} V / ${dBu >= 0 ? '+' : ''}${dBu.toFixed(1)} dBu`);
     this.setProbe("ib-svg-p3-probe", shortPin3 ? "0.00 V (Grounded)" : `0.00 V / ${rout} Ω to 0V`);
+
+    if (window.floatingMeterDock) {
+      window.floatingMeterDock.updateFromActiveCircuit();
+    }
   }
 
   // ==========================================
@@ -434,6 +620,10 @@ class CircuitSimulator {
       statusEl.textContent = groundPin3 
         ? "Pin 3 Earth-Referenced: Full Voltage Preserved with Zero Distortion" 
         : "True Galvanic Floating: 100% Isolation from Earth Ground Loops";
+    }
+
+    if (window.floatingMeterDock) {
+      window.floatingMeterDock.updateFromActiveCircuit();
     }
   }
 
@@ -638,6 +828,10 @@ class CircuitSimulator {
         badgeEl.className = "badge badge-danger";
         badgeEl.textContent = "Severe Ground Loop Interference!";
       }
+    }
+
+    if (window.floatingMeterDock) {
+      window.floatingMeterDock.updateFromActiveCircuit();
     }
   }
 
