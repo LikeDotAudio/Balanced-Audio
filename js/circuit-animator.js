@@ -322,10 +322,10 @@ class CircuitSimulator {
         shortText.textContent = "TS Short Link: CLOSED (0 Ω to Chassis!)";
         shortText.setAttribute("fill", "#ef4444");
       } else {
-        shortGroup.setAttribute("opacity", "0.3");
+        shortGroup.setAttribute("opacity", "0.65");
         shortDash.setAttribute("stroke-dasharray", "4,4");
-        shortDash.setAttribute("stroke-width", "2.5");
-        shortText.textContent = "TS Ground Short Link (Open)";
+        shortDash.setAttribute("stroke-width", "2");
+        shortText.textContent = "TS Short: OPEN";
         shortText.setAttribute("fill", "#94a3b8");
       }
     }
