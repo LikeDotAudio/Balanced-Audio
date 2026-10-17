@@ -53,6 +53,7 @@ class CircuitSimulator {
     this.initLevelConverter();
     this.initLTPFaders();
     this.initVoltmeterControls();
+    this.initCircuitFullscreen();
   }
 
   bindInputs(ids, callback) {
@@ -463,6 +464,293 @@ class CircuitSimulator {
         }
       });
     }
+
+    // Section 5: The Deepest Dive — Jim Meyer's Thevenin Model LTP Faders
+    // 1. Signal Drive V_PO
+    const meyerVpoCont = document.getElementById("meyer-vpo-ltp");
+    if (meyerVpoCont) {
+      this.ltpMeyerVpo = new LTPFader(meyerVpoCont, {
+        min: 0.1,
+        max: 5.0,
+        value: 1.0,
+        step: 0.1,
+        unit: "V",
+        railColor: "#38bdf8",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("meyer-vpo");
+          if (s) { s.value = value; this.updateMeyerModel(); }
+          const m = document.getElementById("meyer-vpo-manual");
+          if (m) m.value = value.toFixed(1);
+        }
+      });
+    }
+
+    // 2. Positive Leg Source Impedance Z_PO
+    const meyerZpoCont = document.getElementById("meyer-zpo-ltp");
+    if (meyerZpoCont) {
+      this.ltpMeyerZpo = new LTPFader(meyerZpoCont, {
+        min: 10,
+        max: 250,
+        value: 50,
+        step: 5,
+        unit: "Ω",
+        railColor: "#10b981",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("meyer-zpo");
+          if (s) { s.value = value; this.updateMeyerModel(); }
+          const m = document.getElementById("meyer-zpo-manual");
+          if (m) m.value = Math.round(value);
+        }
+      });
+    }
+
+    // 3. Return Leg Source Impedance Z_RO
+    const meyerZroCont = document.getElementById("meyer-zro-ltp");
+    if (meyerZroCont) {
+      this.ltpMeyerZro = new LTPFader(meyerZroCont, {
+        min: 10,
+        max: 250,
+        value: 50,
+        step: 5,
+        unit: "Ω",
+        railColor: "#ef4444",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("meyer-zro");
+          if (s) { s.value = value; this.updateMeyerModel(); }
+          const m = document.getElementById("meyer-zro-manual");
+          if (m) m.value = Math.round(value);
+        }
+      });
+    }
+
+    // 4. Common-Mode Source Impedance CMZ_OUT
+    const meyerCmzCont = document.getElementById("meyer-cmz-ltp");
+    if (meyerCmzCont) {
+      this.ltpMeyerCmz = new LTPFader(meyerCmzCont, {
+        min: 10,
+        max: 1000,
+        value: 50,
+        step: 10,
+        unit: "Ω",
+        railColor: "#94a3b8",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("meyer-cmz");
+          if (s) { s.value = value; this.updateMeyerModel(); }
+          const m = document.getElementById("meyer-cmz-manual");
+          if (m) m.value = Math.round(value);
+        }
+      });
+    }
+
+    // 5. Ground Voltage Differential V_GVD
+    const meyerVgvdCont = document.getElementById("meyer-vgvd-ltp");
+    if (meyerVgvdCont) {
+      this.ltpMeyerVgvd = new LTPFader(meyerVgvdCont, {
+        min: 0.0,
+        max: 10.0,
+        value: 3.0,
+        step: 0.2,
+        unit: "V",
+        railColor: "#f59e0b",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("meyer-vgvd");
+          if (s) { s.value = value; this.updateMeyerModel(); }
+          const m = document.getElementById("meyer-vgvd-manual");
+          if (m) m.value = value.toFixed(1);
+        }
+      });
+    }
+
+    // 6. Cable Capacitance C_PS
+    const meyerCpsCont = document.getElementById("meyer-cps-ltp");
+    if (meyerCpsCont) {
+      this.ltpMeyerCps = new LTPFader(meyerCpsCont, {
+        min: 20,
+        max: 1000,
+        value: 100,
+        step: 20,
+        unit: "pF",
+        railColor: "#64748b",
+        width: 80,
+        height: 180,
+        onChange: ({ value }) => {
+          const s = document.getElementById("meyer-cps");
+          if (s) { s.value = value; this.updateMeyerModel(); }
+          const m = document.getElementById("meyer-cps-manual");
+          if (m) m.value = Math.round(value);
+        }
+      });
+    }
+
+    // Initialize Section 5 Presets and Direct Value Handlers
+    this.initMeyerPresetsAndManuals();
+  }
+
+  // Section 5: Calibrated Presets & Manual Value Synchronization
+  initMeyerPresetsAndManuals() {
+    const presetSelect = document.getElementById("meyer-preset-select");
+    if (presetSelect) {
+      presetSelect.addEventListener("change", (e) => {
+        const mode = e.target.value;
+        if (mode === "balanced") {
+          this.setMeyerFader("meyer-vpo", 1.0);
+          this.setMeyerFader("meyer-zpo", 50);
+          this.setMeyerFader("meyer-zro", 50);
+          this.setMeyerFader("meyer-cmz", 50);
+          this.setMeyerFader("meyer-vgvd", 3.0);
+          this.setMeyerFader("meyer-cps", 100);
+        } else if (mode === "imbalance_10") {
+          this.setMeyerFader("meyer-vpo", 1.0);
+          this.setMeyerFader("meyer-zpo", 45);
+          this.setMeyerFader("meyer-zro", 55);
+          this.setMeyerFader("meyer-cmz", 50);
+          this.setMeyerFader("meyer-vgvd", 3.0);
+          this.setMeyerFader("meyer-cps", 100);
+        } else if (mode === "imbalance_severe") {
+          this.setMeyerFader("meyer-vpo", 1.0);
+          this.setMeyerFader("meyer-zpo", 20);
+          this.setMeyerFader("meyer-zro", 120);
+          this.setMeyerFader("meyer-cmz", 50);
+          this.setMeyerFader("meyer-vgvd", 3.0);
+          this.setMeyerFader("meyer-cps", 100);
+        } else if (mode === "clean_ground") {
+          this.setMeyerFader("meyer-vpo", 1.0);
+          this.setMeyerFader("meyer-zpo", 50);
+          this.setMeyerFader("meyer-zro", 50);
+          this.setMeyerFader("meyer-cmz", 50);
+          this.setMeyerFader("meyer-vgvd", 0.0);
+          this.setMeyerFader("meyer-cps", 100);
+        } else if (mode === "heavy_hum") {
+          this.setMeyerFader("meyer-vpo", 1.0);
+          this.setMeyerFader("meyer-zpo", 45);
+          this.setMeyerFader("meyer-zro", 55);
+          this.setMeyerFader("meyer-cmz", 30);
+          this.setMeyerFader("meyer-vgvd", 6.0);
+          this.setMeyerFader("meyer-cps", 150);
+        } else if (mode === "long_cable") {
+          this.setMeyerFader("meyer-vpo", 1.0);
+          this.setMeyerFader("meyer-zpo", 50);
+          this.setMeyerFader("meyer-zro", 50);
+          this.setMeyerFader("meyer-cmz", 50);
+          this.setMeyerFader("meyer-vgvd", 3.0);
+          this.setMeyerFader("meyer-cps", 500);
+        }
+        this.updateMeyerModel();
+      });
+    }
+
+    const bindManual = (id) => {
+      const man = document.getElementById(id + "-manual");
+      const slider = document.getElementById(id);
+      if (man && slider) {
+        man.addEventListener("input", (e) => {
+          const val = parseFloat(e.target.value);
+          if (!isNaN(val)) {
+            slider.value = val;
+            this.syncMeyerLtp(id, val);
+            if (presetSelect) presetSelect.value = "custom";
+            this.updateMeyerModel();
+          }
+        });
+      }
+    };
+
+    bindManual("meyer-vpo");
+    bindManual("meyer-zpo");
+    bindManual("meyer-zro");
+    bindManual("meyer-cmz");
+    bindManual("meyer-vgvd");
+    bindManual("meyer-cps");
+  }
+
+  setMeyerFader(id, val) {
+    const slider = document.getElementById(id);
+    if (slider) slider.value = val;
+    const man = document.getElementById(id + "-manual");
+    if (man) man.value = val;
+    this.syncMeyerLtp(id, val);
+  }
+
+  syncMeyerLtp(id, val) {
+    const ltpMap = {
+      "meyer-vpo": this.ltpMeyerVpo,
+      "meyer-zpo": this.ltpMeyerZpo,
+      "meyer-zro": this.ltpMeyerZro,
+      "meyer-cmz": this.ltpMeyerCmz,
+      "meyer-vgvd": this.ltpMeyerVgvd,
+      "meyer-cps": this.ltpMeyerCps
+    };
+    const ltp = ltpMap[id];
+    if (ltp && typeof ltp.setValue === "function") {
+      ltp.setValue(val, true);
+    }
+  }
+
+  // Full Screen Circuit Expansion Controller
+  initCircuitFullscreen() {
+    window.toggleCircuitFullscreen = (btnEl) => {
+      const card = btnEl.closest(".svg-diagram-card") || btnEl.closest(".circuit-subcard") || btnEl.closest(".section");
+      if (!card) return;
+
+      const isFs = card.classList.contains("circuit-fullscreen-active");
+
+      if (isFs) {
+        card.classList.remove("circuit-fullscreen-active");
+        const exitBtn = card.querySelector(".circuit-fullscreen-exit-btn");
+        if (exitBtn) exitBtn.remove();
+        document.body.style.overflow = "";
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(() => {});
+        }
+      } else {
+        card.classList.add("circuit-fullscreen-active");
+        document.body.style.overflow = "hidden";
+
+        // Add prominent Exit button
+        if (!card.querySelector(".circuit-fullscreen-exit-btn")) {
+          const exitBtn = document.createElement("button");
+          exitBtn.className = "circuit-fullscreen-exit-btn";
+          exitBtn.innerHTML = `<span>✕ Exit Full Screen [Esc]</span>`;
+          exitBtn.onclick = () => window.toggleCircuitFullscreen(btnEl);
+          card.appendChild(exitBtn);
+        }
+
+        // Request browser fullscreen if available
+        if (card.requestFullscreen) {
+          card.requestFullscreen().catch(() => {});
+        }
+
+        // Trigger resize event for canvas rerendering
+        setTimeout(() => window.dispatchEvent(new Event("resize")), 100);
+      }
+    };
+
+    // Global Esc key listener
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        const fsEl = document.querySelector(".circuit-fullscreen-active");
+        if (fsEl) {
+          const btn = fsEl.querySelector(".btn-circuit-fullscreen");
+          if (btn) window.toggleCircuitFullscreen(btn);
+          else {
+            fsEl.classList.remove("circuit-fullscreen-active");
+            const exitBtn = fsEl.querySelector(".circuit-fullscreen-exit-btn");
+            if (exitBtn) exitBtn.remove();
+            document.body.style.overflow = "";
+          }
+        }
+      }
+    });
   }
 
   // 1970s Laboratory Audio Level Converter & DMM LCD Driver

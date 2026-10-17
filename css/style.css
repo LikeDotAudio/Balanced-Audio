@@ -1785,15 +1785,11 @@ code, pre {
    Audio Transformer Winding Simulator & Virtual Test Bench
    ========================================================================== */
 .xfmr-lab-grid {
-  display: grid;
-  grid-template-columns: 360px 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
   margin-top: 1.5rem;
-}
-@media (max-width: 1024px) {
-  .xfmr-lab-grid {
-    grid-template-columns: 1fr;
-  }
+  width: 100%;
 }
 .xfmr-controls-panel {
   background: var(--bg-card);
@@ -2671,14 +2667,21 @@ code, pre {
 }
 
 /* Glowing VFD Gas-Discharge / Fluorescent Segmented Values */
+/* Glowing VFD Gas-Discharge / Fluorescent Segmented Values — LUCKY Yellow Default */
 .dmm-readout-value {
   font-family: 'Courier New', Courier, monospace, var(--font-mono);
   font-size: 1.35rem;
   font-weight: 900;
-  color: #38bdf8;
+  color: #facc15; /* Vivid Yellow Font requested by user */
   letter-spacing: 0.08em;
-  text-shadow: 0 0 10px rgba(56, 189, 248, 0.8), 0 0 2px #fff;
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.85), 0 0 2px #fef08a;
   position: relative;
+}
+
+.dmm-readout-value.yellow,
+.dmm-readout-value.lucky-yellow {
+  color: #facc15;
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.85), 0 0 2px #fef08a;
 }
 
 .dmm-readout-value.green {
@@ -2694,6 +2697,57 @@ code, pre {
 .dmm-readout-value.amber {
   color: #fbbf24;
   text-shadow: 0 0 10px rgba(251, 191, 36, 0.8), 0 0 2px #fff;
+}
+
+.dmm-readout-value.rose {
+  color: #f43f5e;
+  text-shadow: 0 0 10px rgba(244, 63, 94, 0.85), 0 0 2px #fff;
+}
+
+/* LUCKY Mode Switcher Bar */
+.dmm-mode-switcher {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 0.25rem;
+  border-radius: 4px;
+  border: 1px solid #334155;
+}
+
+.dmm-mode-btn {
+  flex: 1;
+  background: #1e293b;
+  border: 1px solid #475569;
+  color: #94a3b8;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 0.25rem 0.4rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.dmm-mode-btn:hover {
+  background: #334155;
+  color: #f8fafc;
+}
+
+.dmm-mode-btn.active {
+  background: #0284c7;
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+.dmm-mode-btn.active.yellow-mode {
+  background: #ca8a04;
+  border-color: #facc15;
+  color: #0f172a;
+  font-weight: 900;
+  box-shadow: 0 0 8px rgba(250, 204, 21, 0.5);
 }
 
 /* 1970s Tactile Pushbutton Bank */
@@ -2729,8 +2783,15 @@ code, pre {
   background: linear-gradient(180deg, #e2e8f0 0%, #94a3b8 100%);
   box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
   transform: translateY(1px);
-  color: #0284c7;
-  border-color: #0284c7;
+  color: #ca8a04;
+  border-color: #ca8a04;
+  font-weight: 900;
+}
+
+.dmm-key.active.key-auto {
+  background: linear-gradient(180deg, #fef08a 0%, #eab308 100%);
+  color: #0f172a;
+  border-color: #ca8a04;
 }
 
 .dmm-key.key-red {
@@ -2780,6 +2841,309 @@ code, pre {
 .dmm-jack-socket.black {
   background: #0f172a;
   border-color: #334155;
+}
+
+/* =====================================================================
+   Hewlett-Packard 353A Patch Panel (from Manual 00353-90003 / 9018-02914)
+   ===================================================================== */
+.hp353a-panel-card {
+  background: linear-gradient(180deg, #475569 0%, #334155 10%, #1e293b 90%, #0f172a 100%);
+  border: 2px solid #64748b;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+  margin-top: 1rem;
+}
+
+.hp353a-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #475569;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.hp353a-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hp353a-hp-logo {
+  background: #0284c7;
+  color: #fff;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 2px 5px;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+}
+
+.hp353a-title {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #f1f5f9;
+}
+
+.hp353a-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.85rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid #334155;
+  border-radius: 5px;
+  padding: 0.75rem;
+}
+
+.hp353a-ctrl-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hp353a-ctrl-title {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #94a3b8;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+}
+
+.hp353a-rotary-dial {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #cbd5e1 0%, #64748b 60%, #1e293b 100%);
+  border: 2px solid #94a3b8;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+  transition: transform 0.18s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+.hp353a-rotary-pointer {
+  position: absolute;
+  top: 5px;
+  left: 27px;
+  width: 4px;
+  height: 22px;
+  background: #f59e0b;
+  border-radius: 2px;
+}
+
+.hp353a-value-readout {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #f59e0b;
+  margin-top: 0.35rem;
+}
+
+.hp353a-toggle-switch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.hp353a-switch-btn {
+  background: #1e293b;
+  border: 1.5px solid #64748b;
+  color: #94a3b8;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.3rem 0.65rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hp353a-switch-btn.active {
+  background: #0284c7;
+  border-color: #38bdf8;
+  color: #fff;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.4);
+}
+
+/* =====================================================================
+   Real-Time Strip Chart Trend Recorder Graph
+   ===================================================================== */
+.trend-recorder-card {
+  background: #0b1120;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.85rem;
+  margin-top: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.trend-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.trend-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #facc15; /* Yellow heading */
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.trend-legend {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.trend-legend-pill {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.trend-dot.yellow { background: #facc15; box-shadow: 0 0 6px #facc15; }
+.trend-dot.cyan   { background: #38bdf8; box-shadow: 0 0 6px #38bdf8; }
+.trend-dot.green  { background: #10b981; box-shadow: 0 0 6px #10b981; }
+.trend-dot.rose   { background: #f43f5e; box-shadow: 0 0 6px #f43f5e; }
+
+.trend-btn-group {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.trend-btn {
+  background: #1e293b;
+  border: 1px solid #475569;
+  color: #cbd5e1;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.trend-btn:hover {
+  background: #334155;
+  color: #fff;
+}
+
+.trend-btn.active {
+  background: #eab308;
+  border-color: #facc15;
+  color: #0f172a;
+  font-weight: 900;
+}
+
+.trend-canvas {
+  width: 100%;
+  height: 160px;
+  background: #030712;
+  border: 1px solid #1e293b;
+  border-radius: 4px;
+  display: block;
+}
+
+/* =====================================================================
+   4-Channel Oscilloscope Styling
+   ===================================================================== */
+.scope-ch-toggles {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.scope-ch-btn {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 0.2rem 0.35rem;
+  border-radius: 3px;
+  border: 1px solid #475569;
+  background: #0f172a;
+  color: #64748b;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.scope-ch-btn.ch1.active {
+  background: rgba(250, 204, 21, 0.15);
+  border-color: #facc15;
+  color: #facc15;
+  box-shadow: 0 0 6px rgba(250, 204, 21, 0.4);
+}
+
+.scope-ch-btn.ch2.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #38bdf8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.4);
+}
+
+.scope-ch-btn.ch3.active {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: #f43f5e;
+  color: #f43f5e;
+  box-shadow: 0 0 6px rgba(244, 63, 94, 0.4);
+}
+
+.scope-ch-btn.ch4.active {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: #10b981;
+  color: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+}
+
+/* =====================================================================
+   Measurement Data Points (MDP) Leader Pointers & SVG Callouts
+   ===================================================================== */
+.circuit-mdp-badge {
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.circuit-mdp-badge:hover {
+  filter: brightness(1.25);
+  transform: scale(1.03);
+}
+
+.circuit-mdp-pointer {
+  stroke-dasharray: 3, 3;
+  animation: pointerDash 1s linear infinite;
+}
+
+@keyframes pointerDash {
+  to {
+    stroke-dashoffset: -6;
+  }
 }
 
 .dmm-jack-socket.white {
@@ -4463,5 +4827,127 @@ body.probe-cursor-active * {
 .probe-hud-toast.visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   Full Screen Circuit View & 1960s Military LTP Fader Integration
+   ========================================================================== */
+
+.military-ltp-slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem 0;
+  min-height: 190px;
+  position: relative;
+}
+
+.military-ltp-slot canvas {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+  border: 1px solid #1e293b;
+}
+
+.btn-circuit-fullscreen {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  border-radius: 6px;
+  padding: 0.35rem 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.btn-circuit-fullscreen:hover {
+  background: var(--accent-cyan);
+  color: #040711;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.6);
+  transform: translateY(-1px);
+}
+
+.btn-circuit-fullscreen svg {
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+/* Fullscreen expanded state for any circuit card */
+.circuit-fullscreen-active {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  z-index: 999999 !important;
+  background: #060913 !important;
+  overflow-y: auto !important;
+  padding: 2rem 2.5rem !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.98) !important;
+}
+
+.circuit-fullscreen-exit-btn {
+  position: fixed;
+  top: 1.25rem;
+  right: 2rem;
+  z-index: 1000000;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ef4444;
+  color: #ffffff;
+  border: 1.5px solid #f87171;
+  border-radius: 6px;
+  padding: 0.55rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.5);
+  transition: all 0.2s ease;
+}
+
+.circuit-fullscreen-exit-btn:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(239, 68, 68, 0.7);
+}
+
+.circuit-fullscreen-active .svg-diagram-wrapper {
+  max-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #02040a !important;
+  border: 2px solid var(--accent-cyan) !important;
+  box-shadow: 0 0 40px rgba(6, 182, 212, 0.25) !important;
+  margin: 1.5rem 0 !important;
+}
+
+.circuit-fullscreen-active .svg-diagram-wrapper svg {
+  width: 100% !important;
+  max-height: 70vh !important;
+  height: auto !important;
+}
+
+/* Ensure all schematics and military test panels span 100% full width */
+.svg-diagram-card,
+.svg-diagram-wrapper,
+.vintage-military-panel,
+.vintage-test-bench {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 

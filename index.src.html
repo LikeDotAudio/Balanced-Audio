@@ -131,6 +131,12 @@
 
       <!-- Interactive SVG Enclosure Diagram -->
       <div class="enclosure-diagram-container">
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 0.5rem;">
+          <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            <span>⛶ Full Screen</span>
+          </button>
+        </div>
         <div class="svg-diagram-wrapper">
           <svg viewBox="0 0 1000 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" id="enclosure-svg">
             <rect width="1000" height="320" fill="var(--bg-secondary)" rx="8"/>
@@ -563,6 +569,14 @@
           <a href="#contributor-kenny" class="alignment-contributor-badge"><span>👤 AES72 QTP Research:</span> <strong>Richard Kenny</strong> &rarr;</a>
           <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Grounding:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
           <a href="#contributor-schmidt" class="alignment-contributor-badge"><span>👤 Multichannel Snakes:</span> <strong>John Schmidt (Whirlwind)</strong> &rarr;</a>
+          <a href="#contributor-celli" class="alignment-contributor-badge"><span>👤 Snake Shield Continuity:</span> <strong>John Celli</strong> &rarr;</a>
+          <a href="#contributor-brito" class="alignment-contributor-badge"><span>👤 Standards Implementation:</span> <strong>Joel Brito</strong> &rarr;</a>
+          <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 SCIN Physics:</span> <strong>Bill Whitlock</strong> &rarr;</a>
+        </div>
+        <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="#contributor-kenny" class="alignment-contributor-badge"><span>👤 AES72 QTP Research:</span> <strong>Richard Kenny</strong> &rarr;</a>
+          <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Grounding:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
+          <a href="#contributor-schmidt" class="alignment-contributor-badge"><span>👤 Multichannel Snakes:</span> <strong>John Schmidt (Whirlwind)</strong> &rarr;</a>
           <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 SCIN Physics:</span> <strong>Bill Whitlock</strong> &rarr;</a>
         </div>
         </p>
@@ -819,6 +833,7 @@
 
     </div>
   </section>
+
 
 
 
@@ -1880,9 +1895,9 @@
           <span class="badge badge-accent">Interactive Metering</span>
         </div>
 
-        <!-- Laboratory Test Bench: APK Precision AC Voltmeter + Fluke 8050A Benchtop DMM -->
+        <!-- Laboratory Test Bench: HP 400FL Precision AC Voltmeter + Fluke 8050A Benchtop DMM -->
         <div class="vintage-test-bench">
-          <!-- APK Precision AC Voltmeter -->
+          <!-- Hewlett-Packard 400FL Precision AC Voltmeter -->
           <div class="hp-voltmeter-card">
   <svg class="hp-laboratory-voltmeter" viewBox="0 0 380 495" xmlns="http://www.w3.org/2000/svg">
 <defs>
@@ -2013,11 +2028,11 @@
 <circle cx="190" cy="230" r="5.5" fill="#94a3b8"/>
 <line x1="185" y1="230" x2="195" y2="230" stroke="#1e293b" stroke-width="1.2"/><!-- Lower Panel Silkscreen Header -->
 <g transform="translate(42, 252)">
-  <!-- APK Logo Badge -->
-  <rect x="0" y="0" width="28" height="18" rx="3" fill="#0284c7"/>
-  <text x="14" y="13" fill="#ffffff" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="10" text-anchor="middle" letter-spacing="0.05em">APK</text>
-  <text x="36" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="800" letter-spacing="0.08em">ANTHONY PETER KUZUB</text>
-  <text x="196" y="13" fill="#0284c7" font-family="'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="800" letter-spacing="0.08em">PRECISION AC VOLTMETER</text>
+  <!-- HP Logo -->
+  <rect x="0" y="0" width="18" height="18" rx="3" fill="#006699"/>
+  <text x="9" y="13" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="12" text-anchor="middle">hp</text>
+  <text x="26" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="0.1em">HEWLETT • PACKARD</text>
+  <text x="180" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="0.08em">400FL AC VOLTMETER</text>
   <text x="96" y="25" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="0.05em">IN ~ 100kHz L.P. FILTER ~ OUT</text>
 </g>
 
@@ -2276,6 +2291,12 @@
         <div class="svg-diagram-card">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h4 style="margin: 0; color: var(--accent-cyan);">6.1. Balanced Ground-Referenced Output (Dual Push-Pull)</h4>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                <span>⛶ Full Screen</span>
+              </button>
+            </div>
             <span id="pp-status" class="badge badge-success">Normal Symmetrical Balanced Operation</span>
           </div>
           <p class="circuit-desc">
@@ -2331,8 +2352,9 @@
                   </div>
                 </div>
 
-                <!-- 1960s Knurled Fader Slider -->
-                <input type="range" id="pp-vin" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.2" style="margin-top: 0.5rem;" />
+                <!-- 1960s Linear Travelling Potentiometer (LTP) Fader -->
+                <div id="pp-vin-ltp" class="military-ltp-slot"></div>
+                <input type="range" id="pp-vin" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.2" style="display: none;" />
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
                   <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
@@ -2373,8 +2395,9 @@
                   </div>
                 </div>
 
-                <!-- Knurled Fader Slider -->
-                <input type="range" id="pp-rout" class="range-slider" min="10" max="200" step="5" value="50" style="margin-top: 0.5rem;" />
+                <!-- 1960s Linear Travelling Potentiometer (LTP) Fader -->
+                <div id="pp-rout-ltp" class="military-ltp-slot"></div>
+                <input type="range" id="pp-rout" class="range-slider" min="10" max="200" step="5" value="50" style="display: none;" />
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
                   <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
@@ -2414,8 +2437,9 @@
                   </div>
                 </div>
 
-                <!-- Knurled Fader Slider -->
-                <input type="range" id="pp-rload" class="range-slider" min="150" max="20000" step="50" value="600" style="margin-top: 0.5rem;" />
+                <!-- 1960s Linear Travelling Potentiometer (LTP) Fader -->
+                <div id="pp-rload-ltp" class="military-ltp-slot"></div>
+                <input type="range" id="pp-rload" class="range-slider" min="150" max="20000" step="50" value="600" style="display: none;" />
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
                   <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
@@ -2444,9 +2468,9 @@
 
             </div>
 
-            <!-- Laboratory Test Bench: APK Precision AC Voltmeter + Fluke 8050A Benchtop DMM -->
+            <!-- Laboratory Test Bench: HP 400FL Precision AC Voltmeter + Fluke 8050A Benchtop DMM -->
             <div class="vintage-test-bench" style="margin-top: 1.25rem;">
-              <!-- APK Precision AC Voltmeter -->
+              <!-- Hewlett-Packard 400FL Precision AC Voltmeter -->
               <div class="hp-voltmeter-card">
   <svg class="hp-laboratory-voltmeter" viewBox="0 0 380 495" xmlns="http://www.w3.org/2000/svg">
 <defs>
@@ -2577,11 +2601,11 @@
 <circle cx="190" cy="230" r="5.5" fill="#94a3b8"/>
 <line x1="185" y1="230" x2="195" y2="230" stroke="#1e293b" stroke-width="1.2"/><!-- Lower Panel Silkscreen Header -->
 <g transform="translate(42, 252)">
-  <!-- APK Logo Badge -->
-  <rect x="0" y="0" width="28" height="18" rx="3" fill="#0284c7"/>
-  <text x="14" y="13" fill="#ffffff" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="10" text-anchor="middle" letter-spacing="0.05em">APK</text>
-  <text x="36" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="800" letter-spacing="0.08em">ANTHONY PETER KUZUB</text>
-  <text x="196" y="13" fill="#0284c7" font-family="'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="800" letter-spacing="0.08em">PRECISION AC VOLTMETER</text>
+  <!-- HP Logo -->
+  <rect x="0" y="0" width="18" height="18" rx="3" fill="#006699"/>
+  <text x="9" y="13" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="12" text-anchor="middle">hp</text>
+  <text x="26" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="0.1em">HEWLETT • PACKARD</text>
+  <text x="180" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="0.08em">400FL AC VOLTMETER</text>
   <text x="96" y="25" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="0.05em">IN ~ 100kHz L.P. FILTER ~ OUT</text>
 </g>
 
@@ -2852,6 +2876,12 @@
         <div class="svg-diagram-card">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h4 style="margin: 0; color: var(--accent-cyan);">6.2. Active Impedance-Balanced Output (Single-Op-Amp / Resistor Return)</h4>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                <span>⛶ Full Screen</span>
+              </button>
+            </div>
             <span class="badge badge-success">Symmetrical Impedance &bull; Single-Ended Voltage</span>
           </div>
           <p class="circuit-desc">
@@ -2859,50 +2889,79 @@
             to ground through identical resistor R<sub>RO</sub>. <strong>100% CMRR is achieved with zero risk when shorting Pin 3!</strong>
           </p>
 
-          <!-- Variable Controls Card -->
-          <div class="circuit-controls-card">
-            <div class="circuit-variables-grid">
-              <div class="control-group" style="margin-bottom: 0;">
-                <label class="control-label">
-                  <span>Input Voltage (V<sub>IN</sub>)</span>
-                  <span id="ib-vin-val" class="control-value">1.2 V</span>
-                </label>
-                <input type="range" id="ib-vin" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.2" />
-              </div>
+          <!-- 1960s Military / Laboratory Console: Circuit 6.2 Active Impedance-Balanced LTP Faders -->
+          <div class="vintage-military-panel" style="margin-bottom: 1.5rem;">
+            <div class="panel-screw top-left"></div>
+            <div class="panel-screw top-right"></div>
+            <div class="panel-screw bottom-left"></div>
+            <div class="panel-screw bottom-right"></div>
 
-              <div class="control-group" style="margin-bottom: 0;">
-                <label class="control-label">
-                  <span>Output Impedance (R<sub>OUT</sub>)</span>
-                  <span id="ib-rout-val" class="control-value">50 &Omega;</span>
-                </label>
-                <input type="range" id="ib-rout" class="range-slider" min="10" max="200" step="5" value="50" />
-              </div>
-
-              <div class="control-group" style="margin-bottom: 0;">
-                <label class="control-label">
-                  <span>Load Resistance (R<sub>L</sub>)</span>
-                  <span id="ib-rload-val" class="control-value">10000 &Omega;</span>
-                </label>
-                <input type="range" id="ib-rload" class="range-slider" min="600" max="20000" step="200" value="10000" />
-              </div>
-
-              <div>
-                <label class="checkbox-toggle-label" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: #6ee7b7;">
-                  <input type="checkbox" id="ib-short-pin3" />
-                  <span>Short Pin 3 to Ground (Completely Harmless)</span>
-                </label>
-              </div>
+            <div class="military-panel-header">
+              <span class="military-panel-title">AN/URM-1962 ACTIVE IMPEDANCE-BALANCED LABORATORY SET</span>
+              <span class="military-spec-badge">MIL-T-28800B &bull; PASSIVE COLD MATCH</span>
             </div>
 
-            <!-- Live Falstad-Style Probes -->
-            <div class="probe-badge-panel">
-              <span class="probe-pill">Driver Out: <strong id="ib-probe-drv">1.20 V / 0.12 mA</strong></span>
-              <span class="probe-pill">Pin 2 (Hot): <strong id="ib-probe-p2">1.19 V / +3.7 dBu</strong></span>
-              <span class="probe-pill">Pin 3 (Cold): <strong id="ib-probe-p3">0.00 V / 50.0 &Omega; to 0V</strong></span>
-              <span class="probe-pill">Load Terminal: <strong id="ib-probe-load">V_diff: 1.19 V | 100% Hum Immunity</strong></span>
+            <div class="military-faders-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
+              
+              <!-- Bay 1: V_IN -->
+              <div class="military-fader-cell">
+                <div class="military-cell-header">
+                  <span class="military-fader-label">ACTIVE DRIVE (V<sub>IN</sub>)</span>
+                  <span id="ib-vin-val" class="military-fader-readout">1.2 V</span>
+                </div>
+                <div id="ib-vin-ltp" class="military-ltp-slot"></div>
+                <input type="range" id="ib-vin" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.2" style="display: none;" />
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                  <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
+                  <input type="number" id="ib-vin-manual" class="military-manual-input" value="1.2" step="0.1" min="0.1" max="5.0" />
+                </div>
+              </div>
+
+              <!-- Bay 2: R_OUT -->
+              <div class="military-fader-cell">
+                <div class="military-cell-header">
+                  <span class="military-fader-label">MATCH IMPEDANCE (R<sub>OUT</sub>)</span>
+                  <span id="ib-rout-val" class="military-fader-readout">50 &Omega;</span>
+                </div>
+                <div id="ib-rout-ltp" class="military-ltp-slot"></div>
+                <input type="range" id="ib-rout" class="range-slider" min="10" max="200" step="5" value="50" style="display: none;" />
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                  <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
+                  <input type="number" id="ib-rout-manual" class="military-manual-input" value="50" step="5" min="10" max="200" />
+                </div>
+              </div>
+
+              <!-- Bay 3: R_LOAD -->
+              <div class="military-fader-cell">
+                <div class="military-cell-header">
+                  <span class="military-fader-label">BRIDGING LOAD (R<sub>LOAD</sub>)</span>
+                  <span id="ib-rload-val" class="military-fader-readout">10.0 k&Omega;</span>
+                </div>
+                <div id="ib-rload-ltp" class="military-ltp-slot"></div>
+                <input type="range" id="ib-rload" class="range-slider" min="600" max="20000" step="100" value="10000" style="display: none;" />
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                  <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
+                  <input type="number" id="ib-rload-manual" class="military-manual-input" value="10000" step="100" min="600" max="20000" />
+                </div>
+              </div>
+
+            </div>
+
+            <div class="form-check mt-2" style="background: rgba(15, 23, 42, 0.7); padding: 0.75rem 1rem 0.75rem 2.25rem; border-radius: 6px; border: 1px solid #334155;">
+              <input type="checkbox" id="ib-short-pin3" class="form-check-input" />
+              <label for="ib-short-pin3" class="form-check-label" style="font-weight: 700; color: #38bdf8;">
+                Short Pin 3 to Ground (Unbalanced Mono TS Cable Mode) &mdash; Notice 100% Signal Integrity Preserved!
+              </label>
+            </div>
+
+            <!-- Live On-Wire Falstad-Style Probes -->
+            <div class="probe-badge-panel" style="margin-top: 0.75rem;">
+              <span class="probe-pill">Op-Amp A1 Output: <strong id="ib-probe-drv">1.20 V / 0.12 mA</strong></span>
+              <span class="probe-pill">Pin 2 (Hot Conductor): <strong id="ib-probe-p2">1.19 V / +3.8 dBu</strong></span>
+              <span class="probe-pill">Pin 3 (Cold Conductor): <strong id="ib-probe-p3">0.00 V / 50.0 &Omega; to 0V</strong></span>
+              <span class="probe-pill">Differential Load Signal: <strong id="ib-probe-load">V_diff: 1.19 V | 100% Hum Immunity</strong></span>
             </div>
           </div>
-
           <div class="svg-diagram-wrapper">
             <svg viewBox="0 0 850 280" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
               <rect width="850" height="280" fill="var(--bg-secondary)" rx="8"/>
@@ -2951,6 +3010,12 @@
         <div class="svg-diagram-card">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h4 style="margin: 0; color: var(--accent-cyan);">6.3. Transformer Balanced Galvanically Floating Output</h4>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                <span>⛶ Full Screen</span>
+              </button>
+            </div>
             <span id="tx-status" class="badge badge-success">Galvanically Floating &bull; 100% Galvanic Isolation</span>
           </div>
           <p class="circuit-desc">
@@ -2958,51 +3023,79 @@
             <strong>Toggle "Tie Pin 3 to Earth Ground"</strong> to observe how grounding either pin references the floating winding with zero signal loss!
           </p>
 
-          <!-- Variable Controls Card (Clean HTML) -->
-          <div class="circuit-controls-card">
-            <div class="circuit-variables-grid">
-              <div class="control-group" style="margin-bottom: 0;">
-                <label class="control-label">
-                  <span>Primary Voltage (V<sub>IN</sub>)</span>
-                  <span id="tx-vin-val" class="control-value">15.0 V</span>
-                </label>
-                <input type="range" id="tx-vin" class="range-slider" min="1" max="25" step="0.5" value="15" />
+          <!-- 1960s Military / Laboratory Console: Circuit 6.3 Transformer LTP Faders -->
+          <div class="vintage-military-panel" style="margin-bottom: 1.5rem;">
+            <div class="panel-screw top-left"></div>
+            <div class="panel-screw top-right"></div>
+            <div class="panel-screw bottom-left"></div>
+            <div class="panel-screw bottom-right"></div>
+
+            <div class="military-panel-header">
+              <span class="military-panel-title">AN/URM-1963 TRANSFORMER ISOLATION TEST SET</span>
+              <span class="military-spec-badge">MIL-T-28800B &bull; GALVANIC ISOLATION</span>
+            </div>
+
+            <div class="military-faders-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
+              
+              <!-- Bay 1: V_IN -->
+              <div class="military-fader-cell">
+                <div class="military-cell-header">
+                  <span class="military-fader-label">PRIMARY DRIVE (V<sub>IN</sub>)</span>
+                  <span id="tx-vin-val" class="military-fader-readout">15.0 V</span>
+                </div>
+                <div id="tx-vin-ltp" class="military-ltp-slot"></div>
+                <input type="range" id="tx-vin" class="range-slider" min="1" max="25" step="0.5" value="15" style="display: none;" />
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                  <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
+                  <input type="number" id="tx-vin-manual" class="military-manual-input" value="15" step="0.5" min="1" max="25" />
+                </div>
               </div>
 
-              <div class="control-group" style="margin-bottom: 0;">
-                <label class="control-label">
-                  <span>Transformer Turns Ratio</span>
-                  <span id="tx-ratio-val" class="control-value">1 : 1.0</span>
-                </label>
-                <input type="range" id="tx-ratio" class="range-slider" min="0.5" max="2.0" step="0.1" value="1.0" />
+              <!-- Bay 2: Turns Ratio -->
+              <div class="military-fader-cell">
+                <div class="military-cell-header">
+                  <span class="military-fader-label">TURNS RATIO (1 : N)</span>
+                  <span id="tx-ratio-val" class="military-fader-readout">1 : 1.0</span>
+                </div>
+                <div id="tx-ratio-ltp" class="military-ltp-slot"></div>
+                <input type="range" id="tx-ratio" class="range-slider" min="0.5" max="4.0" step="0.1" value="1.0" style="display: none;" />
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                  <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
+                  <input type="number" id="tx-ratio-manual" class="military-manual-input" value="1.0" step="0.1" min="0.5" max="4.0" />
+                </div>
               </div>
 
-              <div class="control-group" style="margin-bottom: 0;">
-                <label class="control-label">
-                  <span>Load Resistance (R<sub>L</sub>)</span>
-                  <span id="tx-rload-val" class="control-value">600 &Omega;</span>
-                </label>
-                <input type="range" id="tx-rload" class="range-slider" min="150" max="5000" step="50" value="600" />
+              <!-- Bay 3: Secondary Load -->
+              <div class="military-fader-cell">
+                <div class="military-cell-header">
+                  <span class="military-fader-label">LOAD (R<sub>LOAD</sub>)</span>
+                  <span id="tx-rload-val" class="military-fader-readout">600 &Omega;</span>
+                </div>
+                <div id="tx-rload-ltp" class="military-ltp-slot"></div>
+                <input type="range" id="tx-rload" class="range-slider" min="150" max="10000" step="50" value="600" style="display: none;" />
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                  <span style="font-size: 0.72rem; color: #64748b;">Direct Value:</span>
+                  <input type="number" id="tx-rload-manual" class="military-manual-input" value="600" step="50" min="150" max="10000" />
+                </div>
               </div>
 
-              <div>
-                <label class="checkbox-toggle-label" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: #6ee7b7;">
-                  <input type="checkbox" id="tx-ground-pin3" />
-                  <span>Tie Pin 3 to Earth Ground (Unbalanced TS)</span>
-                </label>
-              </div>
+            </div>
+
+            <div class="form-check mt-2" style="background: rgba(15, 23, 42, 0.7); padding: 0.75rem 1rem 0.75rem 2.25rem; border-radius: 6px; border: 1px solid #334155;">
+              <input type="checkbox" id="tx-ground-pin3" class="form-check-input" />
+              <label for="tx-ground-pin3" class="form-check-label" style="font-weight: 700; color: #38bdf8;">
+                Tie Pin 3 to Earth Ground (Simulate Unbalanced Load / Direct Box Ground Lift Test)
+              </label>
             </div>
 
             <!-- Live Falstad-Style Probes -->
-            <div class="probe-badge-panel">
-              <span class="probe-pill">Primary Drive: <strong id="tx-probe-pri">294.8 mA / 15.0 V</strong></span>
-              <span class="probe-pill">Secondary Pin 2: <strong id="tx-probe-p2">159.7 mA / 7.50 V</strong></span>
-              <span class="probe-pill">Secondary Pin 3: <strong id="tx-probe-p3">159.7 mA / -7.50 V</strong></span>
-              <span class="probe-pill">Load Terminal: <strong id="tx-probe-load">V_load: 15.0 V | I_load: 25.0 mA</strong></span>
+            <div class="probe-badge-panel" style="margin-top: 0.75rem;">
+              <span class="probe-pill">Primary Drive: <strong id="tx-probe-pri">23.4 mA / 15.0 V</strong></span>
+              <span class="probe-pill">Pin 2 Conductor: <strong id="tx-probe-p2">23.4 mA / 7.03 V</strong></span>
+              <span class="probe-pill">Pin 3 Conductor: <strong id="tx-probe-p3">23.4 mA / -7.03 V</strong></span>
+              <span class="probe-pill">Load Power: <strong id="tx-probe-load">V_load: 14.06 V | I_load: 23.4 mA</strong></span>
             </div>
           </div>
-
-          <!-- REDRAWN PERFECTLY ALIGNED VECTOR SVG -->
           <div class="svg-diagram-wrapper">
             <svg viewBox="0 0 850 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
               <rect width="850" height="320" fill="var(--bg-secondary)" rx="8"/>
@@ -3063,6 +3156,12 @@
         <div class="svg-diagram-card">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h4 style="margin: 0; color: var(--accent-cyan);">6.4. Double Transformer Cascaded Link &amp; RF Noise Injection</h4>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                <span>⛶ Full Screen</span>
+              </button>
+            </div>
             <span class="badge badge-accent">Cascaded Mutual Flux &bull; RF Common-Mode Rejection</span>
           </div>
           <p class="circuit-desc">
@@ -3163,6 +3262,12 @@
         <div class="svg-diagram-card">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h4 style="margin: 0; color: var(--accent-cyan);">6.5. Cross-Coupled Electronically Balanced Output</h4>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                <span>⛶ Full Screen</span>
+              </button>
+            </div>
             <span class="badge badge-accent">Active Transformer Emulation</span>
           </div>
           <p class="circuit-desc">
@@ -3182,6 +3287,12 @@
         <div class="svg-diagram-card">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h4 style="margin: 0; color: var(--accent-cyan);">6.6. Dual Operational Differential Receiver</h4>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                <span>⛶ Full Screen</span>
+              </button>
+            </div>
             <span class="badge badge-warning">Resistor Ratio Dependent</span>
           </div>
           <p class="circuit-desc">
@@ -3201,6 +3312,12 @@
         <div class="svg-diagram-card">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h4 style="margin: 0; color: var(--accent-cyan);">6.7. High-Common-Mode Impedance Instrumentation Receiver</h4>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                <span>⛶ Full Screen</span>
+              </button>
+            </div>
             <span class="badge badge-success">Source Imbalance Immune</span>
           </div>
           <p class="circuit-desc">
@@ -3220,6 +3337,12 @@
         <div class="svg-diagram-card">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h4 style="margin: 0; color: var(--accent-cyan);">6.8. Hybrid Active-Transformer Isolated System</h4>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                <span>⛶ Full Screen</span>
+              </button>
+            </div>
             <span class="badge badge-success">Ultimate Studio &amp; Broadcast Isolation</span>
           </div>
           <p class="circuit-desc">
@@ -3378,6 +3501,10 @@
             <h3 style="margin: 0; color: var(--text-primary); font-size: 1.15rem;">
               2. Virtual Test Bench &amp; Termination Simulator
             </h3>
+            <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+              <span>⛶ Full Screen</span>
+            </button>
             <span class="badge badge-accent">Live Falstad-Engine</span>
           </div>
 
@@ -3534,72 +3661,142 @@
           <h4 style="margin: 0; color: var(--accent-cyan);">
             Full Interconnection Network: Source &rarr; Cable &rarr; Receiver with Ground Potential Difference (V<sub>GVD</sub>)
           </h4>
-          <span class="badge badge-accent">Thevenin 3-Z Model</span>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+              <span>⛶ Full Screen</span>
+            </button>
+            <span class="badge badge-accent">Thevenin 3-Z Model</span>
+          </div>
         </div>
         <p class="circuit-desc">
           Use the interactive sliders below to introduce source impedance imbalances (&Delta;Z = |Z<sub>PO</sub> &minus; Z<sub>RO</sub>|) 
           and observe the ground voltage differential (V<sub>GVD</sub>) driving interference current that converts directly into differential hum:
         </p>
 
-        <!-- Variable Controls Card (Clean HTML) -->
-        <div class="circuit-controls-card">
-          <div class="circuit-variables-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-            <div class="control-group" style="margin-bottom: 0;">
-              <label class="control-label">
-                <span>Signal Drive (V<sub>PO</sub>)</span>
-                <span id="meyer-vpo-val" class="control-value">1.0 V</span>
-              </label>
-              <input type="range" id="meyer-vpo" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.0" />
-            </div>
+        <!-- 1960s Military / Laboratory Console: AN/URM-1965 Thevenin Transmission Analyzer with LTP Faders -->
+        <div class="vintage-military-panel" style="margin-bottom: 1.5rem;">
+          <div class="panel-screw top-left"></div>
+          <div class="panel-screw top-right"></div>
+          <div class="panel-screw bottom-left"></div>
+          <div class="panel-screw bottom-right"></div>
 
-            <div class="control-group" style="margin-bottom: 0;">
-              <label class="control-label">
-                <span>Positive Leg Z<sub>PO</sub></span>
-                <span id="meyer-zpo-val" class="control-value">50 &Omega;</span>
-              </label>
-              <input type="range" id="meyer-zpo" class="range-slider" min="10" max="250" step="5" value="50" />
+          <div class="military-panel-header" style="flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <span class="military-panel-title">AN/URM-1965 THEVENIN 3-IMPEDANCE TRANSMISSION ANALYZER</span>
+              <span class="military-spec-badge">MIL-T-28800B &bull; JIM MEYER THEVENIN MODEL</span>
             </div>
-
-            <div class="control-group" style="margin-bottom: 0;">
-              <label class="control-label">
-                <span>Return Leg Z<sub>RO</sub></span>
-                <span id="meyer-zro-val" class="control-value">50 &Omega;</span>
-              </label>
-              <input type="range" id="meyer-zro" class="range-slider" min="10" max="250" step="5" value="50" />
-            </div>
-
-            <div class="control-group" style="margin-bottom: 0;">
-              <label class="control-label">
-                <span>Common-Mode Source CMZ<sub>OUT</sub></span>
-                <span id="meyer-cmz-val" class="control-value">50 &Omega;</span>
-              </label>
-              <input type="range" id="meyer-cmz" class="range-slider" min="10" max="1000" step="10" value="50" />
-            </div>
-
-            <div class="control-group" style="margin-bottom: 0;">
-              <label class="control-label">
-                <span>Ground Voltage Diff (V<sub>GVD</sub>)</span>
-                <span id="meyer-vgvd-val" class="control-value">3.0 V</span>
-              </label>
-              <input type="range" id="meyer-vgvd" class="range-slider" min="0" max="10" step="0.2" value="3.0" />
-            </div>
-
-            <div class="control-group" style="margin-bottom: 0;">
-              <label class="control-label">
-                <span>Cable Capacitance (C<sub>PS</sub>)</span>
-                <span id="meyer-cps-val" class="control-value">100 pF</span>
-              </label>
-              <input type="range" id="meyer-cps" class="range-slider" min="20" max="1000" step="20" value="100" />
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Calibrated Presets:</span>
+              <select id="meyer-preset-select" class="military-preset-select" style="font-size: 0.78rem; padding: 0.3rem 0.6rem; min-width: 220px;">
+                <option value="balanced" selected>1. Standard Balanced (50Ω / 50Ω &bull; 0 Hum)</option>
+                <option value="imbalance_10">2. 10Ω Imbalance (45Ω / 55Ω &bull; 0.6 mV Hum)</option>
+                <option value="imbalance_severe">3. Severe Mismatch (20Ω / 120Ω &bull; 5.9 mV Hum)</option>
+                <option value="clean_ground">4. Clean Earth Ground (0.0 V Hum)</option>
+                <option value="heavy_hum">5. Heavy Ground Loop (6.0 V Hum)</option>
+                <option value="long_cable">6. Long Shielded Snake (500 pF C_PS)</option>
+                <option value="custom">Manual LTP Faders</option>
+              </select>
             </div>
           </div>
 
-          <!-- Live Meyer Model Probes -->
-          <div class="probe-badge-panel">
+          <!-- 6-Bay LTP Fader Bank Grid -->
+          <div class="military-faders-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+            
+            <!-- Bay 1: V_PO (Signal Drive) -->
+            <div class="military-fader-cell">
+              <div class="military-cell-header">
+                <span class="military-fader-label">DRIVE (V<sub>PO</sub>)</span>
+                <span id="meyer-vpo-val" class="military-fader-readout">1.0 V</span>
+              </div>
+              <div id="meyer-vpo-ltp" class="military-ltp-slot"></div>
+              <input type="range" id="meyer-vpo" class="range-slider" min="0.1" max="5.0" step="0.1" value="1.0" style="display: none;" />
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                <span style="font-size: 0.68rem; color: #64748b;">Direct:</span>
+                <input type="number" id="meyer-vpo-manual" class="military-manual-input" value="1.0" step="0.1" min="0.1" max="5.0" style="width: 58px;" />
+              </div>
+            </div>
+
+            <!-- Bay 2: Z_PO (Hot Leg Source Impedance) -->
+            <div class="military-fader-cell">
+              <div class="military-cell-header">
+                <span class="military-fader-label">HOT (Z<sub>PO</sub>)</span>
+                <span id="meyer-zpo-val" class="military-fader-readout">50 &Omega;</span>
+              </div>
+              <div id="meyer-zpo-ltp" class="military-ltp-slot"></div>
+              <input type="range" id="meyer-zpo" class="range-slider" min="10" max="250" step="5" value="50" style="display: none;" />
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                <span style="font-size: 0.68rem; color: #64748b;">Direct:</span>
+                <input type="number" id="meyer-zpo-manual" class="military-manual-input" value="50" step="5" min="10" max="250" style="width: 58px;" />
+              </div>
+            </div>
+
+            <!-- Bay 3: Z_RO (Return Leg Source Impedance) -->
+            <div class="military-fader-cell">
+              <div class="military-cell-header">
+                <span class="military-fader-label">COLD (Z<sub>RO</sub>)</span>
+                <span id="meyer-zro-val" class="military-fader-readout">50 &Omega;</span>
+              </div>
+              <div id="meyer-zro-ltp" class="military-ltp-slot"></div>
+              <input type="range" id="meyer-zro" class="range-slider" min="10" max="250" step="5" value="50" style="display: none;" />
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                <span style="font-size: 0.68rem; color: #64748b;">Direct:</span>
+                <input type="number" id="meyer-zro-manual" class="military-manual-input" value="50" step="5" min="10" max="250" style="width: 58px;" />
+              </div>
+            </div>
+
+            <!-- Bay 4: CMZ_OUT (Common-Mode Source) -->
+            <div class="military-fader-cell">
+              <div class="military-cell-header">
+                <span class="military-fader-label">CMZ<sub>OUT</sub></span>
+                <span id="meyer-cmz-val" class="military-fader-readout">50 &Omega;</span>
+              </div>
+              <div id="meyer-cmz-ltp" class="military-ltp-slot"></div>
+              <input type="range" id="meyer-cmz" class="range-slider" min="10" max="1000" step="10" value="50" style="display: none;" />
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                <span style="font-size: 0.68rem; color: #64748b;">Direct:</span>
+                <input type="number" id="meyer-cmz-manual" class="military-manual-input" value="50" step="10" min="10" max="1000" style="width: 58px;" />
+              </div>
+            </div>
+
+            <!-- Bay 5: V_GVD (Ground Voltage Diff) -->
+            <div class="military-fader-cell">
+              <div class="military-cell-header">
+                <span class="military-fader-label">HUM (V<sub>GVD</sub>)</span>
+                <span id="meyer-vgvd-val" class="military-fader-readout">3.0 V</span>
+              </div>
+              <div id="meyer-vgvd-ltp" class="military-ltp-slot"></div>
+              <input type="range" id="meyer-vgvd" class="range-slider" min="0" max="10" step="0.2" value="3.0" style="display: none;" />
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                <span style="font-size: 0.68rem; color: #64748b;">Direct:</span>
+                <input type="number" id="meyer-vgvd-manual" class="military-manual-input" value="3.0" step="0.2" min="0" max="10" style="width: 58px;" />
+              </div>
+            </div>
+
+            <!-- Bay 6: C_PS (Cable Capacitance) -->
+            <div class="military-fader-cell">
+              <div class="military-cell-header">
+                <span class="military-fader-label">SHIELD (C<sub>PS</sub>)</span>
+                <span id="meyer-cps-val" class="military-fader-readout">100 pF</span>
+              </div>
+              <div id="meyer-cps-ltp" class="military-ltp-slot"></div>
+              <input type="range" id="meyer-cps" class="range-slider" min="20" max="1000" step="20" value="100" style="display: none;" />
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                <span style="font-size: 0.68rem; color: #64748b;">Direct:</span>
+                <input type="number" id="meyer-cps-manual" class="military-manual-input" value="100" step="20" min="20" max="1000" style="width: 58px;" />
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Live Meyer Model Probes Strip -->
+          <div class="probe-badge-panel" style="margin-top: 0.5rem; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
             <span class="probe-pill">Impedance Imbalance (&Delta;Z): <strong id="meyer-probe-deltaz">0.0 &Omega; (0.00%)</strong></span>
             <span class="probe-pill">Ground Loop Current: <strong id="meyer-probe-ignd">3.8 mA</strong></span>
             <span class="probe-pill">Diff Audio Signal: <strong id="meyer-probe-vdiff">1.96 V</strong></span>
             <span class="probe-pill">Converted Hum Error: <strong id="meyer-probe-verror" style="color: #10b981;">0.00 mV (Infinite CMRR)</strong></span>
             <span class="probe-pill">Calculated Thevenin CMRR: <strong id="meyer-probe-cmrr" style="color: #10b981;">&infin; dB</strong></span>
+            <span id="meyer-status" class="badge badge-success">Perfect Impedance Match (Infinite Thevenin CMRR)</span>
           </div>
         </div>
 
@@ -3805,10 +4002,10 @@
         <p class="section-lead">
           Normative engineering guidance for connecting balanced equipment to unbalanced inputs and outputs. 
           Based on the definitive compatibility matrix by Richard L. Hess (AES Fellow).
-        </p>
         <div style="margin-top: 0.5rem;">
           <a href="#contributor-hess" class="alignment-contributor-badge"><span>👤 Author Alignment:</span> <strong>Richard L. Hess (AES Fellow)</strong> &bull; View Contributor Profile &amp; Matrix Work &rarr;</a>
         </div>
+        </p>
       </div>
 
       <!-- Richard Hess Compatibility Matrix Table -->
@@ -3984,6 +4181,7 @@
         </div>
 
       </div>
+    </div>
 
       <!-- Interactive Vector SVG Adapter Wiring Schematics Suite -->
       <div id="adapter-wiring-suite" class="adapter-hub-card">
@@ -4717,6 +4915,14 @@
         <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 0.4rem 0.8rem; margin-top: 0.5rem; font-size: 0.82rem; color: #fbbf24;">
           <span>📁</span>
           <strong>Posted to SC-05-05 Repository:</strong> October 3, 2025 &bull; by Richard Cabot, Chair &bull; for AES SC-05-05 Group Members
+        </div>
+        <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="#contributor-cabot" class="alignment-contributor-badge"><span>👤 Archive Compiler:</span> <strong>Richard Cabot, Chair</strong> &rarr;</a>
+          <a href="#contributor-olson" class="alignment-contributor-badge"><span>👤 Standards Governance:</span> <strong>Bruce Olson (AESSC Chair)</strong> &rarr;</a>
+          <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Co-Author:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
+          <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 Seminal Papers:</span> <strong>Bill Whitlock</strong> &rarr;</a>
+          <a href="#contributor-hess" class="alignment-contributor-badge"><span>👤 Working Group Drafts:</span> <strong>Richard L. Hess</strong> &rarr;</a>
+        </div>
         </div>
         <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
           <a href="#contributor-cabot" class="alignment-contributor-badge"><span>👤 Archive Compiler:</span> <strong>Richard Cabot, Chair</strong> &rarr;</a>
@@ -5702,6 +5908,8 @@
         </div>
 
       </div>
+    </div>
+  </section>
 
       <!-- SC-05-05 Working Group Roster & Key Contributors Card -->
       <div id="sc0505-roster" class="detail-card" style="margin-top: 2.5rem; border: 1.5px solid #38bdf8; background: #090d16;">
