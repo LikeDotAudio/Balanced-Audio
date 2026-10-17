@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AES-X152: Balanced Audio Interconnection & Interface Parameters</title>
+  <meta name="description" content="Technical exploration, report of findings, interactive engineering tools, and comprehensive taxonomy tree for AES-X152 (SC-05-05).">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Site Navigation Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="#hero" class="brand-link">
+        <span class="brand-badge">AES-X152</span>
+        <div>
+          <span class="brand-title">Balanced Audio</span>
+          <span class="brand-subtitle">AES SC-05-05 Standards Working Group</span>
+        </div>
+      </a>
+
+      <nav class="site-nav">
+        <a href="#triad" class="nav-link">The Three Parts</a>
+        <a href="#tree-explorer" class="nav-link">Taxonomy Tree</a>
+        <a href="#findings" class="nav-link">Findings & Truths</a>
+        <a href="#engineering-lab" class="nav-link">Engineering Lab</a>
+        <a href="#datasheet-matrix" class="nav-link">Standard Datasheet</a>
+        <a href="#topologies" class="nav-link">Circuits</a>
+        <a href="#deep-dives" class="nav-link">Deep Dives</a>
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">☀️ Light Mode</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-tag">
+        <span>Audio Engineering Society</span>
+        <span>•</span>
+        <span>Standards Committee SC-05-05</span>
+      </div>
+      <h1 class="hero-title">
+        The Science & Specification of <br>
+        <span class="gradient-text">Balanced Audio Interconnection</span>
+      </h1>
+      <p class="hero-lead">
+        A comprehensive guide and reference explorer for <strong>AES-X152</strong>: standardizing the presentation of signal levels, 
+        circuit impedances, and topologies in product data sheets so audio engineers finally understand 
+        <em>what can work with what, and how</em>.
+      </p>
+      <div class="hero-cta-group">
+        <a href="#triad" class="btn btn-primary">Explore The Three Parts</a>
+        <a href="#engineering-lab" class="btn btn-secondary">Open Engineering Lab</a>
+        <a href="#tree-explorer" class="btn btn-secondary">Browse SC-05-05 Tree</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Truth Alert Section -->
+  <section class="section" style="padding: 2.5rem 0; background-color: var(--bg-secondary);">
+    <div class="container">
+      <div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(59, 130, 246, 0.12)); border: 1px solid var(--accent-cyan); border-radius: var(--radius-lg); padding: 1.75rem 2rem;">
+        <div style="display: flex; align-items: flex-start; gap: 1.25rem;">
+          <span style="font-size: 2.2rem; line-height: 1;">💡</span>
+          <div>
+            <h3 style="font-size: 1.3rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.5rem;">
+              The Cardinal Rule of Balanced Audio
+            </h3>
+            <p style="font-size: 1.05rem; line-height: 1.6; color: var(--text-primary); margin-bottom: 0.5rem;">
+              <strong>"A balanced circuit is balanced by IMPEDANCE, NOT by voltage symmetry!"</strong>
+            </p>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5;">
+              Noise rejection (CMRR) in a differential system does not require equal and opposite signal voltages on the two lines. 
+              It strictly requires that the <em>impedances to ground (or any third reference point) on both signal conductors are identical</em>. 
+              When impedances are balanced, induced interference divides identically across both conductors, and the differential receiver subtracts it completely to zero.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 1: The Three Parts of the Interconnection Chain -->
+  <section id="triad" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">The Engineering Triad</span>
+        <h2 class="section-title">The Three Parts of Audio Interconnection</h2>
+        <p class="section-lead">
+          Interoperability and signal integrity can never be evaluated by examining a device in isolation. 
+          AES-X152 establishes that performance is the direct result of dynamic interactions across three distinct elements:
+        </p>
+      </div>
+
+      <div class="triad-grid">
+        <!-- Part 1: Transmitter (Driver) -->
+        <div class="triad-card card-transmitter">
+          <div class="triad-icon-box">📡</div>
+          <span class="triad-subtitle">Part I of the Chain</span>
+          <h3 class="triad-title">The Transmitter (Driver / Source)</h3>
+          <p class="triad-desc">
+            The active or passive source output stage generating the differential signal, establishing the source impedance ($Z_{OUT}$), 
+            driving current into cable parasitics, and defining the system chassis reference.
+          </p>
+          <ul class="triad-features">
+            <li><strong>Output Topologies:</strong> Transformer Floating, Cross-Coupled Active (Servo-Balanced), Electronic Push-Pull, or Impedance-Balanced.</li>
+            <li><strong>Source Impedance:</strong> Differential Mode ($DMZ_{OUT}$) and Common Mode ($CMZ_{OUT}$) matched within 10% per IEC 60268-3.</li>
+            <li><strong>Headroom & Current:</strong> Maximum output voltage (+24 dBu to +28 dBu) and peak output current before clipping into minimum load.</li>
+            <li><strong>Protection & Ground:</strong> DC blocking protection against accidental +48V phantom power, and AES48 chassis bonding.</li>
+          </ul>
+          <a href="#engineering-lab" class="btn btn-secondary" style="margin-top: auto; font-size: 0.85rem;">Test In Lab &rarr;</a>
+        </div>
+
+        <!-- Part 2: Interconnecting Cable -->
+        <div class="triad-card card-cable">
+          <div class="triad-icon-box">〰️</div>
+          <span class="triad-subtitle">Part II of the Chain</span>
+          <h3 class="triad-title">The Cable & Connectors</h3>
+          <p class="triad-desc">
+            The physical transmission medium linking source and load. Governs electrostatic and magnetic field immunity, 
+            high-frequency capacitive loading, and connector pin integrity.
+          </p>
+          <ul class="triad-features">
+            <li><strong>Conductor Geometries:</strong> Shielded Twisted Pair (STP), Star-Quad (20-30 dB superior magnetic rejection), and AES72 UTP.</li>
+            <li><strong>Shielding Architecture:</strong> Braided copper (highest flex life/coverage), Spiral (serve), or Foil + Drain wire (100% electrostatic shield).</li>
+            <li><strong>Connectors:</strong> AES14 (3-pin XLR), AES14id (1/4" TRS), AES59 (25-way D-Sub / DB25), and AES72 (RJ45).</li>
+            <li><strong>Parasitic Capacitance:</strong> Core-to-core ($C_{PR}$) and core-to-shield ($C_{PS}$) interacting with $Z_{OUT}$ to form a low-pass filter.</li>
+          </ul>
+          <a href="#engineering-lab" class="btn btn-secondary" style="margin-top: auto; font-size: 0.85rem;">Calculate Cable Loss &rarr;</a>
+        </div>
+
+        <!-- Part 3: Receiver (Input / Load) -->
+        <div class="triad-card card-receiver">
+          <div class="triad-icon-box">📥</div>
+          <span class="triad-subtitle">Part III of the Chain</span>
+          <h3 class="triad-title">The Receiver (Input / Load)</h3>
+          <p class="triad-desc">
+            The destination stage providing a bridging termination impedance ($Z_{IN} \ge 10\,\text{k}\Omega$), 
+            subtracting common-mode interference via high CMRR, and supplying clean P48 phantom power.
+          </p>
+          <ul class="triad-features">
+            <li><strong>Input Topologies:</strong> Input Transformer (galvanic isolation), Single Op-Amp Differential, or Triple Op-Amp Instrumentation Amp.</li>
+            <li><strong>CMRR Efficacy:</strong> Common-Mode Rejection Ratio across 20 Hz – 20 kHz and sensitivity to source resistance imbalance (IEC 60268-3).</li>
+            <li><strong>Phantom Power (P48):</strong> IEC 61938 compliant +48 VDC delivered through matched 6.81 kΩ (0.1%) resistors with 10 mA capacity.</li>
+            <li><strong>Input Overload Margin:</strong> Maximum input level before clipping, Equivalent Input Noise (EIN), and RF containment.</li>
+          </ul>
+          <a href="#engineering-lab" class="btn btn-secondary" style="margin-top: auto; font-size: 0.85rem;">Simulate CMRR &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Interactive SC-05-05 Taxonomy Tree Explorer -->
+  <section id="tree-explorer" class="section" style="background-color: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Taxonomy Mind Map</span>
+        <h2 class="section-title">Interactive SC-05-05 Taxonomy Tree</h2>
+        <p class="section-lead">
+          Explore the hierarchical tree created by the AES SC-05-05 working group mapping every dimension of balanced audio: 
+          transmitter circuits, cable parameters, receiver electronics, grounding topology, and test specifications.
+        </p>
+      </div>
+
+      <div class="tree-explorer-container">
+        <!-- Left: Tree Viewport -->
+        <div>
+          <div class="tree-toolbar">
+            <input type="text" id="tree-search-input" class="tree-search-input" placeholder="Search tree (e.g., CMRR, transformer, star-quad, AES48)..." />
+            <div style="display: flex; gap: 0.5rem;">
+              <button id="tree-expand-all" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Expand All</button>
+              <button id="tree-collapse-all" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Collapse All</button>
+            </div>
+          </div>
+          <div class="tree-viewport">
+            <div id="tree-root-container"></div>
+          </div>
+        </div>
+
+        <!-- Right: Detail Inspection Panel -->
+        <div class="tree-detail-panel">
+          <div id="tree-detail-card" class="detail-card">
+            <!-- Populated dynamically by tree-viewer.js -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Core Report of Findings -->
+  <section id="findings" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Working Group Insights</span>
+        <h2 class="section-title">Key Findings of AES-X152</h2>
+        <p class="section-lead">
+          Decades of inconsistent product specifications, ground hum confusion, and marketing misconceptions 
+          were addressed by SC-05-05. Here are the core technical findings:
+        </p>
+      </div>
+
+      <div class="findings-grid">
+        <!-- Finding 1 -->
+        <div class="finding-card">
+          <div class="finding-number">Finding 01</div>
+          <h4 class="finding-title">Balance is Strictly an Impedance Characteristic</h4>
+          <p class="finding-body">
+            Signal symmetry (having inverted and non-inverted audio voltages) provides 6 dB greater headroom for a given power supply rail, 
+            but has <em>zero effect</em> on the system's ability to reject common-mode noise. 
+            The noise rejection occurs entirely because identical impedances to ground make incoming EMI develop identical voltages on both legs, 
+            which the differential receiver subtracts to zero.
+          </p>
+          <div class="key-quote">
+            "A balanced line is a two-conductor circuit having equal impedances to any third point, including ground." &mdash; IEC 60268-3
+          </div>
+        </div>
+
+        <!-- Finding 2 -->
+        <div class="finding-card">
+          <div class="finding-number">Finding 02</div>
+          <h4 class="finding-title">The "Pin 1 Problem" (AES48) Remains Pervasive</h4>
+          <p class="finding-body">
+            Cable shields are designed to divert RF and electrostatic noise directly to the chassis/enclosure before it enters the box. 
+            When equipment designers connect XLR Pin 1 to the internal printed circuit board (audio 0V ground) instead of the metal chassis, 
+            shield currents induce noise voltages directly into high-gain preamplifier stages.
+          </p>
+          <div class="key-quote">
+            "Shields must bond directly to chassis with lowest possible impedance at the connector entrance." &mdash; AES48 Standard
+          </div>
+        </div>
+
+        <!-- Finding 3 -->
+        <div class="finding-card">
+          <div class="finding-number">Finding 03</div>
+          <h4 class="finding-title">Impedance-Balanced Outputs: High Performance, Low Cost</h4>
+          <p class="finding-body">
+            An "Impedance Balanced" output drives audio only on Pin 2 while Pin 3 is terminated to ground with a passive resistor matching 
+            the driver's output impedance. It achieves 100% of the common-mode noise rejection of dual-active outputs, requires zero extra op-amps, 
+            and cannot be damaged by accidental shorts to ground. The only trade-off is a 6 dB drop when feeding unbalanced equipment.
+          </p>
+        </div>
+
+        <!-- Finding 4 -->
+        <div class="finding-card">
+          <div class="finding-number">Finding 04</div>
+          <h4 class="finding-title">Push-Pull Outputs Risk Op-Amp Short Circuits</h4>
+          <p class="finding-body">
+            Active dual op-amp push-pull drivers have low output impedance on both legs. When an inexperienced user plugs a mono TS cable 
+            or miswired adapter into the output, Pin 3 (the inverting op-amp) is shorted directly to ground. 
+            This forces the op-amp into current limit, generating massive distortion, internal heat, and potential silicon failure.
+          </p>
+        </div>
+
+        <!-- Finding 5 -->
+        <div class="finding-card">
+          <div class="finding-number">Finding 05</div>
+          <h4 class="finding-title">Resistor Matching Destroys Simple Diff-Amp CMRR</h4>
+          <p class="finding-body">
+            A single op-amp differential input relies on a four-resistor bridge. Standard 1% tolerance resistors limit theoretical CMRR to only 
+            46 dB! Even worse, standard difference amps present unequal input impedances ($10\,\text{k}\Omega$ on inverting vs $20\,\text{k}\Omega$ on non-inverting), 
+            causing CMRR to collapse completely if the driving source impedance has even minor imbalances.
+          </p>
+        </div>
+
+        <!-- Finding 6 -->
+        <div class="finding-card">
+          <div class="finding-number">Finding 06</div>
+          <h4 class="finding-title">Star-Quad Cable: Superior Magnetic Immunity vs Capacitive Roll-off</h4>
+          <p class="finding-body">
+            Star-quad cable provides 20 dB to 30 dB superior rejection of magnetic fields from lighting dimmers and power transformers. 
+            However, its geometry doubles conductor capacitance (~150 pF/m vs ~75 pF/m for standard STP). 
+            When driven by a high-impedance source (e.g. passive DI or vintage tube preamp), long star-quad runs cause significant high-frequency treble loss.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Interactive Engineering Lab -->
+  <section id="engineering-lab" class="section" style="background-color: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Interactive Tools</span>
+        <h2 class="section-title">AES-X152 Engineering Simulators</h2>
+        <p class="section-lead">
+          Interact with the underlying physics and electrical mathematics governing balanced audio circuits.
+        </p>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="lab-tabs">
+        <button class="lab-tab-btn active" onclick="switchLabTab('cmrr')">🧪 CMRR & Tolerance Simulator</button>
+        <button class="lab-tab-btn" onclick="switchLabTab('cable')">📉 Cable Roll-off Calculator</button>
+        <button class="lab-tab-btn" onclick="switchLabTab('compat')">🔄 Interconnection Checker ("What Works with What")</button>
+      </div>
+
+      <!-- Tool 1: CMRR Simulator -->
+      <div id="tab-cmrr" class="simulator-box">
+        <div class="sim-grid">
+          <div>
+            <h4 style="margin-bottom: 0.5rem;">Common-Mode Rejection Ratio (CMRR) Simulator</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+              Simulates how receiver resistor tolerances and source impedance imbalances degrade real-world noise rejection.
+            </p>
+
+            <div class="control-group">
+              <label class="control-label">
+                <span>Receiver Resistor Bridge Tolerance</span>
+              </label>
+              <select id="cmrr-tol" class="select-control">
+                <option value="5.0">5.0% Standard Carbon Film (Budget Consumer)</option>
+                <option value="1.0" selected>1.0% Standard Metal Film (Standard Pro Gear)</option>
+                <option value="0.1">0.1% Precision Laser Trimmed (High-End Pro)</option>
+                <option value="0.01">0.01% Ultra-Precision / THAT Corp IC (Mastering Grade)</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">
+                <span>Source Impedance Imbalance ($\Delta Z_S$)</span>
+                <span id="cmrr-delta-zs-val" class="control-value">10 Ω</span>
+              </label>
+              <input type="range" id="cmrr-delta-zs" class="range-slider" min="0" max="100" step="1" value="10" />
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+                <span>0 Ω (Perfect Match)</span>
+                <span>10 Ω (IEC 60268-3 Standard Test)</span>
+                <span>100 Ω (Severe Imbalance)</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">
+                <span>Receiver Common-Mode Input Impedance ($R_{CM}$)</span>
+                <span id="cmrr-rcm-val" class="control-value">20 kΩ</span>
+              </label>
+              <input type="range" id="cmrr-rcm" class="range-slider" min="5000" max="100000" step="5000" value="20000" />
+            </div>
+          </div>
+
+          <div class="results-panel">
+            <span style="font-size: 0.85rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">
+              Calculated Total Real-World CMRR
+            </span>
+            <div id="cmrr-result-val" class="metric-big">65.2 dB</div>
+            <div style="margin-bottom: 1rem;">
+              <span id="cmrr-rating" class="badge badge-primary">Professional Studio Grade</span>
+            </div>
+            <div id="cmrr-breakdown" style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1rem;">
+              <!-- Populated by JS -->
+            </div>
+
+            <!-- Oscilloscope Display -->
+            <div class="sim-canvas-box">
+              <canvas id="cmrr-canvas" width="480" height="180"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tool 2: Cable Calculator -->
+      <div id="tab-cable" class="simulator-box" style="display: none;">
+        <div class="sim-grid">
+          <div>
+            <h4 style="margin-bottom: 0.5rem;">Cable Capacitance & High-Frequency Loss</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+              Calculate the high-frequency attenuation and phase shift caused by cable capacitance and driver source impedance.
+            </p>
+
+            <div class="control-group">
+              <label class="control-label">
+                <span>Driver Source Impedance ($Z_{OUT}$)</span>
+                <span id="cable-zout-val" class="control-value">100 Ω</span>
+              </label>
+              <input type="range" id="cable-zout" class="range-slider" min="20" max="1000" step="10" value="100" />
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">
+                <span>Cable Capacitance per Meter</span>
+                <span id="cable-cap-val" class="control-value">85 pF/m</span>
+              </label>
+              <input type="range" id="cable-cap-per-m" class="range-slider" min="40" max="250" step="5" value="85" />
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <button type="button" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" data-cable-preset="cat6">Cat6 UTP (50 pF/m)</button>
+                <button type="button" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" data-cable-preset="mic-std">Standard Mic (85 pF/m)</button>
+                <button type="button" class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" data-cable-preset="starquad">Star-Quad (150 pF/m)</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <label class="control-label" style="margin-bottom: 0;">
+                  <span>Cable Run Length</span>
+                  <span id="cable-length-val" class="control-value">50 m</span>
+                </label>
+                <select id="cable-unit" class="select-control" style="width: auto; padding: 0.2rem 0.6rem; font-size: 0.8rem;">
+                  <option value="m">Meters</option>
+                  <option value="ft">Feet</option>
+                </select>
+              </div>
+              <input type="range" id="cable-length" class="range-slider" min="1" max="300" step="1" value="50" />
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">
+                <span>Receiver Load Impedance ($R_{LOAD}$)</span>
+              </label>
+              <select id="cable-rload" class="select-control">
+                <option value="10000" selected>10 kΩ (Bridging Line Input - Standard)</option>
+                <option value="47000">47 kΩ (Hi-Z Line Input)</option>
+                <option value="600">600 Ω (Vintage Matched Load)</option>
+                <option value="1500">1.5 kΩ (Microphone Preamp Input)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="results-panel">
+            <span style="font-size: 0.85rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">
+              High-Frequency Attenuation at 20 kHz
+            </span>
+            <div id="cable-loss-20k" class="metric-big">-0.03 dB</div>
+            <div style="margin-bottom: 1.25rem;">
+              <span id="cable-badge" class="badge badge-success">Transparent Transmission</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+              <div>
+                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Total Capacitance</span>
+                <div id="cable-total-cap" style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); font-family: var(--font-mono);">4.25 nF</div>
+              </div>
+              <div>
+                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">-3 dB Cutoff ($f_c$)</span>
+                <div id="cable-fc" style="font-size: 1.1rem; font-weight: 700; color: var(--accent-cyan); font-family: var(--font-mono);">374.5 kHz</div>
+              </div>
+              <div>
+                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Phase Shift @ 20 kHz</span>
+                <div id="cable-phase" style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); font-family: var(--font-mono);">-3.1°</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tool 3: Compatibility Checker -->
+      <div id="tab-compat" class="simulator-box" style="display: none;">
+        <div class="sim-grid">
+          <div>
+            <h4 style="margin-bottom: 0.5rem;">Interconnection Compatibility Matrix</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+              Select any driver and receiver topology to discover real-world compatibility, level shifts, and wiring rules.
+            </p>
+
+            <div class="control-group">
+              <label class="control-label">Source Output Topology (Driver)</label>
+              <select id="compat-tx" class="select-control">
+                <option value="tx-xfmr">Transformer Floating Output (Type Tx)</option>
+                <option value="tx-servo" selected>Cross-Coupled Active Floating (Servo-Balanced)</option>
+                <option value="tx-pushpull">Electronic Push-Pull (Dual Op-Amp Ground Ref)</option>
+                <option value="tx-impbal">Impedance Balanced Output (Type Z)</option>
+                <option value="tx-unbal">Unbalanced Source (RCA / TS)</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Destination Input Topology (Receiver)</label>
+              <select id="compat-rx" class="select-control">
+                <option value="rx-xfmr">Transformer Input (Galvanic Isolation)</option>
+                <option value="rx-ina" selected>Instrumentation Amplifier (Triple Op-Amp)</option>
+                <option value="rx-simple">Simple Single Op-Amp Differential Input</option>
+                <option value="rx-unbal">Unbalanced Input (RCA / TS Jack)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="results-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <span style="font-size: 0.85rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Compatibility Status</span>
+              <span id="compat-grade" class="badge badge-success">EXCELLENT</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; font-size: 0.9rem;">
+              <div>
+                <span style="color: var(--text-muted); font-size: 0.8rem;">Signal Level Offset:</span>
+                <div id="compat-level-shift" style="font-weight: 700; color: var(--accent-cyan);">0 dB (Unity)</div>
+              </div>
+              <div>
+                <span style="color: var(--text-muted); font-size: 0.8rem;">Common-Mode Rejection:</span>
+                <div id="compat-cmrr" style="font-weight: 700; color: var(--text-primary);">High (> 80 dB)</div>
+              </div>
+              <div style="grid-column: span 2;">
+                <span style="color: var(--text-muted); font-size: 0.8rem;">Ground Loop Risk:</span>
+                <div id="compat-ground-risk" style="font-weight: 600; color: var(--text-secondary);">Low</div>
+              </div>
+            </div>
+
+            <div style="background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 0.75rem;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); display: block; margin-bottom: 0.25rem;">Recommended Wiring Adapter:</span>
+              <div id="compat-wiring" style="font-size: 0.85rem; color: var(--text-primary); font-family: var(--font-mono);">
+                Standard balanced connection.
+              </div>
+            </div>
+
+            <div id="compat-notes" style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Standardized Datasheet Framework -->
+  <section id="datasheet-matrix" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">AES-X152 Specification Template</span>
+        <h2 class="section-title">The Standardized Equipment Datasheet</h2>
+        <p class="section-lead">
+          AES-X152 establishes a 4-part disclosure structure enabling pro audio manufacturers to present interface parameters uniformly. 
+          Select a template below to view real-world examples:
+        </p>
+      </div>
+
+      <div class="datasheet-switcher-bar">
+        <button class="btn btn-secondary active" data-datasheet-preset="micpre">🎙️ Studio Mic Preamp</button>
+        <button class="btn btn-secondary" data-datasheet-preset="linedriver">🎚️ Mastering DAC / Line Driver</button>
+        <button class="btn btn-secondary" data-datasheet-preset="dibox">🎸 Passive Direct Box (DI)</button>
+      </div>
+
+      <div class="datasheet-card">
+        <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+          <h3 id="datasheet-title" style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.25rem;">Example 1: Studio Microphone Preamplifier</h3>
+          <p id="datasheet-subtitle" style="font-size: 0.95rem; color: var(--accent-cyan);">High-Performance Instrumentation Front-End with P48 Phantom</p>
+        </div>
+
+        <!-- Part 2 Table -->
+        <h4 style="font-size: 1.1rem; color: var(--text-primary); margin-top: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <span class="badge badge-primary">Part 2</span> Signal Parameters, Topologies & Grounding
+        </h4>
+        <table class="datasheet-table">
+          <thead>
+            <tr><th>Parameter</th><th>Specified Condition & Measured Value</th></tr>
+          </thead>
+          <tbody id="datasheet-table-part2"></tbody>
+        </table>
+
+        <!-- Part 3 Table -->
+        <h4 style="font-size: 1.1rem; color: var(--text-primary); margin-top: 2rem; display: flex; align-items: center; gap: 0.5rem;">
+          <span class="badge badge-primary">Part 3</span> Signal Levels, Headroom & Bandwidth
+        </h4>
+        <table class="datasheet-table">
+          <thead>
+            <tr><th>Parameter</th><th>Specified Condition & Measured Value</th></tr>
+          </thead>
+          <tbody id="datasheet-table-part3"></tbody>
+        </table>
+
+        <!-- Part 4 Table -->
+        <h4 style="font-size: 1.1rem; color: var(--text-primary); margin-top: 2rem; display: flex; align-items: center; gap: 0.5rem;">
+          <span class="badge badge-primary">Part 4</span> Audio Distortion, Noise & CMRR
+        </h4>
+        <table class="datasheet-table">
+          <thead>
+            <tr><th>Parameter</th><th>Specified Condition & Measured Value</th></tr>
+          </thead>
+          <tbody id="datasheet-table-part4"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Circuit Topologies & Schematics -->
+  <section id="topologies" class="section" style="background-color: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">SPICE Circuit Models</span>
+        <h2 class="section-title">Types of Balanced Circuits</h2>
+        <p class="section-lead">
+          Visual schematics and SPICE models developed for AES-X152 illustrating the primary driver, 
+          transmission line, and receiver topologies.
+        </p>
+      </div>
+
+      <div style="background-color: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center;">
+        <div style="max-height: 480px; overflow: hidden; border-radius: var(--radius-md); margin-bottom: 1.5rem; cursor: pointer; position: relative;" id="open-circuit-modal">
+          <img src="assets/types-of-balanced-circuits.png" alt="Types of Balanced Circuits Diagram" style="width: 100%; height: auto; display: block; object-fit: cover; object-position: top;" />
+          <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(11, 15, 25, 0.95)); padding: 2rem 1rem 1rem; color: #ffffff;">
+            <span class="btn btn-primary" style="font-size: 0.9rem;">🔍 Click to Open High-Resolution Circuit Explorer</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; text-align: left;">
+          <div style="background-color: var(--bg-secondary); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <h5 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">6.1. Balanced Ground-Referenced</h5>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+              Dual op-amp drivers referenced directly to the internal 0V supply rail. High voltage swing, but intolerant of Pin 3 being shorted to ground in single-ended adapters.
+            </p>
+          </div>
+          <div style="background-color: var(--bg-secondary); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <h5 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">6.2. Balanced Active Floating</h5>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+              Cross-coupled servo architecture emulating a true floating transformer secondary winding. Senses load resistance and maintains 0 dB unity level into both balanced and unbalanced gear.
+            </p>
+          </div>
+          <div style="background-color: var(--bg-secondary); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+            <h5 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">6.3. Transformer Floating</h5>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+              Galvanic isolation through mutual magnetic flux. Immune to ground voltage discrepancies, offers infinite DC isolation, and maintains constant output voltage regardless of termination reference.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: Deep Dives & Standards Library -->
+  <section id="deep-dives" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Normative References & Literature</span>
+        <h2 class="section-title">Standards Deep Dives & Literature</h2>
+        <p class="section-lead">
+          Explore the normative standards, landmark technical papers, and committee contributions forming the foundation of AES-X152.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <div class="finding-card">
+          <span class="badge badge-primary" style="margin-bottom: 0.5rem;">AES Standard</span>
+          <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">AES48: Interconnection Shielding & Grounding</h4>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
+            The seminal standard defining practices for grounding and cable shields to avoid hum and RF susceptibility. 
+            Mandates the direct bonding of XLR Pin 1 to the metallic equipment chassis enclosure.
+          </p>
+          <a href="https://www.aes.org/publications/standards/search.cfm?docid=48" target="_blank" rel="noopener">AES48 Specification &rarr;</a>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge badge-primary" style="margin-bottom: 0.5rem;">AES Standard</span>
+          <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">AES72: Audio Interconnects via 8P8C (RJ45)</h4>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
+            Governs the application of RJ45 modular connectors and quad twisted pair (Cat5e/Cat6) network cable 
+            for balanced analog audio, AES3 digital audio, and control data.
+          </p>
+          <a href="https://www.aes.org/publications/standards/search.cfm?docid=110" target="_blank" rel="noopener">AES72 Standard &rarr;</a>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge badge-primary" style="margin-bottom: 0.5rem;">AES Standards Project</span>
+          <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">AES-X249: DB25 Connector Shielding</h4>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
+            Chaired by Anthony Kuzub under SC-05-05. Specifies requirements for multi-channel shield connections 
+            of 25-way D-sub connectors to preserve electromagnetic compatibility (EMC) at both audio and radio frequencies.
+          </p>
+          <a href="https://www.aes.org/standards/work-in-progress.cfm" target="_blank" rel="noopener">AES-X249 Work in Progress &rarr;</a>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge badge-primary" style="margin-bottom: 0.5rem;">International Standard</span>
+          <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">IEC 60268-3 & IEC 61938</h4>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
+            IEC 60268-3 defines methods for measuring amplifier balance and common-mode rejection. 
+            IEC 61938 defines phantom power specifications (P48, P24, P12) including source resistor tolerance limits.
+          </p>
+          <a href="https://webstore.iec.ch/publication/63795" target="_blank" rel="noopener">IEC 61938 Portal &rarr;</a>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge badge-primary" style="margin-bottom: 0.5rem;">Landmark Literature</span>
+          <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Rane Note 145: Sound System Interconnection</h4>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
+            Authored by Dennis Bohn in 2000. Provides the definitive handbook and wiring truth tables 
+            for interconnecting balanced and unbalanced equipment without generating ground loops.
+          </p>
+          <a href="https://www.ranecommercial.com/legacy/note145.html" target="_blank" rel="noopener">Rane Note 145 &rarr;</a>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge badge-primary" style="margin-bottom: 0.5rem;">Working Group Acknowledgments</span>
+          <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Key Committee Contributors</h4>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+            Gratitude to the writing group and contributors of AES SC-05-05: <strong>Anthony P. Kuzub</strong> (Chair), 
+            <strong>Jim Brown</strong>, <strong>Bill Whitlock</strong>, <strong>John Woodgate</strong>, <strong>David Josephson</strong>, 
+            <strong>Richard L. Hess</strong>, <strong>Jim Meyer</strong>, <strong>Richard Cabot</strong>, <strong>Kenneth Fause</strong>, 
+            <strong>Jon Celli</strong>, <strong>Peter Keller</strong>, and <strong>Andy Walker</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- High Resolution Image Modal -->
+  <div id="image-modal" class="modal-overlay">
+    <div class="modal-content-box">
+      <div class="modal-header">
+        <h4 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);">Types of Balanced Circuits (Full Schematic View)</h4>
+        <button id="close-circuit-modal" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <img src="assets/types-of-balanced-circuits.png" alt="High Resolution Types of Balanced Circuits Diagram" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h5 style="color: var(--accent-cyan); font-weight: 800;">AES-X152 Standards Reference Portal</h5>
+          <p style="line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
+            Developed for the Audio Engineering Society Standards Committee SC-05-05 Working Group on Grounding and EMC Practices. 
+            Dedicated to eliminating interconnect confusion through standardized disclosure and transparent technical modeling.
+          </p>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Open Source Reference Repository: <a href="https://github.com/LikeDotAudio/Balanced-Audio" target="_blank" rel="noopener">LikeDotAudio/Balanced-Audio</a>
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Core Navigation</h5>
+          <ul>
+            <li><a href="#triad">The Three-Part Triad</a></li>
+            <li><a href="#tree-explorer">SC-05-05 Mind Map Tree</a></li>
+            <li><a href="#findings">Key Findings & Truths</a></li>
+            <li><a href="#engineering-lab">Interactive Simulators</a></li>
+            <li><a href="#datasheet-matrix">Standard Datasheet</a></li>
+            <li><a href="#topologies">Circuit Schematics</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Normative Standards</h5>
+          <ul>
+            <li><a href="https://www.aes.org/publications/standards/" target="_blank" rel="noopener">AES Standards Committee</a></li>
+            <li><a href="https://www.aes.org/publications/standards/search.cfm?docid=48" target="_blank" rel="noopener">AES48 (Chassis Grounding)</a></li>
+            <li><a href="https://www.aes.org/publications/standards/search.cfm?docid=110" target="_blank" rel="noopener">AES72 (RJ45 Audio)</a></li>
+            <li><a href="https://webstore.iec.ch/publication/63795" target="_blank" rel="noopener">IEC 61938 (Phantom Power)</a></li>
+            <li><a href="https://www.ranecommercial.com/legacy/note145.html" target="_blank" rel="noopener">Rane Note 145</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        Balanced Audio &bull; AES-X152 Reference Documentation &bull; Built with standard HTML5, CSS3 & Modern JavaScript.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/tree-data.js"></script>
+  <script src="js/tree-viewer.js"></script>
+  <script src="js/simulators.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    // Tab switching for Engineering Lab
+    function switchLabTab(tabKey) {
+      document.querySelectorAll(".lab-tab-btn").forEach(b => b.classList.remove("active"));
+      event.target.classList.add("active");
+
+      document.getElementById("tab-cmrr").style.display = (tabKey === 'cmrr') ? 'block' : 'none';
+      document.getElementById("tab-cable").style.display = (tabKey === 'cable') ? 'block' : 'none';
+      document.getElementById("tab-compat").style.display = (tabKey === 'compat') ? 'block' : 'none';
+
+      if (tabKey === 'cmrr' && typeof updateCMRRSimulator === "function") {
+        setTimeout(updateCMRRSimulator, 50);
+      }
+    }
+  </script>
+</body>
+</html>
