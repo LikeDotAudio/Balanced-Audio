@@ -682,6 +682,20 @@ function selectEnclosureBox(eqKey) {
 
   const connEl = document.getElementById('eq-metric-connector');
   if (connEl) connEl.innerHTML = data.connector;
+
+  // Toggle AES59 8-Channel Breakout panel
+  const db25Panel = document.getElementById('db25-channels-panel');
+  if (db25Panel) {
+    db25Panel.style.display = eqKey === 'db25' ? 'block' : 'none';
+  }
+
+  // When DB25 is selected, update cable graphics to illustrate the 8-channel snake
+  const cableLabel = document.getElementById('svg-cable-label');
+  const cableSub = document.getElementById('svg-cable-sub');
+  if (eqKey === 'db25') {
+    if (cableLabel) cableLabel.textContent = "8-Pair Multichannel Snake (AES59 & AES-X249)";
+    if (cableSub) cableSub.textContent = "Ch 1–8: [P24/12, P10/23, P21/9, P7/20, P18/6, P4/17, P15/3, P1/14] | P13: NC";
+  }
 }
 
 function initEnclosureTabs() {

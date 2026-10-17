@@ -50,6 +50,7 @@
     <div class="sub-nav-bar">
       <div class="sub-nav-container">
         <a href="#enclosure-explorer" class="sub-nav-pill">Enclosure Box</a>
+        <a href="#multichannel-hierarchy" class="sub-nav-pill" style="border-color: #c084fc; color: #c084fc;">DB25 &rarr; RJ45 &rarr; XLR/TRS</a>
         <a href="#xlr-hub" class="sub-nav-pill">Universal XLR Hub</a>
         <a href="#top-level" class="sub-nav-pill">Top-Level Rules</a>
         <a href="#triad" class="sub-nav-pill">The Triad (1-2-3)</a>
@@ -228,6 +229,92 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Section 0.2: Multichannel Breakout Hierarchy: AES59 (8-Ch DB25) -> AES72-4E (4-Ch RJ45) -> 4x XLR / 4x TRS -->
+  <section id="multichannel-hierarchy" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">Multichannel Architecture</span>
+        <h2 class="section-title">Multichannel Interconnection Hierarchy: AES59 &rarr; AES72-4E &rarr; 4&times; XLR / TRS</h2>
+        <p class="section-lead">
+          Conforming to AES59, AES-X249, AES72-4E, AES14, and AES48. 
+          In modern pro audio installations, an 8-channel trunk (<strong>AES59 DB25</strong>) splits into two 4-channel Quad Twisted Pair lines (<strong>AES72-4E RJ45</strong>), 
+          which then break out into discrete <strong>XLR-3</strong> or <strong>1/4″ TRS</strong> terminations. 
+          Inspect the hardware icons, twisted-pair pin allocations, and continuous AES48 chassis shield bonding at each stage:
+        </p>
+      </div>
+
+      <!-- Breakout Controls & Channel Selector -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 1.25rem; margin-bottom: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+          <div>
+            <span style="font-weight: 700; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-right: 0.5rem;">Breakout Destination Style:</span>
+            <div class="btn-group" style="display: inline-flex; gap: 0.35rem;">
+              <button class="btn btn-outline mc-mode-btn active" data-mc-mode="xlr">Breakout to 4 &times; XLR-3 (AES14)</button>
+              <button class="btn btn-outline mc-mode-btn" data-mc-mode="trs">Breakout to 4 &times; 1/4″ TRS Phone Jacks</button>
+            </div>
+          </div>
+
+          <div id="mc-active-title" style="font-size: 0.95rem; font-weight: 600; color: var(--text-primary);">
+            Channel 1: Signal Routing (Bank A Ch 1–4)
+          </div>
+        </div>
+
+        <!-- Channel Select Pills -->
+        <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center;">
+          <span style="font-size: 0.8rem; color: var(--text-secondary); margin-right: 0.4rem;">Select Active Channel:</span>
+          <button class="btn btn-outline mc-ch-btn active" data-ch="1" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">Ch 1 (Bank A)</button>
+          <button class="btn btn-outline mc-ch-btn" data-ch="2" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">Ch 2 (Bank A)</button>
+          <button class="btn btn-outline mc-ch-btn" data-ch="3" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">Ch 3 (Bank A)</button>
+          <button class="btn btn-outline mc-ch-btn" data-ch="4" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">Ch 4 (Bank A)</button>
+          <button class="btn btn-outline mc-ch-btn" data-ch="5" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">Ch 5 (Bank B)</button>
+          <button class="btn btn-outline mc-ch-btn" data-ch="6" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">Ch 6 (Bank B)</button>
+          <button class="btn btn-outline mc-ch-btn" data-ch="7" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">Ch 7 (Bank B)</button>
+          <button class="btn btn-outline mc-ch-btn" data-ch="8" style="padding: 0.25rem 0.6rem; font-size: 0.78rem;">Ch 8 (Bank B)</button>
+        </div>
+      </div>
+
+      <!-- Dynamic Vector SVG Pipeline -->
+      <div class="svg-diagram-wrapper" style="background: #060910; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+        <div id="mc-svg-container"></div>
+      </div>
+
+      <!-- Multichannel Pinout Mapping Cross-Reference Table -->
+      <div class="detail-card">
+        <h3 style="margin-top: 0; color: var(--accent-cyan); font-size: 1.1rem; display: flex; align-items: center; justify-content: space-between;">
+          <span>AES59 &rarr; AES72-4E &rarr; XLR / TRS Pin-by-Pin Cross-Reference</span>
+          <span class="badge badge-accent">Normative Mapping</span>
+        </h3>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 0.8rem;">
+          Click any row below to trace its balanced differential conductors from DB25 to Cat STP cable to discrete breakout:
+        </p>
+
+        <div class="table-responsive">
+          <table class="aes-spec-table" style="font-size: 0.84rem;">
+            <thead>
+              <tr>
+                <th style="width: 70px;">Channel</th>
+                <th>AES72-4E Bank</th>
+                <th>AES59 DB25 Pins (Hot / Cold / Shield)</th>
+                <th>AES72-4E RJ45 Twisted Pair</th>
+                <th>Breakout Contacts (XLR-3 or 1/4″ TRS)</th>
+                <th>Grounding Rule</th>
+              </tr>
+            </thead>
+            <tbody id="mc-table-tbody"></tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: 1rem; padding: 0.85rem 1rem; background: rgba(16, 185, 129, 0.08); border-left: 3px solid #10b981; border-radius: 6px;">
+          <strong style="color: #34d399; font-size: 0.88rem;">AES-X249 &amp; AES48 Continuous Shielding Imperative:</strong>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0.35rem 0 0; line-height: 1.5;">
+            Shield continuity must be maintained 360-degrees end-to-end: The <strong>AES59 DB25 metallic shroud</strong> (AES-X249) bonds directly to the equipment enclosure, connects through the <strong>overall braided foil screen of the Category STP cable</strong>, terminates to the <strong>conductive metal collar of the AES72-4E RJ45 plug</strong>, and bonds to <strong>Pin 1 of each XLR-3 (or Sleeve of each 1/4″ TRS)</strong>. Never lift the shield on multi-pair trunks!
+          </p>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -682,47 +769,162 @@
         </p>
       </div>
 
-      <div class="pyramid-wrapper">
-        <div class="pyramid-level level-headroom">
-          <span class="pyramid-level-title">MAXIMUM SYSTEM HEADROOM CEILING (+24 to +28 dBu)</span>
-          <span class="pyramid-level-desc">Clipping boundary of high-end professional analog consoles and converters. 12.28 V to 19.5 V RMS.</span>
-        </div>
+      <!-- Visual Vector SVG Headroom Pyramid Graphic -->
+      <div class="svg-diagram-wrapper" style="margin-bottom: 1.5rem; background: #0b0f19; padding: 1.25rem; border-radius: 8px; border: 1.5px solid #334155;">
+        <svg viewBox="0 0 900 240" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="pyr-grad-headroom" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ef4444" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#b91c1c" stop-opacity="0.8"/>
+            </linearGradient>
+            <linearGradient id="pyr-grad-pro" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#0284c7" stop-opacity="0.75"/>
+            </linearGradient>
+            <linearGradient id="pyr-grad-consumer" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#d97706" stop-opacity="0.75"/>
+            </linearGradient>
+            <linearGradient id="pyr-grad-mic" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#10b981" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#059669" stop-opacity="0.75"/>
+            </linearGradient>
+          </defs>
 
-        <div class="pyramid-level level-pro">
-          <span class="pyramid-level-title">PROFESSIONAL LINE LEVEL REFERENCE (+4 dBu / 0 VU)</span>
-          <span class="pyramid-level-desc">1.228 V RMS across balanced line. Standard reference for professional broadcasting and studio interconnections.</span>
-        </div>
+          <!-- Pyramid Tier 1 (Headroom Ceiling) -->
+          <polygon points="360,20 540,20 570,70 330,70" fill="url(#pyr-grad-headroom)" stroke="#fca5a5" stroke-width="1.5"/>
+          <text x="450" y="42" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">MAX SYSTEM CEILING (+24 to +28 dBu)</text>
+          <text x="450" y="58" fill="#fee2e2" font-size="10" font-weight="600" text-anchor="middle">12.28 V to 19.5 V RMS &bull; Converter Clip Limit</text>
 
-        <div class="pyramid-level level-consumer">
-          <span class="pyramid-level-title">CONSUMER LINE LEVEL REFERENCE (-10 dBV / -7.78 dBu)</span>
-          <span class="pyramid-level-desc">0.316 V RMS. Unbalanced RCA / 3.5mm consumer audio equipment standard.</span>
-        </div>
+          <!-- Pyramid Tier 2 (Pro Line Level) -->
+          <polygon points="330,73 570,73 610,125 290,125" fill="url(#pyr-grad-pro)" stroke="#7dd3fc" stroke-width="1.5"/>
+          <text x="450" y="96" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle">PROFESSIONAL LINE LEVEL (+4 dBu / 0 VU)</text>
+          <text x="450" y="113" fill="#e0f2fe" font-size="10.5" font-weight="600" text-anchor="middle">1.228 V RMS across 600 &Omega; or Bridging &bull; AES Standard</text>
 
-        <div class="pyramid-level level-mic">
-          <span class="pyramid-level-title">MICROPHONE TRANSDUCER LEVEL (-60 to -40 dBu)</span>
-          <span class="pyramid-level-desc">0.775 mV to 7.75 mV RMS. High-gain preamplification required. Ultra-sensitive to EMI and ground loops.</span>
-        </div>
+          <!-- Pyramid Tier 3 (Consumer Line) -->
+          <polygon points="290,128 610,128 650,180 250,180" fill="url(#pyr-grad-consumer)" stroke="#fcd34d" stroke-width="1.5"/>
+          <text x="450" y="151" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle">CONSUMER LINE REFERENCE (&minus;10 dBV / &minus;7.78 dBu)</text>
+          <text x="450" y="168" fill="#fef3c7" font-size="10.5" font-weight="600" text-anchor="middle">0.316 V RMS &bull; Unbalanced RCA Standard</text>
+
+          <!-- Pyramid Tier 4 (Microphone Level) -->
+          <polygon points="250,183 650,183 690,230 210,230" fill="url(#pyr-grad-mic)" stroke="#6ee7b7" stroke-width="1.5"/>
+          <text x="450" y="204" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle">MICROPHONE TRANSDUCER (&minus;60 to &minus;40 dBu)</text>
+          <text x="450" y="220" fill="#d1fae5" font-size="10.5" font-weight="600" text-anchor="middle">0.775 mV to 7.75 mV RMS &bull; High Preamp Gain Required</text>
+
+          <!-- Left & Right Dynamic Range Bracket Annotations -->
+          <line x1="180" y1="20" x2="180" y2="230" stroke="#94a3b8" stroke-width="2"/>
+          <path d="M 185,20 L 175,20 M 185,230 L 175,230" stroke="#94a3b8" stroke-width="2"/>
+          <text x="140" y="125" fill="#38bdf8" font-size="12" font-weight="800" text-anchor="middle" transform="rotate(-90 140 125)">110 dB DYNAMIC SPAN</text>
+
+          <line x1="720" y1="20" x2="720" y2="230" stroke="#94a3b8" stroke-width="2"/>
+          <path d="M 715,20 L 725,20 M 715,230 L 725,230" stroke="#94a3b8" stroke-width="2"/>
+          <text x="760" y="125" fill="#f59e0b" font-size="12" font-weight="800" text-anchor="middle" transform="rotate(90 760 125)">AES-X152 HARMONIZED</text>
+        </svg>
       </div>
 
-      <!-- Real-Time Audio Level & Unit Converter Card -->
-      <div class="interactive-calc-card">
-        <h4 style="margin-top: 0; color: var(--accent-cyan);">Real-Time Audio Voltage &amp; Level Unit Converter</h4>
-        <div class="calc-row">
-          <div class="calc-input-group">
-            <label for="calc-dbu">Level in dBu (0.775 V Ref):</label>
-            <input type="number" id="calc-dbu" class="calc-input" value="4.0" step="0.5" />
+      <!-- 1970s Laboratory Precision Audio Level & DMM Analyzer -->
+      <div class="vintage-military-panel">
+        <div class="panel-screws">
+          <div class="panel-screw tl"></div>
+          <div class="panel-screw tr"></div>
+          <div class="panel-screw bl"></div>
+          <div class="panel-screw br"></div>
+        </div>
+
+        <div class="military-panel-header">
+          <div class="military-panel-title-block">
+            <span class="military-panel-tag">MIL-SPEC INSTRUMENTATION &bull; TYPE 70-VU</span>
+            <h3 class="military-panel-title">Precision Audio Signal Level &amp; Headroom Analyzer</h3>
           </div>
-          <div class="calc-input-group">
-            <label for="calc-dbv">Level in dBV (1.000 V Ref):</label>
-            <input type="number" id="calc-dbv" class="calc-input" value="1.78" step="0.5" />
+          <span class="military-panel-spec">CALIBRATED 600 &Omega; // BRIDGING &bull; RMS/PEAK DETECTOR</span>
+        </div>
+
+        <div class="military-controls-layout">
+          <!-- Left Controls Column -->
+          <div>
+            <div style="margin-bottom: 1rem;">
+              <label style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">
+                Standard Reference Calibrator Preset:
+              </label>
+              <div class="military-input-row">
+                <select id="pyr-preset-select" class="military-preset-select">
+                  <option value="4.0" selected>Professional Studio Standard (+4.0 dBu / 0 VU &bull; 1.228 V RMS)</option>
+                  <option value="-7.78">Consumer Line Reference (-10.0 dBV / -7.78 dBu &bull; 0.316 V RMS)</option>
+                  <option value="0.0">Legacy 600 &Omega; Telephony Reference (0.0 dBu &bull; 0.775 V RMS)</option>
+                  <option value="8.0">European Broadcast Reference (+8.0 dBu &bull; 1.95 V RMS)</option>
+                  <option value="24.0">Maximum Headroom Ceiling (+24.0 dBu &bull; 12.28 V RMS)</option>
+                  <option value="-50.0">Dynamic Microphone Transducer (-50.0 dBu &bull; 2.45 mV RMS)</option>
+                  <option value="custom">Manual Exact Value Entry &rarr;</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="calc-row" style="margin-top: 1rem;">
+              <div class="calc-input-group">
+                <label for="calc-dbu">Level in dBu (0.775 V Ref):</label>
+                <input type="number" id="calc-dbu" class="calc-input" value="4.0" step="0.5" />
+              </div>
+              <div class="calc-input-group">
+                <label for="calc-dbv">Level in dBV (1.000 V Ref):</label>
+                <input type="number" id="calc-dbv" class="calc-input" value="1.78" step="0.5" />
+              </div>
+              <div class="calc-input-group">
+                <label for="calc-vrms">RMS Voltage (V<sub>RMS</sub>):</label>
+                <input type="number" id="calc-vrms" class="calc-input" value="1.228" step="0.05" />
+              </div>
+              <div class="calc-input-group">
+                <label for="calc-vpeak">Peak Voltage (V<sub>PEAK</sub>):</label>
+                <input type="number" id="calc-vpeak" class="calc-input" value="1.737" step="0.05" readonly style="background: rgba(255,255,255,0.03);" />
+              </div>
+            </div>
           </div>
-          <div class="calc-input-group">
-            <label for="calc-vrms">RMS Voltage (V<sub>RMS</sub>):</label>
-            <input type="number" id="calc-vrms" class="calc-input" value="1.228" step="0.05" />
-          </div>
-          <div class="calc-input-group">
-            <label for="calc-vpeak">Peak Voltage (V<sub>PEAK</sub>):</label>
-            <input type="number" id="calc-vpeak" class="calc-input" value="1.737" step="0.05" readonly style="background: rgba(255,255,255,0.03);" />
+
+          <!-- Right Meters Column: Analogue VU Meter & DMM Display -->
+          <div class="military-meters-column">
+            <!-- 1970s Analogue Precision VU Meter -->
+            <div class="analog-vu-meter-card">
+              <div class="analog-meter-window">
+                <svg class="vu-meter-scale-svg" viewBox="0 0 200 100">
+                  <!-- Curved Scale Arc -->
+                  <path d="M 30,75 A 85,85 0 0,1 170,75" fill="none" stroke="#000000" stroke-width="2"/>
+                  <!-- Red Zone (+0 to +3) -->
+                  <path d="M 125,48 A 85,85 0 0,1 170,75" fill="none" stroke="#dc2626" stroke-width="4.5"/>
+                  <!-- Scale Tick Marks -->
+                  <text x="30" y="70" font-family="monospace" font-size="8" font-weight="700" fill="#000000">-20</text>
+                  <text x="60" y="53" font-family="monospace" font-size="8" font-weight="700" fill="#000000">-10</text>
+                  <text x="85" y="44" font-family="monospace" font-size="8" font-weight="700" fill="#000000">-5</text>
+                  <text x="120" y="44" font-family="monospace" font-size="9" font-weight="900" fill="#000000">0 VU</text>
+                  <text x="150" y="55" font-family="monospace" font-size="8" font-weight="900" fill="#dc2626">+3</text>
+                  <text x="100" y="72" font-family="monospace" font-size="8" font-weight="700" fill="#4b5563">100%</text>
+                  <!-- Needle -->
+                  <g id="pyr-vu-needle" class="vu-needle" style="transform: rotate(0deg);">
+                    <line x1="100" y1="85" x2="100" y2="28" stroke="#1e293b" stroke-width="1.8"/>
+                    <circle cx="100" cy="85" r="5" fill="#0f172a" stroke="#475569" stroke-width="1.5"/>
+                  </g>
+                </svg>
+              </div>
+              <div class="vu-meter-title">VOLUME UNITS (VU) &bull; ANSI C16.5</div>
+            </div>
+
+            <!-- 1970s DMM Fluorescent LCD Screen -->
+            <div class="dmm-display-card">
+              <div class="dmm-header">
+                <span class="dmm-brand">DMM MODEL 8000A</span>
+                <span class="dmm-mode-led">&bull; TRUE RMS</span>
+              </div>
+              <div class="dmm-readout-row">
+                <span class="dmm-readout-label">VOLTAGE (RMS):</span>
+                <span id="dmm-vrms-val" class="dmm-readout-value">1.228 V</span>
+              </div>
+              <div class="dmm-readout-row">
+                <span class="dmm-readout-label">LEVEL (dBu):</span>
+                <span id="dmm-dbu-val" class="dmm-readout-value cyan">+4.0 dBu</span>
+              </div>
+              <div class="dmm-readout-row">
+                <span class="dmm-readout-label">PEAK VOLT:</span>
+                <span id="dmm-vpeak-val" class="dmm-readout-value amber">1.737 V</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -802,14 +1004,10 @@
             <svg viewBox="0 0 850 300" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
               <rect width="850" height="300" fill="var(--bg-secondary)" rx="8"/>
               
-              <!-- Input Signal Wire with Live Fader Overlay -->
-              <g transform="translate(14, 126)">
-                <rect x="0" y="0" width="100" height="38" rx="6" class="svg-fader-badge-rect"/>
-                <text x="50" y="15" fill="#38bdf8" class="svg-fader-label-text">Audio In (V_IN)</text>
-                <text x="50" y="30" fill="#ffffff" class="svg-fader-value-text" id="pp-svg-vin">1.2 V</text>
-              </g>
-              <line x1="114" y1="145" x2="160" y2="145" stroke="#38bdf8" stroke-width="2.5"/>
-              <path class="animated-current-flow" data-flow-speed="2.2" d="M 114,145 L 160,145" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Input Signal Wire -->
+              <text x="30" y="150" fill="#38bdf8" font-size="13" font-weight="700">Audio In</text>
+              <line x1="90" y1="145" x2="160" y2="145" stroke="#38bdf8" stroke-width="2.5"/>
+              <path class="animated-current-flow" data-flow-speed="2.2" d="M 90,145 L 160,145" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
               <circle cx="160" cy="145" r="4" fill="#38bdf8"/>
 
               <!-- Branch to Top OpAmp -->
@@ -830,45 +1028,37 @@
               <text x="222" y="202" fill="#94a3b8" font-size="12" font-weight="700">+</text>
               <text x="222" y="225" fill="#38bdf8" font-size="12" font-weight="700">&minus;</text>
 
-              <!-- Top Output Resistor Z_PO with Live Fader Overlay -->
-              <line x1="260" y1="90" x2="305" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
-              <rect x="305" y="71" width="105" height="38" rx="6" class="svg-fader-badge-rect"/>
-              <text x="357" y="86" fill="#38bdf8" class="svg-fader-label-text">Z_PO (R_OUT)</text>
-              <text x="357" y="101" fill="#ffffff" class="svg-fader-value-text" id="pp-svg-zpo">50 &Omega;</text>
-              <line x1="410" y1="90" x2="630" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Top Output Resistor Z_PO -->
+              <line x1="260" y1="90" x2="330" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
+              <rect x="330" y="82" width="55" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="357" y="94" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">Z_PO</text>
+              <line x1="385" y1="90" x2="630" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
               <circle cx="630" cy="90" r="7" fill="#10b981"/>
-              <text x="655" y="85" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
-              <text x="655" y="100" fill="#6ee7b7" font-size="11" font-weight="600" id="pp-svg-probe-p2">3.4 mA / 1.03 V</text>
+              <text x="655" y="95" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 260,90 L 630,90" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
-              <!-- Bottom Output Resistor Z_RO with Live Fader Overlay -->
-              <line x1="260" y1="210" x2="305" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
-              <rect x="305" y="191" width="105" height="38" rx="6" class="svg-fader-badge-rect"/>
-              <text x="357" y="206" fill="#38bdf8" class="svg-fader-label-text">Z_RO (R_OUT)</text>
-              <text x="357" y="221" fill="#ffffff" class="svg-fader-value-text" id="pp-svg-zro">50 &Omega;</text>
-              <line x1="410" y1="210" x2="630" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Bottom Output Resistor Z_RO -->
+              <line x1="260" y1="210" x2="330" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
+              <rect x="330" y="202" width="55" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="357" y="214" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">Z_RO</text>
+              <line x1="385" y1="210" x2="630" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
               <circle cx="630" cy="210" r="7" fill="#ef4444"/>
-              <text x="655" y="205" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
-              <text x="655" y="220" fill="#fca5a5" font-size="11" font-weight="600" id="pp-svg-probe-p3">3.4 mA / -1.03 V</text>
+              <text x="655" y="215" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 630,210 L 260,210" fill="none" stroke="#ef4444" stroke-width="2.5"/>
 
-              <!-- Differential Load Resistor with Live Fader Overlay -->
-              <line x1="630" y1="90" x2="630" y2="115" stroke="#f59e0b" stroke-width="2"/>
-              <rect x="621" y="115" width="18" height="70" rx="3" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5"/>
-              <g transform="translate(648, 131)">
-                <rect x="0" y="0" width="118" height="38" rx="6" class="svg-fader-badge-rect badge-orange"/>
-                <text x="59" y="15" fill="#f59e0b" class="svg-fader-label-text">R_Load (R_L)</text>
-                <text x="59" y="30" fill="#ffffff" class="svg-fader-value-text" id="pp-svg-rload">600 &Omega;</text>
-              </g>
-              <line x1="630" y1="185" x2="630" y2="210" stroke="#f59e0b" stroke-width="2"/>
+              <!-- Differential Load Resistor -->
+              <line x1="630" y1="90" x2="630" y2="120" stroke="#f59e0b" stroke-width="2"/>
+              <rect x="622" y="120" width="16" height="60" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+              <text x="645" y="155" fill="#f59e0b" font-size="10" font-weight="600">R_Load</text>
+              <line x1="630" y1="180" x2="630" y2="210" stroke="#f59e0b" stroke-width="2"/>
 
               <!-- Pin 3 Short to Ground Link (Visible when toggled) -->
               <g id="svg-pp-short-group" opacity="0.3">
-                <line x1="630" y1="210" x2="630" y2="260" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4,4" id="pp-svg-short-dash"/>
+                <line x1="630" y1="210" x2="630" y2="260" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4,4"/>
                 <circle cx="630" cy="260" r="5" fill="#94a3b8"/>
                 <line x1="420" y1="260" x2="630" y2="260" stroke="#94a3b8" stroke-width="2"/>
                 <path d="M 410,260 L 430,260 M 415,265 L 425,265 M 418,270 L 422,270" stroke="#94a3b8" stroke-width="2"/>
-                <text x="540" y="248" fill="#ef4444" font-size="11" font-weight="700" id="pp-svg-ts-text">TS Ground Short Link (Open)</text>
+                <text x="580" y="248" fill="#ef4444" font-size="10" font-weight="600">TS Ground Short Link</text>
                 <text x="655" y="265" fill="#94a3b8" font-size="13" font-weight="700">Pin 1 (CHASSIS)</text>
               </g>
             </svg>
@@ -936,54 +1126,40 @@
             <svg viewBox="0 0 850 280" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
               <rect width="850" height="280" fill="var(--bg-secondary)" rx="8"/>
 
-              <!-- Audio In Signal Source with Live Fader Overlay -->
-              <g transform="translate(14, 61)">
-                <rect x="0" y="0" width="100" height="38" rx="6" class="svg-fader-badge-rect"/>
-                <text x="50" y="15" fill="#38bdf8" class="svg-fader-label-text">Audio In (V_IN)</text>
-                <text x="50" y="30" fill="#ffffff" class="svg-fader-value-text" id="ib-svg-vin">1.2 V</text>
-              </g>
-              <line x1="114" y1="80" x2="200" y2="80" stroke="#38bdf8" stroke-width="2.5"/>
+              <text x="30" y="85" fill="#38bdf8" font-size="13" font-weight="700">Audio In</text>
+              <line x1="90" y1="80" x2="200" y2="80" stroke="#38bdf8" stroke-width="2.5"/>
               <polygon points="200,55 200,105 250,80" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
               <text x="212" y="73" fill="#38bdf8" font-size="12" font-weight="700">+</text>
               <text x="212" y="96" fill="#94a3b8" font-size="12" font-weight="700">&minus;</text>
 
-              <!-- Series Output Resistor R_PO with Live Fader Overlay -->
-              <line x1="250" y1="80" x2="305" y2="80" stroke="#38bdf8" stroke-width="2.5"/>
-              <rect x="305" y="61" width="105" height="38" rx="6" class="svg-fader-badge-rect"/>
-              <text x="357" y="76" fill="#38bdf8" class="svg-fader-label-text">R_PO (R_OUT)</text>
-              <text x="357" y="91" fill="#ffffff" class="svg-fader-value-text" id="ib-svg-rpo">50 &Omega;</text>
-              <line x1="410" y1="80" x2="640" y2="80" stroke="#10b981" stroke-width="2.5"/>
+              <line x1="250" y1="80" x2="330" y2="80" stroke="#38bdf8" stroke-width="2.5"/>
+              <rect x="330" y="72" width="60" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="360" y="84" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">R_PO (50&Omega;)</text>
+              <line x1="390" y1="80" x2="640" y2="80" stroke="#10b981" stroke-width="2.5"/>
               <circle cx="640" cy="80" r="7" fill="#10b981"/>
-              <text x="665" y="76" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
-              <text x="665" y="92" fill="#6ee7b7" font-size="11" font-weight="600" id="ib-svg-p2-probe">1.19 V / +3.7 dBu</text>
+              <text x="665" y="85" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 250,80 L 640,80" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
-              <!-- Passive Resistor Termination to Ground (Pin 3) with Live Fader Overlay -->
+              <!-- Passive Resistor Termination to Ground (Pin 3) -->
               <path d="M 200,180 L 220,180 M 205,185 L 215,185 M 208,190 L 212,190" stroke="#94a3b8" stroke-width="2"/>
-              <line x1="210" y1="180" x2="305" y2="180" stroke="#94a3b8" stroke-width="2.5"/>
-              <rect x="305" y="161" width="105" height="38" rx="6" class="svg-fader-badge-rect badge-rose"/>
-              <text x="357" y="176" fill="#ef4444" class="svg-fader-label-text">R_RO (R_OUT)</text>
-              <text x="357" y="191" fill="#ffffff" class="svg-fader-value-text" id="ib-svg-rro">50 &Omega;</text>
-              <line x1="410" y1="180" x2="640" y2="180" stroke="#94a3b8" stroke-width="2.5"/>
+              <line x1="210" y1="180" x2="330" y2="180" stroke="#94a3b8" stroke-width="2.5"/>
+              <rect x="330" y="172" width="60" height="16" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+              <text x="360" y="184" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">R_RO (50&Omega;)</text>
+              <line x1="390" y1="180" x2="640" y2="180" stroke="#94a3b8" stroke-width="2.5"/>
               <circle cx="640" cy="180" r="7" fill="#ef4444"/>
-              <text x="665" y="176" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
-              <text x="665" y="192" fill="#fca5a5" font-size="11" font-weight="600" id="ib-svg-p3-probe">0.00 V / 50.0 &Omega; to 0V</text>
-              <text x="430" y="210" fill="#94a3b8" font-size="10" font-weight="600">Zero Audio Signal Voltage (Passive Balance Match)</text>
+              <text x="665" y="185" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
+              <text x="440" y="165" fill="#94a3b8" font-size="10" font-weight="600">Zero Audio Signal Voltage (Passive Balance)</text>
 
-              <!-- Bridging Load Resistor with Live Fader Overlay -->
-              <line x1="640" y1="80" x2="640" y2="105" stroke="#f59e0b" stroke-width="2.5"/>
-              <rect x="631" y="105" width="18" height="50" rx="3" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5"/>
-              <g transform="translate(658, 112)">
-                <rect x="0" y="0" width="118" height="38" rx="6" class="svg-fader-badge-rect badge-orange"/>
-                <text x="59" y="15" fill="#f59e0b" class="svg-fader-label-text">R_Load (R_L)</text>
-                <text x="59" y="30" fill="#ffffff" class="svg-fader-value-text" id="ib-svg-rload">10.0 k&Omega;</text>
-              </g>
-              <line x1="640" y1="155" x2="640" y2="180" stroke="#f59e0b" stroke-width="2.5"/>
+              <!-- Bridging Load Resistor -->
+              <line x1="640" y1="80" x2="640" y2="110" stroke="#f59e0b" stroke-width="2"/>
+              <rect x="632" y="110" width="16" height="40" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+              <text x="655" y="135" fill="#f59e0b" font-size="10" font-weight="600">10k &Omega;</text>
+              <line x1="640" y1="150" x2="640" y2="180" stroke="#f59e0b" stroke-width="2"/>
 
               <!-- Pin 1 Shield -->
-              <line x1="210" y1="240" x2="640" y2="240" stroke="#94a3b8" stroke-width="2"/>
-              <circle cx="640" cy="240" r="7" fill="#94a3b8"/>
-              <text x="665" y="245" fill="#94a3b8" font-size="14" font-weight="700">Pin 1 (CHASSIS)</text>
+              <line x1="210" y1="230" x2="640" y2="230" stroke="#94a3b8" stroke-width="2"/>
+              <circle cx="640" cy="230" r="7" fill="#94a3b8"/>
+              <text x="665" y="235" fill="#94a3b8" font-size="14" font-weight="700">Pin 1 (CHASSIS)</text>
             </svg>
           </div>
         </div>
@@ -1050,27 +1226,18 @@
             <svg viewBox="0 0 850 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
               <rect width="850" height="320" fill="var(--bg-secondary)" rx="8"/>
               
-              <!-- Primary Input Wires with Live Fader Overlay -->
-              <g transform="translate(14, 145)">
-                <rect x="0" y="0" width="105" height="38" rx="6" class="svg-fader-badge-rect"/>
-                <text x="52" y="15" fill="#38bdf8" class="svg-fader-label-text">Driver In (V_IN)</text>
-                <text x="52" y="30" fill="#ffffff" class="svg-fader-value-text" id="tx-svg-vin">15.0 V</text>
-              </g>
-              <line x1="119" y1="120" x2="250" y2="120" stroke="#38bdf8" stroke-width="2.5"/>
-              <line x1="119" y1="210" x2="250" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
-              <path class="animated-current-flow" data-flow-speed="2.0" d="M 119,120 L 250,120 L 250,210 L 119,210" fill="none" stroke="#10b981" stroke-width="2.5"/>
+              <!-- Primary Input Wires (Strictly Horizontal at y=120 and y=210) -->
+              <text x="30" y="165" fill="#38bdf8" font-size="13" font-weight="700">Driver In</text>
+              <line x1="90" y1="120" x2="250" y2="120" stroke="#38bdf8" stroke-width="2.5"/>
+              <line x1="90" y1="210" x2="250" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
+              <path class="animated-current-flow" data-flow-speed="2.0" d="M 90,120 L 250,120 L 250,210 L 90,210" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
               <!-- Primary Coils (y=120 to y=210: exactly 3 arcs of 30px) -->
               <path d="M 250,120 A 15,15 0 0,1 250,150 A 15,15 0 0,1 250,180 A 15,15 0 0,1 250,210" fill="none" stroke="#10b981" stroke-width="3.5"/>
 
-              <!-- Core Laminations with Live Turns Ratio Overlay -->
+              <!-- Core Laminations (Nickel / Mu-metal core) -->
               <line x1="280" y1="100" x2="280" y2="230" stroke="#94a3b8" stroke-width="3"/>
               <line x1="290" y1="100" x2="290" y2="230" stroke="#94a3b8" stroke-width="3"/>
-              <g transform="translate(235, 52)">
-                <rect x="0" y="0" width="100" height="36" rx="6" class="svg-fader-badge-rect badge-emerald"/>
-                <text x="50" y="14" fill="#10b981" class="svg-fader-label-text">Turns Ratio</text>
-                <text x="50" y="28" fill="#ffffff" class="svg-fader-value-text" id="tx-svg-ratio">1 : 1.0</text>
-              </g>
 
               <!-- Secondary Coils (y=120 to y=210: exactly 3 arcs of 30px) -->
               <path d="M 320,120 A 15,15 0 0,1 320,150 A 15,15 0 0,1 320,180 A 15,15 0 0,1 320,210" fill="none" stroke="#ef4444" stroke-width="3.5"/>
@@ -1078,25 +1245,19 @@
               <!-- Secondary Top Wire (Strictly Horizontal at y=120) -->
               <line x1="320" y1="120" x2="680" y2="120" stroke="#10b981" stroke-width="2.5"/>
               <circle cx="680" cy="120" r="7" fill="#10b981"/>
-              <text x="705" y="115" fill="#10b981" font-size="13" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
-              <text x="705" y="130" fill="#6ee7b7" font-size="11" font-weight="600" id="tx-svg-p2-probe">7.50 V / 159.7 mA</text>
+              <text x="705" y="125" fill="#10b981" font-size="13" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 320,120 L 680,120" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
               <!-- Secondary Bottom Wire (Strictly Horizontal at y=210) -->
               <line x1="320" y1="210" x2="680" y2="210" stroke="#ef4444" stroke-width="2.5"/>
               <circle cx="680" cy="210" r="7" fill="#ef4444"/>
-              <text x="705" y="205" fill="#ef4444" font-size="13" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
-              <text x="705" y="220" fill="#fca5a5" font-size="11" font-weight="600" id="tx-svg-p3-probe">-7.50 V / 159.7 mA</text>
+              <text x="705" y="215" fill="#ef4444" font-size="13" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 680,210 L 320,210" fill="none" stroke="#ef4444" stroke-width="2.5"/>
 
-              <!-- Load Resistor with Live Fader Overlay -->
+              <!-- Load Resistor (Symmetrically between y=120 and y=210) -->
               <line x1="680" y1="120" x2="680" y2="140" stroke="#94a3b8" stroke-width="2"/>
-              <rect x="671" y="140" width="18" height="50" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5" rx="3"/>
-              <g transform="translate(698, 146)">
-                <rect x="0" y="0" width="118" height="38" rx="6" class="svg-fader-badge-rect badge-orange"/>
-                <text x="59" y="15" fill="#f59e0b" class="svg-fader-label-text">R_Load (R_L)</text>
-                <text x="59" y="30" fill="#ffffff" class="svg-fader-value-text" id="tx-svg-rload">600 &Omega;</text>
-              </g>
+              <rect x="672" y="140" width="16" height="50" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+              <text x="698" y="170" fill="#f59e0b" font-size="11" font-weight="700">600 &Omega;</text>
               <line x1="680" y1="190" x2="680" y2="210" stroke="#94a3b8" stroke-width="2"/>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 680,120 L 680,210" fill="none" stroke="#f59e0b" stroke-width="2"/>
 
@@ -1167,14 +1328,9 @@
             <svg viewBox="0 0 920 300" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
               <rect width="920" height="300" fill="var(--bg-secondary)" rx="8"/>
 
-              <!-- Audio Generator with Live Fader Overlay -->
-              <g transform="translate(10, 137)">
-                <rect x="0" y="0" width="95" height="38" rx="6" class="svg-fader-badge-rect"/>
-                <text x="47" y="15" fill="#38bdf8" class="svg-fader-label-text">Audio (V_IN)</text>
-                <text x="47" y="30" fill="#ffffff" class="svg-fader-value-text" id="txlink-svg-vin">10.0 V</text>
-              </g>
-              <line x1="105" y1="120" x2="160" y2="120" stroke="#38bdf8" stroke-width="2.5"/>
-              <line x1="105" y1="192" x2="160" y2="192" stroke="#38bdf8" stroke-width="2.5"/>
+              <text x="25" y="155" fill="#38bdf8" font-size="12" font-weight="700">Audio Gen</text>
+              <line x1="85" y1="120" x2="160" y2="120" stroke="#38bdf8" stroke-width="2.5"/>
+              <line x1="85" y1="192" x2="160" y2="192" stroke="#38bdf8" stroke-width="2.5"/>
 
               <!-- T1 -->
               <path d="M 160,120 A 12,12 0 0,1 160,144 A 12,12 0 0,1 160,168 A 12,12 0 0,1 160,192" fill="none" stroke="#10b981" stroke-width="3"/>
@@ -1189,13 +1345,10 @@
               <path class="animated-current-flow" data-flow-speed="1.6" d="M 210,120 L 670,120" fill="none" stroke="#10b981" stroke-width="2.5"/>
               <path class="animated-current-flow" data-flow-speed="1.6" d="M 670,192 L 210,192" fill="none" stroke="#ef4444" stroke-width="2.5"/>
 
-              <!-- RF Noise Injection with Live Fader Overlay -->
-              <g transform="translate(375, 30)">
-                <rect x="0" y="0" width="130" height="36" rx="6" class="svg-fader-badge-rect badge-orange"/>
-                <text x="65" y="14" fill="#f59e0b" class="svg-fader-label-text">RF Noise (44.8 kHz)</text>
-                <text x="65" y="28" fill="#ffffff" class="svg-fader-value-text" id="txlink-svg-noise">5.0 V</text>
-              </g>
-              <line x1="440" y1="66" x2="440" y2="90" stroke="#f59e0b" stroke-width="2"/>
+              <!-- RF Noise Injection -->
+              <circle cx="440" cy="50" r="18" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+              <text x="440" y="54" fill="#f59e0b" font-size="10" font-weight="700" text-anchor="middle">~ 45k</text>
+              <line x1="440" y1="68" x2="440" y2="90" stroke="#f59e0b" stroke-width="2"/>
               <rect x="432" y="90" width="16" height="20" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
               <line x1="440" y1="110" x2="440" y2="120" stroke="#f59e0b" stroke-width="2"/>
               <circle cx="440" cy="120" r="4" fill="#f59e0b"/>
@@ -1207,17 +1360,13 @@
               <path d="M 720,120 A 12,12 0 0,1 720,144 A 12,12 0 0,1 720,168 A 12,12 0 0,1 720,192" fill="none" stroke="#ef4444" stroke-width="3"/>
               <text x="694" y="95" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">T2 (Rx In)</text>
 
-              <!-- Output to Load with Live Fader Overlay -->
-              <line x1="720" y1="120" x2="780" y2="120" stroke="#38bdf8" stroke-width="2.5"/>
-              <line x1="720" y1="192" x2="780" y2="192" stroke="#38bdf8" stroke-width="2.5"/>
-              <rect x="772" y="135" width="16" height="42" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
-              <line x1="780" y1="120" x2="780" y2="135" stroke="#38bdf8" stroke-width="2"/>
-              <line x1="780" y1="177" x2="780" y2="192" stroke="#38bdf8" stroke-width="2"/>
-              <g transform="translate(798, 137)">
-                <rect x="0" y="0" width="112" height="38" rx="6" class="svg-fader-badge-rect badge-emerald"/>
-                <text x="56" y="15" fill="#10b981" class="svg-fader-label-text">R_Load (R_L)</text>
-                <text x="56" y="30" fill="#ffffff" class="svg-fader-value-text" id="txlink-svg-rload">600 &Omega;</text>
-              </g>
+              <!-- Output to Load -->
+              <line x1="720" y1="120" x2="800" y2="120" stroke="#38bdf8" stroke-width="2.5"/>
+              <line x1="720" y1="192" x2="800" y2="192" stroke="#38bdf8" stroke-width="2.5"/>
+              <rect x="792" y="135" width="16" height="42" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+              <line x1="800" y1="120" x2="800" y2="135" stroke="#38bdf8" stroke-width="2"/>
+              <line x1="800" y1="177" x2="800" y2="192" stroke="#38bdf8" stroke-width="2"/>
+              <text x="825" y="160" fill="#10b981" font-size="11" font-weight="700">R_L (600&Omega;)</text>
 
               <!-- Badge -->
               <rect x="330" y="230" width="260" height="38" rx="6" fill="rgba(6, 182, 212, 0.12)" stroke="#06b6d4" stroke-width="1.5"/>
@@ -1682,50 +1831,36 @@
             <rect x="30" y="30" width="280" height="280" rx="8" fill="rgba(30, 41, 59, 0.5)" stroke="#38bdf8" stroke-width="2"/>
             <text x="170" y="60" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle">EQUIPMENT A (SOURCE)</text>
 
-            <!-- Audio Signal Generators with Live Fader Overlay -->
-            <g transform="translate(42, 60)">
-              <rect x="0" y="0" width="96" height="36" rx="6" class="svg-fader-badge-rect"/>
-              <text x="48" y="14" fill="#38bdf8" class="svg-fader-label-text">Audio In (V_PO)</text>
-              <text x="48" y="28" fill="#ffffff" class="svg-fader-value-text" id="meyer-svg-vpo">1.0 V</text>
-            </g>
+            <!-- Audio Signal Generators -->
             <circle cx="90" cy="110" r="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
             <path d="M 82,110 Q 86,102 90,110 T 98,110" fill="none" stroke="#38bdf8" stroke-width="2"/>
-            <text x="90" y="94" fill="#38bdf8" font-size="10" font-weight="600" text-anchor="middle">V_PO</text>
+            <text x="90" y="90" fill="#38bdf8" font-size="10" font-weight="600" text-anchor="middle">V_PO</text>
 
             <circle cx="90" cy="220" r="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
             <path d="M 82,220 Q 86,228 90,220 T 98,220" fill="none" stroke="#38bdf8" stroke-width="2"/>
-            <text x="90" y="250" fill="#38bdf8" font-size="10" font-weight="600" text-anchor="middle">&minus;V_PO</text>
+            <text x="90" y="250" fill="#38bdf8" font-size="10" font-weight="600" text-anchor="middle">V_RO</text>
 
-            <!-- Internal Star Connection to Chassis via CMZ_OUT with Live Fader Overlay -->
+            <!-- Internal Star Connection to Chassis via CMZ_OUT -->
             <line x1="90" y1="126" x2="90" y2="150" stroke="#38bdf8" stroke-width="2"/>
             <line x1="90" y1="204" x2="90" y2="180" stroke="#38bdf8" stroke-width="2"/>
-            <line x1="90" y1="165" x2="115" y2="165" stroke="#94a3b8" stroke-width="2"/>
-            <g transform="translate(115, 146)">
-              <rect x="0" y="0" width="98" height="38" rx="6" class="svg-fader-badge-rect"/>
-              <text x="49" y="15" fill="#38bdf8" class="svg-fader-label-text">CMZ_OUT</text>
-              <text x="49" y="30" fill="#ffffff" class="svg-fader-value-text" id="meyer-svg-cmz">50 &Omega;</text>
-            </g>
-            <line x1="213" y1="165" x2="235" y2="165" stroke="#94a3b8" stroke-width="2"/>
-            <line x1="235" y1="165" x2="235" y2="290" stroke="#94a3b8" stroke-width="2"/>
-            <circle cx="235" cy="290" r="4" fill="#94a3b8"/>
-            <text x="235" y="305" fill="#94a3b8" font-size="10" text-anchor="middle">Chassis A</text>
+            <line x1="90" y1="165" x2="140" y2="165" stroke="#94a3b8" stroke-width="2"/>
+            <rect x="140" y="157" width="45" height="16" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+            <text x="162" y="169" fill="#f8fafc" font-size="9" text-anchor="middle">CMZ_OUT</text>
+            <line x1="185" y1="165" x2="220" y2="165" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="220" y1="165" x2="220" y2="290" stroke="#94a3b8" stroke-width="2"/>
+            <circle cx="220" cy="290" r="4" fill="#94a3b8"/>
+            <text x="220" y="305" fill="#94a3b8" font-size="10" text-anchor="middle">Chassis A</text>
 
-            <!-- Output Resistors Z_PO and Z_RO with Live Fader Overlays -->
-            <line x1="106" y1="110" x2="185" y2="110" stroke="#38bdf8" stroke-width="2.5"/>
-            <g transform="translate(185, 91)">
-              <rect x="0" y="0" width="105" height="38" rx="6" class="svg-fader-badge-rect badge-emerald"/>
-              <text x="52" y="15" fill="#10b981" class="svg-fader-label-text">Z_PO (Hot Leg)</text>
-              <text x="52" y="30" fill="#ffffff" class="svg-fader-value-text" id="meyer-svg-zpo">50 &Omega;</text>
-            </g>
-            <line x1="290" y1="110" x2="310" y2="110" stroke="#10b981" stroke-width="2.5"/>
+            <!-- Output Resistors Z_PO and Z_RO -->
+            <line x1="106" y1="110" x2="190" y2="110" stroke="#38bdf8" stroke-width="2.5"/>
+            <rect x="190" y="102" width="50" height="16" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+            <text x="215" y="114" fill="#10b981" font-size="10" font-weight="700" text-anchor="middle">Z_PO</text>
+            <line x1="240" y1="110" x2="310" y2="110" stroke="#10b981" stroke-width="2.5"/>
 
-            <line x1="106" y1="220" x2="185" y2="220" stroke="#38bdf8" stroke-width="2.5"/>
-            <g transform="translate(185, 201)">
-              <rect x="0" y="0" width="105" height="38" rx="6" class="svg-fader-badge-rect badge-rose"/>
-              <text x="52" y="15" fill="#ef4444" class="svg-fader-label-text">Z_RO (Cold Leg)</text>
-              <text x="52" y="30" fill="#ffffff" class="svg-fader-value-text" id="meyer-svg-zro">50 &Omega;</text>
-            </g>
-            <line x1="290" y1="220" x2="310" y2="220" stroke="#ef4444" stroke-width="2.5"/>
+            <line x1="106" y1="220" x2="190" y2="220" stroke="#38bdf8" stroke-width="2.5"/>
+            <rect x="190" y="212" width="50" height="16" fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+            <text x="215" y="224" fill="#ef4444" font-size="10" font-weight="700" text-anchor="middle">Z_RO</text>
+            <line x1="240" y1="220" x2="310" y2="220" stroke="#ef4444" stroke-width="2.5"/>
 
             <!-- CABLE SECTION (STP) -->
             <rect x="330" y="70" width="300" height="200" rx="6" fill="rgba(15, 23, 42, 0.6)" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,4"/>
@@ -1751,22 +1886,18 @@
             <circle cx="650" cy="260" r="5" fill="#94a3b8"/>
             <text x="480" y="252" fill="#94a3b8" font-size="10" text-anchor="middle">Cable Shield (Pin 1 to Pin 1)</text>
 
-            <!-- Shunt Capacitances C_PS (Core-to-Shield) with Live Fader Overlay -->
-            <line x1="430" y1="110" x2="430" y2="150" stroke="#64748b" stroke-width="1.5"/>
-            <line x1="420" y1="150" x2="440" y2="150" stroke="#f59e0b" stroke-width="2"/>
-            <line x1="420" y1="156" x2="440" y2="156" stroke="#f59e0b" stroke-width="2"/>
-            <line x1="430" y1="156" x2="430" y2="260" stroke="#64748b" stroke-width="1.5"/>
+            <!-- Shunt Capacitances C_PS (Core-to-Shield) -->
+            <line x1="450" y1="110" x2="450" y2="150" stroke="#64748b" stroke-width="1.5"/>
+            <line x1="440" y1="150" x2="460" y2="150" stroke="#f59e0b" stroke-width="2"/>
+            <line x1="440" y1="156" x2="460" y2="156" stroke="#f59e0b" stroke-width="2"/>
+            <line x1="450" y1="156" x2="450" y2="260" stroke="#64748b" stroke-width="1.5"/>
+            <text x="475" y="156" fill="#f59e0b" font-size="9">C_PS1</text>
 
-            <g transform="translate(442, 146)">
-              <rect x="0" y="0" width="98" height="38" rx="6" class="svg-fader-badge-rect badge-orange"/>
-              <text x="49" y="15" fill="#f59e0b" class="svg-fader-label-text">C_PS (Cable)</text>
-              <text x="49" y="30" fill="#ffffff" class="svg-fader-value-text" id="meyer-svg-cps">100 pF</text>
-            </g>
-
-            <line x1="560" y1="220" x2="560" y2="180" stroke="#64748b" stroke-width="1.5"/>
-            <line x1="550" y1="180" x2="570" y2="180" stroke="#f59e0b" stroke-width="2"/>
-            <line x1="550" y1="174" x2="570" y2="174" stroke="#f59e0b" stroke-width="2"/>
-            <line x1="560" y1="174" x2="560" y2="260" stroke="#64748b" stroke-width="1.5"/>
+            <line x1="520" y1="220" x2="520" y2="180" stroke="#64748b" stroke-width="1.5"/>
+            <line x1="510" y1="180" x2="530" y2="180" stroke="#f59e0b" stroke-width="2"/>
+            <line x1="510" y1="174" x2="530" y2="174" stroke="#f59e0b" stroke-width="2"/>
+            <line x1="520" y1="174" x2="520" y2="260" stroke="#64748b" stroke-width="1.5"/>
+            <text x="545" y="180" fill="#f59e0b" font-size="9">C_PS2</text>
 
             <!-- Enclosure 2 Box (Receiver Chassis) -->
             <rect x="650" y="30" width="280" height="280" rx="8" fill="rgba(30, 41, 59, 0.5)" stroke="#38bdf8" stroke-width="2"/>
@@ -1801,18 +1932,16 @@
             <circle cx="850" cy="290" r="4" fill="#94a3b8"/>
             <text x="850" y="305" fill="#94a3b8" font-size="10" text-anchor="middle">Chassis B</text>
 
-            <!-- Ground Potential Difference V_GVD generator with Live Fader Overlay -->
-            <line x1="235" y1="350" x2="415" y2="350" stroke="#f59e0b" stroke-width="2"/>
-            <g transform="translate(415, 331)">
-              <rect x="0" y="0" width="130" height="38" rx="6" class="svg-fader-badge-rect badge-orange"/>
-              <text x="65" y="15" fill="#f59e0b" class="svg-fader-label-text">V_GVD (Hum Offset)</text>
-              <text x="65" y="30" fill="#ffffff" class="svg-fader-value-text" id="meyer-svg-vgvd">3.0 V</text>
-            </g>
-            <line x1="545" y1="350" x2="850" y2="350" stroke="#f59e0b" stroke-width="2"/>
+            <!-- Ground Potential Difference V_GVD generator (Ground Loop Path) -->
+            <line x1="220" y1="350" x2="450" y2="350" stroke="#f59e0b" stroke-width="2"/>
+            <circle cx="480" cy="350" r="18" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5"/>
+            <text x="480" y="345" fill="#f59e0b" font-size="11" font-weight="700" text-anchor="middle">V_GVD</text>
+            <text x="480" y="360" fill="#f59e0b" font-size="9" text-anchor="middle">Ground Hum</text>
+            <line x1="510" y1="350" x2="850" y2="350" stroke="#f59e0b" stroke-width="2"/>
 
             <!-- Ground loop flow arrows -->
-            <path class="animated-current-flow" data-flow-speed="2.5" d="M 235,290 L 235,350 L 850,350 L 850,290" fill="none" stroke="#f59e0b" stroke-width="2"/>
-            <line x1="235" y1="290" x2="235" y2="350" stroke="#94a3b8" stroke-width="2"/>
+            <path class="animated-current-flow" data-flow-speed="2.5" d="M 220,290 L 220,350 L 850,350 L 850,290" fill="none" stroke="#f59e0b" stroke-width="2"/>
+            <line x1="220" y1="290" x2="220" y2="350" stroke="#94a3b8" stroke-width="2"/>
             <line x1="850" y1="290" x2="850" y2="350" stroke="#94a3b8" stroke-width="2"/>
 
             <text x="480" y="385" fill="#f59e0b" font-size="11" font-weight="600" text-anchor="middle">
@@ -2170,37 +2299,69 @@
 
             </div>
 
-            <!-- Right: Stereo Peak Meters & Ground Lift Switch -->
-            <div style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 8px; border: 1px solid #2d3340;">
+            <!-- Right: Calibrated Precision Metering & AES48 Grounding Engine -->
+            <div style="background: rgba(0,0,0,0.35); padding: 0.85rem; border-radius: 8px; border: 1px solid #2d3340;">
               
-              <!-- Left Meter -->
-              <div class="vst-meter-channel">
-                <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.2rem;">
-                  <span>L (Hot +)</span>
-                  <span class="vst-peak-led" id="vst-peak-led-l"></span>
+              <!-- Meter Mode Selector -->
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.72rem;">
+                <span style="color: #94a3b8; font-weight: 600; text-transform: uppercase;">Metering:</span>
+                <div style="display: flex; gap: 0.25rem;">
+                  <button class="vst-meter-mode-btn active" data-meter-mode="stereo" style="font-size: 0.65rem; padding: 0.15rem 0.4rem; background: #1e293b; border: 1px solid #06b6d4; color: #06b6d4; border-radius: 3px; cursor: pointer;">Stereo (L/R)</button>
+                  <button class="vst-meter-mode-btn" data-meter-mode="balanced" style="font-size: 0.65rem; padding: 0.15rem 0.4rem; background: transparent; border: 1px solid #475569; color: #94a3b8; border-radius: 3px; cursor: pointer;">Pins (2/3)</button>
+                  <button class="vst-meter-mode-btn" data-meter-mode="cm" style="font-size: 0.65rem; padding: 0.15rem 0.4rem; background: transparent; border: 1px solid #475569; color: #94a3b8; border-radius: 3px; cursor: pointer;">Diff / CM</button>
+                </div>
+              </div>
+
+              <!-- Meter Channel 1 -->
+              <div class="vst-meter-channel" style="margin-bottom: 0.45rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #e2e8f0; margin-bottom: 0.2rem;">
+                  <span id="vst-m1-label" style="font-weight: 600;">Left Channel (Ch 1)</span>
+                  <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <span id="vst-m1-val" style="font-family: monospace; font-size: 0.75rem; color: #38bdf8;">+4.0 dBu</span>
+                    <span class="vst-peak-led" id="vst-peak-led-l" title="Clip / Overload"></span>
+                  </div>
                 </div>
                 <div class="vst-meter-track">
                   <div class="vst-meter-fill" id="vst-vu-bar-l"></div>
                 </div>
               </div>
 
-              <!-- Right Meter -->
-              <div class="vst-meter-channel">
-                <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.2rem;">
-                  <span>R (Cold &minus;)</span>
-                  <span class="vst-peak-led" id="vst-peak-led-r"></span>
+              <!-- Meter Channel 2 -->
+              <div class="vst-meter-channel" style="margin-bottom: 0.35rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #e2e8f0; margin-bottom: 0.2rem;">
+                  <span id="vst-m2-label" style="font-weight: 600;">Right Channel (Ch 2)</span>
+                  <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <span id="vst-m2-val" style="font-family: monospace; font-size: 0.75rem; color: #38bdf8;">+4.0 dBu</span>
+                    <span class="vst-peak-led" id="vst-peak-led-r" title="Clip / Overload"></span>
+                  </div>
                 </div>
                 <div class="vst-meter-track">
                   <div class="vst-meter-fill" id="vst-vu-bar-r"></div>
                 </div>
               </div>
 
-              <!-- Ground Lift Toggle -->
-              <div style="margin-top: 0.6rem; text-align: center;">
-                <label class="checkbox-toggle-label" style="font-size: 0.75rem; padding: 0.3rem 0.6rem; margin: 0; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;">
-                  <input type="checkbox" id="vst-gnd-lift" />
-                  <span>Ground Lift (Pin 1)</span>
-                </label>
+              <!-- Calibration Scale Legend (dBu) -->
+              <div style="display: flex; justify-content: space-between; font-size: 0.62rem; color: #64748b; font-family: monospace; padding: 0 2px; margin-bottom: 0.6rem;">
+                <span>&minus;40</span>
+                <span>&minus;20</span>
+                <span>&minus;10</span>
+                <span style="color: #38bdf8;">0</span>
+                <span style="color: #10b981; font-weight: 700;">+4</span>
+                <span style="color: #f59e0b;">+12</span>
+                <span style="color: #ef4444;">+24</span>
+              </div>
+
+              <!-- AES48 Pin 1 Shield Grounding Control -->
+              <div style="background: rgba(15, 23, 42, 0.7); padding: 0.5rem 0.65rem; border-radius: 6px; border: 1px solid #334155;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;">Pin 1 Shield (AES48):</span>
+                  <button id="vst-gnd-toggle-btn" style="font-size: 0.68rem; padding: 0.2rem 0.55rem; border-radius: 4px; border: 1px solid #10b981; background: rgba(16, 185, 129, 0.2); color: #34d399; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+                    CHASSIS BONDED
+                  </button>
+                </div>
+                <div id="vst-gnd-status-desc" style="font-size: 0.65rem; color: #10b981; margin-top: 0.25rem; line-height: 1.3;">
+                  ✓ Shield bonded to enclosure chassis. Conforms to AES48.
+                </div>
               </div>
 
             </div>
@@ -2340,24 +2501,36 @@
         <span class="section-badge">Free Resources</span>
         <h2 class="section-title">Free AES Data Sheet Templates &amp; Specification Generator</h2>
         <p class="section-lead">
-          Normative, standardized product data sheet templates conforming to AES-X152 Parts 1 through 4. 
-          Generate instant, machine-readable specifications in Markdown, JSON, or plain text for your audio designs.
+          Normative product data sheet templates conforming to AES-X152 Parts 1 through 4. 
+          Use the live interactive builder below to customize parameters, download pristine <strong>Blank Templates</strong>, 
+          and watch the specification assemble in real time as you build.
         </p>
       </div>
 
       <div class="ds-generator-grid">
-        <!-- Left: Form Controls -->
+        <!-- Left: Form Controls (Live Inputs) -->
         <div class="detail-card">
-          <h3 style="margin-top: 0; color: var(--accent-cyan); font-size: 1.15rem;">Device Parameters Generator</h3>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="margin: 0; color: var(--accent-cyan); font-size: 1.15rem;">Device Parameters Generator</h3>
+            <span id="ds-building-pulse" style="font-family: monospace; font-size: 0.78rem; color: #10b981; font-weight: 700;">✓ LIVE BUILDER ACTIVE</span>
+          </div>
 
-          <!-- Preset Selector -->
+          <!-- Preset Selector & Load Blank Button -->
           <div class="control-group">
-            <label class="control-label" for="ds-preset-select">Product Class Preset:</label>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.35rem;">
+              <label class="control-label" for="ds-preset-select" style="margin-bottom: 0;">Product Class Preset:</label>
+              <button id="ds-load-blank-btn" type="button" style="background: rgba(245, 158, 11, 0.15); border: 1px solid #f59e0b; color: #fbbf24; font-size: 0.75rem; padding: 0.2rem 0.55rem; border-radius: 4px; cursor: pointer; font-weight: 600;">
+                Load Blank Template
+              </button>
+            </div>
             <select id="ds-preset-select" class="form-select">
-              <option value="line_out" selected>Professional Line Driver / DAC Output</option>
+              <option value="line_out" selected>Professional Line Driver / DAC Output (AES14)</option>
               <option value="mic">Studio Condenser Microphone (SC-04-04)</option>
               <option value="line_in">Balanced Line Receiver / ADC Input</option>
-              <option value="transformer">Galvanically Isolated Line Transformer</option>
+              <option value="transformer">Galvanically Isolated Line Transformer (6.3)</option>
+              <option value="db25_aes59">8-Channel Multichannel DB25 (AES59 &amp; AES-X249)</option>
+              <option value="qtp_aes72">4-Channel Quad Twisted Pair Extender (AES72-4E)</option>
+              <option value="blank">[BLANK TEMPLATE] Empty AES-X152 Specification</option>
             </select>
           </div>
 
@@ -2383,7 +2556,7 @@
 
           <div class="control-group">
             <label class="control-label" for="ds-in-max-level">Max Level Capability (L_MAX):</label>
-            <input type="text" id="ds-in-max-level" class="tree-search-input" value="+24.0 dBu (12.28 V RMS)" />
+            <input type="text" id="ds-in-max-level" class="tree-search-input" value="+24.0 dBu (12.28 V RMS into 10 k&Omega;)" />
           </div>
 
           <div class="control-group">
@@ -2402,26 +2575,40 @@
           </div>
 
           <div class="control-group" style="margin-bottom: 0;">
-            <label class="control-label" for="ds-in-conn">Connector Type (AES14):</label>
+            <label class="control-label" for="ds-in-conn">Connector Type (AES14 / AES59 / AES72):</label>
             <input type="text" id="ds-in-conn" class="tree-search-input" value="XLR-3M (Pin connector Equipment Output)" />
           </div>
         </div>
 
-        <!-- Right: Generated Output Display & Action Buttons -->
+        <!-- Right: Live Builder Preview Display & Action Buttons -->
         <div class="detail-card">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <div style="display: flex; gap: 0.5rem;">
-              <button class="ds-format-tab-btn active" data-format="markdown">Markdown (.md)</button>
-              <button class="ds-format-tab-btn" data-format="json">JSON (.json)</button>
-              <button class="ds-format-tab-btn" data-format="text">Plain Text (.txt)</button>
+          <div class="d-flex justify-content-between align-items-center mb-2" style="flex-wrap: wrap; gap: 0.5rem;">
+            <!-- Format Tabs -->
+            <div style="display: flex; gap: 0.35rem;">
+              <button class="ds-view-tab-btn active" data-view="rendered" style="font-size: 0.78rem; padding: 0.3rem 0.6rem; border-radius: 4px; border: 1px solid var(--accent-cyan); background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); font-weight: 600; cursor: pointer;">Document View</button>
+              <button class="ds-view-tab-btn" data-view="code" style="font-size: 0.78rem; padding: 0.3rem 0.6rem; border-radius: 4px; border: 1px solid var(--border-color); background: transparent; color: var(--text-secondary); cursor: pointer;">Code View</button>
             </div>
-            <div style="display: flex; gap: 0.5rem;">
-              <button id="ds-copy-btn" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.82rem;">Copy to Clipboard</button>
-              <button id="ds-download-btn" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.82rem;">Download Template</button>
+
+            <!-- Code Format Sub-Tabs -->
+            <div style="display: flex; gap: 0.25rem;">
+              <button class="ds-format-tab-btn active" data-format="markdown" style="font-size: 0.72rem; padding: 0.25rem 0.5rem;">.MD</button>
+              <button class="ds-format-tab-btn" data-format="json" style="font-size: 0.72rem; padding: 0.25rem 0.5rem;">JSON</button>
+              <button class="ds-format-tab-btn" data-format="text" style="font-size: 0.72rem; padding: 0.25rem 0.5rem;">TXT</button>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 0.4rem;">
+              <button id="ds-copy-btn" class="btn btn-secondary" style="padding: 0.35rem 0.7rem; font-size: 0.78rem;">Copy</button>
+              <button id="ds-download-btn" class="btn btn-primary" style="padding: 0.35rem 0.7rem; font-size: 0.78rem;">Download</button>
+              <button id="ds-download-blank-btn" style="padding: 0.35rem 0.7rem; font-size: 0.78rem; background: rgba(245, 158, 11, 0.15); border: 1px solid #f59e0b; color: #fbbf24; border-radius: 6px; cursor: pointer; font-weight: 600;">Blank .MD</button>
             </div>
           </div>
 
-          <pre id="ds-output-code" class="ds-code-view"></pre>
+          <!-- Live Rendered Document View -->
+          <div id="ds-rendered-view" style="margin-top: 0.5rem;"></div>
+
+          <!-- Raw Code View -->
+          <pre id="ds-output-code" class="ds-code-view" style="display: none; max-height: 480px; overflow-y: auto;"></pre>
         </div>
       </div>
     </div>
@@ -2831,6 +3018,7 @@
           <h5>Interactive Tools</h5>
           <ul>
             <li><a href="#enclosure-explorer">Enclosure &amp; Signal Chain Explorer</a></li>
+            <li><a href="#multichannel-hierarchy">Multichannel AES59 &rarr; AES72-4E &rarr; XLR/TRS</a></li>
             <li><a href="#xlr-hub">Universal XLR Pinout Hub</a></li>
             <li><a href="#topologies">Vector SVG Circuits (6.1&ndash;6.8)</a></li>
             <li><a href="#transformer-simulator">Audio Transformer Simulator &amp; Test Bench</a></li>
@@ -2855,6 +3043,7 @@
   <script src="js/tree-viewer.js"></script>
   <script src="js/simulators.js"></script>
   <script src="js/circuit-animator.js"></script>
+  <script src="js/multichannel-breakout.js"></script>
   <script src="js/xlr-hub.js"></script>
   <script src="js/transformer-sim.js"></script>
   <script src="js/vst-standards.js"></script>

@@ -6,6 +6,16 @@
 
 class AESVSTPlugin {
   constructor() {
+    this.meterMode = "stereo"; // "stereo", "balanced", "cm"
+    this.isGndLifted = false;
+    this.gainDb = 0.0;
+    this.cmrrDb = 92;
+    this.preset = "line";
+    this.activeStandard = "aes-x152";
+
+    this.meterValL = 68.0;
+    this.meterValR = 68.0;
+
     this.standardsData = {
       "sc-05-05": {
         id: "sc-05-05",
@@ -100,25 +110,41 @@ class AESVSTPlugin {
       "sc-02-01": {
         id: "sc-02-01",
         name: "AES SC-02-01 Working Group",
-        title: "Digital Audio Interfaces (AES3 & AES11)",
-        chair: "John Grant / Rich Cabot",
+        title: "Digital Audio Interfaces",
+        chair: "John Strawn",
         status: "Active Working Group",
-        description: "Develops the serial linear digital transmission standard (AES3) and master synchronization clock distribution (AES11). Defines 110 Ω balanced twisted pair and 75 Ω coaxial formats.",
-        keyStandards: ["AES3", "AES11", "AES-3id"],
-        jumpTarget: "#box-digital"
+        description: "Develops digital audio transport specifications including AES3 (AES/EBU balanced 110 Ω digital audio) and AES10 (MADI multichannel digital interface).",
+        keyStandards: ["AES3", "AES10", "AES11"],
+        jumpTarget: "#box-aes3"
+      },
+      "aes3": {
+        id: "aes3",
+        name: "AES3 Standard",
+        title: "Digital Audio Engineering — Serial Transmission Format for Two-Channel Audio",
+        chair: "SC-02-01",
+        status: "Universal Professional Digital Standard",
+        description: "Specifies 110 Ω balanced transmission of linear PCM digital audio over XLR-3 or DB25, using biphase-mark encoding with transformer isolation.",
+        keyStandards: ["AES11", "AES14", "AES59"],
+        jumpTarget: "#box-aes3"
+      },
+      "aes11": {
+        id: "aes11",
+        name: "AES11 Standard",
+        title: "Synchronization of Digital Audio Equipment in Studio Operations",
+        chair: "SC-02-01",
+        status: "Published Standard (r2014)",
+        description: "Establishes master clock synchronization requirements and DARS (Digital Audio Reference Signal) phase alignment across studio installations.",
+        keyStandards: ["AES3"],
+        jumpTarget: "#box-aes3"
       }
     };
-
-    this.activeStandard = "aes-x152";
-    this.meterValL = 0;
-    this.meterValR = 0;
-    this.animationId = null;
 
     this.init();
   }
 
   init() {
     this.bindDOM();
+    this.updateMeterLabels();
     this.startMeterAnimation();
     this.selectStandard("aes-x152");
   }
@@ -146,7 +172,7 @@ class AESVSTPlugin {
 
     // Node click handlers in SVG map
     document.querySelectorAll(".standards-map-node").forEach(node => {
-      node.addEventListener("click", (e) => {
+      node.addEventListener("click", () => {
         const stdId = node.dataset.stdId;
         if (stdId && this.standardsData[stdId]) {
           this.selectStandard(stdId);
@@ -158,40 +184,128 @@ class AESVSTPlugin {
     const presetSelect = document.getElementById("vst-preset-select");
     if (presetSelect) {
       presetSelect.addEventListener("change", (e) => {
-        const val = e.target.value;
-        const oledMsg = document.getElementById("vst-oled-text");
-        if (oledMsg) {
-          oledMsg.textContent = `MODE: ${val.toUpperCase()} | BALANCED OK`;
-        }
+        this.preset = e.target.value;
+        this.updateOLEDDisplay();
       });
     }
 
     // Knobs input event
-    const bindKnob = (id, displayId, unit) => {
-      const knob = document.getElementById(id);
-      const disp = document.getElementById(displayId);
-      if (knob && disp) {
-        knob.addEventListener("input", (e) => {
-          disp.textContent = `${e.target.value} ${unit}`;
-        });
-      }
-    };
-
-    bindKnob("vst-knob-gain", "vst-gain-val", "dB");
-    bindKnob("vst-knob-cmrr", "vst-cmrr-val", "dB");
-
-    // Ground lift toggle
-    const gndLift = document.getElementById("vst-gnd-lift");
-    if (gndLift) {
-      gndLift.addEventListener("change", (e) => {
-        const oled = document.getElementById("vst-oled-sub");
-        if (oled) {
-          oled.textContent = e.target.checked 
-            ? "PIN 1 LIFTED: Floating Ground Active (AES48 Warning!)" 
-            : "PIN 1 BONDED: Direct Chassis Metal-to-Metal (AES48 OK)";
-          oled.style.color = e.target.checked ? "#ef4444" : "#10b981";
-        }
+    const knobGain = document.getElementById("vst-knob-gain");
+    const dispGain = document.getElementById("vst-gain-val");
+    if (knobGain && dispGain) {
+      knobGain.addEventListener("input", (e) => {
+        this.gainDb = parseFloat(e.target.value);
+        dispGain.textContent = `${this.gainDb >= 0 ? '+' : ''}${this.gainDb.toFixed(1)} dB`;
+        this.updateOLEDDisplay();
       });
+    }
+
+    const knobCmrr = document.getElementById("vst-knob-cmrr");
+    const dispCmrr = document.getElementById("vst-cmrr-val");
+    if (knobCmrr && dispCmrr) {
+      knobCmrr.addEventListener("input", (e) => {
+        this.cmrrDb = parseInt(e.target.value, 10);
+        dispCmrr.textContent = `${this.cmrrDb} dB`;
+        this.updateOLEDDisplay();
+      });
+    }
+
+    // Meter mode buttons
+    document.querySelectorAll(".vst-meter-mode-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".vst-meter-mode-btn").forEach(b => {
+          b.classList.remove("active");
+          b.style.background = "transparent";
+          b.style.borderColor = "#475569";
+          b.style.color = "#94a3b8";
+        });
+        btn.classList.add("active");
+        btn.style.background = "#1e293b";
+        btn.style.borderColor = "#06b6d4";
+        btn.style.color = "#06b6d4";
+
+        this.meterMode = btn.dataset.meterMode || "stereo";
+        this.updateMeterLabels();
+      });
+    });
+
+    // AES48 Pin 1 Ground Shield toggle button
+    const gndToggleBtn = document.getElementById("vst-gnd-toggle-btn");
+    if (gndToggleBtn) {
+      gndToggleBtn.addEventListener("click", () => {
+        this.isGndLifted = !this.isGndLifted;
+        this.updateGroundLiftUI();
+      });
+    }
+  }
+
+  updateMeterLabels() {
+    const m1Label = document.getElementById("vst-m1-label");
+    const m2Label = document.getElementById("vst-m2-label");
+
+    if (this.meterMode === "stereo") {
+      if (m1Label) m1Label.textContent = "Left Channel (Ch 1)";
+      if (m2Label) m2Label.textContent = "Right Channel (Ch 2)";
+    } else if (this.meterMode === "balanced") {
+      if (m1Label) m1Label.textContent = "Pin 2 (Hot / Positive +)";
+      if (m2Label) m2Label.textContent = "Pin 3 (Cold / Return \u2212)";
+    } else if (this.meterMode === "cm") {
+      if (m1Label) m1Label.textContent = "V_DIFF (Differential Signal)";
+      if (m2Label) m2Label.textContent = "V_CM (Common-Mode Noise)";
+    }
+  }
+
+  updateGroundLiftUI() {
+    const btn = document.getElementById("vst-gnd-toggle-btn");
+    const desc = document.getElementById("vst-gnd-status-desc");
+    const oledSub = document.getElementById("vst-oled-sub");
+
+    if (this.isGndLifted) {
+      if (btn) {
+        btn.textContent = "LIFTED (SHIELD OPEN)";
+        btn.style.borderColor = "#f59e0b";
+        btn.style.background = "rgba(245, 158, 11, 0.2)";
+        btn.style.color = "#fbbf24";
+      }
+      if (desc) {
+        desc.textContent = "\u26a0\ufe0f Pin 1 Lifted: Ground loop broken, but shield ungrounded (RFI alert).";
+        desc.style.color = "#fbbf24";
+      }
+      if (oledSub) {
+        oledSub.textContent = "PIN 1 LIFTED: Floating Shield (AES48 Non-Compliant / RFI Risk)";
+        oledSub.style.color = "#f59e0b";
+      }
+    } else {
+      if (btn) {
+        btn.textContent = "CHASSIS BONDED";
+        btn.style.borderColor = "#10b981";
+        btn.style.background = "rgba(16, 185, 129, 0.2)";
+        btn.style.color = "#34d399";
+      }
+      if (desc) {
+        desc.textContent = "\u2713 Shield bonded to enclosure chassis. Conforms to AES48.";
+        desc.style.color = "#10b981";
+      }
+      if (oledSub) {
+        oledSub.textContent = "PIN 1 BONDED: Direct Chassis Metal-to-Metal (AES48 OK)";
+        oledSub.style.color = "#10b981";
+      }
+    }
+
+    this.updateOLEDDisplay();
+  }
+
+  updateOLEDDisplay() {
+    const oledText = document.getElementById("vst-oled-text");
+    if (oledText) {
+      const modeNames = {
+        line: "MODE: AES14 BALANCED LINE (+4 dBu / 100 \u03a9)",
+        mic: "MODE: SC-04-04 MICROPHONE (-50 dBu / 150 \u03a9 + P48)",
+        digital: "MODE: AES3 DIGITAL (110 \u03a9 BALANCED / 0 dBFS)",
+        db25: "MODE: AES59 MULTICHANNEL DB25 (8-CH BALANCED)",
+        qtp: "MODE: AES72 QUAD TWISTED PAIR (4-CH RJ45)"
+      };
+      oledText.textContent = modeNames[this.preset] || "MODE: AES-X152 BALANCED LINE";
     }
   }
 
@@ -226,40 +340,81 @@ class AESVSTPlugin {
 
     if (jumpBtn) {
       jumpBtn.setAttribute("href", data.jumpTarget);
-      jumpBtn.textContent = `Jump to ${data.name} on Page ↓`;
-    }
-
-    // Update VST OLED display
-    const oledEl = document.getElementById("vst-oled-text");
-    if (oledEl) {
-      oledEl.textContent = `${data.id.toUpperCase()}: ${data.title.substring(0, 32)}...`;
+      jumpBtn.textContent = `Jump to ${data.name} on Page \u2193`;
     }
   }
 
   startMeterAnimation() {
     const meterL = document.getElementById("vst-vu-bar-l");
     const meterR = document.getElementById("vst-vu-bar-r");
+    const valL = document.getElementById("vst-m1-val");
+    const valR = document.getElementById("vst-m2-val");
     const peakLedL = document.getElementById("vst-peak-led-l");
     const peakLedR = document.getElementById("vst-peak-led-r");
 
     let t = 0;
     const animate = () => {
       t += 0.05;
-      // Simulated realistic audio signal fluctuation
-      const rawL = (Math.sin(t * 1.5) * 0.35 + Math.cos(t * 3.7) * 0.25 + 0.5) * 85;
-      const rawR = (Math.sin(t * 1.7 + 0.3) * 0.35 + Math.cos(t * 3.3) * 0.25 + 0.5) * 85;
 
-      this.meterValL = this.meterValL * 0.7 + rawL * 0.3;
-      this.meterValR = this.meterValR * 0.7 + rawR * 0.3;
+      let dBu1 = 0;
+      let dBu2 = 0;
 
-      if (meterL) meterL.style.width = `${Math.min(100, Math.max(5, this.meterValL))}%`;
-      if (meterR) meterR.style.width = `${Math.min(100, Math.max(5, this.meterValR))}%`;
+      // Base program level
+      let nominalDbu = 4.0;
+      if (this.preset === "mic") nominalDbu = -45.0;
+      else if (this.preset === "digital") nominalDbu = 0.0;
+
+      const progOscL = Math.sin(t * 1.8) * 1.8 + Math.cos(t * 3.4) * 1.2;
+      const progOscR = Math.sin(t * 1.6 + 0.4) * 1.8 + Math.cos(t * 3.1) * 1.2;
+
+      if (this.meterMode === "stereo") {
+        dBu1 = nominalDbu + this.gainDb + progOscL;
+        dBu2 = nominalDbu + this.gainDb + progOscR;
+      } else if (this.meterMode === "balanced") {
+        dBu1 = nominalDbu + this.gainDb + progOscL;
+        dBu2 = nominalDbu + this.gainDb + progOscL; // Identical differential magnitude on Pin 3
+      } else if (this.meterMode === "cm") {
+        // Meter 1: Differential audio
+        dBu1 = nominalDbu + this.gainDb + progOscL;
+        // Meter 2: Common-Mode residual noise
+        let cmNoise = -20.0 - this.cmrrDb; // suppressed by CMRR
+        if (this.isGndLifted) {
+          // Floating shield picks up RFI/EMI
+          cmNoise = -65.0 + Math.sin(t * 5.0) * 3.0;
+        } else {
+          cmNoise += Math.sin(t * 2.5) * 1.5;
+        }
+        dBu2 = cmNoise;
+      }
+
+      // Convert dBu (-40 to +24 dBu) to percentage [0, 100]
+      const toPct = (val) => {
+        const minDbu = -40;
+        const maxDbu = 24;
+        return Math.min(100, Math.max(2, ((val - minDbu) / (maxDbu - minDbu)) * 100));
+      };
+
+      const targetPctL = toPct(dBu1);
+      const targetPctR = toPct(dBu2);
+
+      this.meterValL = this.meterValL * 0.7 + targetPctL * 0.3;
+      this.meterValR = this.meterValR * 0.7 + targetPctR * 0.3;
+
+      if (meterL) meterL.style.width = `${this.meterValL.toFixed(1)}%`;
+      if (meterR) meterR.style.width = `${this.meterValR.toFixed(1)}%`;
+
+      if (valL) {
+        valL.textContent = `${dBu1 >= 0 ? '+' : ''}${dBu1.toFixed(1)} dBu`;
+      }
+      if (valR) {
+        valR.textContent = `${dBu2 >= 0 ? '+' : ''}${dBu2.toFixed(1)} dBu`;
+      }
 
       if (peakLedL) {
-        peakLedL.style.opacity = (this.meterValL > 78) ? "1" : "0.2";
+        peakLedL.style.opacity = (dBu1 > 20.0) ? "1" : "0.2";
       }
       if (peakLedR) {
-        peakLedR.style.opacity = (this.meterValR > 78) ? "1" : "0.2";
+        peakLedR.style.opacity = (dBu2 > 20.0) ? "1" : "0.2";
       }
 
       this.animationId = requestAnimationFrame(animate);
