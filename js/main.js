@@ -544,9 +544,160 @@ function switchTermsTab(tabKey) {
   }
 }
 
+
+// ==========================================================================
+// Enclosure Box & Signal Chain Explorer (Section 0)
+// ==========================================================================
+const ENCLOSURE_PRESETS = {
+  mic: {
+    title: "1. Microphone Transducer Enclosure (SC-04-04)",
+    badge: "SC-04-04 Normative",
+    desc: "Dynamic, ribbon, or condenser microphone capsule. Output signal level is typically -60 to -40 dBu. Source impedance is strictly balanced (150 to 200 Ω). Conforming to AES48, the capsule shield and Pin 1 terminate directly to the conductive microphone chassis shell.",
+    txTitle: "MICROPHONE CAPSULE",
+    txSub: "SC-04-04 Acoustic Transducer",
+    txCircuit: "Mic Element / P48",
+    txZout: "Z_out: 150 Ω (Balanced)",
+    cableLabel: "Balanced Microphone Cable (STP)",
+    cableSub: "Low Microphonics | Star-Quad Geometry",
+    rxTitle: "MICROPHONE PREAMPLIFIER",
+    rxSub: "Differential Input Stage",
+    rxCircuit: "Discrete / IC Preamp",
+    rxZin: "Z_in: 2.4 kΩ (Bridging)",
+    connector: '<a href="#xlr-hub" class="text-cyan">XLR-3M (AES14 Table 1)</a>',
+    level: "-50 dBu / +2 dBu",
+    zout: "150 Ω (Balanced)",
+    insight: "When connecting microphones, always maintain AES48 shield continuity. Do not lift Pin 1 inside the microphone cable!"
+  },
+  "line-src": {
+    title: "2. Line Source Enclosure (AES14)",
+    badge: "AES14 Line Driver",
+    desc: "Mixing console, audio interface, synthesizer, or outboard analog processor. Drives nominal +4 dBu balanced line levels with maximum headroom up to +24 dBu into bridging receiver inputs.",
+    txTitle: "LINE OUTPUT ENCLOSURE",
+    txSub: "AES14 Output Stage",
+    txCircuit: "Op-Amp / Buffer",
+    txZout: "Z_out: 100 Ω (50 Ω / leg)",
+    cableLabel: "Balanced Interconnect Cable (STP)",
+    cableSub: "Z_T Transfer Impedance | 40 pF/m Capacitance",
+    rxTitle: "LINE INPUT ENCLOSURE",
+    rxSub: "AES14 Input Stage",
+    rxCircuit: "Differential Receiver",
+    rxZin: "Z_in: 20 kΩ (Bridging)",
+    connector: '<a href="#xlr-hub" class="text-cyan">XLR-3M / 1/4″ TRS</a>',
+    level: "+4 dBu / +24 dBu",
+    zout: "100 Ω (50 Ω Pin 2 + 50 Ω Pin 3)",
+    insight: "Conforming to AES48, connector Pin 1 bonds directly to metal chassis. Differential drive preserves 100% signal transfer even over 300 m cables."
+  },
+  digital: {
+    title: "3. Digital Audio AES3 & Clock Sync (AES11)",
+    badge: "AES3 / AES11 Digital",
+    desc: "Transmits linear PCM 2-channel digital audio data over 110 Ω balanced twisted pair cable or 75 Ω coaxial cable (AES-3id). Receiver utilizes transformer-isolated phase-locked loop (PLL) clock recovery.",
+    txTitle: "AES3 DIGITAL TRANSMITTER",
+    txSub: "Biphase Mark Encoded",
+    txCircuit: "RS-422 Differential Driver",
+    txZout: "Z_out: 110 Ω ± 20%",
+    cableLabel: "110 Ω AES3 Shielded Twisted Pair",
+    cableSub: "Controlled Impedance (110 Ω) | Low Loss",
+    rxTitle: "AES3 DIGITAL RECEIVER",
+    rxSub: "AES11 Clock Recovery",
+    rxCircuit: "Transformer + PLL",
+    rxZin: "Z_in: 110 Ω (Matched)",
+    connector: '<a href="#xlr-hub" class="text-cyan">XLR-3M (110 Ω) / BNC (75 Ω)</a>',
+    level: "2.0 V to 7.0 V p-p into 110 Ω",
+    zout: "110 Ω Balanced",
+    insight: "Unlike analog audio, digital AES3 transmission operates on transmission-line RF principles requiring impedance matching at 110 Ω to prevent signal reflections and jitter."
+  },
+  db25: {
+    title: "4. Multichannel DB25 Enclosure (AES59 & AES-X249)",
+    badge: "AES59 / AES-X249 Normative",
+    desc: "8 balanced analog channels or 4 AES3 digital pairs on a single high-density 25-way D-sub connector. AES-X249 mandates that the metal shroud flange and jack screws must bond metal-to-metal directly to the chassis.",
+    txTitle: "DB25 TRANSMITTER (8-CH)",
+    txSub: "AES59 Tascam Standard Pinout",
+    txCircuit: "8-Channel Output Buffer",
+    txZout: "Z_out: 100 Ω per pair",
+    cableLabel: "8-Pair Multichannel Snake (AES59)",
+    cableSub: "AES-X249 Direct Shroud Chassis Bonding",
+    rxTitle: "DB25 RECEIVER (8-CH)",
+    rxSub: "Multi-Pair Differential Input",
+    rxCircuit: "8-Channel Diff Receiver",
+    rxZin: "Z_in: 20 kΩ per pair",
+    connector: "25-Way D-Sub (DB25 Female)",
+    level: "+4 dBu Nominal / +24 dBu Max",
+    zout: "100 Ω Balanced per channel",
+    insight: "AES-X249 solved the multi-channel Pin 1 problem by requiring all 8 individual shield pins plus the mechanical connector shell to bond directly to the metal enclosure frame."
+  },
+  qtp: {
+    title: "5. Quad Twisted Pair RJ45 Enclosure (AES72-4E)",
+    badge: "AES72-4E Standard",
+    desc: "Transmits 4 balanced audio channels over Category 5e/6/7 STP cable using standard 8P8C (RJ45) modular connectors. Follows the 'Even = Positive' polarity rule with solid colored wires on even pins.",
+    txTitle: "AES72-4E TRANSMITTER (4-CH)",
+    txSub: "QTP RJ45 Port (Type 4E)",
+    txCircuit: "4-Channel Balanced Driver",
+    txZout: "Z_out: 100 Ω per pair",
+    cableLabel: "Category 5e/6 STP (4 Twisted Pairs)",
+    cableSub: "Shielded RJ45 / etherCON Metal Shell",
+    rxTitle: "AES72-4E RECEIVER (4-CH)",
+    rxSub: "QTP RJ45 Port (Type 4E)",
+    rxCircuit: "4-Channel Diff Receiver",
+    rxZin: "Z_in: 20 kΩ per pair",
+    connector: "8P8C Shielded Modular RJ45",
+    level: "+4 dBu Analog or AES3 Digital",
+    zout: "100 Ω UTP/STP Balanced",
+    insight: "AES72-4E standardizes pinout across four pairs (Pair 1: Pins 1/2; Pair 2: Pins 3/6; Pair 3: Pins 5/4; Pair 4: Pins 7/8). Shielded Cat-6 cable allows phantom power return."
+  }
+};
+
+function selectEnclosureBox(eqKey) {
+  const data = ENCLOSURE_PRESETS[eqKey];
+  if (!data) return;
+
+  // Update tabs
+  document.querySelectorAll('.equipment-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.eq === eqKey);
+  });
+
+  // Update SVG
+  const setTxt = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  };
+
+  setTxt('svg-tx-title', data.txTitle);
+  setTxt('svg-tx-sub', data.txSub);
+  setTxt('svg-tx-circuit-name', data.txCircuit);
+  setTxt('svg-tx-zout', data.txZout);
+  setTxt('svg-cable-label', data.cableLabel);
+  setTxt('svg-cable-sub', data.cableSub);
+  setTxt('svg-rx-title', data.rxTitle);
+  setTxt('svg-rx-sub', data.rxSub);
+  setTxt('svg-rx-circuit-name', data.rxCircuit);
+  setTxt('svg-rx-zin', data.rxZin);
+
+  // Update Detail Card
+  setTxt('eq-detail-title', data.title);
+  setTxt('eq-detail-badge', data.badge);
+  setTxt('eq-detail-desc', data.desc);
+  setTxt('eq-metric-level', data.level);
+  setTxt('eq-metric-zout', data.zout);
+  setTxt('eq-detail-insight', data.insight);
+
+  const connEl = document.getElementById('eq-metric-connector');
+  if (connEl) connEl.innerHTML = data.connector;
+}
+
+function initEnclosureTabs() {
+  document.querySelectorAll('.equipment-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const eq = btn.dataset.eq;
+      if (eq) selectEnclosureBox(eq);
+    });
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   // Default box type
   selectBoxType("mic");
+  initEnclosureTabs();
+  selectEnclosureBox("mic");
 
   initTheme();
   initImageModal();
