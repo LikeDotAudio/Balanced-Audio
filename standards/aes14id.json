@@ -1,0 +1,40 @@
+{
+  "standard_id": "AES14id",
+  "short_id": "AES14id",
+  "title": "AES information document for professional audio — Application of connectors, concentric phone plugs and jacks",
+  "organization": "Audio Engineering Society, Inc.",
+  "status": "Information Document",
+  "working_group": "SC-05-02 (Audio Connectors)",
+  "source_file": ".env/X152/AES - SC0505 - TERMS USED ELSEWHERE.smmx",
+  "abstract": "Defines standardized allocations, contacts, and mating practices for concentric phone plugs and jacks (1/4 inch, 6.35 mm, 3.5 mm) used in professional balanced and unbalanced audio systems.",
+  "key_definitions": {
+    "jack": "Female concentric connector, usually fixed to equipment or connector panel.",
+    "plug": "Male concentric connector, usually terminating a free cable.",
+    "TRS_plug": "3-contact concentric plug where the contacts are identified as Tip, Ring, and Sleeve.",
+    "TS_plug": "2-contact concentric plug where the contacts are identified as Tip and Sleeve.",
+    "IEC_plug": "2-contact or 3-contact concentric plug compliant with IEC 60603-11.",
+    "B_gauge_plug": "6.35 mm (nominal sleeve diameter) 3-contact concentric plug identified in Standard Sheet 12 of IEC 61602 (broadcast patch fields).",
+    "MIL_plug": "6.35 mm 3-contact concentric plug identified in US military specification PJ-051."
+  },
+  "contact_allocations": {
+    "balanced_single_channel": {
+      "tip": "Positive-polarity terminal (Signal + / Hot)",
+      "ring": "Return terminal (Signal - / Cold)",
+      "sleeve": "Designated shield contact (Chassis / Shield)"
+    },
+    "unbalanced_monophonic": {
+      "tip": "Positive-polarity terminal (Signal +)",
+      "sleeve": "Common shield and signal return"
+    },
+    "unbalanced_stereophonic": {
+      "tip": "Left-channel positive polarity",
+      "ring": "Right-channel positive polarity",
+      "sleeve": "Common shield and return"
+    }
+  },
+  "interoperability_and_hazards": {
+    "ts_in_trs_hazard": "When a monophonic 2-contact TS plug is inserted into a balanced TRS jack, the long sleeve shorts the Ring contact to Sleeve (Ground). In active cross-coupled or ground-referenced push-pull driver topologies, this dead-shorts an active op-amp output to ground, causing excessive thermal stress, output stage clipping, and increased distortion.",
+    "insertion_shorting": "Concentric plugs momentarily short adjacent contacts (Tip to Ring or Ring to Sleeve) during physical insertion and withdrawal. Equipment must include current limiting (series output resistance >= 50 Ω) and DC blocking to prevent internal amplifier damage."
+  },
+  "relevance_to_balanced_audio": "Specifies 1/4\" TRS balanced patchbay and line I/O interconnects, highlighting critical differences between active floating versus ground-referenced op-amp drivers when mated with unbalanced cabling."
+}

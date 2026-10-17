@@ -1,0 +1,49 @@
+{
+  "standard_id": "IEC 61938:2018 (CDV)",
+  "short_id": "IEC 61938",
+  "title": "Multimedia systems — Guide to the recommended characteristics of analogue interfaces to achieve interoperability",
+  "organization": "International Electrotechnical Commission (IEC TC 100)",
+  "status": "International Standard",
+  "source_file": ".env/X152/IEC-61938_2018_CDV.pdf",
+  "abstract": "Gives guidance on recommended electrical characteristics of analogue audio and video interfaces to achieve interoperability between equipment from different manufacturers. Covers direct current power supply voltages, phantom powering for microphones, and matching criteria.",
+  "normative_phantom_power_specifications": {
+    "P48": {
+      "supply_voltage": "48 V ± 4 V DC",
+      "maximum_supply_current": "10 mA",
+      "rated_supply_current": "7 mA",
+      "resistors_R1_R2": "6.8 kΩ (typically 6.81 kΩ 0.1% matched)",
+      "matching_requirement": "Resistors must be matched within 0.1% to preserve common-mode rejection ratio (CMRR)."
+    },
+    "P24": {
+      "supply_voltage": "24 V ± 4 V DC",
+      "maximum_supply_current": "10 mA",
+      "rated_supply_current": "10 mA",
+      "resistors_R1_R2": "1.2 kΩ (or 2.4 kΩ for backward compatibility)"
+    },
+    "P12": {
+      "supply_voltage": "12 V ± 1 V DC",
+      "maximum_supply_current": "15 mA",
+      "rated_supply_current": "15 mA",
+      "resistors_R1_R2": "680 Ω"
+    },
+    "SP48": {
+      "description": "Specialized high-power phantom interface for microphones with extreme dynamic range",
+      "supply_voltage": "48 V ± 4 V DC",
+      "maximum_supply_current": "22 mA",
+      "resistors_R1_R2": "2.2 kΩ"
+    },
+    "P12L": {
+      "description": "Specialized low-power phantom interface for intercom systems",
+      "supply_voltage": "12 V ± 1 V DC",
+      "maximum_supply_current": "8 mA",
+      "resistors_R1_R2": "3.3 kΩ"
+    }
+  },
+  "ab_power_specifications": {
+    "supply_voltage": "12 V ± 1 V DC",
+    "maximum_current": "15 mA",
+    "resistors_R1_R2": "180 Ω",
+    "topology": "Differential series supply through signal conductors"
+  },
+  "relevance_to_balanced_audio": "Defines the exact resistor matching and current supply requirements for phantom powering condenser microphones across AES14 XLR and AES72 RJ45 interfaces."
+}

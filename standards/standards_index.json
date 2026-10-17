@@ -1,0 +1,139 @@
+{
+  "collection_title": "AES Standards & Reference Documents for Balanced Audio",
+  "compiled_from": "/home/anthony/Documents/GitProjects/Balanced Audio/.env",
+  "compiled_by": "Antigravity AI Pair Programmer & Anthony P. Kuzub (SC-05-05 Chair)",
+  "date_generated": "2026-10-17",
+  "total_standards": 15,
+  "standards_catalog": [
+    {
+      "short_id": "AES11",
+      "standard_id": "AES11-2009 (r2014)",
+      "title": "AES recommended practice for digital audio engineering - Synchronization of digital audio equipment in studio operations",
+      "status": "Reaffirmed 2014 (Revision of AES11-2003)",
+      "file": "aes11.json"
+    },
+    {
+      "short_id": "AES14",
+      "standard_id": "AES14-1992 (s2014)",
+      "title": "AES standard for professional audio equipment — Application of connectors, part 1, XLR-type polarity and gender",
+      "status": "Reaffirmed 2014, Stabilized 2014 (ANSI S4.43-1991)",
+      "file": "aes14.json"
+    },
+    {
+      "short_id": "AES14id",
+      "standard_id": "AES14id",
+      "title": "AES information document for professional audio — Application of connectors, concentric phone plugs and jacks",
+      "status": "Information Document",
+      "file": "aes14id.json"
+    },
+    {
+      "short_id": "AES26",
+      "standard_id": "AES26-2001 (s2017)",
+      "title": "AES recommended practice for professional audio interconnections — Conservation of the polarity of audio signals",
+      "status": "Stabilized 2017 (Revision of AES26-1995, reaffirmed 2006, 2011)",
+      "file": "aes26.json"
+    },
+    {
+      "short_id": "AES48",
+      "standard_id": "AES48-2019",
+      "title": "AES standard on interconnections — Grounding and EMC practices — Shields of connectors in balanced circuits",
+      "status": "Standard (Revision of AES48-2005)",
+      "file": "aes48.json"
+    },
+    {
+      "short_id": "AES54-1",
+      "standard_id": "AES54-1-2008 (r2018)",
+      "title": "AES standard on interconnections — Grounding and EMC practices — Connection of cable shields within connectors attached to portable balanced audio cables",
+      "status": "Standard (Reaffirmed 2018)",
+      "file": "aes54-1.json"
+    },
+    {
+      "short_id": "AES54-2",
+      "standard_id": "AES54-2-2008 (r2018)",
+      "title": "AES standard on interconnections — Grounding and EMC practices — Shields of balanced audio wiring within fixed and portable installations",
+      "status": "Standard (Reaffirmed 2018)",
+      "file": "aes54-2.json"
+    },
+    {
+      "short_id": "AES54-3",
+      "standard_id": "AES54-3-2008 (r2018)",
+      "title": "AES standard on interconnections — Grounding and EMC practices — Screen connection of multi-conductor balanced cables",
+      "status": "Standard (Reaffirmed 2018)",
+      "file": "aes54-3.json"
+    },
+    {
+      "short_id": "AES59",
+      "standard_id": "AES59-2012",
+      "title": "AES standard for professional audio — Audio application of 25-way D-type connectors in balanced circuits",
+      "status": "Standard (Developed under project AES-X183 by SC-05-02)",
+      "file": "aes59.json"
+    },
+    {
+      "short_id": "AES72",
+      "standard_id": "AES72-2019",
+      "title": "AES standard on interconnections — Application of RJ45-type connectors and quad twisted pair cable for audio interconnections",
+      "status": "Published Standard (2019)",
+      "file": "aes72.json"
+    },
+    {
+      "short_id": "AES-X152",
+      "standard_id": "AES-X152",
+      "title": "AES standard on interconnections — Standard for Presenting Signal Levels, Circuit Impedances, and Topologies of Analog Audio System Components for Product Data Sheets",
+      "status": "Draft Working Group Standard",
+      "file": "aes-x152.json"
+    },
+    {
+      "short_id": "AES-X246",
+      "standard_id": "AES-X246-XXXX",
+      "title": "AES draft standard on interconnections — Application of RJ45-type connectors and quad twisted pair cable for audio interconnections",
+      "status": "Working Draft (Precursor developed into AES72-2019)",
+      "file": "aes-x246.json"
+    },
+    {
+      "short_id": "AES-X249",
+      "standard_id": "AES-X249",
+      "title": "AES standard on interconnections — Grounding and EMC practices — Shields of 25-way D-type connectors in balanced circuits",
+      "status": "Draft Standard / Amendment to AES48 (SC-05-05)",
+      "file": "aes-x249.json"
+    },
+    {
+      "short_id": "IEC 61938",
+      "standard_id": "IEC 61938:2018 (CDV)",
+      "title": "Multimedia systems — Guide to the recommended characteristics of analogue interfaces to achieve interoperability",
+      "status": "International Standard",
+      "file": "iec61938.json"
+    },
+    {
+      "short_id": "IEC 60268-3",
+      "standard_id": "IEC 60268-3",
+      "title": "Sound system equipment — Part 3: Amplifiers",
+      "status": "International Standard",
+      "file": "iec60268-3.json"
+    }
+  ],
+  "standards_taxonomy": {
+    "grounding_and_shielding": [
+      "AES48",
+      "AES54-1",
+      "AES54-2",
+      "AES54-3",
+      "AES-X249"
+    ],
+    "connectors_and_pinouts": [
+      "AES14",
+      "AES14id",
+      "AES59",
+      "AES72",
+      "AES-X246"
+    ],
+    "signal_levels_and_polarity": [
+      "AES26",
+      "AES-X152",
+      "IEC 61938",
+      "IEC 60268-3"
+    ],
+    "digital_audio_synchronization": [
+      "AES11"
+    ]
+  }
+}

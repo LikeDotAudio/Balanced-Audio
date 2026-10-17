@@ -1,0 +1,60 @@
+{
+  "standard_id": "AES14-1992 (s2014)",
+  "short_id": "AES14",
+  "title": "AES standard for professional audio equipment — Application of connectors, part 1, XLR-type polarity and gender",
+  "organization": "Audio Engineering Society, Inc.",
+  "status": "Reaffirmed 2014, Stabilized 2014 (ANSI S4.43-1991)",
+  "working_group": "SC-05-02 (Working Group on Audio Connectors)",
+  "source_file": ".env/aes14-1992-s2014-f.pdf",
+  "abstract": "This Audio Engineering Society (AES) standard specifies a common scheme for wiring the connectors used in audio systems, particularly to avoid the inversion of absolute polarity among the items in the analog signal chain.",
+  "object": "In sound systems it is often necessary to connect pieces of equipment from different manufacturers. This standard provides a common scheme for wiring the connectors used—particularly to avoid the inversion of absolute polarity among the items in a signal chain.",
+  "scope": "Applies to 3-pin and 5-pin circular connectors commonly and generically known as XLR-type, used for the interconnection of all categories of sound system components for professional audio, commercial, recording, broadcast, and similar applications, regardless of function, type, or level of the signal. Specifies the application and polarity of analog signals for these connectors.",
+  "normative_references": [
+    "IEC 60268-12: Sound System Equipment Part 12: Application of Connectors for Broadcast and Similar Use",
+    "IEC 61076-2-103: Circular connectors - Detail specification for a range of multipole connectors (type 'XLR')"
+  ],
+  "key_definitions": {
+    "positive_sound_pressure": "That portion of the sound wave during which the pressure is in excess of the atmospheric ambient.",
+    "positive_polarity": "An electrical signal voltage which acquires a potential that has a phase angle within 90 degrees with respect to a positive sound pressure peak.",
+    "positive_polarity_terminal": "That terminal on which a positive signal shall be measured with respect to the oppositely polarized terminal when a positive-polarity signal is applied as observed with an oscilloscope.",
+    "return_terminal": "That terminal which is polarized opposite to the positive-polarity terminal, that is, the negative-polarity terminal.",
+    "positive_supply_terminal": "That terminal which carries the positive voltage of a direct-current microphone power supply.",
+    "negative_supply_terminal": "That terminal which carries the negative voltage of a direct-current microphone power supply."
+  },
+  "gender_convention": {
+    "equipment_output": "Male pin connector (contacts exposed on chassis)",
+    "equipment_input": "Female socket connector (recessed contacts on chassis)",
+    "cable_assembly": "Female socket on source end (plugs into equipment output), Male pin on receiving end (plugs into equipment input)"
+  },
+  "pinout_table": {
+    "single_channel_balanced": {
+      "pin_1": "Cable shield / screen",
+      "pin_2": "Positive-polarity terminal (Hot / Signal +)",
+      "pin_3": "Return terminal (Cold / Signal -)"
+    },
+    "single_channel_unbalanced": {
+      "pin_1": "Screen and signal return (Ground)",
+      "pin_2": "Positive-polarity terminal (Signal +)",
+      "pin_3": "Connected to Pin 1 when interfacing balanced equipment to unbalanced inputs"
+    },
+    "phantom_powered_balanced": {
+      "pin_1": "Cable shield / screen and negative supply ground (0V DC)",
+      "pin_2": "Positive polarity signal AND +48V DC positive supply",
+      "pin_3": "Return signal AND +48V DC positive supply"
+    },
+    "ab_powered_balanced": {
+      "pin_1": "Cable shield / screen",
+      "pin_2": "Positive polarity signal AND positive supply (+12V DC)",
+      "pin_3": "Return signal AND negative supply (0V DC)"
+    },
+    "two_channel_balanced_5pin": {
+      "pin_1": "Cable shield / screen",
+      "pin_2": "Channel 1 (Left) positive polarity",
+      "pin_3": "Channel 1 (Left) return",
+      "pin_4": "Channel 2 (Right) positive polarity",
+      "pin_5": "Channel 2 (Right) return"
+    }
+  },
+  "historical_context": "Settled the historic 'Pin 2 Hot' vs 'Pin 3 Hot' divide between North American and European manufacturers, universally mandating Pin 2 as positive polarity.",
+  "relevance_to_balanced_audio": "The foundational physical connector standard for all balanced analog audio, establishing the 3-conductor differential topology (Hot, Cold, Shield) referenced across AES48, AES26, and AES-X152."
+}

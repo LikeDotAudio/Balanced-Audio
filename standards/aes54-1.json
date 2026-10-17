@@ -1,0 +1,15 @@
+{
+  "standard_id": "AES54-1-2008 (r2018)",
+  "short_id": "AES54-1",
+  "title": "AES standard on interconnections — Grounding and EMC practices — Connection of cable shields within connectors attached to portable balanced audio cables",
+  "organization": "Audio Engineering Society, Inc.",
+  "status": "Standard (Reaffirmed 2018)",
+  "working_group": "SC-05-05 (Grounding and EMC Practices)",
+  "source_file": ".env/X152/AES - SC0505 - TERMS USED ELSEWHERE.smmx",
+  "abstract": "Specifies requirements for terminating cable shields within connectors attached to portable balanced audio cables (e.g. microphone cables) to ensure EMC compliance while preventing accidental ground loops when connector shells touch adjacent equipment.",
+  "key_clauses": {
+    "pin_1_termination": "The cable shield must terminate strictly on Pin 1 (the designated shield contact).",
+    "shell_termination": "The connector outer shell should NOT be connected to Pin 1 inside portable cables. Leaving the shell floating prevents unintentional shield-to-chassis contact when connector barrels touch stage floors, lighting trusses, or other connector shells."
+  },
+  "relevance_to_balanced_audio": "Prevents unpredictable ground loop paths in portable concert touring and broadcast environments."
+}

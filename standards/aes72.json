@@ -1,0 +1,141 @@
+{
+  "standard_id": "AES72-2019",
+  "short_id": "AES72",
+  "title": "AES standard on interconnections — Application of RJ45-type connectors and quad twisted pair cable for audio interconnections",
+  "organization": "Audio Engineering Society, Inc.",
+  "status": "Published Standard (2019)",
+  "working_group": "SC-05-02 (Working Group on Audio Connectors)",
+  "source_file": ".env/AES72-4E - QTP - RJ45 /aes72-2019-f.pdf",
+  "abstract": "This standard documents 8C8P (RJ45) pin-outs commonly used in professional audio applications, including channel/link order, signal polarity and phantom power compatibility. Type numbers are assigned to these variations, allowing manufacturers to easily specify which wiring standard is used in a particular piece of equipment.",
+  "scope": "Specifies wiring schemes for conveying 4 balanced audio links (analog channels or AES3 digital streams) over quad twisted pair (QTP / Cat5, Cat5e, Cat6, Cat7) structured cabling using 8P8C (RJ45) modular connectors.",
+  "normative_references": [
+    "IEC 60603-7: Detail specification for 8-way, unshielded, free and fixed connectors",
+    "IEC 60603-7-1: Detail specification for 8-way, shielded, free and fixed connectors",
+    "ANSI/TIA-568: Commercial Building Telecommunications Cabling Standard",
+    "AES14: XLR-type polarity and gender"
+  ],
+  "type_descriptor_system": {
+    "number": "Designates link-to-pair assignment (Types 1 through 6)",
+    "letter": {
+      "E": "Even pins are Positive Polarity (+)",
+      "O": "Odd pins are Positive Polarity (+)",
+      "M": "Mixed polarity (Pins 4/5 inverted relative to others)"
+    }
+  },
+  "wiring_types_table": [
+    {
+      "type": "Type 1E",
+      "pin1": "Link 1 -",
+      "pin2": "Link 1 +",
+      "pin3": "Link 2 -",
+      "pin4": "Link 3 +",
+      "pin5": "Link 3 -",
+      "pin6": "Link 2 +",
+      "pin7": "Link 4 -",
+      "pin8": "Link 4 +",
+      "polarity_rule": "Even = +"
+    },
+    {
+      "type": "Type 1O",
+      "pin1": "Link 1 +",
+      "pin2": "Link 1 -",
+      "pin3": "Link 2 +",
+      "pin4": "Link 3 -",
+      "pin5": "Link 3 +",
+      "pin6": "Link 2 -",
+      "pin7": "Link 4 +",
+      "pin8": "Link 4 -",
+      "polarity_rule": "Odd = +"
+    },
+    {
+      "type": "Type 1M",
+      "pin1": "Link 1 +",
+      "pin2": "Link 1 -",
+      "pin3": "Link 2 +",
+      "pin4": "Link 3 +",
+      "pin5": "Link 3 -",
+      "pin6": "Link 2 -",
+      "pin7": "Link 4 +",
+      "pin8": "Link 4 -",
+      "polarity_rule": "Mixed"
+    },
+    {
+      "type": "Type 2O",
+      "pin1": "Link 2 +",
+      "pin2": "Link 2 -",
+      "pin3": "Link 3 +",
+      "pin4": "Link 1 -",
+      "pin5": "Link 1 +",
+      "pin6": "Link 3 -",
+      "pin7": "Link 4 +",
+      "pin8": "Link 4 -",
+      "polarity_rule": "Odd = +"
+    },
+    {
+      "type": "Type 3E",
+      "pin1": "Link 3 -",
+      "pin2": "Link 3 +",
+      "pin3": "Link 2 -",
+      "pin4": "Link 1 +",
+      "pin5": "Link 1 -",
+      "pin6": "Link 2 +",
+      "pin7": "Link 4 -",
+      "pin8": "Link 4 +",
+      "polarity_rule": "Even = +"
+    },
+    {
+      "type": "Type 3M",
+      "pin1": "Link 3 +",
+      "pin2": "Link 3 -",
+      "pin3": "Link 2 +",
+      "pin4": "Link 1 +",
+      "pin5": "Link 1 -",
+      "pin6": "Link 2 -",
+      "pin7": "Link 4 +",
+      "pin8": "Link 4 -",
+      "polarity_rule": "Mixed"
+    },
+    {
+      "type": "Type 4E",
+      "pin1": "Link 1 -",
+      "pin2": "Link 1 +",
+      "pin3": "Link 3 -",
+      "pin4": "Link 2 +",
+      "pin5": "Link 2 -",
+      "pin6": "Link 3 +",
+      "pin7": "Link 4 -",
+      "pin8": "Link 4 +",
+      "polarity_rule": "Even = + (Industry Standard: Radial, StudioHub, SoundTools)"
+    },
+    {
+      "type": "Type 5E",
+      "pin1": "Link 3 -",
+      "pin2": "Link 3 +",
+      "pin3": "Link 4 -",
+      "pin4": "Link 1 +",
+      "pin5": "Link 1 -",
+      "pin6": "Link 4 +",
+      "pin7": "Link 2 -",
+      "pin8": "Link 2 +",
+      "polarity_rule": "Even = +"
+    },
+    {
+      "type": "Type 6E",
+      "pin1": "Link 4 -",
+      "pin2": "Link 4 +",
+      "pin3": "Link 3 -",
+      "pin4": "Link 2 +",
+      "pin5": "Link 2 -",
+      "pin6": "Link 3 +",
+      "pin7": "Link 1 -",
+      "pin8": "Link 1 +",
+      "polarity_rule": "Even = +"
+    }
+  ],
+  "cable_shielding_and_phantom_power": {
+    "shielded_requirement": "Shielded CAT cable (STP/FTP) with metal-wrapped RJ45 connectors (IEC 60603-7-1) is MANDATORY when carrying phantom power (P48), because all 8 internal pins carry differential audio. The outer shield is the sole DC ground return path for phantom current.",
+    "chassis_grounding": "Shield must connect directly to equipment chassis with lowest practical RF impedance, conforming to AES48."
+  },
+  "labeling_requirement": "Equipment shall be prominently labeled with descriptor (e.g. 'AES72 Type 4E') and state whether shield ground is connected.",
+  "relevance_to_balanced_audio": "Revolutionized stage boxes, studio tie-lines, and broadcast infrastructure by carrying 4 balanced audio lines over single inexpensive Category 5/6/7 patch cables."
+}

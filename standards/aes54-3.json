@@ -1,0 +1,15 @@
+{
+  "standard_id": "AES54-3-2008 (r2018)",
+  "short_id": "AES54-3",
+  "title": "AES standard on interconnections — Grounding and EMC practices — Screen connection of multi-conductor balanced cables",
+  "organization": "Audio Engineering Society, Inc.",
+  "status": "Standard (Reaffirmed 2018)",
+  "working_group": "SC-05-05 (Grounding and EMC Practices)",
+  "source_file": ".env/X152/AES - SC0505 - TERMS USED ELSEWHERE.smmx",
+  "abstract": "Defines screening practices for multi-pair and multi-conductor audio cables, establishing designated screen contacts (Dsc) and screen enclosures for multi-channel snakes and interconnect bundles.",
+  "key_definitions": {
+    "screen_shield": "A surrounding metallic layer to confine the electric field within the cable and protect from external electrical influence.",
+    "designated_screen_contact": "The contact of a connector dedicated to provide an electromagnetic screen connection (e.g. Pin 1 of XLR, shield pins of DB25)."
+  },
+  "relevance_to_balanced_audio": "Sets the stage for multi-channel connector standards like AES59 and AES-X249."
+}

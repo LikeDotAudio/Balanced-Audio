@@ -1,0 +1,21 @@
+{
+  "standard_id": "AES48-2019",
+  "short_id": "AES48",
+  "title": "AES standard on interconnections — Grounding and EMC practices — Shields of connectors in balanced circuits",
+  "organization": "Audio Engineering Society, Inc.",
+  "status": "Standard (Revision of AES48-2005)",
+  "working_group": "SC-05-05 (Working Group on Grounding and EMC Practices)",
+  "source_file": ".env/AES-X249 AES standard on interconnections - Grounding and EMC practices - Shields of  25-way D-type connectors in balanced circuits/ReadyToMerge_With_AES48 _Project_X249_Shields_of_D-type_connectors_20240930.docx",
+  "abstract": "Specifies requirements for termination of cable shields of balanced audio wiring to equipment enclosures to maintain electromagnetic compatibility (EMC) and prevent shield currents from inducing audible hum, buzz, and RF interference into audio signal paths.",
+  "cardinal_rule": "Cable shields shall connect directly to the metallic equipment enclosure (chassis) with the lowest practical impedance (< 0.1 Ω at power frequencies) at the entrance of the connector. Shields must NEVER connect to the internal signal circuit ground (0V reference).",
+  "the_pin_1_problem": {
+    "mechanism": "When cable shield currents (ground loops, RF interference, power supply leakage) enter the enclosure and flow through internal PCB ground traces, the trace impedance (Z = R + jωL) develops an error voltage (V = I × Z). Because audio circuitry references this same trace, the error voltage is injected directly into high-gain preamplifier stages, creating audible 50/60 Hz hum and RF demodulation buzz.",
+    "solution": "Direct chassis bonding: Divert shield currents straight into the metallic chassis perimeter. The chassis acts as a Faraday cage, shunting noise around internal circuits directly to earth/ground without traversing signal reference traces."
+  },
+  "engineering_requirements": {
+    "maximum_bonding_impedance": "< 0.1 Ω from connector shield contact to metallic enclosure",
+    "connector_shell_bonding": "Connector shells must bond directly to chassis. In portable cables, AES54-1 applies.",
+    "internal_circuit_ground": "Audio circuit 0V reference connects to chassis at one single star ground point, completely isolated from shield entrance currents."
+  },
+  "relevance_to_balanced_audio": "Rule 2 of Balanced Audio. Over 90% of field ground hum problems are traced directly to Pin 1 violations in commercial equipment. AES48 compliance is the mandatory gatekeeper test in AES-X152 Part 2."
+}

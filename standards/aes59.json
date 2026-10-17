@@ -1,0 +1,139 @@
+{
+  "standard_id": "AES59-2012",
+  "short_id": "AES59",
+  "title": "AES standard for professional audio — Audio application of 25-way D-type connectors in balanced circuits",
+  "organization": "Audio Engineering Society, Inc.",
+  "status": "Standard (Developed under project AES-X183 by SC-05-02)",
+  "working_group": "SC-05-02 (Working Group on Audio Connectors)",
+  "source_file": ".env/AES59/aes59-2012-f__For_CBC_use_only_Do_not_distribute.pdf",
+  "abstract": "This document describes a standard contact assignment and gender convention for users of the 25-contact D-type connector as a multi-channel balanced audio interconnection, in analogue or AES3 digital form, to facilitate interconnection of equipment from different suppliers using standardized cables. The intent is to simplify the rapid and reliable interconnection of equipment in temporary installations, perhaps using rented equipment, although the method may be extended to permanent installations where appropriate.",
+  "mechanical_specifications": {
+    "equipment_connector": "Female (DB25F / socket)",
+    "cable_connector": "Male (DB25M / pin)",
+    "gender_rationale": "Equipment-mounted connectors are difficult to replace if damaged; female connectors are far less susceptible to bent pins.",
+    "jackscrew_specification": "4/40 unified inch screw thread (ISO 263 / #4 UNC). M3 metric screws are strictly prohibited as they cross-thread and destroy mating connectors."
+  },
+  "unused_pin_rule": "Pin 13 is strictly UNUSED. It shall not be connected to audio, DC, or shield overall.",
+  "eight_way_balanced_pinout": [
+    {
+      "circuit": 1,
+      "signal": "Hot (+)",
+      "pin": 24,
+      "return": "Cold (-)",
+      "return_pin": 12,
+      "shield_pin": 25
+    },
+    {
+      "circuit": 2,
+      "signal": "Hot (+)",
+      "pin": 10,
+      "return": "Cold (-)",
+      "return_pin": 23,
+      "shield_pin": 11
+    },
+    {
+      "circuit": 3,
+      "signal": "Hot (+)",
+      "pin": 21,
+      "return": "Cold (-)",
+      "return_pin": 9,
+      "shield_pin": 22
+    },
+    {
+      "circuit": 4,
+      "signal": "Hot (+)",
+      "pin": 7,
+      "return": "Cold (-)",
+      "return_pin": 20,
+      "shield_pin": 8
+    },
+    {
+      "circuit": 5,
+      "signal": "Hot (+)",
+      "pin": 18,
+      "return": "Cold (-)",
+      "return_pin": 6,
+      "shield_pin": 19
+    },
+    {
+      "circuit": 6,
+      "signal": "Hot (+)",
+      "pin": 4,
+      "return": "Cold (-)",
+      "return_pin": 17,
+      "shield_pin": 5
+    },
+    {
+      "circuit": 7,
+      "signal": "Hot (+)",
+      "pin": 15,
+      "return": "Cold (-)",
+      "return_pin": 3,
+      "shield_pin": 16
+    },
+    {
+      "circuit": 8,
+      "signal": "Hot (+)",
+      "pin": 1,
+      "return": "Cold (-)",
+      "return_pin": 14,
+      "shield_pin": 2
+    }
+  ],
+  "digital_combined_io_pinout": {
+    "description": "4 digital inputs (RCV 1-4) and 4 digital outputs (XMT 1-4) on a single DB25 connector",
+    "receivers": [
+      {
+        "circuit": "RCV 1",
+        "hot_pin": 24,
+        "cold_pin": 12,
+        "shield_pin": 25
+      },
+      {
+        "circuit": "RCV 2",
+        "hot_pin": 10,
+        "cold_pin": 23,
+        "shield_pin": 11
+      },
+      {
+        "circuit": "RCV 3",
+        "hot_pin": 21,
+        "cold_pin": 9,
+        "shield_pin": 22
+      },
+      {
+        "circuit": "RCV 4",
+        "hot_pin": 7,
+        "cold_pin": 20,
+        "shield_pin": 8
+      }
+    ],
+    "transmitters": [
+      {
+        "circuit": "XMT 1",
+        "hot_pin": 18,
+        "cold_pin": 6,
+        "shield_pin": 19
+      },
+      {
+        "circuit": "XMT 2",
+        "hot_pin": 4,
+        "cold_pin": 17,
+        "shield_pin": 5
+      },
+      {
+        "circuit": "XMT 3",
+        "hot_pin": 15,
+        "cold_pin": 3,
+        "shield_pin": 16
+      },
+      {
+        "circuit": "XMT 4",
+        "hot_pin": 1,
+        "cold_pin": 14,
+        "shield_pin": 2
+      }
+    ]
+  },
+  "relevance_to_balanced_audio": "Universal standard for high-density multi-channel audio interfaces (AD/DA converters, mixing consoles, audio patchbays, DSP frames)."
+}

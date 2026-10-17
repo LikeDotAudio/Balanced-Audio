@@ -1,0 +1,12 @@
+{
+  "standard_id": "AES-X246-XXXX",
+  "short_id": "AES-X246",
+  "title": "AES draft standard on interconnections — Application of RJ45-type connectors and quad twisted pair cable for audio interconnections",
+  "organization": "Audio Engineering Society, Inc.",
+  "status": "Working Draft (Precursor developed into AES72-2019)",
+  "working_group": "SC-05-02 (Working Group on Audio Connectors)",
+  "source_file": ".env/AES72-4E - QTP - RJ45 /X246 - QTP/aes-x246-181229 (1).docx",
+  "abstract": "This standard documents 8C8P (RJ45) pin-outs commonly used in professional audio applications, including channel/link order, signal polarity and phantom power compatibility. Type numbers are assigned to these variations, allowing manufacturers to easily specify which wiring standard is used in a particular piece of equipment.",
+  "historic_role": "Identified the chaos of competing commercial RJ45 wiring schemes across broadcast and live sound manufacturers, formulating the first standardized classification matrix that culminated in AES72-2019.",
+  "relevance_to_balanced_audio": "Documented historical commercial implementations from StudioHub, Whirlwind, Radial Engineering, ETS, and Ward-Beck."
+}

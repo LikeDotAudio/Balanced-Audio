@@ -1,0 +1,20 @@
+{
+  "standard_id": "AES54-2-2008 (r2018)",
+  "short_id": "AES54-2",
+  "title": "AES standard on interconnections — Grounding and EMC practices — Shields of balanced audio wiring within fixed and portable installations",
+  "organization": "Audio Engineering Society, Inc.",
+  "status": "Standard (Reaffirmed 2018)",
+  "working_group": "SC-05-05 (Grounding and EMC Practices)",
+  "source_file": ".env/X152/AES - SC0505 - TERMS USED ELSEWHERE.smmx",
+  "abstract": "Specifies the shielding and grounding practices for balanced audio wiring installed in fixed architectural facilities and portable installations, addressing line level and microphone level interconnects.",
+  "standardized_levels": {
+    "line_level": "Audio signal transmitted at reference RMS voltage between 0.25 V and 2 V RMS (practical range: few millivolts to 15 V).",
+    "microphone_level": "Audio signal transmitted at output levels specified by IEC 61938 for electrodynamic and capacitor microphones (nominal: 1 mV to 10 mV; practical range: few microvolts to 1 V)."
+  },
+  "shield_grounding_architectures": {
+    "single_point_shielding": "Shield grounded at driving end only; provides low-frequency electrostatic shielding but degrades RF immunity.",
+    "dual_point_shielding": "Shield bonded at both ends to chassis (strictly compliant with AES48); provides maximum RF shielding immunity.",
+    "hybrid_rf_shielding": "Direct metallic bond at driving end, capacitive termination (0.01 μF to 0.1 μF ceramic) at receiving end to bleed RF while blocking power-line ground loop currents."
+  },
+  "relevance_to_balanced_audio": "Harmonizes installation wiring rules with equipment design, bridging AES48 with field facility infrastructure."
+}

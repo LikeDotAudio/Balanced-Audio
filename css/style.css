@@ -1602,3 +1602,384 @@ code, pre {
   color: var(--text-muted);
 }
 
+
+
+/* ==========================================================================
+   Universal XLR Connection Hub (AES14 Table 1)
+   ========================================================================== */
+.xlr-hub-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 900px) {
+  .xlr-hub-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.xlr-table-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+}
+.aes-spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+.aes-spec-table th, .aes-spec-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+}
+.aes-spec-table th {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--accent-cyan);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   Audio Transformer Winding Simulator & Virtual Test Bench
+   ========================================================================== */
+.xfmr-lab-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 1024px) {
+  .xfmr-lab-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.xfmr-controls-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.xfmr-bench-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.scope-screen-wrapper {
+  background: #040d12;
+  border: 2px solid #0e3a47;
+  border-radius: 8px;
+  padding: 0.75rem;
+  position: relative;
+  box-shadow: inset 0 0 25px rgba(6, 182, 212, 0.15);
+}
+.scope-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: #38bdf8;
+}
+.scope-legend {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+}
+.sig-btn-group, .term-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.sig-type-btn, .term-type-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.45rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.sig-type-btn:hover, .term-type-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+.sig-type-btn.active, .term-type-btn.active {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+.term-type-btn[data-term="zobel"].active {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+  color: #34d399;
+}
+.zobel-banner {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.zobel-values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+/* ==========================================================================
+   AES-VST Plugin Interactive GUI
+   ========================================================================== */
+.vst-rack-container {
+  margin-top: 2rem;
+}
+.vst-chassis {
+  background: linear-gradient(180deg, #2a2e39 0%, #1a1d24 60%, #121419 100%);
+  border: 3px solid #3d4452;
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  padding: 1.75rem;
+  position: relative;
+  color: #e2e8f0;
+}
+.vst-screw {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, #8a94a6 30%, #475569 90%);
+  border-radius: 50%;
+  border: 1px solid #1e293b;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0,0,0,0.5);
+}
+.vst-screw.top-left { top: 10px; left: 10px; }
+.vst-screw.top-right { top: 10px; right: 10px; }
+.vst-screw.bottom-left { bottom: 10px; left: 10px; }
+.vst-screw.bottom-right { bottom: 10px; right: 10px; }
+
+.vst-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #2d3340;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+.vst-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.vst-logo-badge {
+  background: linear-gradient(135deg, #06b6d4, #2563eb);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1.1rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.4);
+}
+.vst-btn-standards-map {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  border: 1px solid #34d399;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.vst-btn-standards-map:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+}
+
+.vst-main-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+@media (max-width: 900px) {
+  .vst-main-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+.vst-oled-display {
+  background: #091216;
+  border: 2px solid #143542;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: inset 0 0 15px rgba(6, 182, 212, 0.25);
+  font-family: var(--font-mono);
+}
+.vst-meter-channel {
+  margin-bottom: 0.6rem;
+}
+.vst-meter-track {
+  background: #111827;
+  height: 12px;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #374151;
+}
+.vst-meter-fill {
+  height: 100%;
+  width: 20%;
+  background: linear-gradient(90deg, #10b981 0%, #10b981 70%, #f59e0b 85%, #ef4444 100%);
+  transition: width 0.08s ease-out;
+}
+.vst-peak-led {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  opacity: 0.2;
+  transition: opacity 0.15s ease;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+.standards-map-modal {
+  display: none;
+  margin-top: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+}
+.standards-map-modal.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+.standards-map-node {
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
+}
+.standards-map-node:hover {
+  filter: brightness(1.3);
+}
+.standards-map-node.selected rect, .standards-map-node.selected circle {
+  stroke: #ffffff !important;
+  stroke-width: 3px !important;
+  filter: drop-shadow(0 0 8px var(--accent-cyan));
+}
+
+/* ==========================================================================
+   Free AES Datasheet Generator
+   ========================================================================== */
+.ds-generator-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 960px) {
+  .ds-generator-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.ds-code-view {
+  background: #090d16;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #38bdf8;
+  max-height: 480px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+/* ==========================================================================
+   Dennis A. Bohn PAR Tribute & Glossary
+   ========================================================================== */
+.bohn-tribute-card {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 850px) {
+  .bohn-tribute-card {
+    grid-template-columns: 1fr;
+  }
+}
+.bohn-portrait-wrapper {
+  text-align: center;
+}
+.bohn-portrait {
+  width: 100%;
+  max-width: 280px;
+  border-radius: 12px;
+  border: 3px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+.par-term {
+  border-bottom: 1.5px dotted var(--accent-cyan);
+  cursor: help;
+  color: var(--accent-cyan);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.par-term:hover {
+  background: rgba(6, 182, 212, 0.15);
+  color: #ffffff;
+}
+.par-letter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+.par-letter-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.par-letter-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+}
+.par-letter-btn.active {
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  color: #000000;
+}

@@ -1,0 +1,52 @@
+{
+  "standard_id": "AES11-2009 (r2014)",
+  "short_id": "AES11",
+  "title": "AES recommended practice for digital audio engineering - Synchronization of digital audio equipment in studio operations",
+  "organization": "Audio Engineering Society, Inc.",
+  "status": "Reaffirmed 2014 (Revision of AES11-2003)",
+  "working_group": "SC-02-01 (Working Group on Digital Audio Measurement Techniques / Infrastructure)",
+  "source_file": ".env/Collection - #AES - #AES11 aes11-2009-r2014-f.pdf",
+  "abstract": "This standard provides a systematic approach to the synchronization of digital audio signals. Recommendations are made concerning the accuracy of sample clocks as embodied in the interface signal and the use of this format as a convenient synchronization reference where signals must be rendered cotimed for digital processing. Synchronism is defined, and limits are given which take account of relevant timing uncertainties encountered in an audio studio.",
+  "scope": {
+    "general": "Specifies synchronization methods for digital audio equipment in studio operations using AES3 digital interfaces or dedicated reference signals.",
+    "area_of_application": "Applies to professional recording, broadcasting, post-production, and digital routing facilities where multiple digital audio devices must operate synchronously without buffer under-run or over-run errors."
+  },
+  "normative_references": [
+    "AES3: AES standard for digital audio engineering - Serial transmission format for two-channel linearly represented digital audio data",
+    "IEC 60958: Digital audio interface",
+    "ITU-R BS.647: A digital audio interface for broadcasting studios"
+  ],
+  "key_definitions": {
+    "DARS": "Digital Audio Reference Signal: An AES3 signal containing no intentional audio data but carrying a valid clock and channel status to which other digital devices synchronize.",
+    "cotimed": "Signals that are synchronized such that corresponding sample frames occur simultaneously within defined timing tolerances.",
+    "sampling_frequency": "The frequency at which the audio signal is sampled (standard values: 48 kHz reference, 44.1 kHz, 96 kHz, 192 kHz).",
+    "word_clock": "A square-wave reference signal at the audio sample frequency (fs), typically distributed over 75-ohm coaxial cabling with BNC connectors.",
+    "capture_range": "The maximum frequency deviation from nominal over which a slave device's receiver PLL can achieve lock."
+  },
+  "modes_of_operation": {
+    "DARS_referenced": "Equipment synchronizes its internal sample clock to an incoming AES3 DARS bitstream.",
+    "audio_input_referenced": "Equipment recovers sample clock directly from the incoming audio data stream.",
+    "video_referenced": "Audio sample clock is locked to an incoming video reference (genlock/black burst/tri-level sync) via integer or non-integer frequency ratios.",
+    "GPS_referenced": "Atomic clock or GPS-derived 10 MHz reference signal used for distributed facility-wide master synchronization."
+  },
+  "clock_grades": {
+    "grade_1": {
+      "frequency_accuracy": "±1 ppm",
+      "intended_use": "Master reference generators, facility-wide house clocks, broadcast master control."
+    },
+    "grade_2": {
+      "frequency_accuracy": "±10 ppm",
+      "intended_use": "Local studio operations, standalone digital audio workstations, routing matrixes."
+    }
+  },
+  "timing_tolerances": {
+    "input_timing_phase": "±25% of sample period (0.25 Ts)",
+    "output_timing_phase": "Within ±5% of sample period relative to reference",
+    "jitter_attenuation": "Receivers must attenuate input jitter above 100 Hz by at least 20 dB/decade."
+  },
+  "physical_interconnection": {
+    "balanced": "110 Ω balanced twisted pair shielded cable (AES3-balanced), terminating in XLR-3 (AES14) or DB25 (AES59).",
+    "unbalanced": "75 Ω coaxial cable with BNC connectors (AES3-id) for long distance distribution."
+  },
+  "relevance_to_balanced_audio": "AES11 DARS uses the identical 110 Ω balanced physical plant and AES48 chassis-grounded shielding scheme as analog balanced interconnections, ensuring electromagnetic compatibility (EMC) and jitter-free digital studio distribution."
+}

@@ -1,0 +1,36 @@
+{
+  "standard_id": "AES-X249",
+  "short_id": "AES-X249",
+  "title": "AES standard on interconnections — Grounding and EMC practices — Shields of 25-way D-type connectors in balanced circuits",
+  "organization": "Audio Engineering Society, Inc.",
+  "status": "Draft Standard / Amendment to AES48 (SC-05-05)",
+  "working_group": "SC-05-05 (Working Group on Grounding and EMC Practices)",
+  "contributors": [
+    "R. Cabot",
+    "K. Fause",
+    "B. Whitlock",
+    "R. L. Hess",
+    "J. Meyer",
+    "J. Woodgate",
+    "J. Brown",
+    "A. P. Kuzub",
+    "A. Walker",
+    "J. Celli",
+    "P. Keller"
+  ],
+  "source_file": ".env/AES-X249 AES standard on interconnections - Grounding and EMC practices - Shields of  25-way D-type connectors in balanced circuits/ReadyToMerge_With_AES48 _Project_X249_Shields_of_D-type_connectors_20240930.docx",
+  "abstract": "Defines specific mechanical and electrical bonding requirements for 25-way D-subminiature (AES59 DB25) connectors to equipment shielding enclosures (chassis) to eliminate the Pin 1 problem in high-density multi-channel audio equipment.",
+  "key_elements": {
+    "Csf": "Contact Shroud Flange: The trapezoidal metal flange surrounding connector pins, installed inside enclosure pushing outward, providing direct metal-to-metal contact with the metallic chassis perimeter.",
+    "Cjs": "Contact Jack Screw: Hexagonal metal standoffs with 4-40 threaded holes that mechanically fasten connector and provide electrical bonding directly to the chassis shield plane.",
+    "Dsc": "Designated Shield Contacts: Pins 2, 5, 8, 11, 16, 19, 22, 25 in DB25 connector.",
+    "So": "Shield Overall: External cable outer braid.",
+    "pin_13_prohibition": "Under AES59, Pin 13 is unused. AES-X249 strictly prohibits bonding Shield Overall or any ground wire to Pin 13."
+  },
+  "pcb_layout_rules": {
+    "shield_plane": "A dedicated PCB shield plane must route designated shield contacts directly to jackscrews and shroud flange.",
+    "segregation": "Shield plane currents MUST be completely segregated from the internal audio signal circuit reference ground plane.",
+    "paint_warning": "No non-conductive paint, anodization, or powder coat between shroud flange, jack screws, and metallic chassis."
+  },
+  "relevance_to_balanced_audio": "Extends AES48 chassis-grounding discipline to multi-channel DB25 connectors, solving RF and hum intrusion in compact high-channel-count converters."
+}

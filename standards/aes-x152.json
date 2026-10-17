@@ -1,0 +1,117 @@
+{
+  "standard_id": "AES-X152",
+  "short_id": "AES-X152",
+  "title": "AES standard on interconnections — Standard for Presenting Signal Levels, Circuit Impedances, and Topologies of Analog Audio System Components for Product Data Sheets",
+  "organization": "Audio Engineering Society, Inc.",
+  "status": "Draft Working Group Standard",
+  "working_group": "SC-05-05 (Grounding and EMC Practices)",
+  "project_editor_and_chair": "Anthony P. Kuzub",
+  "writing_group_contributors": [
+    "R. Cabot",
+    "K. Fause",
+    "B. Whitlock",
+    "R. L. Hess",
+    "J. Meyer",
+    "J. Woodgate",
+    "J. Brown",
+    "A. P. Kuzub",
+    "A. Walker",
+    "J. Celli",
+    "P. Keller"
+  ],
+  "source_file": ".env/AES-SC-05-05-X152-202300920.docx",
+  "abstract": "This standard defines the format for device manufacturers to present a uniform description of their interfacing circuit capabilities. The intent of this standard is to enable system designers and users to better predict and understand 'what can work - with what - and how'. The performance of device interconnection depends on the tripartite interaction of the Driver (Transmitter), the Interconnecting Cable, and the Receiver (Input Load).",
+  "scope": "A standard Datasheet disclosure framework to measure, document, and report characteristics, topologies, impedances, and interface parameters of analog audio devices.",
+  "foundational_principles": {
+    "impedance_balance": "Balance is an IMPEDANCE characteristic, not a voltage property. Common-Mode Rejection Ratio (CMRR) requires equal impedances to ground on both signal legs (Z_P = Z_R). Equal and opposite voltages are not required.",
+    "voltage_transfer": "Modern audio interconnection operates via bridging voltage transfer (Z_IN >= 10 × Z_OUT), not obsolete 600-ohm power matching.",
+    "pin_1_enclosure_bond": "Cable shields belong to the metallic chassis enclosure, never internal audio signal 0V."
+  },
+  "four_part_datasheet_framework": {
+    "part_1_mechanical_and_shielding": {
+      "connector_type": "XLR (AES14), 1/4\" TRS (AES14id), DB25 (AES59), RJ45 (AES72), Terminal Block",
+      "aes48_compliance": "Yes/No (Direct < 0.1 Ω bond to chassis)",
+      "phantom_power": "None, P48, P24, P12, SP48 (IEC 61938)"
+    },
+    "part_2_circuit_topology_and_impedances": {
+      "differential_mode_impedance_DMZ": {
+        "formula_output": "DMZ_OUT = Z_PO + Z_RO",
+        "formula_input": "DMZ_IN = Z_PI + Z_RI",
+        "typical_values": "Output: 50 Ω to 200 Ω (nominally ~136 Ω); Input: 10 kΩ to 100 kΩ"
+      },
+      "common_mode_impedance_CMZ": {
+        "formula_output": "CMZ_OUT = Z_SO + Z_RO",
+        "formula_input": "CMZ_IN = Z_SI + (Z_PI || Z_RI)",
+        "output_thresholds": {
+          "low": "CMZ_OUT < DMZ_OUT",
+          "high": "CMZ_OUT @ 1 kHz > 4 kΩ",
+          "mid": "Not Low or High"
+        },
+        "input_thresholds": {
+          "low": "CMZ_IN < DMZ_IN / 2",
+          "high": "CMZ_IN @ 1 kHz > 2 × DMZ_IN",
+          "mid": "Not Low or High"
+        }
+      },
+      "impedance_balance_Zbal": "Yes if |Z_P - Z_R| / Z_P <= 10% across 20 Hz to 20 kHz; otherwise No",
+      "voltage_symmetry_Vsym": "Yes if V_R = -V_P; No if V_R = 0 (impedance-balanced)"
+    },
+    "part_3_signal_levels_and_distortion": {
+      "setup_reference_level": "0 dBu (0.775 V RMS) or +4 dBu (1.228 V RMS)",
+      "mezzanine_distortion_level": "Maximum linear operating level at rated distortion (0.1% or 1% THD+N across 10 Hz - 50 kHz, typically +20 dBu to +24 dBu)",
+      "clipping_ceiling": "Absolute hard clip level where waveform hits DC supply rails"
+    },
+    "part_4_common_mode_rejection": {
+      "cmrr_matched": "Measured with 0 Ω source imbalance across 20 Hz - 20 kHz",
+      "cmrr_unbalanced_source": "Measured with normative 10 Ω or 600 Ω source imbalance per IEC 60268-3"
+    }
+  },
+  "standardized_output_topologies": [
+    {
+      "topology": "Transformer Balanced Output",
+      "z_bal": "Yes",
+      "v_sym": "Yes",
+      "cmz": "High",
+      "z_gnd": "High",
+      "short_to_ground_safe": "Yes",
+      "notes": "True galvanic isolation, extreme RF/ground loop rejection, high cost."
+    },
+    {
+      "topology": "Impedance Balanced Output",
+      "z_bal": "Yes",
+      "v_sym": "No (Audio on Pin 2, passive resistor on Pin 3)",
+      "cmz": "Low",
+      "z_gnd": "Low",
+      "short_to_ground_safe": "Yes",
+      "notes": "Full CMRR noise rejection, low power, safe when Pin 3 shorted to ground by TS plug."
+    },
+    {
+      "topology": "Servo / Cross-Coupled Balanced Output",
+      "z_bal": "Yes",
+      "v_sym": "Yes",
+      "cmz": "Mid",
+      "z_gnd": "Low",
+      "short_to_ground_safe": "Yes",
+      "notes": "Cross-coupled op-amps; automatically delivers 6 dB boost when Pin 3 grounded to maintain level."
+    },
+    {
+      "topology": "Differential Push-Pull Balanced Output",
+      "z_bal": "Yes",
+      "v_sym": "Yes",
+      "cmz": "Low",
+      "z_gnd": "Low",
+      "short_to_ground_safe": "NO (High Distortion/Thermal Overload)",
+      "notes": "Ground-referenced independent op-amps; shorting Pin 3 shorts active op-amp to ground."
+    },
+    {
+      "topology": "Transformer Balanced with Center Tap",
+      "z_bal": "Yes",
+      "v_sym": "Yes",
+      "cmz": "Low",
+      "z_gnd": "Low",
+      "short_to_ground_safe": "NO (Shorts half winding)",
+      "notes": "Secondary center tap referenced to ground."
+    }
+  ],
+  "relevance_to_balanced_audio": "The overarching synthesis standard for the entire SC-05-05 working group, providing engineers with the first standardized datasheet language to predict interoperability between audio devices."
+}

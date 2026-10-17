@@ -1,0 +1,15 @@
+{
+  "standard_id": "IEC 60268-3",
+  "short_id": "IEC 60268-3",
+  "title": "Sound system equipment — Part 3: Amplifiers",
+  "organization": "International Electrotechnical Commission",
+  "status": "International Standard",
+  "source_file": ".env/X152/SC-05-05-X152-Map-20210217.smmx",
+  "abstract": "Defines specifications, characteristics, and measurement methods for sound system amplifiers, including balance factor and Common-Mode Rejection Ratio (CMRR).",
+  "key_clauses": {
+    "balance_definition": "A circuit is balanced if the voltages between each conductor and a reference point (ground) are equal in magnitude and 180° out of phase, and the impedances between each conductor and reference point are equal.",
+    "cmrr_measurement_method": "Common-mode generator V_cm is connected to Pin 2 and Pin 3 simultaneously relative to Pin 1. Differential audio output V_dm_out is measured.",
+    "source_impedance_imbalance_test": "Tested with matched source (0 Ω imbalance) and with standardized 10 Ω (modern) or 600 Ω (legacy) series resistor inserted in one leg to simulate real-world driver/cable imbalance."
+  },
+  "relevance_to_balanced_audio": "The normative test procedure cited in AES-X152 Part 4 for verifying real-world CMRR under realistic source impedance imbalances."
+}
