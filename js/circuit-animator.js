@@ -315,8 +315,8 @@ class CircuitSimulator {
       }
     }
 
-    const statusEl = document.getElementById("pp-status");
-    if (statusEl) {
+    const statusEls = document.querySelectorAll("#pp-status, #pp-panel-status");
+    statusEls.forEach(statusEl => {
       if (shortPin3) {
         statusEl.className = "badge badge-danger";
         statusEl.textContent = isClipped 
@@ -326,7 +326,7 @@ class CircuitSimulator {
         statusEl.className = "badge badge-success";
         statusEl.textContent = "Normal Symmetrical Balanced Operation";
       }
-    }
+    });
   }
 
   // ==========================================
