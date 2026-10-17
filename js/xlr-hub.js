@@ -150,6 +150,19 @@ class XLRHubEngine {
         }
       });
     });
+
+    // Filter toggle button
+    const filterBtn = document.getElementById("btn-toggle-xlr-filter");
+    if (filterBtn) {
+      filterBtn.addEventListener("click", () => {
+        this.onlySelectedMode = !this.onlySelectedMode;
+        filterBtn.textContent = this.onlySelectedMode 
+          ? "Show All Configurations" 
+          : "Show Only Selected Circuit";
+        filterBtn.classList.toggle("active", this.onlySelectedMode);
+        this.renderCircuit(this.currentCircuitId);
+      });
+    }
   }
 
   renderCircuit(id) {
@@ -161,10 +174,15 @@ class XLRHubEngine {
       b.classList.toggle("active", parseInt(b.dataset.circuitId, 10) === id);
     });
 
-    // Update table row highlighting
+    // Update table row highlighting and selective visibility
     document.querySelectorAll(".aes14-t2-row").forEach(r => {
       const isSelected = parseInt(r.dataset.circuitId, 10) === id;
       r.classList.toggle("table-row-selected", isSelected);
+      if (this.onlySelectedMode) {
+        r.style.display = isSelected ? "" : "none";
+      } else {
+        r.style.display = "";
+      }
       if (isSelected) {
         r.style.background = "rgba(56, 189, 248, 0.12)";
         r.style.borderLeft = "4px solid var(--accent-cyan)";

@@ -167,7 +167,7 @@ function initImageModal() {
   });
 }
 
-// Deep Dive smooth jump
+// Deep Dive smooth jump & related content activation
 function initDeepDiveLinks() {
   document.querySelectorAll("[data-scroll-to]").forEach(btn => {
     btn.addEventListener("click", (e) => {
@@ -176,6 +176,39 @@ function initDeepDiveLinks() {
       const targetEl = document.getElementById(targetId);
       if (targetEl) {
         targetEl.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  });
+
+  // Handle any link targeting circuit or enclosure
+  document.querySelectorAll("a[href^='#circuit-']").forEach(link => {
+    link.addEventListener("click", (e) => {
+      const match = link.getAttribute("href").match(/^#circuit-(6-[1-8])$/);
+      if (match && match[1]) {
+        e.preventDefault();
+        switchCircuit(match[1]);
+      }
+    });
+  });
+
+  document.querySelectorAll("[data-select-circuit]").forEach(el => {
+    el.addEventListener("click", (e) => {
+      const key = el.getAttribute("data-select-circuit");
+      if (key) {
+        e.preventDefault();
+        switchCircuit(key);
+      }
+    });
+  });
+
+  document.querySelectorAll("[data-select-enclosure]").forEach(el => {
+    el.addEventListener("click", (e) => {
+      const key = el.getAttribute("data-select-enclosure");
+      if (key) {
+        e.preventDefault();
+        selectEnclosureBox(key);
+        const encEl = document.getElementById("enclosure-explorer");
+        if (encEl) encEl.scrollIntoView({ behavior: "smooth" });
       }
     });
   });
@@ -523,14 +556,49 @@ function selectBoxType(typeKey) {
   `;
 }
 
-// Navigation Jump Helpers
+// Navigation & Selective Circuit Topology Display
 function switchCircuit(circuitKey) {
-  const el = document.getElementById(`circuit-${circuitKey}`);
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    document.querySelectorAll('.circuit-tab-btn').forEach(btn => btn.classList.remove('active'));
-    const activeBtn = document.querySelector(`[onclick*="switchCircuit('${circuitKey}')"]`);
-    if (activeBtn) activeBtn.classList.add('active');
+  // Update active tab buttons
+  document.querySelectorAll('.circuit-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.circuit === circuitKey || (circuitKey === 'all' && btn.id === 'btn-show-all-circuits'));
+  });
+
+  const allCircuits = document.querySelectorAll('.circuit-subcard');
+  const activeTitle = document.getElementById('active-circuit-title-badge');
+
+  if (circuitKey === 'all') {
+    allCircuits.forEach(c => c.style.display = 'block');
+    if (activeTitle) activeTitle.textContent = "Viewing All 8 Topologies (AES-X152 Full Analysis)";
+    return;
+  }
+
+  // Hide all other circuits, show ONLY the selected circuit
+  allCircuits.forEach(c => {
+    const isTarget = c.id === `circuit-${circuitKey}`;
+    c.style.display = isTarget ? 'block' : 'none';
+  });
+
+  const targetEl = document.getElementById(`circuit-${circuitKey}`);
+  if (targetEl) {
+    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Update active title badge
+    const headerTitle = targetEl.querySelector('h4');
+    if (activeTitle && headerTitle) {
+      activeTitle.textContent = headerTitle.textContent;
+    }
+
+    // Trigger simulator update if it has one
+    if (window.circuitAnimator) {
+      if (circuitKey === '6-1') window.circuitAnimator.updatePushPull();
+      if (circuitKey === '6-2') window.circuitAnimator.updateImpedanceBalanced();
+      if (circuitKey === '6-3') window.circuitAnimator.updateTransformerOut();
+      if (circuitKey === '6-4') window.circuitAnimator.updateCrossCoupled();
+      if (circuitKey === '6-5') window.circuitAnimator.updateDiffInput();
+      if (circuitKey === '6-6') window.circuitAnimator.updateSingleEnded();
+      if (circuitKey === '6-7') window.circuitAnimator.updateTransformerIn();
+      if (circuitKey === '6-8') window.circuitAnimator.updateInaInput();
+    }
   }
 }
 
@@ -683,11 +751,20 @@ function selectEnclosureBox(eqKey) {
   const connEl = document.getElementById('eq-metric-connector');
   if (connEl) connEl.innerHTML = data.connector;
 
-  // Toggle AES59 8-Channel Breakout panel
-  const db25Panel = document.getElementById('db25-channels-panel');
-  if (db25Panel) {
-    db25Panel.style.display = eqKey === 'db25' ? 'block' : 'none';
-  }
+  // Toggle dedicated related content panels for each enclosure
+  const panels = {
+    'mic': 'enclosure-panel-mic',
+    'line-src': 'enclosure-panel-line-src',
+    'digital': 'enclosure-panel-digital',
+    'db25': 'db25-channels-panel',
+    'qtp': 'enclosure-panel-qtp'
+  };
+  Object.entries(panels).forEach(([k, panelId]) => {
+    const el = document.getElementById(panelId);
+    if (el) {
+      el.style.display = (k === eqKey) ? 'block' : 'none';
+    }
+  });
 
   // When DB25 is selected, update cable graphics to illustrate the 8-channel snake
   const cableLabel = document.getElementById('svg-cable-label');
@@ -712,6 +789,9 @@ document.addEventListener("DOMContentLoaded", () => {
   selectBoxType("mic");
   initEnclosureTabs();
   selectEnclosureBox("mic");
+
+  // Default circuit topology (Only bring up 6.1 initially)
+  switchCircuit("6-1");
 
   initTheme();
   initImageModal();
