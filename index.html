@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AES-X152: Balanced Audio Interconnection & Interface Parameters</title>
-  <meta name="description" content="Technical exploration, report of findings, interactive engineering tools, and comprehensive taxonomy tree for AES-X152 (SC-05-05).">
+  <meta name="description" content="Technical exploration, report of findings, interactive engineering tools, SVG schematics, terms dictionary, and contributor timeline for AES-X152 (SC-05-05).">
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
@@ -29,12 +29,14 @@
 
       <nav class="site-nav">
         <a href="#triad" class="nav-link">The Three Parts</a>
+        <a href="#pyramid-section" class="nav-link">Levels Pyramid</a>
         <a href="#tree-explorer" class="nav-link">Taxonomy Tree</a>
+        <a href="#topologies" class="nav-link">SVG Circuits</a>
         <a href="#findings" class="nav-link">Findings & Truths</a>
+        <a href="#terms-section" class="nav-link">Terms & Definitions</a>
         <a href="#engineering-lab" class="nav-link">Engineering Lab</a>
-        <a href="#datasheet-matrix" class="nav-link">Standard Datasheet</a>
-        <a href="#topologies" class="nav-link">Circuits</a>
-        <a href="#deep-dives" class="nav-link">Deep Dives</a>
+        <a href="#datasheet-matrix" class="nav-link">Datasheets</a>
+        <a href="#timeline-section" class="nav-link">Contributor Timeline</a>
         <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">☀️ Light Mode</button>
       </nav>
     </div>
@@ -59,8 +61,9 @@
       </p>
       <div class="hero-cta-group">
         <a href="#triad" class="btn btn-primary">Explore The Three Parts</a>
-        <a href="#engineering-lab" class="btn btn-secondary">Open Engineering Lab</a>
-        <a href="#tree-explorer" class="btn btn-secondary">Browse SC-05-05 Tree</a>
+        <a href="#pyramid-section" class="btn btn-secondary">Audio Dynamic Pyramid</a>
+        <a href="#topologies" class="btn btn-secondary">Vector SVG Circuits</a>
+        <a href="#timeline-section" class="btn btn-secondary">Contributor Timeline</a>
       </div>
     </div>
   </section>
@@ -159,8 +162,147 @@
     </div>
   </section>
 
+  <!-- SVG Diagram 1: Dynamic Operating Range & Signal Levels Pyramid (Redrawn from User Sketch) -->
+  <section id="pyramid-section" class="section" style="background-color: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Vector Graphic Model</span>
+        <h2 class="section-title">The Audio Dynamic Operating Range Pyramid</h2>
+        <p class="section-lead">
+          A vectorized technical model illustrating the relationship between the Noise Floor, Nominal Signal Level, 
+          Impedance Foundation, Distortion Threshold (Mezzanine Level), Sensitivity, Headroom, and the Clipping Point.
+        </p>
+      </div>
+
+      <div class="svg-diagram-card">
+        <div class="svg-diagram-wrapper">
+          <svg viewBox="0 0 900 520" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <!-- Gradients -->
+              <linearGradient id="pyramidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
+                <stop offset="35%" stop-color="#0284c7" stop-opacity="0.25"/>
+                <stop offset="70%" stop-color="#0369a1" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#0c4a6e" stop-opacity="0.12"/>
+              </linearGradient>
+              <linearGradient id="mezzanineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.2"/>
+                <stop offset="50%" stop-color="#f59e0b" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.2"/>
+              </linearGradient>
+              <linearGradient id="headroomBrace" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#10b981"/>
+                <stop offset="100%" stop-color="#06b6d4"/>
+              </linearGradient>
+              <filter id="glowEffect" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+            </defs>
+
+            <!-- Background subtle grid -->
+            <line x1="50" y1="440" x2="850" y2="440" stroke="#334155" stroke-width="2" />
+            <line x1="60" y1="180" x2="840" y2="180" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,4" />
+            <line x1="100" y1="320" x2="800" y2="320" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,4" />
+
+            <!-- Main Pyramid Triangle -->
+            <!-- Apex: (450, 70), Bottom-Left: (150, 440), Bottom-Right: (750, 440) -->
+            <polygon points="450,70 150,440 750,440" fill="url(#pyramidGrad)" stroke="#38bdf8" stroke-width="2.5" />
+
+            <!-- Mezzanine / Distortion Band -->
+            <!-- Triangle width at y=180: dx = (180 - 70) / (440 - 70) * 300 = 110 / 370 * 300 = 89.18 => x1=360.8, x2=539.2 -->
+            <polygon points="450,70 361,180 539,180" fill="rgba(245, 158, 11, 0.15)" stroke="#f59e0b" stroke-width="1.5" />
+
+            <!-- Reference Level Band -->
+            <!-- Triangle width at y=320: dx = (320 - 70) / (440 - 70) * 300 = 250 / 370 * 300 = 202.7 => x1=247.3, x2=652.7 -->
+            <line x1="247" y1="320" x2="653" y2="320" stroke="#0ea5e9" stroke-width="2" />
+
+            <!-- APEX: Clipping Point -->
+            <circle cx="450" cy="70" r="5" fill="#ef4444" filter="url(#glowEffect)" />
+            <text x="450" y="42" fill="#ef4444" font-size="16" font-family="'Inter', sans-serif" font-weight="800" text-anchor="middle">
+              ▲ CLIPPING POINT (CEILING)
+            </text>
+            <text x="450" y="58" fill="#94a3b8" font-size="11" font-family="'JetBrains Mono', monospace" text-anchor="middle">
+              +24 dBu to +28 dBu Peak Voltage Limit
+            </text>
+
+            <!-- UPPER SECTION: Sensitivity -->
+            <text x="450" y="125" fill="#f8fafc" font-size="14" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">
+              Sensitivity &amp; Max Input
+            </text>
+            <text x="450" y="142" fill="#cbd5e1" font-size="10.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">
+              Smallest signal for rated output
+            </text>
+
+            <!-- MEZZANINE LEVEL: Distortion Level -->
+            <text x="450" y="210" fill="#f59e0b" font-size="15" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">
+              Distortion Level (1% / 0.1% THD)
+            </text>
+            <text x="450" y="228" fill="#cbd5e1" font-size="11" font-family="'Inter', sans-serif" text-anchor="middle">
+              The Mezzanine Rated Distortion Threshold
+            </text>
+
+            <!-- Right label for Mezzanine Line -->
+            <text x="845" y="176" fill="#f59e0b" font-size="13" font-family="'Inter', sans-serif" font-weight="700" text-anchor="end">
+              Ceiling / A Mezzanine Level
+            </text>
+            <text x="845" y="194" fill="#94a3b8" font-size="10.5" font-family="'JetBrains Mono', monospace" text-anchor="end">
+              Onset of Non-Linear Saturation
+            </text>
+
+            <!-- HEADROOM INDICATOR & BRACKET -->
+            <path d="M 570,185 L 610,185 L 610,250 L 620,250 L 610,250 L 610,315 L 570,315" fill="none" stroke="url(#headroomBrace)" stroke-width="2" />
+            <text x="635" y="246" fill="#10b981" font-size="15" font-family="'Inter', sans-serif" font-weight="800">
+              HEADROOM
+            </text>
+            <text x="635" y="264" fill="#94a3b8" font-size="11" font-family="'JetBrains Mono', monospace">
+              20 dB Dynamic Margin
+            </text>
+
+            <!-- NOMINAL LEVEL LINE -->
+            <text x="450" y="305" fill="#38bdf8" font-size="13.5" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">
+              Nominal Operating Level (+4 dBu Pro / -10 dBV Consumer)
+            </text>
+
+            <!-- BASE CORNERS: Impedance & Level -->
+            <g transform="translate(205, 415)">
+              <rect x="-15" y="-22" width="160" height="36" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1.5" />
+              <text x="65" y="-2" fill="#38bdf8" font-size="13" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">
+                Impedance
+              </text>
+              <text x="65" y="10" fill="#94a3b8" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">
+                Z_out &le; 100&Omega; | Z_in &ge; 10k&Omega;
+              </text>
+            </g>
+
+            <g transform="translate(545, 415)">
+              <rect x="-15" y="-22" width="160" height="36" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1.5" />
+              <text x="65" y="-2" fill="#38bdf8" font-size="13" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">
+                Signal Level
+              </text>
+              <text x="65" y="10" fill="#94a3b8" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">
+                1.228 VRMS (Pro +4 dBu)
+              </text>
+            </g>
+
+            <!-- BASELINE: Noise Floor -->
+            <text x="450" y="470" fill="#64748b" font-size="15" font-family="'Inter', sans-serif" font-weight="800" text-anchor="middle">
+              ▼ NOISE FLOOR BASELINE
+            </text>
+            <text x="450" y="488" fill="#475569" font-size="11" font-family="'JetBrains Mono', monospace" text-anchor="middle">
+              Johnson-Nyquist Thermal Noise (-130 dBu to -125 dBu EIN)
+            </text>
+          </svg>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); text-align: center; margin-top: 0.5rem;">
+          <em>Figure 1: The Audio Dynamic Range Pyramid &mdash; Vectorized redrawing of the SC-05-05 working diagram showing the relationship between circuit impedance, noise floor, operating reference, mezzanine distortion rating, and headroom.</em>
+        </p>
+      </div>
+    </div>
+  </section>
+
   <!-- Section 2: Interactive SC-05-05 Taxonomy Tree Explorer -->
-  <section id="tree-explorer" class="section" style="background-color: var(--bg-secondary);">
+  <section id="tree-explorer" class="section">
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Taxonomy Mind Map</span>
@@ -196,8 +338,663 @@
     </div>
   </section>
 
-  <!-- Section 3: Core Report of Findings -->
-  <section id="findings" class="section">
+  <!-- Section 3: Redrawn Vector SVG Circuit Topologies -->
+  <section id="topologies" class="section" style="background-color: var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Vector Circuit Schematics</span>
+        <h2 class="section-title">Types of Balanced Audio Circuits (SVG)</h2>
+        <p class="section-lead">
+          All circuit topologies from the working group drafts redrawn as pure vector SVGs. 
+          Select any circuit below to view its schematic and operational behavior:
+        </p>
+      </div>
+
+      <!-- Navigation Tabs for Circuits -->
+      <div class="circuit-tabs-nav">
+        <button class="circuit-tab-btn active" onclick="switchCircuit('pushpull')">6.1 Ground-Referenced Push-Pull</button>
+        <button class="circuit-tab-btn" onclick="switchCircuit('servo')">6.2 Active Floating (Cross-Coupled)</button>
+        <button class="circuit-tab-btn" onclick="switchCircuit('transformer')">6.3 Transformer Floating</button>
+        <button class="circuit-tab-btn" onclick="switchCircuit('impbal')">Type Z: Impedance-Balanced</button>
+        <button class="circuit-tab-btn" onclick="switchCircuit('receiver')">Differential Receiver (INA)</button>
+        <button class="circuit-tab-btn" onclick="switchCircuit('wheatstone')">Wheatstone Bridge CMRR Model</button>
+        <button class="circuit-tab-btn" onclick="switchCircuit('aes48')">AES48 Chassis Grounding</button>
+      </div>
+
+      <!-- Circuit Panel 1: Ground-Referenced Push-Pull -->
+      <div id="circuit-pushpull" class="circuit-panel active">
+        <div class="svg-diagram-card">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4 style="margin: 0; color: var(--accent-cyan);">6.1. Balanced Ground-Referenced Output (Dual Push-Pull)</h4>
+            <span class="badge badge-warning">Short-Circuit Vulnerable</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+            Two operational amplifiers driving inverted signals referenced to circuit 0V. Delivers maximum voltage swing into balanced lines, 
+            but shorting Pin 3 to ground (e.g. into mono TS equipment) shorts an active op-amp directly to ground.
+          </p>
+          <div class="svg-diagram-wrapper">
+            <svg viewBox="0 0 850 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <!-- Grid background -->
+              <rect width="850" height="320" fill="var(--bg-secondary)" rx="8"/>
+              <!-- Input Signal -->
+              <text x="30" y="160" fill="#38bdf8" font-size="14" font-weight="700">Audio In</text>
+              <line x1="100" y1="155" x2="160" y2="155" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="160" cy="155" r="4" fill="#38bdf8"/>
+              <line x1="160" y1="155" x2="160" y2="90" stroke="#38bdf8" stroke-width="2"/>
+              <line x1="160" y1="155" x2="160" y2="220" stroke="#38bdf8" stroke-width="2"/>
+
+              <!-- Non-inverting Op-Amp (Top) -->
+              <line x1="160" y1="90" x2="220" y2="90" stroke="#38bdf8" stroke-width="2"/>
+              <polygon points="220,60 220,120 280,90" fill="#1e293b" stroke="#0ea5e9" stroke-width="2"/>
+              <text x="230" y="80" fill="#38bdf8" font-size="14" font-weight="700">+</text>
+              <text x="230" y="110" fill="#64748b" font-size="14" font-weight="700">-</text>
+              <!-- Feedback & Ground -->
+              <line x1="280" y1="90" x2="350" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Output resistor R_PO -->
+              <rect x="350" y="82" width="60" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="380" y="94" fill="#f8fafc" font-size="10" text-anchor="middle">Z_PO (50&Omega;)</text>
+              <line x1="410" y1="90" x2="680" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Pin 2 Hot -->
+              <circle cx="680" cy="90" r="7" fill="#38bdf8"/>
+              <text x="705" y="95" fill="#38bdf8" font-size="14" font-weight="700">Pin 2 (HOT) +Signal</text>
+
+              <!-- Inverting Op-Amp (Bottom) -->
+              <line x1="160" y1="220" x2="220" y2="220" stroke="#38bdf8" stroke-width="2"/>
+              <polygon points="220,190 220,250 280,220" fill="#1e293b" stroke="#0ea5e9" stroke-width="2"/>
+              <text x="230" y="210" fill="#64748b" font-size="14" font-weight="700">+</text>
+              <text x="230" y="240" fill="#38bdf8" font-size="14" font-weight="700">-</text>
+              <line x1="280" y1="220" x2="350" y2="220" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Output resistor R_RO -->
+              <rect x="350" y="212" width="60" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="380" y="224" fill="#f8fafc" font-size="10" text-anchor="middle">Z_RO (50&Omega;)</text>
+              <line x1="410" y1="220" x2="680" y2="220" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Pin 3 Cold -->
+              <circle cx="680" cy="220" r="7" fill="#38bdf8"/>
+              <text x="705" y="225" fill="#38bdf8" font-size="14" font-weight="700">Pin 3 (COLD) -Signal</text>
+
+              <!-- Ground Reference Pin 1 -->
+              <line x1="450" y1="280" x2="680" y2="280" stroke="#94a3b8" stroke-width="2"/>
+              <circle cx="680" cy="280" r="7" fill="#94a3b8"/>
+              <text x="705" y="285" fill="#94a3b8" font-size="14" font-weight="700">Pin 1 (CHASSIS)</text>
+              <line x1="450" y1="280" x2="450" y2="295" stroke="#94a3b8" stroke-width="2"/>
+              <line x1="440" y1="295" x2="460" y2="295" stroke="#94a3b8" stroke-width="2"/>
+              <line x1="444" y1="300" x2="456" y2="300" stroke="#94a3b8" stroke-width="2"/>
+
+              <!-- Warning Callout -->
+              <rect x="490" y="140" width="165" height="45" rx="6" fill="rgba(239, 68, 68, 0.15)" stroke="#ef4444" stroke-width="1.5"/>
+              <text x="572" y="158" fill="#ef4444" font-size="10.5" font-weight="700" text-anchor="middle">⚠ CAUTION: MONO TS PLUG</text>
+              <text x="572" y="174" fill="#fca5a5" font-size="9" text-anchor="middle">Shorting Pin 3 causes op-amp clip</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Circuit Panel 2: Active Floating (Cross-Coupled Servo) -->
+      <div id="circuit-servo" class="circuit-panel">
+        <div class="svg-diagram-card">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4 style="margin: 0; color: var(--accent-cyan);">6.2. Balanced Active Floating Output (Cross-Coupled Servo)</h4>
+            <span class="badge badge-success">Universal Compatibility (0 dB into Unbalanced)</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+            Cross-coupled feedback simulates a true floating transformer secondary winding. 
+            When Pin 3 is tied to ground, the opposing op-amp automatically doubles its drive voltage (+6 dB), 
+            maintaining full signal level without excessive heat or distortion.
+          </p>
+          <div class="svg-diagram-wrapper">
+            <svg viewBox="0 0 850 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="320" fill="var(--bg-secondary)" rx="8"/>
+              <!-- Driver A & B with Cross-Coupled Feedback Loops -->
+              <text x="30" y="160" fill="#38bdf8" font-size="14" font-weight="700">Audio In</text>
+              <line x1="100" y1="155" x2="180" y2="155" stroke="#38bdf8" stroke-width="2"/>
+
+              <!-- Op-Amp 1 -->
+              <polygon points="220,60 220,120 280,90" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+              <line x1="180" y1="90" x2="220" y2="90" stroke="#38bdf8" stroke-width="2"/>
+              <line x1="280" y1="90" x2="350" y2="90" stroke="#10b981" stroke-width="2.5"/>
+              <rect x="350" y="82" width="60" height="16" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+              <text x="380" y="94" fill="#f8fafc" font-size="10" text-anchor="middle">Z_PO (25&Omega;)</text>
+              <line x1="410" y1="90" x2="680" y2="90" stroke="#10b981" stroke-width="2.5"/>
+              <circle cx="680" cy="90" r="7" fill="#10b981"/>
+              <text x="705" y="95" fill="#10b981" font-size="14" font-weight="700">Pin 2 (HOT)</text>
+
+              <!-- Cross feedback loop 1 -> 2 -->
+              <path d="M 440,90 L 440,140 L 200,180 L 200,210" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+              <!-- Op-Amp 2 -->
+              <polygon points="220,190 220,250 280,220" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+              <line x1="180" y1="220" x2="220" y2="220" stroke="#38bdf8" stroke-width="2"/>
+              <line x1="280" y1="220" x2="350" y2="220" stroke="#10b981" stroke-width="2.5"/>
+              <rect x="350" y="212" width="60" height="16" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+              <text x="380" y="224" fill="#f8fafc" font-size="10" text-anchor="middle">Z_RO (25&Omega;)</text>
+              <line x1="410" y1="220" x2="680" y2="220" stroke="#10b981" stroke-width="2.5"/>
+              <circle cx="680" cy="220" r="7" fill="#10b981"/>
+              <text x="705" y="225" fill="#10b981" font-size="14" font-weight="700">Pin 3 (COLD)</text>
+
+              <!-- Cross feedback loop 2 -> 1 -->
+              <path d="M 440,220 L 440,170 L 200,130 L 200,100" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+              <!-- Ground Reference Pin 1 -->
+              <line x1="450" y1="280" x2="680" y2="280" stroke="#94a3b8" stroke-width="2"/>
+              <circle cx="680" cy="280" r="7" fill="#94a3b8"/>
+              <text x="705" y="285" fill="#94a3b8" font-size="14" font-weight="700">Pin 1 (CHASSIS)</text>
+
+              <!-- Feature Callout -->
+              <rect x="490" y="135" width="180" height="45" rx="6" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.5"/>
+              <text x="580" y="153" fill="#10b981" font-size="10.5" font-weight="700" text-anchor="middle">✓ SERVO SENSING ACTIVE</text>
+              <text x="580" y="169" fill="#a7f3d0" font-size="9" text-anchor="middle">Grounding Pin 3 boosts Pin 2 by +6 dB</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Circuit Panel 3: Transformer Floating -->
+      <div id="circuit-transformer" class="circuit-panel">
+        <div class="svg-diagram-card">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4 style="margin: 0; color: var(--accent-cyan);">6.3. Balanced Output Transformer Floating (Type Tx)</h4>
+            <span class="badge badge-success">Infinite Galvanic Isolation</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+            Galvanic isolation through mutual magnetic flux. Immune to ground voltage discrepancies, offers infinite DC isolation, 
+            and maintains constant differential output voltage regardless of whether Pin 2 or Pin 3 is grounded.
+          </p>
+          <div class="svg-diagram-wrapper">
+            <svg viewBox="0 0 850 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="320" fill="var(--bg-secondary)" rx="8"/>
+              <!-- Driver driving primary winding -->
+              <text x="30" y="160" fill="#38bdf8" font-size="14" font-weight="700">Driver In</text>
+              <line x1="100" y1="120" x2="250" y2="120" stroke="#38bdf8" stroke-width="2.5"/>
+              <line x1="100" y1="190" x2="250" y2="190" stroke="#38bdf8" stroke-width="2.5"/>
+
+              <!-- Primary Coils -->
+              <path d="M 250,120 A 15,15 0 0,1 250,150 A 15,15 0 0,1 250,180 A 15,15 0 0,1 250,210" fill="none" stroke="#38bdf8" stroke-width="3"/>
+
+              <!-- Core Laminations (Iron/Nickel) -->
+              <line x1="280" y1="100" x2="280" y2="230" stroke="#94a3b8" stroke-width="3"/>
+              <line x1="290" y1="100" x2="290" y2="230" stroke="#94a3b8" stroke-width="3"/>
+
+              <!-- Secondary Coils -->
+              <path d="M 320,120 A 15,15 0 0,1 320,150 A 15,15 0 0,1 320,180 A 15,15 0 0,1 320,210" fill="none" stroke="#10b981" stroke-width="3"/>
+
+              <!-- Floating Secondary Leads -->
+              <line x1="320" y1="120" x2="680" y2="90" stroke="#10b981" stroke-width="2.5"/>
+              <circle cx="680" cy="90" r="7" fill="#10b981"/>
+              <text x="705" y="95" fill="#10b981" font-size="14" font-weight="700">Pin 2 (HOT)</text>
+
+              <line x1="320" y1="210" x2="680" y2="220" stroke="#10b981" stroke-width="2.5"/>
+              <circle cx="680" cy="220" r="7" fill="#10b981"/>
+              <text x="705" y="225" fill="#10b981" font-size="14" font-weight="700">Pin 3 (COLD)</text>
+
+              <!-- Optional Electrostatic Faraday Shield to Pin 1 -->
+              <line x1="285" y1="230" x2="285" y2="280" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3"/>
+              <line x1="285" y1="280" x2="680" y2="280" stroke="#94a3b8" stroke-width="2"/>
+              <circle cx="680" cy="280" r="7" fill="#94a3b8"/>
+              <text x="705" y="285" fill="#94a3b8" font-size="14" font-weight="700">Pin 1 (CHASSIS / SHIELD)</text>
+
+              <!-- Feature Callout -->
+              <rect x="420" y="130" width="220" height="50" rx="6" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.5"/>
+              <text x="530" y="152" fill="#10b981" font-size="11" font-weight="700" text-anchor="middle">GALVANICALLY FLOATING</text>
+              <text x="530" y="168" fill="#a7f3d0" font-size="9.5" text-anchor="middle">Grounding Pin 2 or 3 has zero level loss</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Circuit Panel 4: Impedance Balanced -->
+      <div id="circuit-impbal" class="circuit-panel">
+        <div class="svg-diagram-card">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4 style="margin: 0; color: var(--accent-cyan);">Type Z: Impedance-Balanced Output</h4>
+            <span class="badge badge-primary">Full Noise Rejection at Lowest Cost</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+            Audio signal is driven ONLY on Pin 2. Pin 3 is terminated to circuit ground through a precision passive resistor 
+            matching the Pin 2 output impedance ($R_{match} = R_{out}$). Provides 100% identical common-mode noise cancellation to active drivers.
+          </p>
+          <div class="svg-diagram-wrapper">
+            <svg viewBox="0 0 850 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="320" fill="var(--bg-secondary)" rx="8"/>
+              <!-- Single Op-Amp Driving Pin 2 -->
+              <text x="30" y="95" fill="#38bdf8" font-size="14" font-weight="700">Audio In</text>
+              <line x1="100" y1="90" x2="220" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
+              <polygon points="220,60 220,120 280,90" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+              <line x1="280" y1="90" x2="350" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Active output resistor -->
+              <rect x="350" y="82" width="60" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="380" y="94" fill="#f8fafc" font-size="10" text-anchor="middle">R_out (100&Omega;)</text>
+              <line x1="410" y1="90" x2="680" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle cx="680" cy="90" r="7" fill="#38bdf8"/>
+              <text x="705" y="95" fill="#38bdf8" font-size="14" font-weight="700">Pin 2 (ACTIVE HOT)</text>
+
+              <!-- Passive Matching Leg on Pin 3 -->
+              <line x1="220" y1="220" x2="350" y2="220" stroke="#f59e0b" stroke-width="2"/>
+              <!-- Passive matching resistor to 0V ground -->
+              <rect x="350" y="212" width="60" height="16" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+              <text x="380" y="224" fill="#f8fafc" font-size="10" text-anchor="middle">R_match (100&Omega;)</text>
+              <line x1="410" y1="220" x2="680" y2="220" stroke="#f59e0b" stroke-width="2.5"/>
+              <circle cx="680" cy="220" r="7" fill="#f59e0b"/>
+              <text x="705" y="225" fill="#f59e0b" font-size="14" font-weight="700">Pin 3 (PASSIVE MATCHED)</text>
+
+              <!-- 0V Circuit Ground connection for passive leg -->
+              <line x1="220" y1="220" x2="220" y2="245" stroke="#94a3b8" stroke-width="2"/>
+              <line x1="210" y1="245" x2="230" y2="245" stroke="#94a3b8" stroke-width="2"/>
+              <line x1="214" y1="250" x2="226" y2="250" stroke="#94a3b8" stroke-width="2"/>
+              <text x="220" y="265" fill="#94a3b8" font-size="9" text-anchor="middle">Circuit 0V</text>
+
+              <!-- Chassis Shield Pin 1 -->
+              <line x1="450" y1="280" x2="680" y2="280" stroke="#94a3b8" stroke-width="2"/>
+              <circle cx="680" cy="280" r="7" fill="#94a3b8"/>
+              <text x="705" y="285" fill="#94a3b8" font-size="14" font-weight="700">Pin 1 (CHASSIS)</text>
+
+              <!-- Equality Box -->
+              <rect x="440" y="130" width="220" height="50" rx="6" fill="rgba(6, 182, 212, 0.12)" stroke="#06b6d4" stroke-width="1.5"/>
+              <text x="550" y="152" fill="#06b6d4" font-size="11" font-weight="700" text-anchor="middle">R_out == R_match (EXACT)</text>
+              <text x="550" y="168" fill="#e0f2fe" font-size="9.5" text-anchor="middle">Impedance balance is 100% preserved!</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Circuit Panel 5: Differential Receiver (INA) -->
+      <div id="circuit-receiver" class="circuit-panel">
+        <div class="svg-diagram-card">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4 style="margin: 0; color: var(--accent-cyan);">Instrumentation Differential Receiver Stage</h4>
+            <span class="badge badge-success">High Input Impedance &amp; Stellar CMRR</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+            Two high-impedance input buffer op-amps feeding a precision four-resistor difference amplifier. 
+            Ensures that input impedance on both Pin 2 and Pin 3 is identical and very high (&gt; 10 M&Omega;), preserving CMRR.
+          </p>
+          <div class="svg-diagram-wrapper">
+            <svg viewBox="0 0 850 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="320" fill="var(--bg-secondary)" rx="8"/>
+              <!-- Inputs -->
+              <circle cx="80" cy="80" r="6" fill="#38bdf8"/>
+              <text x="100" y="85" fill="#38bdf8" font-size="13" font-weight="700">Pin 2 (In +)</text>
+              <line x1="86" y1="80" x2="180" y2="80" stroke="#38bdf8" stroke-width="2"/>
+
+              <circle cx="80" cy="240" r="6" fill="#38bdf8"/>
+              <text x="100" y="245" fill="#38bdf8" font-size="13" font-weight="700">Pin 3 (In -)</text>
+              <line x1="86" y1="240" x2="180" y2="240" stroke="#38bdf8" stroke-width="2"/>
+
+              <!-- Buffer Op-Amps 1 & 2 -->
+              <polygon points="180,50 180,110 240,80" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+              <polygon points="180,210 180,270 240,240" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+
+              <!-- Gain Resistor between buffers -->
+              <line x1="210" y1="100" x2="210" y2="135" stroke="#94a3b8" stroke-width="2"/>
+              <rect x="202" y="135" width="16" height="50" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+              <text x="195" y="164" fill="#f59e0b" font-size="10" text-anchor="end">R_Gain</text>
+              <line x1="210" y1="185" x2="210" y2="220" stroke="#94a3b8" stroke-width="2"/>
+
+              <!-- Outputs of buffers feeding difference amp -->
+              <line x1="240" y1="80" x2="350" y2="80" stroke="#38bdf8" stroke-width="2"/>
+              <rect x="350" y="72" width="50" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="375" y="84" fill="#f8fafc" font-size="9" text-anchor="middle">R1 (0.1%)</text>
+              <line x1="400" y1="80" x2="520" y2="140" stroke="#38bdf8" stroke-width="2"/>
+
+              <line x1="240" y1="240" x2="350" y2="240" stroke="#38bdf8" stroke-width="2"/>
+              <rect x="350" y="232" width="50" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="375" y="244" fill="#f8fafc" font-size="9" text-anchor="middle">R2 (0.1%)</text>
+              <line x1="400" y1="240" x2="520" y2="180" stroke="#38bdf8" stroke-width="2"/>
+
+              <!-- Final Difference Op-Amp -->
+              <polygon points="520,120 520,200 600,160" fill="#1e293b" stroke="#10b981" stroke-width="2.5"/>
+              <line x1="600" y1="160" x2="720" y2="160" stroke="#10b981" stroke-width="2.5"/>
+              <circle cx="720" cy="160" r="7" fill="#10b981"/>
+              <text x="735" y="165" fill="#10b981" font-size="14" font-weight="700">Audio Out (Clean)</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Circuit Panel 6: Wheatstone Bridge CMRR Model -->
+      <div id="circuit-wheatstone" class="circuit-panel">
+        <div class="svg-diagram-card">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4 style="margin: 0; color: var(--accent-cyan);">The Wheatstone Bridge Model of Balanced CMRR</h4>
+            <span class="badge badge-primary">Mathematical Proof of Balance</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+            A balanced audio interconnection is electrically identical to a Wheatstone Bridge. 
+            When source impedances and receiver impedances form equal ratios ($Z_{S1}/Z_{IN1} = Z_{S2}/Z_{IN2}$), 
+            the common-mode noise voltage $V_{CM}$ develops identical potentials on both lines, resulting in zero differential interference.
+          </p>
+          <div class="svg-diagram-wrapper">
+            <svg viewBox="0 0 850 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="320" fill="var(--bg-secondary)" rx="8"/>
+              <!-- Common Mode Noise Generator at left -->
+              <circle cx="120" cy="160" r="30" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+              <text x="120" y="165" fill="#f59e0b" font-size="12" font-weight="700" text-anchor="middle">V_CM</text>
+              <line x1="150" y1="160" x2="220" y2="160" stroke="#f59e0b" stroke-width="2"/>
+
+              <!-- Bridge Split -->
+              <line x1="220" y1="160" x2="270" y2="90" stroke="#f59e0b" stroke-width="2"/>
+              <line x1="220" y1="160" x2="270" y2="230" stroke="#f59e0b" stroke-width="2"/>
+
+              <!-- Leg 1: Z_S1 and Z_IN1 -->
+              <rect x="270" y="82" width="60" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="300" y="94" fill="#38bdf8" font-size="10" text-anchor="middle">Z_S1</text>
+              <line x1="330" y1="90" x2="480" y2="90" stroke="#38bdf8" stroke-width="2"/>
+              <circle cx="480" cy="90" r="5" fill="#38bdf8"/>
+              <text x="480" y="75" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle">Node A (V_A)</text>
+
+              <rect x="520" y="82" width="60" height="16" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+              <text x="550" y="94" fill="#10b981" font-size="10" text-anchor="middle">Z_IN1</text>
+              <line x1="480" y1="90" x2="520" y2="90" stroke="#10b981" stroke-width="2"/>
+              <line x1="580" y1="90" x2="680" y2="160" stroke="#10b981" stroke-width="2"/>
+
+              <!-- Leg 2: Z_S2 and Z_IN2 -->
+              <rect x="270" y="222" width="60" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+              <text x="300" y="234" fill="#38bdf8" font-size="10" text-anchor="middle">Z_S2</text>
+              <line x1="330" y1="230" x2="480" y2="230" stroke="#38bdf8" stroke-width="2"/>
+              <circle cx="480" cy="230" r="5" fill="#38bdf8"/>
+              <text x="480" y="255" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle">Node B (V_B)</text>
+
+              <rect x="520" y="222" width="60" height="16" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+              <text x="550" y="234" fill="#10b981" font-size="10" text-anchor="middle">Z_IN2</text>
+              <line x1="480" y1="230" x2="520" y2="230" stroke="#10b981" stroke-width="2"/>
+              <line x1="580" y1="230" x2="680" y2="160" stroke="#10b981" stroke-width="2"/>
+
+              <!-- Ground Reference at right -->
+              <line x1="680" y1="160" x2="740" y2="160" stroke="#94a3b8" stroke-width="2"/>
+              <line x1="740" y1="145" x2="740" y2="175" stroke="#94a3b8" stroke-width="2"/>
+              <line x1="748" y1="150" x2="748" y2="170" stroke="#94a3b8" stroke-width="2"/>
+
+              <!-- Differential Voltmeter between Node A and B -->
+              <line x1="480" y1="95" x2="480" y2="225" stroke="#10b981" stroke-width="2" stroke-dasharray="4,4"/>
+              <circle cx="480" cy="160" r="24" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+              <text x="480" y="165" fill="#10b981" font-size="12" font-weight="800" text-anchor="middle">&Delta;V = 0</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Circuit Panel 7: AES48 Chassis Grounding -->
+      <div id="circuit-aes48" class="circuit-panel">
+        <div class="svg-diagram-card">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4 style="margin: 0; color: var(--accent-cyan);">AES48 Chassis Grounding vs The "Pin 1 Problem"</h4>
+            <span class="badge badge-success">EMC &amp; Hum Immunity</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+            Shows the crucial difference between standard AES48 compliance (bonding Pin 1 directly to the metallic enclosure at the entry point) 
+            versus the catastrophic "Pin 1 Problem" where shield currents are routed across internal PCB audio traces.
+          </p>
+          <div class="svg-diagram-wrapper">
+            <svg viewBox="0 0 850 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <rect width="850" height="320" fill="var(--bg-secondary)" rx="8"/>
+              <!-- Metal Chassis Enclosure (Outer box) -->
+              <rect x="220" y="40" width="580" height="240" fill="none" stroke="#64748b" stroke-width="3" rx="10"/>
+              <text x="240" y="65" fill="#94a3b8" font-size="12" font-weight="700">METAL CHASSIS ENCLOSURE</text>
+
+              <!-- XLR Connector Entrance -->
+              <rect x="180" y="90" width="80" height="140" fill="#1e293b" stroke="#38bdf8" stroke-width="2" rx="6"/>
+              <text x="220" y="115" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">XLR Input</text>
+
+              <!-- Pin 1 Chassis Bond (AES48 Compliant) -->
+              <circle cx="240" cy="140" r="5" fill="#10b981"/>
+              <text x="250" y="145" fill="#10b981" font-size="11" font-weight="700">Pin 1</text>
+              <line x1="240" y1="140" x2="320" y2="140" stroke="#10b981" stroke-width="3"/>
+              <line x1="320" y1="140" x2="320" y2="40" stroke="#10b981" stroke-width="3"/>
+              <text x="330" y="80" fill="#10b981" font-size="11" font-weight="700">Direct Chassis Bond &lt;0.05&Omega; (AES48)</text>
+
+              <!-- The Bad Pin 1 Trace (Dotted red line to internal PCB) -->
+              <line x1="240" y1="140" x2="420" y2="200" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,4"/>
+              <text x="360" y="185" fill="#ef4444" font-size="10" font-weight="700">The "Pin 1 Problem" Path (BAD)</text>
+
+              <!-- Internal Audio Circuit PCB -->
+              <rect x="420" y="150" width="340" height="100" fill="#0f172a" stroke="#0ea5e9" stroke-width="1.5" rx="6"/>
+              <text x="440" y="175" fill="#38bdf8" font-size="11" font-weight="700">Internal Audio Circuit Board (0V Signal Ground)</text>
+              <text x="440" y="200" fill="#fca5a5" font-size="10">Shield currents flowing here induce audible hum and RF buzz!</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Terms and Definitions -->
+  <section id="terms-section" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Standards Dictionary</span>
+        <h2 class="section-title">Terms, Definitions &amp; Alignment</h2>
+        <p class="section-lead">
+          Harmonizing foundational definitions from AES, IEC, and establishing the formal new interface terminology 
+          introduced by AES-X152.
+        </p>
+      </div>
+
+      <!-- Terms Tabs -->
+      <div class="terms-tab-bar">
+        <button class="terms-tab-btn active" onclick="switchTermsTab('toplevel')">📖 Top-Level Definitions</button>
+        <button class="terms-tab-btn" onclick="switchTermsTab('alignment')">🏛️ Alignment of Existing AES Definitions</button>
+        <button class="terms-tab-btn" onclick="switchTermsTab('newterms')">✨ NEW Definitions in AES-X152</button>
+      </div>
+
+      <!-- Tab 1: Top-Level Definitions -->
+      <div id="terms-toplevel" class="terms-panel">
+        <div class="terms-grid">
+          <div class="term-card">
+            <div class="term-header">
+              <h4 class="term-title">Balanced Circuit</h4>
+              <span class="term-origin">IEC 60268-3</span>
+            </div>
+            <p class="term-body">
+              A transmission line or interface circuit consisting of two conductors having equal impedances to any third reference point, 
+              including ground. In a balanced system, common-mode interference voltages divide equally across both conductors, allowing a 
+              differential receiver to subtract the noise to zero.
+            </p>
+            <div class="term-citation">Reference: IEC 60268-3 Section 4.2; AES-X152 Working Draft</div>
+          </div>
+
+          <div class="term-card">
+            <div class="term-header">
+              <h4 class="term-title">Impedance Balance</h4>
+              <span class="term-origin">Core Principle</span>
+            </div>
+            <p class="term-body">
+              The condition where the source or termination impedances of both conductors in a signal pair relative to ground or chassis 
+              are matched within a specified ratio (typically &le; 10%, ideally &le; 0.1%). It is this impedance balance, and <em>not</em> 
+              signal voltage symmetry, that determines the circuit's Common-Mode Rejection Ratio (CMRR).
+            </p>
+          </div>
+
+          <div class="term-card">
+            <div class="term-header">
+              <h4 class="term-title">Common-Mode Voltage ($V_{CM}$)</h4>
+              <span class="term-origin">IEEE / IEC</span>
+            </div>
+            <p class="term-body">
+              The portion of an electrical potential that is identical in magnitude and phase on both conductors of a balanced pair 
+              relative to a common third point (usually equipment chassis or earth ground): $V_{CM} = (V_+ + V_-) / 2$.
+            </p>
+          </div>
+
+          <div class="term-card">
+            <div class="term-header">
+              <h4 class="term-title">Differential-Mode Voltage ($V_{DM}$)</h4>
+              <span class="term-origin">Audio Signal</span>
+            </div>
+            <p class="term-body">
+              The potential difference appearing directly between the two signal conductors: $V_{DM} = V_+ - V_-$. 
+              In balanced audio, this is the desired program signal.
+            </p>
+          </div>
+
+          <div class="term-card">
+            <div class="term-header">
+              <h4 class="term-title">Common-Mode Rejection Ratio (CMRR)</h4>
+              <span class="term-origin">IEC 60268-3</span>
+            </div>
+            <p class="term-body">
+              The ratio, expressed in decibels (dB), of the differential voltage gain to the common-mode voltage gain: 
+              $\text{CMRR} = 20 \log_{10} (A_D / A_{CM})$. Represents the receiver's ability to reject hum, buzz, and radio frequency interference.
+            </p>
+          </div>
+
+          <div class="term-card">
+            <div class="term-header">
+              <h4 class="term-title">Galvanic Isolation / Floating</h4>
+              <span class="term-origin">Circuit Topology</span>
+            </div>
+            <p class="term-body">
+              An electrical circuit configuration having no direct conductive path (zero DC connection) to earth, chassis, or power supply ground. 
+              Floating interfaces (such as transformer windings) transfer energy entirely through magnetic flux or optical coupling.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Alignment of Existing AES Definitions -->
+      <div id="terms-alignment" class="terms-panel" style="display: none;">
+        <table class="alignment-table">
+          <thead>
+            <tr>
+              <th style="width: 15%;">Standard</th>
+              <th style="width: 25%;">Standardized Term</th>
+              <th style="width: 40%;">Official Definition / Meaning</th>
+              <th style="width: 20%;">AES-X152 Application</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>AES14</strong></td>
+              <td>Pin 1, 2, 3 Allocation</td>
+              <td>Pin 1 = Cable shield/screen; Pin 2 = Positive-polarity terminal; Pin 3 = Return/negative-polarity terminal.</td>
+              <td>Normative standard for XLR connectorization on all balanced small-signal datasheets.</td>
+            </tr>
+            <tr>
+              <td><strong>AES14id</strong></td>
+              <td>Concentric Plug (TRS)</td>
+              <td>Tip = Positive-polarity contact; Ring = Return terminal; Sleeve = Designated shield contact.</td>
+              <td>Defines universal jack wiring for 1/4" (6.35 mm) concentric plugs in balanced line I/O.</td>
+            </tr>
+            <tr>
+              <td><strong>AES26</strong></td>
+              <td>Conservation of Polarity</td>
+              <td>Maintains in-phase relationship between positive sound pressure peak and positive terminal voltage.</td>
+              <td>Guarantees that pin 2 produces positive pressure wave at loudspeaker diaphragm.</td>
+            </tr>
+            <tr>
+              <td><strong>AES48</strong></td>
+              <td>Shield-to-Chassis Bonding</td>
+              <td>Connects cable shields directly to the metallic equipment enclosure with negligible impedance (&lt; 0.1 &Omega;).</td>
+              <td>The fundamental mandatory test in AES-X152 Part 2 (Yes/No compliance declaration).</td>
+            </tr>
+            <tr>
+              <td><strong>AES54-3</strong></td>
+              <td>Designated Shield Contact</td>
+              <td>The contact of a connector dedicated to provide an electromagnetic screen connection.</td>
+              <td>Applied to multi-pin connectors and chassis shell bonding criteria.</td>
+            </tr>
+            <tr>
+              <td><strong>AES59</strong></td>
+              <td>25-Way D-Type (DB25)</td>
+              <td>Defines the 8-channel analog and AES3 digital balanced pinout on 25-way D-subminiature connectors.</td>
+              <td>Specified for high-density multi-channel converter and console datasheets.</td>
+            </tr>
+            <tr>
+              <td><strong>AES72</strong></td>
+              <td>Quad Twisted Pair (QTP) / 8P8C</td>
+              <td>Application of RJ45 modular connectors and Category cable for multi-channel analog/digital links.</td>
+              <td>Harmonizes UTP transmission parameters, pin assignments, and crosstalk ratings.</td>
+            </tr>
+            <tr>
+              <td><strong>IEC 60268-3</strong></td>
+              <td>Balance Factor &amp; Test</td>
+              <td>Prescribes injecting common-mode voltage with a 10 &Omega; or 600 &Omega; imbalance to verify real-world CMRR.</td>
+              <td>Normative test condition for all reported CMRR values in AES-X152 Part 4.</td>
+            </tr>
+            <tr>
+              <td><strong>IEC 61938</strong></td>
+              <td>Phantom Power (P48, P24, P12)</td>
+              <td>Direct current microphone powering. P48 specifies 48 VDC &plusmn; 4V through matched 6.81 k&Omega; (&le; 0.1%) resistors.</td>
+              <td>Normative disclosure requirement for preamplifiers and condenser microphone current draw.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tab 3: NEW Definitions This Report Will Use Often -->
+      <div id="terms-newterms" class="terms-panel" style="display: none;">
+        <div class="terms-grid">
+          <div class="term-card">
+            <div class="term-header">
+              <h4 class="term-title">Differential-Mode Impedance (DMZ)</h4>
+              <span class="term-origin">AES-X152 Part 2</span>
+            </div>
+            <p class="term-body">
+              The total impedance measured directly across the positive and return contacts: $DMZ_{OUT} = Z_{PO} + Z_{RO}$ for sources, 
+              and $DMZ_{IN} = Z_{PI} + Z_{RI}$ for receivers. Represents the effective load or drive impedance seen by the differential audio signal.
+            </p>
+          </div>
+
+          <div class="term-card">
+            <div class="term-header">
+              <h4 class="term-title">Common-Mode Impedance (CMZ)</h4>
+              <span class="term-origin">AES-X152 Part 2</span>
+            </div>
+            <p class="term-body">
+              The impedance from both signal contacts connected in parallel relative to the chassis ground reference: 
+              $CMZ = (Z_P \parallel Z_R)$ to chassis. Classified into <strong>Low</strong>, <strong>Mid</strong>, or <strong>High</strong> 
+              to predict common-mode ground current loop behavior.
+            </p>
+          </div>
+
+          <div class="term-card">
+            <div class="term-header">
+              <h4 class="term-title">Mezzanine Distortion Level</h4>
+              <span class="term-origin">AES-X152 Part 3</span>
+            </div>
+            <p class="term-body">
+              The standardized intermediate threshold (typically 1% or 0.1% THD across 10 Hz – 50 kHz) defining the upper bound 
+              of clean linear operation before entering severe non-linear clipping. Establishes the rated maximum output level.
+            </p>
+          </div>
+
+          <div class="term-card">
+            <div class="term-header">
+              <h4 class="term-title">Clipping Point (Ceiling)</h4>
+              <span class="term-origin">AES-X152 Part 3</span>
+            </div>
+            <p class="term-body">
+              The absolute instantaneous peak voltage level (dBu) at which the amplifier output stage hits its power supply rails 
+              and hard waveform truncation occurs.
+            </p>
+          </div>
+
+          <div class="term-card">
+            <div class="term-header">
+              <h4 class="term-title">Type Z (Impedance-Balanced Driver)</h4>
+              <span class="term-origin">Topology Spec</span>
+            </div>
+            <p class="term-body">
+              A balanced output driver classification wherein signal voltage is supplied on one pin only, while the opposing pin 
+              is terminated to ground with a passive impedance matching the driver's output impedance within 10%.
+            </p>
+          </div>
+
+          <div class="term-card">
+            <div class="term-header">
+              <h4 class="term-title">Shield-to-Chassis Impedance ($Z_{GND}$)</h4>
+              <span class="term-origin">AES-X152 Part 2</span>
+            </div>
+            <p class="term-body">
+              The electrical impedance measured at 1 kHz between the connector shield contact (XLR Pin 1) and the exterior metallic chassis enclosure. 
+              Classified as <strong>Low</strong> if &lt; 1 &Omega;, indicating proper AES48 bonding.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Core Report of Findings -->
+  <section id="findings" class="section" style="background-color: var(--bg-secondary);">
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Working Group Insights</span>
@@ -285,8 +1082,8 @@
     </div>
   </section>
 
-  <!-- Section 4: Interactive Engineering Lab -->
-  <section id="engineering-lab" class="section" style="background-color: var(--bg-secondary);">
+  <!-- Section 6: Interactive Engineering Lab -->
+  <section id="engineering-lab" class="section">
     <div class="container">
       <div class="section-header">
         <span class="section-badge">Interactive Tools</span>
@@ -518,8 +1315,8 @@
     </div>
   </section>
 
-  <!-- Section 5: Standardized Datasheet Framework -->
-  <section id="datasheet-matrix" class="section">
+  <!-- Section 7: Standardized Datasheet Framework -->
+  <section id="datasheet-matrix" class="section" style="background-color: var(--bg-secondary);">
     <div class="container">
       <div class="section-header">
         <span class="section-badge">AES-X152 Specification Template</span>
@@ -578,138 +1375,263 @@
     </div>
   </section>
 
-  <!-- Section 6: Circuit Topologies & Schematics -->
-  <section id="topologies" class="section" style="background-color: var(--bg-secondary);">
+  <!-- Section 8: Contributor Timeline at the Bottom -->
+  <section id="timeline-section" class="section">
     <div class="container">
       <div class="section-header">
-        <span class="section-badge">SPICE Circuit Models</span>
-        <h2 class="section-title">Types of Balanced Circuits</h2>
+        <span class="section-badge">Historical Committee Record</span>
+        <h2 class="section-title">Contributor Timeline &amp; Working Group Record</h2>
         <p class="section-lead">
-          Visual schematics and SPICE models developed for AES-X152 illustrating the primary driver, 
-          transmission line, and receiver topologies.
+          Chronological timeline of all major contributions, author notes, working group meetings, 
+          and draft revisions shaping AES-X152 from 2004 to present.
         </p>
       </div>
 
-      <div style="background-color: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center;">
-        <div style="max-height: 480px; overflow: hidden; border-radius: var(--radius-md); margin-bottom: 1.5rem; cursor: pointer; position: relative;" id="open-circuit-modal">
-          <img src="assets/types-of-balanced-circuits.png" alt="Types of Balanced Circuits Diagram" style="width: 100%; height: auto; display: block; object-fit: cover; object-position: top;" />
-          <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(11, 15, 25, 0.95)); padding: 2rem 1rem 1rem; color: #ffffff;">
-            <span class="btn btn-primary" style="font-size: 0.9rem;">🔍 Click to Open High-Resolution Circuit Explorer</span>
+      <div class="timeline-container">
+        <!-- 2004 -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">November 27, 2004</span>
+            <h4 class="timeline-title">Project Initiation: AES-X152 Created</h4>
+            <div class="timeline-author">Contributor: Jim Brown (Proposer &amp; First Chair)</div>
+            <p class="timeline-desc">
+              Jim Brown files the formal Project Initiation Request (PIR) under SC-05-05. 
+              The stated mission: end the "ongoing dumbing-down of product data sheets" by standardizing how manufacturers 
+              measure and disclose input/output impedances and signal levels.
+            </p>
+            <span class="timeline-doc-tag">📄 x152-brown-pir-041127.docx</span>
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; text-align: left;">
-          <div style="background-color: var(--bg-secondary); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-            <h5 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">6.1. Balanced Ground-Referenced</h5>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
-              Dual op-amp drivers referenced directly to the internal 0V supply rail. High voltage swing, but intolerant of Pin 3 being shorted to ground in single-ended adapters.
+        <!-- 2005 -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">October 4, 2005</span>
+            <h4 class="timeline-title">SynAudCon Publication: "What Manufacturers Need to Tell Us"</h4>
+            <div class="timeline-author">Contributor: Jim Brown</div>
+            <p class="timeline-desc">
+              Seminal paper laying out the essential datasheet requirements: input/output connectorization, 
+              AES48 Pin 1 compliance, RF low-pass filtering, FFT noise spectra, and dynamic headroom specifications.
             </p>
+            <span class="timeline-doc-tag">📄 x152-jb-051004.pdf</span>
           </div>
-          <div style="background-color: var(--bg-secondary); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-            <h5 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">6.2. Balanced Active Floating</h5>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
-              Cross-coupled servo architecture emulating a true floating transformer secondary winding. Senses load resistance and maintains 0 dB unity level into both balanced and unbalanced gear.
+        </div>
+
+        <!-- 2007 (Brown) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">August 27, 2007</span>
+            <h4 class="timeline-title">First Technical Specification Draft for Small Signal Electronics</h4>
+            <div class="timeline-author">Contributor: Jim Brown</div>
+            <p class="timeline-desc">
+              Establishes formal parameter tables for input/output impedance (parallel resistance and capacitance), 
+              input sensitivity, clipping thresholds (10 Hz – 50 kHz), and power amplifier load behavior.
             </p>
+            <span class="timeline-doc-tag">📄 X152-070827-JB.pdf</span>
           </div>
-          <div style="background-color: var(--bg-secondary); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-            <h5 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">6.3. Transformer Floating</h5>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
-              Galvanic isolation through mutual magnetic flux. Immune to ground voltage discrepancies, offers infinite DC isolation, and maintains constant output voltage regardless of termination reference.
+        </div>
+
+        <!-- 2007 (Woodgate) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">October 20, 2007</span>
+            <h4 class="timeline-title">International Harmonization with IEC 60268-3 &amp; IEC 61938</h4>
+            <div class="timeline-author">Contributor: John Woodgate</div>
+            <p class="timeline-desc">
+              John Woodgate reviews the draft against international standards IEC 60268-3 (Sound system equipment: Amplifiers) 
+              and IEC 61938. Recommends strict alignment of definitions to prevent industry confusion.
             </p>
+            <span class="timeline-doc-tag">📄 X152Woodgate071020.docx</span>
+          </div>
+        </div>
+
+        <!-- 2009 (Woodgate) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">May 9, 2009</span>
+            <h4 class="timeline-title">Preferred Interface Values &amp; Deprecation of 'e.m.f.'</h4>
+            <div class="timeline-author">Contributor: John Woodgate</div>
+            <p class="timeline-desc">
+              Drafts preferred interface values for professional base-band analog audio. Eliminates confusing legacy terms 
+              such as 'e.m.f.' in favor of terminal output voltage across rated load impedances.
+            </p>
+            <span class="timeline-doc-tag">📄 X152-JMW090509.docx</span>
+          </div>
+        </div>
+
+        <!-- 2009 (127th Convention) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">October 10, 2009</span>
+            <h4 class="timeline-title">127th AES Convention Working Group Revision</h4>
+            <div class="timeline-author">Contributors: SC-05-05 Working Group</div>
+            <p class="timeline-desc">
+              Review and revision of the interface value tables for professional microphones, line levels, and speaker feeds. 
+              Adopted principle: define the minimum set of parameters sufficient to guarantee interoperability.
+            </p>
+            <span class="timeline-doc-tag">📄 X152-127th-091010.docx</span>
+          </div>
+        </div>
+
+        <!-- 2010 (Josephson) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">June 4, 2010</span>
+            <h4 class="timeline-title">Microphone vs. Line Interface Overload Harmonization</h4>
+            <div class="timeline-author">Contributor: David Josephson</div>
+            <p class="timeline-desc">
+              David Josephson introduces comprehensive comparison matrices aligning IEC 61938 Table 4 (Microphones) 
+              and Table 13 (Line Amplifiers) with Jim Brown's draft, setting realistic overload voltages (e.g. 2.45V / 10 dBu mic input overload).
+            </p>
+            <span class="timeline-doc-tag">📄 x152-100604Josephson.docx</span>
+          </div>
+        </div>
+
+        <!-- 2012 (Hess) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">October 27, 2012</span>
+            <h4 class="timeline-title">Refining Input/Output Interfacing Definitions</h4>
+            <div class="timeline-author">Contributor: Richard L. Hess</div>
+            <p class="timeline-desc">
+              Richard Hess refines definitions of balanced, unbalanced, and transformer-coupled topologies. 
+              Introduces standardized reporting rules for frequency-dependent impedances.
+            </p>
+            <span class="timeline-doc-tag">📄 X152-bco-121027.docx</span>
+          </div>
+        </div>
+
+        <!-- 2013 (Woodgate) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">May 8, 2013</span>
+            <h4 class="timeline-title">Tabular Presentation Standards for Equipment Datasheets</h4>
+            <div class="timeline-author">Contributor: John Woodgate</div>
+            <p class="timeline-desc">
+              Re-evaluates presentation methods and proposes standardized table templates modeled after IEC standards 
+              to simplify manufacturer compliance.
+            </p>
+            <span class="timeline-doc-tag">📄 X152Woodgate130508.docx</span>
+          </div>
+        </div>
+
+        <!-- 2019 (Kuzub Reactivation) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">December 11, 2019</span>
+            <h4 class="timeline-title">Reactivation of SC-05-05 &amp; AES-X152 Modernization</h4>
+            <div class="timeline-author">Contributor: Anthony P. Kuzub (Appointed Chair)</div>
+            <p class="timeline-desc">
+              Working Group SC-05-05 reconvenes under Chair Anthony Kuzub. Broadens scope to include the entire interconnection 
+              system: Driver + Interconnecting Cable + Receiver. Initiates twice-monthly collaborative virtual sessions.
+            </p>
+            <span class="timeline-doc-tag">📄 SC-05-05 Meeting DECEMBER 11, 2019.pptx</span>
+          </div>
+        </div>
+
+        <!-- 2020 (Whitlock, Meyer, Kuzub) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">March – October 2020</span>
+            <h4 class="timeline-title">The Three-Impedance Model &amp; Pin 1 Testing Analysis</h4>
+            <div class="timeline-author">Contributors: Bill Whitlock, Jim Meyer, Anthony Kuzub</div>
+            <p class="timeline-desc">
+              Bill Whitlock (Jensen Transformers) contributes engineering models proving that impedance balance (not signal symmetry) 
+              governs noise rejection, providing the Pin 1 tester method. Jim Meyer contributes Thevenin equivalent 3-impedance models.
+            </p>
+            <span class="timeline-doc-tag">📄 SC-05-05-Meeting-20200826.pptx</span>
+          </div>
+        </div>
+
+        <!-- 2020 (Mind Mapping) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">September – November 2020</span>
+            <h4 class="timeline-title">Release of the Complete SC-05-05 Taxonomy Mind Map</h4>
+            <div class="timeline-author">Contributors: Anthony Kuzub, Jim Brown, Richard Hess, John Woodgate</div>
+            <p class="timeline-desc">
+              Interactive collaborative mind-mapping sessions create the comprehensive hierarchical tree categorizing 
+              transmitters, cables, receivers, system ground references, and test protocols.
+            </p>
+            <span class="timeline-doc-tag">📄 SC-05-05-X152-Map-20200916.smmx</span>
+          </div>
+        </div>
+
+        <!-- 2021 (Mind Map & DataSheet V2) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">February 17, 2021</span>
+            <h4 class="timeline-title">Release of DataSheet Draft V2 &amp; Circuit Schematics</h4>
+            <div class="timeline-author">Contributors: SC-05-05 Working Group &amp; Mike Law</div>
+            <p class="timeline-desc">
+              Publication of DataSheet Draft V2 (`AES-SC-05-05-X152-DataSheetDraft-V2-20210217.xlsx`). 
+              Mike Law creates standard schematic symbols representing balanced ground-referenced, active floating, and transformer topologies.
+            </p>
+            <span class="timeline-doc-tag">📄 SC-05-05-X152-Meeting-20210217.pptx</span>
+          </div>
+        </div>
+
+        <!-- 2021 - 2022 (AES-X249 & AES72) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">October 2021 – January 2022</span>
+            <h4 class="timeline-title">Multichannel Interconnect Harmonization (AES-X249 &amp; AES72)</h4>
+            <div class="timeline-author">Contributor: Anthony P. Kuzub (Editor)</div>
+            <p class="timeline-desc">
+              SC-05-05 integrates multichannel cable shielding standards into X152, establishing joint alignment with 
+              AES-X249 (25-way D-sub connector shielding) and AES72 (RJ45 / Quad Twisted Pair).
+            </p>
+            <span class="timeline-doc-tag">📄 SC-05-05-Meeting-20220119.pptx</span>
+          </div>
+        </div>
+
+        <!-- 2023 (Draft Standard) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">September 20, 2023</span>
+            <h4 class="timeline-title">Working Group Draft Standard Published</h4>
+            <div class="timeline-author">Contributor: Anthony P. Kuzub (Project Editor)</div>
+            <p class="timeline-desc">
+              Release of the comprehensive working group draft standard: *Standard for Presenting Signal Levels and Circuit Impedances 
+              of Audio System Components and for the Specification of These Quantities in Product Data Sheets*.
+            </p>
+            <span class="timeline-doc-tag">📄 AES-SC-05-05-X152-202300920.docx</span>
+          </div>
+        </div>
+
+        <!-- 2024 (RFC & 4-Part Framework) -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-date-badge">February – May 2024</span>
+            <h4 class="timeline-title">Request for Comments &amp; Consensus on 4-Part Standard Framework</h4>
+            <div class="timeline-author">Contributors: Anthony P. Kuzub &amp; SC-05-05 Working Group</div>
+            <p class="timeline-desc">
+              Consensus reached on the restructured 4-Part Report: Part 1 defines the core standard and datasheet disclosure rules; 
+              Parts 2, 3, and 4 provide informative tutorial annexes on Signal Impedances &amp; Topologies, Levels &amp; Bandwidth, 
+              and Distortion &amp; CMRR.
+            </p>
+            <span class="timeline-doc-tag">📄 Notes at meeting-X152-Part-1-20240520.docx</span>
           </div>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- Section 7: Deep Dives & Standards Library -->
-  <section id="deep-dives" class="section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-badge">Normative References & Literature</span>
-        <h2 class="section-title">Standards Deep Dives & Literature</h2>
-        <p class="section-lead">
-          Explore the normative standards, landmark technical papers, and committee contributions forming the foundation of AES-X152.
-        </p>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
-        <div class="finding-card">
-          <span class="badge badge-primary" style="margin-bottom: 0.5rem;">AES Standard</span>
-          <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">AES48: Interconnection Shielding & Grounding</h4>
-          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
-            The seminal standard defining practices for grounding and cable shields to avoid hum and RF susceptibility. 
-            Mandates the direct bonding of XLR Pin 1 to the metallic equipment chassis enclosure.
-          </p>
-          <a href="https://www.aes.org/publications/standards/search.cfm?docid=48" target="_blank" rel="noopener">AES48 Specification &rarr;</a>
-        </div>
-
-        <div class="finding-card">
-          <span class="badge badge-primary" style="margin-bottom: 0.5rem;">AES Standard</span>
-          <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">AES72: Audio Interconnects via 8P8C (RJ45)</h4>
-          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
-            Governs the application of RJ45 modular connectors and quad twisted pair (Cat5e/Cat6) network cable 
-            for balanced analog audio, AES3 digital audio, and control data.
-          </p>
-          <a href="https://www.aes.org/publications/standards/search.cfm?docid=110" target="_blank" rel="noopener">AES72 Standard &rarr;</a>
-        </div>
-
-        <div class="finding-card">
-          <span class="badge badge-primary" style="margin-bottom: 0.5rem;">AES Standards Project</span>
-          <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">AES-X249: DB25 Connector Shielding</h4>
-          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
-            Chaired by Anthony Kuzub under SC-05-05. Specifies requirements for multi-channel shield connections 
-            of 25-way D-sub connectors to preserve electromagnetic compatibility (EMC) at both audio and radio frequencies.
-          </p>
-          <a href="https://www.aes.org/standards/work-in-progress.cfm" target="_blank" rel="noopener">AES-X249 Work in Progress &rarr;</a>
-        </div>
-
-        <div class="finding-card">
-          <span class="badge badge-primary" style="margin-bottom: 0.5rem;">International Standard</span>
-          <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">IEC 60268-3 & IEC 61938</h4>
-          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
-            IEC 60268-3 defines methods for measuring amplifier balance and common-mode rejection. 
-            IEC 61938 defines phantom power specifications (P48, P24, P12) including source resistor tolerance limits.
-          </p>
-          <a href="https://webstore.iec.ch/publication/63795" target="_blank" rel="noopener">IEC 61938 Portal &rarr;</a>
-        </div>
-
-        <div class="finding-card">
-          <span class="badge badge-primary" style="margin-bottom: 0.5rem;">Landmark Literature</span>
-          <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Rane Note 145: Sound System Interconnection</h4>
-          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem;">
-            Authored by Dennis Bohn in 2000. Provides the definitive handbook and wiring truth tables 
-            for interconnecting balanced and unbalanced equipment without generating ground loops.
-          </p>
-          <a href="https://www.ranecommercial.com/legacy/note145.html" target="_blank" rel="noopener">Rane Note 145 &rarr;</a>
-        </div>
-
-        <div class="finding-card">
-          <span class="badge badge-primary" style="margin-bottom: 0.5rem;">Working Group Acknowledgments</span>
-          <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Key Committee Contributors</h4>
-          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
-            Gratitude to the writing group and contributors of AES SC-05-05: <strong>Anthony P. Kuzub</strong> (Chair), 
-            <strong>Jim Brown</strong>, <strong>Bill Whitlock</strong>, <strong>John Woodgate</strong>, <strong>David Josephson</strong>, 
-            <strong>Richard L. Hess</strong>, <strong>Jim Meyer</strong>, <strong>Richard Cabot</strong>, <strong>Kenneth Fause</strong>, 
-            <strong>Jon Celli</strong>, <strong>Peter Keller</strong>, and <strong>Andy Walker</strong>.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- High Resolution Image Modal -->
-  <div id="image-modal" class="modal-overlay">
-    <div class="modal-content-box">
-      <div class="modal-header">
-        <h4 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);">Types of Balanced Circuits (Full Schematic View)</h4>
-        <button id="close-circuit-modal" class="modal-close-btn" aria-label="Close modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <img src="assets/types-of-balanced-circuits.png" alt="High Resolution Types of Balanced Circuits Diagram" />
-      </div>
-    </div>
-  </div>
 
   <!-- Site Footer -->
   <footer class="site-footer">
@@ -730,11 +1652,13 @@
           <h5>Core Navigation</h5>
           <ul>
             <li><a href="#triad">The Three-Part Triad</a></li>
+            <li><a href="#pyramid-section">Dynamic Range Pyramid</a></li>
             <li><a href="#tree-explorer">SC-05-05 Mind Map Tree</a></li>
+            <li><a href="#topologies">Vector SVG Circuits</a></li>
             <li><a href="#findings">Key Findings & Truths</a></li>
+            <li><a href="#terms-section">Terms & Definitions</a></li>
             <li><a href="#engineering-lab">Interactive Simulators</a></li>
-            <li><a href="#datasheet-matrix">Standard Datasheet</a></li>
-            <li><a href="#topologies">Circuit Schematics</a></li>
+            <li><a href="#timeline-section">Contributor Timeline</a></li>
           </ul>
         </div>
 
@@ -745,13 +1669,13 @@
             <li><a href="https://www.aes.org/publications/standards/search.cfm?docid=48" target="_blank" rel="noopener">AES48 (Chassis Grounding)</a></li>
             <li><a href="https://www.aes.org/publications/standards/search.cfm?docid=110" target="_blank" rel="noopener">AES72 (RJ45 Audio)</a></li>
             <li><a href="https://webstore.iec.ch/publication/63795" target="_blank" rel="noopener">IEC 61938 (Phantom Power)</a></li>
-            <li><a href="https://www.ranecommercial.com/legacy/note145.html" target="_blank" rel="noopener">Rane Note 145</a></li>
+            <li><a href="https://www.ranecommercial.com/legacy/note145.html" target="_blank" rel="noopener">Rane Note 145 (Dennis Bohn)</a></li>
           </ul>
         </div>
       </div>
 
       <div class="footer-bottom">
-        Balanced Audio &bull; AES-X152 Reference Documentation &bull; Built with standard HTML5, CSS3 & Modern JavaScript.
+        Balanced Audio &bull; AES-X152 Reference Documentation &bull; Built with standard HTML5, CSS3 & Vector SVG.
       </div>
     </div>
   </footer>
@@ -774,6 +1698,30 @@
 
       if (tabKey === 'cmrr' && typeof updateCMRRSimulator === "function") {
         setTimeout(updateCMRRSimulator, 50);
+      }
+    }
+
+    // Circuit switching for Vector SVGs
+    function switchCircuit(circuitKey) {
+      document.querySelectorAll(".circuit-tab-btn").forEach(b => b.classList.remove("active"));
+      event.target.classList.add("active");
+
+      document.querySelectorAll(".circuit-panel").forEach(p => p.classList.remove("active"));
+      const targetPanel = document.getElementById(`circuit-${circuitKey}`);
+      if (targetPanel) {
+        targetPanel.classList.add("active");
+      }
+    }
+
+    // Terms tab switching
+    function switchTermsTab(termTabKey) {
+      document.querySelectorAll(".terms-tab-btn").forEach(b => b.classList.remove("active"));
+      event.target.classList.add("active");
+
+      document.querySelectorAll(".terms-panel").forEach(p => p.style.display = "none");
+      const target = document.getElementById(`terms-${termTabKey}`);
+      if (target) {
+        target.style.display = "block";
       }
     }
   </script>
