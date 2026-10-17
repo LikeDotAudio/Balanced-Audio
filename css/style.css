@@ -1983,3 +1983,44 @@ code, pre {
   border-color: var(--accent-cyan);
   color: #000000;
 }
+
+/* ==========================================================================
+   Live Schematic Component Fader Value Overlay Badges
+   ========================================================================== */
+.svg-fader-badge-rect {
+  fill: #0f172a;
+  stroke: var(--accent-cyan);
+  stroke-width: 1.8;
+  rx: 5;
+  transition: stroke 0.2s ease, fill 0.2s ease;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+}
+
+.svg-fader-badge-rect.badge-orange {
+  stroke: #f59e0b;
+}
+
+.svg-fader-badge-rect.badge-emerald {
+  stroke: #10b981;
+}
+
+.svg-fader-badge-rect.badge-rose {
+  stroke: #ef4444;
+}
+
+.svg-fader-label-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-anchor: middle;
+  letter-spacing: 0.04em;
+}
+
+.svg-fader-value-text {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 800;
+  fill: #ffffff;
+  text-anchor: middle;
+}
+

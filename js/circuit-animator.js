@@ -21,13 +21,13 @@ class CircuitSimulator {
     // 6.1 Ground Referenced Controls
     this.bindInputs(["pp-vin", "pp-rout", "pp-rload", "pp-short-pin3"], () => this.updatePushPull());
 
-    // 6.2 Active Floating Controls
-    this.bindInputs(["af-vin", "af-rout", "af-rload", "af-short-pin3"], () => this.updateActiveFloating());
+    // 6.2 Impedance-Balanced / Active Floating Controls
+    this.bindInputs(["ib-vin", "ib-rout", "ib-rload", "ib-short-pin3", "af-vin", "af-rout", "af-rload", "af-short-pin3"], () => this.updateImpedanceBalanced());
 
     // 6.3 Transformer Floating Controls
     this.bindInputs(["tx-vin", "tx-ratio", "tx-rload", "tx-ground-pin3"], () => this.updateTransformer());
 
-    // 6.4 Double Transformer Link & Noise Injection Controls (User Image 0)
+    // 6.4 Double Transformer Link & Noise Injection Controls
     this.bindInputs(["txlink-vin", "txlink-noise", "txlink-rload"], () => this.updateTransformerLink());
 
     // Type Z Impedance Balanced Controls
@@ -41,7 +41,7 @@ class CircuitSimulator {
 
     // Initial calculations
     this.updatePushPull();
-    this.updateActiveFloating();
+    this.updateImpedanceBalanced();
     this.updateTransformer();
     this.updateTransformerLink();
     this.updateTypeZ();
@@ -92,10 +92,41 @@ class CircuitSimulator {
       if (iShort > 0.05) isClipped = true;
     }
 
-    this.setProbe("pp-probe-in", `${(vin * 0.707).toFixed(2)} VRMS / ${(vin * 1000 / 10000).toFixed(1)} mA`);
+    // Panel probe readouts
+    const vrmsText = `${(vin * 0.707).toFixed(2)} VRMS / ${(vin * 1000 / 10000).toFixed(1)} mA`;
+    this.setProbe("pp-probe-gen", vrmsText);
+    this.setProbe("pp-probe-in", vrmsText);
     this.setProbe("pp-probe-p2", `${(iPin2 * 1000).toFixed(1)} mA / ${vPin2.toFixed(2)} V`);
     this.setProbe("pp-probe-p3", `${(iPin3 * 1000).toFixed(1)} mA / ${vPin3.toFixed(2)} V`);
     this.setProbe("pp-probe-load", `V_diff: ${vDiff.toFixed(2)} V | I_load: ${(iLoad * 1000).toFixed(1)} mA`);
+
+    // Live SVG schematic component fader value overlays
+    this.setProbe("pp-svg-vin", `${vin.toFixed(1)} V`);
+    this.setProbe("pp-svg-zpo", `${rout} Ω`);
+    this.setProbe("pp-svg-zro", `${rout} Ω`);
+    this.setProbe("pp-svg-rload", `${rload >= 1000 ? (rload / 1000).toFixed(1) + ' kΩ' : rload + ' Ω'}`);
+    this.setProbe("pp-svg-probe-p2", `${(iPin2 * 1000).toFixed(1)} mA / ${vPin2.toFixed(2)} V`);
+    this.setProbe("pp-svg-probe-p3", `${(iPin3 * 1000).toFixed(1)} mA / ${vPin3.toFixed(2)} V`);
+
+    // TS Short toggle visual feedback in SVG
+    const shortGroup = document.getElementById("svg-pp-short-group");
+    const shortDash = document.getElementById("pp-svg-short-dash");
+    const shortText = document.getElementById("pp-svg-ts-text");
+    if (shortGroup && shortDash && shortText) {
+      if (shortPin3) {
+        shortGroup.setAttribute("opacity", "1.0");
+        shortDash.setAttribute("stroke-dasharray", "none");
+        shortDash.setAttribute("stroke-width", "3.5");
+        shortText.textContent = "TS Short Link: CLOSED (0 Ω to Chassis!)";
+        shortText.setAttribute("fill", "#ef4444");
+      } else {
+        shortGroup.setAttribute("opacity", "0.3");
+        shortDash.setAttribute("stroke-dasharray", "4,4");
+        shortDash.setAttribute("stroke-width", "2.5");
+        shortText.textContent = "TS Ground Short Link (Open)";
+        shortText.setAttribute("fill", "#94a3b8");
+      }
+    }
 
     const statusEl = document.getElementById("pp-status");
     if (statusEl) {
@@ -112,46 +143,52 @@ class CircuitSimulator {
   }
 
   // ==========================================
-  // 6.2 Active Floating (Cross-Coupled Servo)
+  // 6.2 Active Impedance-Balanced Output
   // ==========================================
-  updateActiveFloating() {
-    const vinEl = document.getElementById("af-vin");
+  updateImpedanceBalanced() {
+    const vinEl = document.getElementById("ib-vin") || document.getElementById("af-vin");
     if (!vinEl) return;
+    const prefix = document.getElementById("ib-vin") ? "ib-" : "af-";
     const vin = parseFloat(vinEl.value);
-    const rout = parseFloat(document.getElementById("af-rout").value);
-    const rload = parseFloat(document.getElementById("af-rload").value);
-    const shortPin3 = document.getElementById("af-short-pin3").checked;
+    const rout = parseFloat(document.getElementById(prefix + "rout").value);
+    const rload = parseFloat(document.getElementById(prefix + "rload").value);
+    const shortPin3 = document.getElementById(prefix + "short-pin3").checked;
 
-    document.getElementById("af-vin-val").textContent = `${vin.toFixed(1)} V`;
-    document.getElementById("af-rout-val").textContent = `${rout} Ω`;
-    document.getElementById("af-rload-val").textContent = `${rload} Ω`;
+    const vinValEl = document.getElementById(prefix + "vin-val");
+    if (vinValEl) vinValEl.textContent = `${vin.toFixed(1)} V`;
+    const routValEl = document.getElementById(prefix + "rout-val");
+    if (routValEl) routValEl.textContent = `${rout} Ω`;
+    const rloadValEl = document.getElementById(prefix + "rload-val");
+    if (rloadValEl) rloadValEl.textContent = `${rload >= 1000 ? (rload / 1000).toFixed(1) + ' kΩ' : rload + ' Ω'}`;
 
-    let vPin2, vPin3, iLoad, vDiff;
+    let vPin2, vPin3 = 0, iLoad, vDiff;
 
     if (!shortPin3) {
       const rTotal = 2 * rout + rload;
-      iLoad = (2 * vin) / rTotal;
+      iLoad = vin / rTotal;
       vPin2 = vin - iLoad * rout;
-      vPin3 = -(vin - iLoad * rout);
+      vPin3 = iLoad * rout;
       vDiff = vPin2 - vPin3;
     } else {
+      iLoad = vin / (rout + rload);
+      vPin2 = iLoad * rload;
       vPin3 = 0;
-      const effectiveDrive = 2 * vin;
-      iLoad = effectiveDrive / (rout + rload);
-      vPin2 = effectiveDrive - iLoad * rout;
       vDiff = vPin2;
     }
 
-    this.setProbe("af-probe-in", `${vin.toFixed(2)} V / 1 kHz`);
-    this.setProbe("af-probe-p2", `${(iLoad * 1000).toFixed(1)} mA / ${vPin2.toFixed(2)} V`);
-    this.setProbe("af-probe-p3", shortPin3 ? "0.0 mA / 0.00 V (Grounded)" : `${(iLoad * 1000).toFixed(1)} mA / ${vPin3.toFixed(2)} V`);
-    this.setProbe("af-probe-load", `V_load: ${vDiff.toFixed(2)} V (${(20 * Math.log10(Math.max(0.001, vDiff / (2 * vin)) * 2)).toFixed(1)} dB re balanced)`);
+    const dBu = 20 * Math.log10(Math.max(0.001, vPin2 / 0.775));
+    this.setProbe("ib-probe-drv", `${vin.toFixed(2)} V / ${(iLoad * 1000).toFixed(2)} mA`);
+    this.setProbe("ib-probe-p2", `${vPin2.toFixed(2)} V / ${dBu >= 0 ? '+' : ''}${dBu.toFixed(1)} dBu`);
+    this.setProbe("ib-probe-p3", shortPin3 ? "0.00 V (Direct Chassis Short)" : `0.00 V / ${rout.toFixed(1)} Ω to 0V`);
+    this.setProbe("ib-probe-load", `V_diff: ${vDiff.toFixed(2)} V | 100% Hum Immunity`);
 
-    const statusEl = document.getElementById("af-status");
-    if (statusEl) {
-      statusEl.className = shortPin3 ? "badge badge-success" : "badge badge-primary";
-      statusEl.textContent = shortPin3 ? "Servo Active: Pin 2 Doubled (+6 dB). Zero Level Loss!" : "Floating Active Balanced Mode";
-    }
+    // SVG fader overlays
+    this.setProbe("ib-svg-vin", `${vin.toFixed(1)} V`);
+    this.setProbe("ib-svg-rpo", `${rout} Ω`);
+    this.setProbe("ib-svg-rro", `${rout} Ω`);
+    this.setProbe("ib-svg-rload", `${rload >= 1000 ? (rload / 1000).toFixed(1) + ' kΩ' : rload + ' Ω'}`);
+    this.setProbe("ib-svg-p2-probe", `${vPin2.toFixed(2)} V / ${dBu >= 0 ? '+' : ''}${dBu.toFixed(1)} dBu`);
+    this.setProbe("ib-svg-p3-probe", shortPin3 ? "0.00 V (Grounded)" : `0.00 V / ${rout} Ω to 0V`);
   }
 
   // ==========================================
@@ -181,6 +218,13 @@ class CircuitSimulator {
     this.setProbe("tx-probe-p2", `${(iLoad * 1000).toFixed(1)} mA / ${vPin2.toFixed(2)} V`);
     this.setProbe("tx-probe-p3", `${(iLoad * 1000).toFixed(1)} mA / ${vPin3.toFixed(2)} V`);
     this.setProbe("tx-probe-load", `V_load: ${vLoad.toFixed(2)} V | I_load: ${(iLoad * 1000).toFixed(1)} mA`);
+
+    // SVG fader overlays
+    this.setProbe("tx-svg-vin", `${vin.toFixed(1)} V`);
+    this.setProbe("tx-svg-ratio", `1 : ${turnsRatio.toFixed(1)}`);
+    this.setProbe("tx-svg-rload", `${rload >= 1000 ? (rload / 1000).toFixed(1) + ' kΩ' : rload + ' Ω'}`);
+    this.setProbe("tx-svg-p2-probe", `${(iLoad * 1000).toFixed(1)} mA / ${vPin2.toFixed(2)} V`);
+    this.setProbe("tx-svg-p3-probe", `${(iLoad * 1000).toFixed(1)} mA / ${vPin3.toFixed(2)} V`);
 
     const statusEl = document.getElementById("tx-status");
     if (statusEl) {
@@ -215,6 +259,11 @@ class CircuitSimulator {
     this.setProbe("txlink-probe-src", `${(iPri * 1000).toFixed(1)} mA / ${vin.toFixed(1)} V`);
     this.setProbe("txlink-probe-mid", `${(iSec1 * 1000).toFixed(1)} mA / 600 Ω line`);
     this.setProbe("txlink-probe-load", `${vLoad.toFixed(2)} V audio | ${(residualNoise * 1000).toFixed(2)} mV RF noise`);
+
+    // SVG fader overlays
+    this.setProbe("txlink-svg-vin", `${vin.toFixed(1)} V`);
+    this.setProbe("txlink-svg-noise", `${noiseV.toFixed(1)} V`);
+    this.setProbe("txlink-svg-rload", `${rload} Ω`);
 
     const statusEl = document.getElementById("txlink-status");
     if (statusEl) {
@@ -318,7 +367,7 @@ class CircuitSimulator {
     document.getElementById("meyer-vpo-val").textContent = `${vpo.toFixed(1)} V`;
     document.getElementById("meyer-zpo-val").textContent = `${zpo} Ω`;
     document.getElementById("meyer-zro-val").textContent = `${zro} Ω`;
-    document.getElementById("meyer-cmz-val").textContent = `${(cmz / 1000).toFixed(1)} kΩ`;
+    document.getElementById("meyer-cmz-val").textContent = `${cmz >= 1000 ? (cmz / 1000).toFixed(1) + ' kΩ' : cmz + ' Ω'}`;
     document.getElementById("meyer-vgvd-val").textContent = `${vgvd.toFixed(1)} V (Hum / Ground Offset)`;
     document.getElementById("meyer-cps-val").textContent = `${cps} pF`;
 
@@ -327,14 +376,50 @@ class CircuitSimulator {
     const rinDiff = 20000; // 20k bridging input
     const rinCm = 50000;   // 50k common mode input
 
+    // Ground loop current driven through shield / chassis bonds
+    const iGnd = vgvd / (cmz + 20);
+    // Differential audio signal received
+    const vDiff = (2 * vpo) * (rinDiff / (rinDiff + zpo + zro));
+
     // Common-mode to differential conversion error:
     // V_err = V_GVD * (deltaZ / (rinCm + cmz))
     const vErr = vgvd * (deltaZ / (rinCm + cmz));
-    const cmrrThevenin = (vErr > 0) ? (20 * Math.log10(vpo / vErr)) : 120;
+    const cmrrThevenin = (vErr > 0.000001) ? (20 * Math.log10(vpo / vErr)) : 140;
 
-    this.setProbe("meyer-probe-deltaz", `ΔZ: ${deltaZ} Ω (${((deltaZ / zpo) * 100).toFixed(1)}% Imbalance)`);
-    this.setProbe("meyer-probe-verr", `V_error: ${(vErr * 1000).toFixed(3)} mV`);
-    this.setProbe("meyer-probe-cmrr", `Thevenin CMRR: ${Math.min(120, Math.round(cmrrThevenin * 10) / 10)} dB`);
+    const percentImbalance = zpo > 0 ? ((deltaZ / zpo) * 100).toFixed(2) : "0.00";
+    this.setProbe("meyer-probe-deltaz", `${deltaZ.toFixed(1)} Ω (${percentImbalance}%)`);
+    this.setProbe("meyer-probe-ignd", `${(iGnd * 1000).toFixed(1)} mA`);
+    this.setProbe("meyer-probe-vdiff", `${vDiff.toFixed(2)} V`);
+
+    const vErrEl = document.getElementById("meyer-probe-verror");
+    if (vErrEl) {
+      if (deltaZ === 0) {
+        vErrEl.textContent = "0.00 mV (Infinite CMRR)";
+        vErrEl.style.color = "#10b981";
+      } else {
+        vErrEl.textContent = `${(vErr * 1000).toFixed(2)} mV`;
+        vErrEl.style.color = vErr * 1000 > 1.0 ? "#ef4444" : "#f59e0b";
+      }
+    }
+
+    const cmrrEl = document.getElementById("meyer-probe-cmrr");
+    if (cmrrEl) {
+      if (deltaZ === 0 || cmrrThevenin >= 120) {
+        cmrrEl.innerHTML = "&infin; dB";
+        cmrrEl.style.color = "#10b981";
+      } else {
+        cmrrEl.textContent = `${(Math.round(cmrrThevenin * 10) / 10).toFixed(1)} dB`;
+        cmrrEl.style.color = cmrrThevenin < 60 ? "#ef4444" : "#38bdf8";
+      }
+    }
+
+    // Live SVG schematic fader overlays
+    this.setProbe("meyer-svg-vpo", `${vpo.toFixed(1)} V`);
+    this.setProbe("meyer-svg-zpo", `${zpo} Ω`);
+    this.setProbe("meyer-svg-zro", `${zro} Ω`);
+    this.setProbe("meyer-svg-cmz", `${cmz >= 1000 ? (cmz / 1000).toFixed(1) + ' kΩ' : cmz + ' Ω'}`);
+    this.setProbe("meyer-svg-vgvd", `${vgvd.toFixed(1)} V`);
+    this.setProbe("meyer-svg-cps", `${cps} pF`);
 
     const badgeEl = document.getElementById("meyer-status");
     if (badgeEl) {
