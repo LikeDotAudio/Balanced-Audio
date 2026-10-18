@@ -342,6 +342,155 @@
   </section>
 
   <!-- Section 3: The Interconnection Levels & Signal Headroom Pyramid -->
+  <!-- 2.1 The Dangers: every "do not connect" in the report, in one place -->
+  <section id="dangers" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Warnings</span>
+        <h2 class="section-title">The Dangers: What Not to Connect</h2>
+        <p class="section-lead" style="margin: 0;">Every warning in this report, collected in one place. Each one is a connection not to make, what happens if you make it, what to do instead, and where the report covers it.</p>
+      </div>
+      <h3 class="danger-group">Outputs into unbalanced inputs</h3>
+      <div class="danger-list">
+        <div class="danger-item" id="danger-1">
+          <div class="danger-no">01</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> connect <strong>a push-pull (ground-referenced) output&#x27;s Pin 3</strong> <span class="danger-arrow">→</span> to <strong>ground, e.g. the sleeve of a mono TS plug</strong></div>
+            <div class="danger-why"><b>What happens:</b> Pin 3 is dead-shorted to chassis. Op-amp 2 goes into current limit: heavy distortion and thermal failure.</div>
+            <div class="danger-fix"><b>Instead:</b> Float Pin 3 (Hess row 1), or use an impedance-balanced or cross-coupled output that tolerates the short.</div>
+            <div class="danger-see">See <a href="#enclosure-explorer">§4.0 TS plug hazard</a> · <a href="#circuit-6-1">§6.1 Push-pull</a> · <a href="#hess-row-1">§8.0 row 1</a></div>
+          </div>
+        </div>
+        <div class="danger-item" id="danger-2">
+          <div class="danger-no">02</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> connect <strong>a floating transformer output</strong> <span class="danger-arrow">→</span> to <strong>an unbalanced input with Pin 3 left open</strong></div>
+            <div class="danger-why"><b>What happens:</b> The secondary has no reference. The circuit is open and the level is lost or unpredictable.</div>
+            <div class="danger-fix"><b>Instead:</b> Bond Pin 3 to the sleeve at the unbalanced end.</div>
+            <div class="danger-see">See <a href="#hess-row-3">§8.0 row 3</a> · <a href="#circuit-6-3">§6.3 Transformer floating</a></div>
+          </div>
+        </div>
+        <div class="danger-item" id="danger-3">
+          <div class="danger-no">03</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> connect <strong>a 3.5 mm stereo TRS plug (Tip = left, Ring = right)</strong> <span class="danger-arrow">→</span> to <strong>a single balanced mono input (Pin 2 / Pin 3)</strong></div>
+            <div class="danger-why"><b>What happens:</b> The receiver subtracts left from right. Everything in the centre (vocals, kick, bass) cancels to 0 V.</div>
+            <div class="danger-fix"><b>Instead:</b> Use a summing box or a stereo DI, or split left and right into two inputs.</div>
+            <div class="danger-see">See <a href="#hess-row-7">§8.0 row 7</a> · <a href="#hess-row-6">§8.0 row 6 (the right way)</a></div>
+          </div>
+        </div>
+        <div class="danger-item" id="danger-4">
+          <div class="danger-no">04</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> connect <strong>a modern low-impedance output</strong> <span class="danger-arrow">→</span> to <strong>a 600 Ω matched (power-matched) load</strong></div>
+            <div class="danger-why"><b>What happens:</b> Half the voltage is lost (−6 dB), the driver works harder and distortion rises.</div>
+            <div class="danger-fix"><b>Instead:</b> Bridge: receiver input impedance at least 10 × the source impedance.</div>
+            <div class="danger-see">See <a href="#top-level">§5.0 Rule 03</a> · <a href="#pp-level-vintage-600">§6.1 600 Ω level table</a></div>
+          </div>
+        </div>
+      </div>
+      <h3 class="danger-group">Shields and grounds</h3>
+      <div class="danger-list">
+        <div class="danger-item" id="danger-5">
+          <div class="danger-no">05</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> connect <strong>the cable shield (Pin 1)</strong> <span class="danger-arrow">→</span> to <strong>the PCB audio 0 V</strong></div>
+            <div class="danger-why"><b>What happens:</b> Shield current flows through the audio ground (the Pin 1 problem): hum and buzz are injected into the signal.</div>
+            <div class="danger-fix"><b>Instead:</b> Bond Pin 1 directly to the metal chassis at the connector (AES48).</div>
+            <div class="danger-see">See <a href="#pin1-problem-svg">§5.0 Rule 02</a> · <a href="#enclosure-explorer">§4.0 Enclosure</a></div>
+          </div>
+        </div>
+        <div class="danger-item" id="danger-6">
+          <div class="danger-no">06</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> connect <strong>the D-sub ground pins and pair drains</strong> <span class="danger-arrow">→</span> to <strong>a shared PCB 0 V bus</strong></div>
+            <div class="danger-why"><b>What happens:</b> Every channel&#x27;s shield current sums in one trace: all eight channels share the dirty 0 V.</div>
+            <div class="danger-fix"><b>Instead:</b> Terminate every ground pin and drain on the D-sub shield plane at entry (AES-X249).</div>
+            <div class="danger-see">See <a href="#aes59-ground-svg">§5.0 D-sub ground pins</a></div>
+          </div>
+        </div>
+        <div class="danger-item" id="danger-7">
+          <div class="danger-no">07</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> connect <strong>the overall cable shield</strong> <span class="danger-arrow">→</span> to <strong>DB25 Pin 13</strong></div>
+            <div class="danger-why"><b>What happens:</b> Pin 13 is unassigned. Using it for the shield breaks the 360° shroud bond the standard relies on.</div>
+            <div class="danger-fix"><b>Instead:</b> Bond the overall shield through the metal shroud to the chassis (AES-X249).</div>
+            <div class="danger-see">See <a href="#enclosure-explorer">§4.0 DB25 equipment</a></div>
+          </div>
+        </div>
+        <div class="danger-item" id="danger-8">
+          <div class="danger-no">08</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> lift (disconnect) Pin 1 <span class="danger-arrow">→</span> on a microphone or phantom-powered line</div>
+            <div class="danger-why"><b>What happens:</b> Phantom power loses its return, so P48 fails. RF and buzz couple onto both legs.</div>
+            <div class="danger-fix"><b>Instead:</b> Keep shield continuity end to end; cure hum with balance or isolation, not by lifting Pin 1.</div>
+            <div class="danger-see">See <a href="#qtp-demo-shield_lifted">§4.2 Example 8</a> · <a href="#enclosure-explorer">§4.0 Microphone</a></div>
+          </div>
+        </div>
+        <div class="danger-item" id="danger-9">
+          <div class="danger-no">09</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> connect <strong>the audio ground return of a microphone</strong> <span class="danger-arrow">→</span> to <strong>the outer barrel at more than one point</strong></div>
+            <div class="danger-why"><b>What happens:</b> DC return and RF shield currents mix, so the Faraday shield no longer protects the capsule electronics.</div>
+            <div class="danger-fix"><b>Instead:</b> Bond the housing to the XLR shell; keep the audio return on Pin 1 only.</div>
+            <div class="danger-see">See <a href="#landmark-papers">§11.5 Landmark papers</a></div>
+          </div>
+        </div>
+        <div class="danger-item" id="danger-10">
+          <div class="danger-no">10</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> cut the safety ground pin <span class="danger-arrow">→</span> of a mains power cord to cure hum</div>
+            <div class="danger-why"><b>What happens:</b> It removes shock protection and does not fix the cause: a ground loop is a design defect, not a wiring fault.</div>
+            <div class="danger-fix"><b>Instead:</b> Fix the impedance balance, or insert a shielded isolation transformer.</div>
+            <div class="danger-see">See <a href="#landmark-papers">§11.5 Whitlock&#x27;s rule</a></div>
+          </div>
+        </div>
+      </div>
+      <h3 class="danger-group">Phantom power and polarity</h3>
+      <div class="danger-list">
+        <div class="danger-item" id="danger-11">
+          <div class="danger-no">11</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> connect <strong>a cable</strong> <span class="danger-arrow">→</span> to <strong>an input while +48 V phantom power is on (hot-plugging)</strong></div>
+            <div class="danger-why"><b>What happens:</b> The charged coupling capacitors discharge into the input: transients above ±40 V and 2 A destroy the input transistors, and can pump the supply rails into latch-up.</div>
+            <div class="danger-fix"><b>Instead:</b> Switch phantom off (or mute) before patching; specify protected inputs.</div>
+            <div class="danger-see">See <a href="#landmark-papers">§11.5 The Phantom Menace</a></div>
+          </div>
+        </div>
+        <div class="danger-item" id="danger-12">
+          <div class="danger-no">12</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> connect <strong>one conductor of a pair reversed</strong> <span class="danger-arrow">→</span> to <strong>the matching contact at the other end</strong></div>
+            <div class="danger-why"><b>What happens:</b> Both legs carry the same polarity: the differential signal cancels. A whole pair flipped inverts the audio and cancels when summed with other channels.</div>
+            <div class="danger-fix"><b>Instead:</b> Keep Pin 2 = hot and Pin 3 = cold end to end (AES26); check with a polarity tester.</div>
+            <div class="danger-see">See <a href="#qtp-demo-leg_flipped">§4.2 Example 9</a> · <a href="#qtp-demo-phase_flip">§4.2 Example 2</a></div>
+          </div>
+        </div>
+      </div>
+      <h3 class="danger-group">Transformers and measurement</h3>
+      <div class="danger-list">
+        <div class="danger-item" id="danger-13">
+          <div class="danger-no">13</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> connect <strong>a transformer secondary</strong> <span class="danger-arrow">→</span> to <strong>a load without a Zobel network</strong></div>
+            <div class="danger-why"><b>What happens:</b> Leakage inductance and capacitance ring undamped: a high ultrasonic peak and overshoot.</div>
+            <div class="danger-fix"><b>Instead:</b> Engage the recommended Zobel snubber (R and C across the secondary).</div>
+            <div class="danger-see">See <a href="#transformer-simulator">§6.5 Transformer lab</a></div>
+          </div>
+        </div>
+        <div class="danger-item" id="danger-14">
+          <div class="danger-no">14</div>
+          <div class="danger-body">
+            <div class="danger-rule"><span class="danger-dont">DO NOT</span> connect <strong>a zero-ohm generator</strong> <span class="danger-arrow">→</span> to <strong>a balanced input to measure its CMRR</strong></div>
+            <div class="danger-why"><b>What happens:</b> The figure looks excellent but collapses in real installations, where sources are never perfectly matched.</div>
+            <div class="danger-fix"><b>Instead:</b> Measure with a 10 Ω source imbalance (IEC 60268-3, AES-X152).</div>
+            <div class="danger-see">See <a href="#landmark-papers">§11.5 10 Ω imbalance test</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="pyramid-section" class="section">
     <div class="container">
       <div class="section-header">

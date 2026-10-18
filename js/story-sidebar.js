@@ -95,6 +95,11 @@ class StorySidebar {
             <a href="#triad" class="chapter-link">2.0 The Three Parts of the Chain</a>
           </div>
 
+          <div class="story-chapter" data-target="dangers">
+            <div class="chapter-dot"></div>
+            <a href="#dangers" class="chapter-link" style="color: #ef4444;">2.1 The Dangers</a>
+          </div>
+
           <div class="story-chapter" data-target="pyramid-section">
             <div class="chapter-dot"></div>
             <a href="#pyramid-section" class="chapter-link">3.0 Dynamic Range &amp; Levels Pyramid</a>
@@ -385,6 +390,7 @@ class StorySidebar {
       "how-to-use",
       "normative-references",
       "triad",
+      "dangers",
       "pyramid-section",
       "enclosure-explorer",
       "multichannel-hierarchy",

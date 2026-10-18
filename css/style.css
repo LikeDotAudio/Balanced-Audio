@@ -9156,3 +9156,64 @@ html[data-theme="paper"] body > section .activity-result::before {
   font-size: 1.15rem;
   color: #38bdf8;
 }
+
+/* ==========================================================================
+   2.1 The Dangers: every "do not connect" in one list
+   ========================================================================== */
+.danger-group {
+  margin: 1.25rem 0 0.4rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #f87171;
+}
+.danger-list { display: flex; flex-direction: column; }
+.danger-item {
+  display: flex;
+  gap: 0.9rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--border-color);
+  border-left: 4px solid #ef4444;
+}
+.danger-item + .danger-item { margin-top: -1px; }
+.danger-no {
+  flex: none;
+  font: 900 1.3rem var(--font-mono);
+  color: #ef4444;
+  min-width: 2.2rem;
+}
+.danger-body { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
+.danger-rule { font-size: 1.05rem; }
+.danger-dont {
+  display: inline-block;
+  background: #ef4444;
+  color: #000;
+  font: 900 0.8rem var(--font-mono);
+  letter-spacing: 0.08em;
+  padding: 0.05rem 0.4rem;
+  margin-right: 0.3rem;
+}
+.danger-arrow { color: #ef4444; font-weight: 900; padding: 0 0.15rem; }
+.danger-why, .danger-fix, .danger-see { font-size: 0.92rem; color: var(--text-secondary); }
+.danger-fix b { color: #4ade80; }
+.danger-see a { color: #38bdf8; }
+@media print { .danger-item { break-inside: avoid; } }
+
+/* ==========================================================================
+   Daytime review (paper view): the rack turns grey with dark grey text.
+   Each instrument is inverted on its own (not the whole dock), so a zoomed card
+   can still position itself against the window; the cream needle dials flip back.
+   ========================================================================== */
+html[data-theme="paper"] .floating-meter-dock,
+html[data-theme="paper"] .floating-meter-dock .rack-instruments-bay {
+  background: #e3e3e3 !important;
+}
+html[data-theme="paper"] .floating-meter-dock .rack-header,
+html[data-theme="paper"] .floating-meter-dock .rack-meter-card,
+html[data-theme="paper"] .floating-meter-dock .rack-instrument-panel,
+html[data-theme="paper"] .floating-meter-dock .rack-credit {
+  filter: invert(1) hue-rotate(180deg) brightness(0.89) contrast(0.92);
+}
+html[data-theme="paper"] .floating-meter-dock .rack-vu-bezel {
+  filter: invert(1) hue-rotate(180deg);
+}
