@@ -250,7 +250,7 @@ class QTPSimulatorEngine {
         </defs>
 
         <!-- Outer Cable Sheath (Cutaway View) -->
-        <rect x="50" y="30" width="780" height="270" rx="14" fill="#0b111e" stroke="#334155" stroke-width="2"/>
+        <rect class="diagram-ground" x="50" y="30" width="780" height="270" rx="14" fill="#0b111e" stroke="#334155" stroke-width="2"/>
         <text x="65" y="52" fill="#94a3b8" font-size="11" font-weight="700">HEAVY-DUTY OUTER JACKET (PUR / PVC)</text>
 
         <!-- 360-Degree Overall Braided/Foil Shield Layer -->
@@ -272,20 +272,20 @@ class QTPSimulatorEngine {
           ${wireState.shield ? "" : '<text x="15" y="31" fill="#ef4444" font-size="8" font-weight="800">⇅ same hum on both legs</text>'}
           
           <!-- Pin 2 Hot Wire (Solid Orange) -->
-          <line x1="120" y1="12" x2="620" y2="12" stroke="#f97316" stroke-width="3" stroke-dasharray="${wireState.sun_hot ? 'none' : '6,4'}"/>
-          <circle cx="120" cy="12" r="5" fill="#f97316"/>
-          <circle data-qtp-wire="sun-hot" cx="620" cy="12" r="5" fill="${wireState.sun_hot ? '#f97316' : '#ef4444'}"/>
-          <text x="100" y="15" fill="#f97316" font-size="9" font-weight="700">P2 (+)</text>
-          <text x="630" y="15" fill="${wireState.sun_hot ? '#f97316' : '#ef4444'}" font-size="9" font-weight="700">
+          <line x1="120" y1="12" x2="520" y2="12" stroke="#f97316" stroke-width="3" stroke-dasharray="${wireState.sun_hot ? 'none' : '6,4'}"/>
+          <circle cx="120" cy="12" r="5" fill="#f97316" data-probe-target="qtp-sun-hot"/>
+          <circle data-qtp-wire="sun-hot" cx="520" cy="12" r="5" fill="${wireState.sun_hot ? '#f97316' : '#ef4444'}"/>
+          <text x="112" y="15" fill="#f97316" font-size="9" font-weight="700" text-anchor="end">P2 (+)</text>
+          <text x="532" y="15" fill="${wireState.sun_hot ? '#f97316' : '#ef4444'}" font-size="9" font-weight="700">
             ${isPhaseFlip ? 'P2 (180° FLIPPED!)' : (wireState.sun_hot ? 'P2 (HOT +)' : 'P2 (DROPPED!)')}
           </text>
 
           <!-- Pin 1 Cold Wire (White/Orange Stripe) -->
-          <line x1="120" y1="26" x2="620" y2="26" stroke="#fb923c" stroke-width="2.5" stroke-dasharray="${wireState.sun_cold ? '8,4' : '4,4'}" opacity="${wireState.sun_cold ? '1' : '0.4'}"/>
-          <circle cx="120" cy="26" r="4" fill="#fb923c"/>
-          <circle data-qtp-wire="sun-cold" cx="620" cy="26" r="4" fill="${wireState.sun_cold ? '#fb923c' : '#ef4444'}"/>
-          <text x="100" y="29" fill="#fed7aa" font-size="8.5">P1 (&minus;)</text>
-          <text x="630" y="29" fill="${wireState.sun_cold ? '#fed7aa' : '#ef4444'}" font-size="8.5">
+          <line x1="120" y1="26" x2="520" y2="26" stroke="#fb923c" stroke-width="2.5" stroke-dasharray="${wireState.sun_cold ? '8,4' : '4,4'}" opacity="${wireState.sun_cold ? '1' : '0.4'}"/>
+          <circle cx="120" cy="26" r="4" fill="#fb923c" data-probe-target="qtp-sun-cold"/>
+          <circle data-qtp-wire="sun-cold" cx="520" cy="26" r="4" fill="${wireState.sun_cold ? '#fb923c' : '#ef4444'}"/>
+          <text x="112" y="29" fill="#fed7aa" font-size="8.5" text-anchor="end">P1 (&minus;)</text>
+          <text x="532" y="29" fill="${wireState.sun_cold ? '#fed7aa' : '#ef4444'}" font-size="8.5">
             ${wireState.sunColdFlipped ? 'P1 (FLIPPED → +)' : wireState.sun_cold ? 'P1 (COLD &minus;)' : 'P1 (DROPPED!)'}
           </text>
         </g>
@@ -297,20 +297,20 @@ class QTPSimulatorEngine {
           ${wireState.shield ? "" : '<text x="15" y="31" fill="#ef4444" font-size="8" font-weight="800">⇅ same hum on both legs</text>'}
           
           <!-- Pin 4 Hot Wire (Solid Blue) -->
-          <line x1="120" y1="12" x2="620" y2="12" stroke="#38bdf8" stroke-width="3" stroke-dasharray="${wireState.sky_hot ? 'none' : '6,4'}"/>
-          <circle cx="120" cy="12" r="5" fill="#38bdf8"/>
-          <circle data-qtp-wire="sky-hot" cx="620" cy="12" r="5" fill="${wireState.sky_hot ? '#38bdf8' : '#ef4444'}"/>
-          <text x="100" y="15" fill="#38bdf8" font-size="9" font-weight="700">P4 (+)</text>
-          <text x="630" y="15" fill="${wireState.sky_hot ? '#38bdf8' : '#ef4444'}" font-size="9" font-weight="700">
+          <line x1="120" y1="12" x2="520" y2="12" stroke="#38bdf8" stroke-width="3" stroke-dasharray="${wireState.sky_hot ? 'none' : '6,4'}"/>
+          <circle cx="120" cy="12" r="5" fill="#38bdf8" data-probe-target="qtp-sky-hot"/>
+          <circle data-qtp-wire="sky-hot" cx="520" cy="12" r="5" fill="${wireState.sky_hot ? '#38bdf8' : '#ef4444'}"/>
+          <text x="112" y="15" fill="#38bdf8" font-size="9" font-weight="700" text-anchor="end">P4 (+)</text>
+          <text x="532" y="15" fill="${wireState.sky_hot ? '#38bdf8' : '#ef4444'}" font-size="9" font-weight="700">
             ${wireState.sky_hot ? 'P4 (HOT +)' : 'P4 (DROPPED!)'}
           </text>
 
           <!-- Pin 5 Cold Wire (White/Blue Stripe) -->
-          <line x1="120" y1="26" x2="620" y2="26" stroke="#7dd3fc" stroke-width="2.5" stroke-dasharray="${wireState.sky_cold ? '8,4' : '4,4'}" opacity="${wireState.sky_cold ? '1' : '0.4'}"/>
-          <circle cx="120" cy="26" r="4" fill="#7dd3fc"/>
-          <circle data-qtp-wire="sky-cold" cx="620" cy="26" r="4" fill="${wireState.sky_cold ? '#7dd3fc' : '#ef4444'}"/>
-          <text x="100" y="29" fill="#bae6fd" font-size="8.5">P5 (&minus;)</text>
-          <text x="630" y="29" fill="${wireState.sky_cold ? '#bae6fd' : '#ef4444'}" font-size="8.5">
+          <line x1="120" y1="26" x2="520" y2="26" stroke="#7dd3fc" stroke-width="2.5" stroke-dasharray="${wireState.sky_cold ? '8,4' : '4,4'}" opacity="${wireState.sky_cold ? '1' : '0.4'}"/>
+          <circle cx="120" cy="26" r="4" fill="#7dd3fc" data-probe-target="qtp-sky-cold"/>
+          <circle data-qtp-wire="sky-cold" cx="520" cy="26" r="4" fill="${wireState.sky_cold ? '#7dd3fc' : '#ef4444'}"/>
+          <text x="112" y="29" fill="#bae6fd" font-size="8.5" text-anchor="end">P5 (&minus;)</text>
+          <text x="532" y="29" fill="${wireState.sky_cold ? '#bae6fd' : '#ef4444'}" font-size="8.5">
             ${wireState.sky_cold ? 'P5 (COLD &minus;)' : 'P5 (DROPPED!)'}
           </text>
         </g>
@@ -322,20 +322,20 @@ class QTPSimulatorEngine {
           ${wireState.shield ? "" : '<text x="15" y="31" fill="#ef4444" font-size="8" font-weight="800">⇅ same hum on both legs</text>'}
           
           <!-- Pin 6 Hot Wire (Solid Green) -->
-          <line x1="120" y1="12" x2="620" y2="12" stroke="#10b981" stroke-width="3" stroke-dasharray="${wireState.grass_hot ? 'none' : '6,4'}"/>
-          <circle cx="120" cy="12" r="5" fill="#10b981"/>
-          <circle data-qtp-wire="grass-hot" cx="620" cy="12" r="5" fill="${wireState.grass_hot ? '#10b981' : '#ef4444'}"/>
-          <text x="100" y="15" fill="#10b981" font-size="9" font-weight="700">P6 (+)</text>
-          <text x="630" y="15" fill="${wireState.grass_hot ? '#10b981' : '#ef4444'}" font-size="9" font-weight="700">
+          <line x1="120" y1="12" x2="520" y2="12" stroke="#10b981" stroke-width="3" stroke-dasharray="${wireState.grass_hot ? 'none' : '6,4'}"/>
+          <circle cx="120" cy="12" r="5" fill="#10b981" data-probe-target="qtp-grass-hot"/>
+          <circle data-qtp-wire="grass-hot" cx="520" cy="12" r="5" fill="${wireState.grass_hot ? '#10b981' : '#ef4444'}"/>
+          <text x="112" y="15" fill="#10b981" font-size="9" font-weight="700" text-anchor="end">P6 (+)</text>
+          <text x="532" y="15" fill="${wireState.grass_hot ? '#10b981' : '#ef4444'}" font-size="9" font-weight="700">
             ${wireState.grass_hot ? 'P6 (HOT +)' : 'P6 (DROPPED!)'}
           </text>
 
           <!-- Pin 3 Cold Wire (White/Green Stripe) -->
-          <line x1="120" y1="26" x2="620" y2="26" stroke="#6ee7b7" stroke-width="2.5" stroke-dasharray="${wireState.grass_cold ? '8,4' : '4,4'}" opacity="${wireState.grass_cold ? '1' : '0.4'}"/>
-          <circle cx="120" cy="26" r="4" fill="#6ee7b7"/>
-          <circle data-qtp-wire="grass-cold" cx="620" cy="26" r="4" fill="${wireState.grass_cold ? '#6ee7b7' : '#ef4444'}"/>
-          <text x="100" y="29" fill="#a7f3d0" font-size="8.5">P3 (&minus;)</text>
-          <text x="630" y="29" fill="${wireState.grass_cold ? '#a7f3d0' : '#ef4444'}" font-size="8.5">
+          <line x1="120" y1="26" x2="520" y2="26" stroke="#6ee7b7" stroke-width="2.5" stroke-dasharray="${wireState.grass_cold ? '8,4' : '4,4'}" opacity="${wireState.grass_cold ? '1' : '0.4'}"/>
+          <circle cx="120" cy="26" r="4" fill="#6ee7b7" data-probe-target="qtp-grass-cold"/>
+          <circle data-qtp-wire="grass-cold" cx="520" cy="26" r="4" fill="${wireState.grass_cold ? '#6ee7b7' : '#ef4444'}"/>
+          <text x="112" y="29" fill="#a7f3d0" font-size="8.5" text-anchor="end">P3 (&minus;)</text>
+          <text x="532" y="29" fill="${wireState.grass_cold ? '#a7f3d0' : '#ef4444'}" font-size="8.5">
             ${wireState.grass_cold ? 'P3 (COLD &minus;)' : 'P3 (DROPPED!)'}
           </text>
         </g>
@@ -347,18 +347,18 @@ class QTPSimulatorEngine {
           ${wireState.shield ? "" : '<text x="15" y="31" fill="#ef4444" font-size="8" font-weight="800">⇅ same hum on both legs</text>'}
           
           <!-- Pin 8 Hot Wire (Solid Brown) -->
-          <line x1="120" y1="12" x2="620" y2="12" stroke="#ca8a04" stroke-width="3"/>
-          <circle cx="120" cy="12" r="5" fill="#ca8a04"/>
-          <circle data-qtp-wire="earth-hot" cx="620" cy="12" r="5" fill="#ca8a04"/>
-          <text x="100" y="15" fill="#ca8a04" font-size="9" font-weight="700">P8 (+)</text>
-          <text x="630" y="15" fill="#ca8a04" font-size="9" font-weight="700">P8 (HOT +)</text>
+          <line x1="120" y1="12" x2="520" y2="12" stroke="#ca8a04" stroke-width="3"/>
+          <circle cx="120" cy="12" r="5" fill="#ca8a04" data-probe-target="qtp-earth-hot"/>
+          <circle data-qtp-wire="earth-hot" cx="520" cy="12" r="5" fill="#ca8a04"/>
+          <text x="112" y="15" fill="#ca8a04" font-size="9" font-weight="700" text-anchor="end">P8 (+)</text>
+          <text x="532" y="15" fill="#ca8a04" font-size="9" font-weight="700">P8 (HOT +)</text>
 
           <!-- Pin 7 Cold Wire (White/Brown Stripe) -->
-          <line x1="120" y1="26" x2="620" y2="26" stroke="#eab308" stroke-width="2.5" stroke-dasharray="8,4"/>
-          <circle cx="120" cy="26" r="4" fill="#eab308"/>
-          <circle data-qtp-wire="earth-cold" cx="620" cy="26" r="4" fill="#eab308"/>
-          <text x="100" y="29" fill="#fef08a" font-size="8.5">P7 (&minus;)</text>
-          <text x="630" y="29" fill="#fef08a" font-size="8.5">P7 (COLD &minus;)</text>
+          <line x1="120" y1="26" x2="520" y2="26" stroke="#eab308" stroke-width="2.5" stroke-dasharray="8,4"/>
+          <circle cx="120" cy="26" r="4" fill="#eab308" data-probe-target="qtp-earth-cold"/>
+          <circle data-qtp-wire="earth-cold" cx="520" cy="26" r="4" fill="#eab308"/>
+          <text x="112" y="29" fill="#fef08a" font-size="8.5" text-anchor="end">P7 (&minus;)</text>
+          <text x="532" y="29" fill="#fef08a" font-size="8.5">P7 (COLD &minus;)</text>
         </g>
 
         <!-- Dynamic Overall Cable Shield Return Wave -->

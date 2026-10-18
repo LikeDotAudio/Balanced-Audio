@@ -49,7 +49,9 @@ SCRIPTS_ORDER = [
     "js/audio-analyzer.js",
     "js/signal-generator.js",
     "js/story-sidebar.js",
+    "js/print-report.js",
     "js/floating-meters.js",
+    "js/spice-view.js",
     "js/eight-channel-bench.js",
     "js/tree-data.js",
     "js/tree-viewer.js",
@@ -754,6 +756,11 @@ def bundle_portal(timestamp=None):
 
     with open(source_html_path, "r", encoding="utf-8") as f:
         html = f.read()
+
+    # Stamp the document version (shown in the sidebar and on every printed page)
+    version = datetime.strptime(timestamp, "%Y%m%d-%H%M") if timestamp else datetime.now()
+    html = html.replace('<meta name="doc-version" content="dev">',
+                        f'<meta name="doc-version" content="{version:%Y-%m-%d %H:%M}">', 1)
 
     # 0. Inline fonts: css/fonts.css with each woff2 as a data URI
     fonts_link = '<link rel="stylesheet" href="css/fonts.css">'

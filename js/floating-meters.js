@@ -54,6 +54,88 @@ const SCHEMATIC_CONFIGS = [
     vu4: "gp-dirty8",
     wires: ["gp-clean", "gp-plane", "gp-drain", "gp-bus", "gp-dirty1", "gp-dirty8"]
   },
+  // 6.5–6.8 topology drawings (line level, +4 dBu across the pair)
+  {
+    id: "circuit-6-5",
+    name: "6.5: Cross-Coupled Output",
+    shortName: "6.5: Cross-Coupled Output",
+    scope1_ch1: "6-5-vin",
+    scope1_ch2: "6-5-p2",
+    scope2_ch3: "6-5-p3",
+    scope2_ch4: "6-5-load",
+    dmm1: "6-5-p2",
+    dmm2: "6-5-load",
+    vu1: "6-5-vin",
+    vu2: "6-5-load",
+    vu3: "6-5-p2",
+    vu4: "6-5-p3",
+    wires: ["6-5-vin", "6-5-p2", "6-5-p3", "6-5-load"]
+  },
+  {
+    id: "circuit-6-6",
+    name: "6.6: Differential Receiver",
+    shortName: "6.6: Differential Receiver",
+    scope1_ch1: "6-6-p2",
+    scope1_ch2: "6-6-p2",
+    scope2_ch3: "6-6-p3",
+    scope2_ch4: "6-6-out",
+    dmm1: "6-6-p2",
+    dmm2: "6-6-out",
+    vu1: "6-6-p2",
+    vu2: "6-6-out",
+    vu3: "6-6-p2",
+    vu4: "6-6-p3",
+    wires: ["6-6-p2", "6-6-p3", "6-6-out"]
+  },
+  {
+    id: "circuit-6-7",
+    name: "6.7: Instrumentation Receiver",
+    shortName: "6.7: Instrumentation Receiver",
+    scope1_ch1: "6-7-p2",
+    scope1_ch2: "6-7-p2",
+    scope2_ch3: "6-7-p3",
+    scope2_ch4: "6-7-out",
+    dmm1: "6-7-p2",
+    dmm2: "6-7-out",
+    vu1: "6-7-p2",
+    vu2: "6-7-out",
+    vu3: "6-7-p2",
+    vu4: "6-7-p3",
+    wires: ["6-7-p2", "6-7-p3", "6-7-out"]
+  },
+  {
+    id: "circuit-6-8",
+    name: "6.8: Active-Transformer",
+    shortName: "6.8: Active-Transformer",
+    scope1_ch1: "6-8-vin",
+    scope1_ch2: "6-8-p2",
+    scope2_ch3: "6-8-p3",
+    scope2_ch4: "6-8-load",
+    dmm1: "6-8-p2",
+    dmm2: "6-8-load",
+    vu1: "6-8-vin",
+    vu2: "6-8-load",
+    vu3: "6-8-p2",
+    vu4: "6-8-p3",
+    wires: ["6-8-vin", "6-8-p2", "6-8-p3", "6-8-load", "6-8-p1"]
+  },
+  {
+    // The eight QTP fault examples: one strip per conductor, on the example in the middle of the screen
+    id: "qtp-sim-svg-container",
+    name: "Section 4.2: Multichannel Snake (QTP Faults)",
+    shortName: "Sec 4.2: QTP Snake",
+    scope1_ch1: "qtp-sun-hot",
+    scope1_ch2: "qtp-sun-hot",
+    scope2_ch3: "qtp-sun-cold",
+    scope2_ch4: "qtp-sun-diff",
+    dmm1: "qtp-sun-hot",
+    dmm2: "qtp-sun-cold",
+    vu1: "qtp-sky-hot",
+    vu2: "qtp-sky-cold",
+    vu3: "qtp-grass-hot",
+    vu4: "qtp-earth-hot",
+    wires: ["qtp-sun-hot", "qtp-sun-cold", "qtp-sky-hot", "qtp-sky-cold", "qtp-grass-hot", "qtp-grass-cold", "qtp-earth-hot", "qtp-earth-cold"]
+  },
   {
     id: "enclosure-svg",
     name: "Section 1: Enclosure Grounding & AES48 Standard",
@@ -504,6 +586,9 @@ class FloatingMeterDock {
     this.initAnchorEngine();
     this.initScrollTracker();
     this.initHoverZoom();
+    // Diagrams are built by other scripts on load: add their Full Screen buttons once they exist
+    setTimeout(() => this.addFullscreenButtons(), 0);
+    setTimeout(() => this.addFullscreenButtons(), 1500);
     // Calibration step (Levels Pyramid) sets the line level used by the probe-only models
     document.addEventListener("x152-line-level", (e) => {
       this.lineVrms = e.detail.vrms;
@@ -806,7 +891,6 @@ class FloatingMeterDock {
         <div class="hp353a-panel-card" style="margin-top: 0; background: #000000; border: 1px solid #333333; border-radius: 0;">
           <div class="hp353a-header" style="background: #0a0a0a; border-bottom: 1px solid #222222; padding: 6px 8px;">
             <div class="hp353a-badge">
-              <span class="hp353a-hp-logo" style="background: #333333; color: #ffffff; border-radius: 0;">hp</span>
               <span class="hp353a-title" style="font-family: var(--font-mono); font-weight: 800;">353A PATCH PANEL</span>
             </div>
             <span style="font-size: 0.65rem; color: #888888; font-family: var(--font-mono);">MANUAL 00353-90003</span>
@@ -1502,9 +1586,10 @@ class FloatingMeterDock {
     let maxVisibleHeight = 0;
     let closestToCenter = Infinity;
 
+    const fs = document.querySelector(".circuit-fullscreen-active");
     for (const cfg of SCHEMATIC_CONFIGS) {
       const el = document.getElementById(cfg.id);
-      if (!el) continue;
+      if (!el || (fs && !fs.contains(el))) continue;
       const rect = el.getBoundingClientRect();
 
       // Check vertical intersection with viewport [0, vh]
@@ -1547,7 +1632,7 @@ class FloatingMeterDock {
       }
     }
 
-    return bestConfig || SCHEMATIC_CONFIGS[3]; // default to Section 6 Audio Transformer
+    return bestConfig || SCHEMATIC_CONFIGS.find(c => c.id === "xlr-svg-container"); // default: the XLR hub
   }
 
   updateActiveSchematicFromScroll() {
@@ -1906,6 +1991,64 @@ class FloatingMeterDock {
           status = `${pin.type === "cold" ? "COLD" : "HOT"}${dcNote(pin)}`;
         }
       }
+    } else if (/^6-[5-8]-/.test(key)) {
+      // 6.5–6.8 topologies at +4 dBu: half the swing on each leg, the whole swing across the pair
+      const line = isMuted ? 0 : (this.lineVrms || 1.228);
+      const topo = { 5: "Cross-coupled", 6: "Diff receiver", 7: "Instrumentation rx", 8: "Active-transformer" }[key[2]];
+      const pt = key.slice(4);
+      if (pt === "p2") {
+        vRms = line / 2;
+        name = `${topo} Pin 2 (HOT +)`;
+        status = "HOT +";
+      } else if (pt === "p3") {
+        vRms = line / 2;
+        phase = Math.PI;
+        name = `${topo} Pin 3 (COLD −)`;
+        status = "COLD −";
+      } else if (pt === "vin") {
+        vRms = line / 2;
+        name = `${topo} input drive`;
+        status = "GENERATOR IN";
+      } else if (pt === "p1") {
+        vRms = 0.0001;
+        shape = "flatline";
+        name = `${topo} Pin 1 (CHASSIS)`;
+        status = "AES48 CHASSIS";
+      } else {
+        vRms = line;
+        name = pt === "out" ? `${topo} output (Pin 2 − Pin 3)` : `${topo} across load`;
+        status = pt === "out" ? "RECEIVER OUTPUT" : "DIFFERENTIAL";
+      }
+    } else if (key.startsWith("qtp-")) {
+      // QTP snake conductors for the fault example in view: half the pair's swing per leg, hum when the shield is lifted
+      const st = window.qtpSimulator ? window.qtpSimulator.getWireState() : {};
+      const [, pair, leg] = key.split("-");
+      const PAIRS = { sun: ["SUN", 2, 1], sky: ["SKY", 4, 5], grass: ["GRASS", 6, 3], earth: ["EARTH", 8, 7] };
+      const [pairName, hotPin, coldPin] = PAIRS[pair] || ["PAIR", 2, 3];
+      const line = isMuted ? 0 : (this.lineVrms || 1.228);
+      const hotOk = st[`${pair}_hot`] !== false;
+      const coldOk = st[`${pair}_cold`] !== false;
+      const flipped = pair === "sun" && !!st.sunFlipped;
+      const coldFlipped = pair === "sun" && !!st.sunColdFlipped;
+      var humVrms = st.shield === false ? 0.32 : 0;
+      var sigVrms;
+      if (leg === "diff") {
+        const legs = (hotOk ? 1 : 0) + (coldOk ? 1 : 0);
+        sigVrms = coldFlipped ? 0 : line * legs / 2;
+        humVrms = 0; // common-mode hum cancels across the pair
+        phase = flipped ? Math.PI : 0;
+        name = `${pairName} across P${hotPin}↔P${coldPin}`;
+        status = coldFlipped ? "SAME POLARITY: CANCELS" : legs === 2 ? (flipped ? "180° FLIPPED" : "DIFFERENTIAL") : legs ? "ONE LEG OPEN: −6 dB" : "PAIR OPEN";
+      } else {
+        const ok = leg === "hot" ? hotOk : coldOk;
+        sigVrms = ok ? line / 2 : 0;
+        const inverted = leg === "cold" ? !coldFlipped : false;
+        phase = (inverted !== flipped) ? Math.PI : 0;
+        name = `${pairName} P${leg === "hot" ? hotPin : coldPin} (${leg === "hot" ? "HOT +" : "COLD −"})`;
+        status = !ok ? "OPEN (DROPPED)" : humVrms ? "AUDIO + CM HUM (SHIELD LIFTED)" : leg === "hot" ? "HOT +" : "COLD −";
+      }
+      vRms = Math.sqrt(sigVrms * sigVrms + humVrms * humVrms) || 0.0001;
+      shape = vRms > 0.001 ? "sine" : "flatline";
     } else {
       vRms = 1.0;
       status = "CUSTOM TEST ANCHOR";
@@ -1942,7 +2085,7 @@ class FloatingMeterDock {
 
   // Hot, cold and across-the-pair keys for the schematic currently in view
   activePairKeys() {
-    const cfg = this.currentActiveSchematic || SCHEMATIC_CONFIGS[3];
+    const cfg = this.currentActiveSchematic || SCHEMATIC_CONFIGS.find(c => c.id === "xlr-svg-container");
     return { hot: cfg.scope1_ch2, cold: cfg.scope2_ch3, across: cfg.scope2_ch4 };
   }
 
@@ -1961,6 +2104,11 @@ class FloatingMeterDock {
       "gp-dirty1": "CH1 + HUM", "gp-dirty8": "CH8 + HUM"
     };
     if (GROUNDING_POINTS[key]) return GROUNDING_POINTS[key];
+    const qtp = (key || "").match(/^qtp-(\w+)-(hot|cold)$/);
+    if (qtp) {
+      const pins = { sun: [2, 1], sky: [4, 5], grass: [6, 3], earth: [8, 7] }[qtp[1]] || [2, 3];
+      return `${qtp[1].toUpperCase()} P${qtp[2] === "hot" ? pins[0] : pins[1]}`;
+    }
     const hub = (key || "").match(/^xlr([mf])-(p(\d)|shell)$/);
     if (hub) return hub[3] ? `PIN ${hub[3]}` : "CHASSIS";
     const nm = (this.getSignalForTarget(key).name || key || "").toUpperCase();
@@ -1977,6 +2125,7 @@ class FloatingMeterDock {
   // What a meter is measuring, as its whole name: "PIN 2 → CHASSIS" or "PIN 2 ↔ PIN 3"
   measuredLabel(key, forceAcross = false) {
     if (/-diff45$/.test(key || "")) return "PIN 4 ↔ PIN 5";
+    if (/^qtp-sun-diff$/.test(key || "")) return "SUN P2 ↔ P1";
     if (forceAcross || this.isAcrossKey(key)) return "PIN 2 ↔ PIN 3";
     const pt = this.shortPoint(key);
     if (pt === "PIN 2 ↔ PIN 3") return pt;
@@ -2849,10 +2998,13 @@ class FloatingMeterDock {
       canvas.height = ch;
     }
     const ctx = canvas.getContext("2d");
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
-    if (w < 60 || h < 40) return; // not laid out yet (arcs below would get negative radii)
+    if (canvas.clientWidth < 60 || canvas.clientHeight < 40) return; // not laid out yet (arcs below would get negative radii)
+    // The face is laid out at its rack size (166 × 97); a zoomed meter scales the whole drawing up evenly
+    const s = Math.max(1, Math.min(canvas.clientWidth / 166, canvas.clientHeight / 97));
+    ctx.setTransform(dpr * s, 0, 0, dpr * s, 0, 0);
+    const w = canvas.clientWidth / s;
+    const h = canvas.clientHeight / s;
+    const R = Math.min(h, w * 0.6); // arc size: never wider than the face
     const color = PROBE_COLORS[`VU${n}`];
     const range = this[`vu${n}Range`];
     const rangeDb = 20 * Math.log10(range / 0.7746);
@@ -2863,15 +3015,15 @@ class FloatingMeterDock {
     ctx.fillRect(0, 0, w, 3);
 
     const cx = w / 2;
-    const cy = h * 1.08;
+    const cy = h + R * 0.08;
     const A0 = -Math.PI * 0.77;
     const A1 = -Math.PI * 0.23;
     const ang = (frac) => A0 + Math.max(-0.03, Math.min(1.05, frac)) * (A1 - A0);
     const pt = (r, a) => [cx + r * Math.cos(a), cy + r * Math.sin(a)];
-    const rDb = h * 0.98;
-    const rV1 = h * 0.72;
-    const rV3 = h * 0.52;
-    const rCap = h * 0.2;
+    const rDb = R * 0.98;
+    const rV1 = R * 0.72;
+    const rV3 = R * 0.52;
+    const rCap = R * 0.2;
 
     // Level-pyramid zones (dBu) at their place on this range
     VM_ZONES.forEach(z => {
@@ -2947,7 +3099,7 @@ class FloatingMeterDock {
     for (let i = 0; i <= 30; i++) tick(rV3, i / 30, i % 10 === 0 ? 4 : 2, 0.6, "#475569");
     [0, 1, 2, 3].forEach(v => label(rV3 - 9, v / 3, `${v}`, "#334155", 6.5));
 
-    // Scale captions at the left end of each arc, hp badge, range
+    // Scale captions at the left end of each arc, range
     ctx.font = "800 6px Arial, sans-serif";
     ctx.fillStyle = "#0f172a";
     const cap = (r, txt) => {
@@ -2959,11 +3111,6 @@ class FloatingMeterDock {
     cap(rV3 - 9, "3V");
     ctx.font = "800 5.5px Arial, sans-serif";
     ctx.fillText("R.M.S. VOLTS", cx, cy - rCap - 6);
-    ctx.fillStyle = "#006699";
-    ctx.fillRect(5, 6, 13, 12);
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "italic bold 9px Georgia, serif";
-    ctx.fillText("hp", 11.5, 12.5);
     ctx.textAlign = "right";
     ctx.fillStyle = "#475569";
     ctx.font = "700 7px Arial, sans-serif";
@@ -2974,14 +3121,37 @@ class FloatingMeterDock {
     if (dbuNow !== undefined) {
       const delta = dbuNow - GOAL_DBU;
       const onGoal = Math.abs(delta) < 0.5;
+      // The level in dBu and in volts are the headlines: large and clear, signed only when negative
+      const chassis = dbuNow <= -60;
+      const volts = 0.7746 * Math.pow(10, dbuNow / 20);
+      const bigReading = (txt, unit, x, align) => {
+        ctx.textAlign = align;
+        ctx.font = "900 17px 'JetBrains Mono', monospace";
+        const tw = ctx.measureText(txt).width;
+        ctx.font = "800 7px Arial, sans-serif";
+        const uw = ctx.measureText(unit).width + 2;
+        const x0 = align === "left" ? x : x - uw;
+        ctx.font = "900 17px 'JetBrains Mono', monospace";
+        ctx.fillText(txt, x0, h - 4);
+        ctx.font = "800 7px Arial, sans-serif";
+        ctx.textAlign = "left";
+        ctx.fillText(unit, align === "left" ? x0 + tw + 2 : x0 + 2, h - 5);
+      };
       ctx.textBaseline = "alphabetic";
-      ctx.font = "900 11px 'JetBrains Mono', monospace";
-      ctx.textAlign = "left";
       ctx.fillStyle = "#0f172a";
-      ctx.fillText(dbuNow <= -60 ? "0 V" : `${dbuNow >= 0 ? "+" : ""}${dbuNow.toFixed(1)}`, 5, h - 5);
-      ctx.textAlign = "right";
-      ctx.fillStyle = onGoal ? "#15803d" : Math.abs(delta + 6.02) < 0.6 ? "#b45309" : "#dc2626";
-      ctx.fillText(dbuNow <= -60 ? "CHASSIS" : onGoal ? "+4 ✓" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}`, w - 5, h - 5);
+      if (chassis) {
+        ctx.textAlign = "left";
+        ctx.font = "900 17px 'JetBrains Mono', monospace";
+        ctx.fillText("0 V", 4, h - 4);
+      } else {
+        bigReading(dbuNow.toFixed(1), "dBu", 4, "left");
+        bigReading(volts < 0.1 ? volts.toFixed(3) : volts.toFixed(2), "V", w - 4, "right");
+      }
+      // Distance from the +4 dBu goal, small in the top-left corner
+      ctx.textAlign = "left";
+      ctx.font = "900 8px 'JetBrains Mono', monospace";
+      ctx.fillStyle = chassis ? "#475569" : onGoal ? "#15803d" : Math.abs(delta + 6.02) < 0.6 ? "#b45309" : "#dc2626";
+      ctx.fillText(chassis ? "CHASSIS" : onGoal ? "4 ✓" : `Δ ${delta.toFixed(1)}`, 4, 13);
       ctx.textBaseline = "middle";
     }
 
@@ -3170,6 +3340,50 @@ class FloatingMeterDock {
   /**
    * Dynamic SVG Wires Engine: Renders physical colored leads from rack terminal dots to circuit nodes/anchors
    */
+  // Every diagram the meters probe gets a Full Screen button (the rack and wires stay with it)
+  addFullscreenButtons() {
+    if (typeof window.toggleCircuitFullscreen !== "function") return;
+    SCHEMATIC_CONFIGS.forEach(cfg => {
+      const el = document.getElementById(cfg.id);
+      if (!el) return;
+      const card = el.closest(".svg-diagram-card, .circuit-subcard, .enclosure-diagram-container");
+      if (card && card.querySelector(".btn-circuit-fullscreen")) return;
+      const target = el.closest(".qtp-sim-card, .svg-diagram-wrapper") || el;
+      if (target.previousElementSibling?.classList.contains("fs-btn-row")) return;
+      const row = document.createElement("div");
+      row.className = "fs-btn-row";
+      row.innerHTML = `
+        <button type="button" class="btn-circuit-fullscreen" title="Toggle Fullscreen View">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          <span>⛶ Full Screen</span>
+        </button>`;
+      const btn = row.querySelector("button");
+      btn._fsTarget = target;
+      btn.addEventListener("click", () => window.toggleCircuitFullscreen(btn));
+      target.parentNode.insertBefore(row, target);
+    });
+  }
+
+  // A key can appear in several diagrams (e.g. the eight QTP examples): use the one nearest mid-screen
+  findProbeTarget(key) {
+    const fs = document.querySelector(".circuit-fullscreen-active");
+    const all = (fs || document).querySelectorAll(`[data-probe-target="${key}"]`);
+    if (all.length < 2) return all[0] || null;
+    const mid = window.innerHeight / 2;
+    let best = null;
+    let bestDist = Infinity;
+    all.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (!r.width && !r.height) return;
+      const d = Math.abs((r.top + r.bottom) / 2 - mid);
+      if (d < bestDist) {
+        bestDist = d;
+        best = el;
+      }
+    });
+    return best;
+  }
+
   renderWires() {
     const svg = document.getElementById("live-probe-wires-svg");
     const underSvg = document.getElementById("live-probe-wires-under");
@@ -3214,7 +3428,7 @@ class FloatingMeterDock {
       const y1 = dotRect.top + dotRect.height / 2;
 
       // Find target element in page or user anchors
-      let targetEl = document.querySelector(`[data-probe-target="${conn.targetKey}"]`);
+      let targetEl = this.findProbeTarget(conn.targetKey);
       if (!targetEl) {
         targetEl = document.getElementById(conn.targetKey);
       }

@@ -49,10 +49,16 @@ class StorySidebar {
           <span class="sidebar-icon">📖</span>
           <div class="sidebar-title-group">
             <span class="sidebar-title">Story &amp; Standards</span>
-            <span class="sidebar-sub">AES-X152 Reference</span>
+            <span class="sidebar-sub">Internal Report &amp; Interactive Toolset</span>
           </div>
         </div>
         <button id="sidebar-collapse-btn" class="sidebar-toggle-btn" title="Toggle Sidebar">◀</button>
+      </div>
+
+      <!-- Print / Save as PDF (js/print-report.js) with the document version -->
+      <div class="sidebar-print-row">
+        <button type="button" id="print-pdf-btn" class="sidebar-print-btn" title="Print or save as PDF (committee use only)">🖨️ Print PDF</button>
+        <span class="sidebar-doc-version" data-doc-version></span>
       </div>
 
       <!-- Dual Navigation Tabs -->

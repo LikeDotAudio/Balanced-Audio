@@ -2470,6 +2470,129 @@ code, pre {
   border-left: 2px solid #38bdf8;
 }
 
+/* Compact preset buttons (icon + title on one line) */
+.muggle-preset-row-compact {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  margin-bottom: 0;
+}
+
+.muggle-preset-row-compact .muggle-btn {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 0.4rem 0.6rem;
+}
+
+.muggle-preset-row-compact .muggle-icon {
+  margin-bottom: 0;
+}
+
+/* Engineering deep dive: one static table per level type */
+.level-tables-intro {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.45;
+  margin-bottom: 0.85rem;
+}
+
+.level-tables {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.level-table-section {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  padding: 0.75rem;
+}
+
+.level-table-heading {
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.35rem;
+}
+
+.level-table-desc {
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+  border-left: 3px solid #38bdf8;
+  padding: 0.25rem 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.level-spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.76rem;
+}
+
+.level-spec-table th,
+.level-spec-table td {
+  padding: 4px 8px;
+  text-align: left;
+  vertical-align: baseline;
+  border-bottom: 1px dashed rgba(51, 65, 85, 0.5);
+}
+
+.level-spec-table thead th {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+}
+
+.level-spec-table tbody th[scope="row"] {
+  font-weight: 500;
+  color: #94a3b8;
+  width: 34%;
+}
+
+.level-spec-table .level-val {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: #38bdf8;
+  white-space: nowrap;
+}
+
+.level-spec-table .level-basis {
+  color: #64748b;
+  font-size: 0.7rem;
+  min-width: 10rem;
+}
+
+.level-spec-table tr.level-group th {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-top: 0.7rem;
+  border-bottom: 1px solid #334155;
+}
+
+.level-spec-table tr.level-group .rack-status-pill {
+  margin-left: 8px;
+}
+
+.level-spec-table tr.level-note-row td {
+  border-bottom: none;
+  padding-top: 2px;
+}
+
+@media (max-width: 640px) {
+  .level-spec-table .level-val { white-space: normal; }
+  .level-spec-table :is(th, td):nth-child(3) { display: none; }
+}
+
 /* Master Equipment Grid: Controls, Knobs, VU Meter & DMM Display */
 .military-controls-layout {
   display: grid;
@@ -6016,16 +6139,46 @@ body.probe-cursor-active * {
   }
 }
 
-/* Ensure full screen mode takes over completely and dims the floating dock so it never obstructs */
-body.has-circuit-fullscreen #floating-meter-dock {
-  opacity: 0.12;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
+/* Full screen circuit: the instrument rack stays live beside it and the probe wires follow */
+html body.has-circuit-fullscreen #floating-meter-dock {
+  z-index: 1000001 !important;
 }
 
-body.has-circuit-fullscreen #floating-meter-dock:hover {
-  opacity: 1;
-  pointer-events: auto;
+html[data-theme] body.has-circuit-fullscreen .circuit-fullscreen-active {
+  left: 270px !important;
+  right: 350px !important;
+  width: auto !important;
+  max-width: none !important;
+  background: #060913 !important;
+}
+
+html[data-theme] body.has-circuit-fullscreen.sidebar-taxonomy-active .circuit-fullscreen-active {
+  left: 360px !important;
+}
+
+html body.has-circuit-fullscreen .circuit-fullscreen-exit-btn {
+  right: calc(350px + 2rem);
+}
+
+/* No section may trap the expanded circuit beneath the rack and wires */
+html body.has-circuit-fullscreen > section {
+  z-index: auto !important;
+}
+
+html body.has-circuit-fullscreen .live-probe-wires-svg,
+html body.has-circuit-fullscreen #live-probe-wires-svg {
+  z-index: 1000002 !important;
+}
+
+/* The expanded circuit is on a dark ground: settled wires draw normally over it */
+html body.has-circuit-fullscreen .live-probe-wires-under {
+  mix-blend-mode: normal;
+}
+
+.fs-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
 }
 
 /* ==========================================================================
@@ -7788,7 +7941,8 @@ html[data-theme="paper"] .site-header {
 /* Things that are already light (meter dials, sage instrument panels) are flipped back */
 html[data-theme="paper"] .hp-voltmeter-card,
 html[data-theme="paper"] .dmm-display-card,
-html[data-theme="paper"] .cal-panel {
+html[data-theme="paper"] .cal-panel,
+html[data-theme="paper"] body > section img:not([src^="data:image/svg"]) {
   filter: invert(1) hue-rotate(180deg);
 }
 
@@ -8356,19 +8510,26 @@ html[data-theme="paper"] .live-probe-wires-svg {
   z-index: 1 !important;
 }
 
+/* …except the probe tips and labels (and a wire's brief grey launch), which stay on top */
+html[data-theme="paper"] #live-probe-wires-svg {
+  z-index: 9999 !important;
+}
+
 html[data-theme="paper"] body > section {
   position: relative;
   z-index: 2;
   background: transparent !important;
 }
 
-html[data-theme="paper"] body > section svg > rect:first-child:not([x]):not([y]) {
+html[data-theme="paper"] body > section svg > rect:first-child:not([x]):not([y]),
+html[data-theme="paper"] body > section svg > rect.diagram-ground {
   fill-opacity: 0;
 }
 
 html[data-theme="paper"] body > section svg[style*="background"],
 html[data-theme="paper"] body > section .svg-diagram-wrapper,
-html[data-theme="paper"] body > section .svg-diagram-card {
+html[data-theme="paper"] body > section .svg-diagram-card,
+html[data-theme="paper"] body > section .qtp-sim-card {
   background: transparent !important;
 }
 
@@ -8405,3 +8566,179 @@ html[data-theme="paper"] body > section .svg-diagram-card {
 .rack-meter-card.rack-zoomed .meter-collapsible-drawer {
   flex: 0 0 auto;
 }
+
+/* ==========================================================================
+   Print PDF button, version, watermark (js/print-report.js)
+   ========================================================================== */
+.sidebar-print-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 1.1rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+}
+.sidebar-print-btn {
+  background: #000;
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  padding: 0.25rem 0.6rem;
+  font: 700 0.75rem var(--font-sans);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.sidebar-print-btn:hover { background: #38bdf8; color: #000; }
+.sidebar-doc-version {
+  font: 600 0.68rem var(--font-mono);
+  color: #94a3b8;
+}
+
+.print-watermark,
+.print-cover { display: none; }
+
+@media print {
+  html, body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body,
+  body.has-story-sidebar,
+  body.has-story-sidebar.sidebar-is-scrolling,
+  body.has-story-sidebar.sidebar-collapsed,
+  body.has-story-sidebar.sidebar-taxonomy-active {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Screen-only chrome */
+  #story-index-sidebar,
+  .floating-meter-dock,
+  .live-probe-wires-svg,
+  .site-header,
+  .hero-actions,
+  #module-reader-modal,
+  #review-bar,
+  #review-pin-layer,
+  #review-popover,
+  #review-summary .review-actions,
+  .review-item-del {
+    display: none !important;
+  }
+
+  svg, figure, table, img, canvas, .rule-card, .detail-card { break-inside: avoid; }
+  h2, h3, h4 { break-after: avoid; }
+
+  .print-cover {
+    display: block;
+    padding: 0 0 6mm;
+    margin-bottom: 6mm;
+    border-bottom: 2px solid #000;
+    color: #000;
+    background: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  .print-cover-notice {
+    display: inline-block;
+    border: 2px solid #b91c1c;
+    color: #b91c1c;
+    padding: 1mm 3mm;
+    font: 800 10pt var(--font-sans);
+    letter-spacing: 0.05em;
+  }
+  .print-cover-title { font-size: 22pt; font-weight: 700; margin: 4mm 0 2mm; }
+  .print-cover-meta { font-size: 10pt; }
+
+  .print-watermark {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 2147483647;
+  }
+  .print-watermark span {
+    transform: rotate(-35deg);
+    text-align: center;
+    font: 900 54pt var(--font-sans);
+    line-height: 1.1;
+    color: rgba(185, 28, 28, 0.13);
+    border: 6px solid rgba(185, 28, 28, 0.13);
+    padding: 4mm 10mm;
+    white-space: nowrap;
+  }
+  .print-watermark small { font-size: 24pt; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+}
+
+/* ==========================================================================
+   SPICE view: Ctrl+click a probed circuit (js/spice-view.js)
+   ========================================================================== */
+.spice-view {
+  position: fixed;
+  inset: 0;
+  z-index: 1000100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.6);
+}
+.spice-view[hidden] { display: none; }
+.spice-panel {
+  width: min(860px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  background: #000;
+  border: 1px solid #333;
+  color: #e5e7eb;
+  font-family: var(--font-sans);
+  padding: 0 0 0.75rem;
+}
+.spice-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #333;
+}
+.spice-badge {
+  background: #38bdf8;
+  color: #000;
+  font: 900 0.7rem var(--font-mono);
+  padding: 0.15rem 0.4rem;
+}
+.spice-title { flex: 1; font: 800 0.9rem var(--font-mono); color: #38bdf8; }
+.spice-btn {
+  background: transparent;
+  border: 1px solid #444;
+  color: #e5e7eb;
+  font: 700 0.75rem var(--font-mono);
+  padding: 0.2rem 0.55rem;
+  cursor: pointer;
+}
+.spice-btn:hover { border-color: #38bdf8; }
+.spice-about { margin: 0.6rem 0.75rem; color: #9ca3af; font-size: 0.85rem; }
+.spice-netlist {
+  margin: 0 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: #050505;
+  border: 1px solid #333;
+  color: #a7f3d0;
+  font: 0.8rem/1.5 var(--font-mono);
+  white-space: pre;
+  overflow-x: auto;
+}
+.spice-points {
+  width: calc(100% - 1.5rem);
+  margin: 0.75rem 0.75rem 0;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+.spice-points th,
+.spice-points td {
+  border: 1px solid #333;
+  padding: 0.3rem 0.5rem;
+  text-align: left;
+}
+.spice-points th { color: #9ca3af; font: 700 0.7rem var(--font-mono); text-transform: uppercase; }
+.spice-points code { font-family: var(--font-mono); color: #facc15; }
+.spice-foot { margin: 0.6rem 0.75rem 0; color: #6b7280; font-size: 0.75rem; }

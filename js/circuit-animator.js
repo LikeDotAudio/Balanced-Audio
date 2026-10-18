@@ -16,6 +16,80 @@ function calTierFor(dbu) {
   return "headroom";
 }
 
+// Push-pull (Circuit 6.1) audio level presets. One entry per level type, in report order.
+// vin / rout / rload are what the live simulation is set to; nominal is the reference level the type is named for.
+const PP_LEVEL_PRESETS = [
+  {
+    key: "mic", icon: "🎙️", title: "MIC LEVEL",
+    nominal: "−50 dBu (≈2.4 mV) dynamic mic",
+    dbu: -50, rout: 150, rload: 2000,
+    desc: "<strong>Dynamic Microphone (-50 dBu / ~2.4 mV to 100 mV):</strong> 150 &Omega; dynamic moving-coil source driving a 2 k&Omega; console preamp input (~6.7:1 bridging ratio). Ensures maximum signal voltage transfer with minimal loading on the acoustic diaphragm."
+  },
+  {
+    key: "pro-line", icon: "🎛️", title: "PRO LINE LEVEL",
+    nominal: "+4 dBu (1.228 V) studio reference",
+    dbu: 4, rout: 50, rload: 10000,
+    desc: "<strong>Professional Studio Line (+4 dBu / 1.228 VRMS):</strong> Standard differential line-level interconnect. Employs low-impedance voltage bridging (50 &Omega; leg drive into a 10 k&Omega; console input), ensuring &gt;99% voltage transfer with negligible cable loading."
+  },
+  {
+    key: "consumer-line", icon: "📻", title: "CONSUMER LINE",
+    nominal: "−10 dBV (0.316 V) RCA / hi-fi",
+    dbu: -7.78, rout: 100, rload: 10000,
+    desc: "<strong>Consumer Line (-10 dBV / 0.316 VRMS):</strong> Standard Hi-Fi / RCA interconnect level. 100 &Omega; output driving a 10 k&Omega; load (~50:1 bridging ratio). Generates lower line currents but has ~12 dB lower headroom than pro line level."
+  },
+  {
+    key: "instrument", icon: "🎸", title: "INSTRUMENT / DI",
+    nominal: "−20 dBu (77 mV) guitar / bass via active DI",
+    dbu: -20, rout: 150, rload: 10000,
+    desc: "<strong>Instrument / DI (-20 dBu / 77 mV):</strong> High-impedance magnetic pickup buffered through an active DI box outputting balanced signal (150 &Omega; source into 10 k&Omega; console input)."
+  },
+  {
+    key: "vintage-600", icon: "🏛️", title: "600Ω MATCHED (VINTAGE)",
+    nominal: "0 dBu (0.775 V) telecom power match",
+    dbu: 0, rout: 300, rload: 600,
+    desc: "<strong>Vintage 600 &Omega; Power Matched (0 dBu / 0.775 VRMS):</strong> 600 &Omega; source (300 &Omega; per leg) into a 600 &Omega; load. Obsolete 1950s telephony standard designed for maximum power transfer rather than voltage fidelity. Heavy current draw and high transmission loss (-6 dB)."
+  }
+];
+
+// Each preset is defined by its nominal level across the load: the drive per leg (vin) is whatever
+// puts exactly that level on the receiver once the source and load divide it
+PP_LEVEL_PRESETS.forEach(p => {
+  const vDiff = 0.7746 * Math.pow(10, p.dbu / 20);
+  p.vin = Math.round((vDiff / 2) * (2 * p.rout + p.rload) / p.rload * 1e6) / 1e6;
+});
+
+const PP_RAIL_V = 18.0;          // ±18 V op-amp supply
+const PP_CLIP_SHORT_A = 0.05;    // a Pin 3 short drawing more than 50 mA drives the op-amp into current limit
+
+// Engineering figures for a normal (unfaulted) push-pull output: vin per leg (V RMS), rout per leg (Ω), rload (Ω).
+// Same formulas as the live simulation in updatePushPull().
+function ppEngineeringMetrics(vin, rout, rload) {
+  const totalZ = 2 * rout;
+  const iLoad = (2 * vin) / (totalZ + rload);
+  const vPin2 = vin - iLoad * rout;
+  const vDiff = 2 * vPin2;
+  const bridgeRatio = rload / Math.max(1, totalZ);
+  const vRatio = rload / (totalZ + rload);
+  const pLoadMw = (vDiff * vDiff) / Math.max(1, rload) * 1000;
+  const vPeak = Math.max(0.05, Math.abs(vPin2) * 1.414);
+  const iShort = vin / Math.max(1, rout);
+  return {
+    totalZ, rout, rload, vin, vPin2, vDiff, iLoad, bridgeRatio, vRatio,
+    vLossDb: 20 * Math.log10(Math.max(0.0001, vRatio)),
+    vDiffDbu: 20 * Math.log10(Math.max(1e-6, vDiff) / 0.775),
+    vDiffDbv: 20 * Math.log10(Math.max(1e-6, vDiff)),
+    vPin2Dbu: 20 * Math.log10(Math.max(1e-6, vPin2) / 0.775),
+    vpp: vDiff * 2.828,
+    pLoadMw,
+    pDbm: 10 * Math.log10(Math.max(0.00001, pLoadMw)),
+    vPeak,
+    headroomDb: 20 * Math.log10(PP_RAIL_V / vPeak),
+    iShort,
+    shortClips: iShort > PP_CLIP_SHORT_A,
+    matching: bridgeRatio >= 10 ? "bridging" : (bridgeRatio >= 1.5 ? "moderate" : "matched")
+  };
+}
+
 class CircuitSimulator {
   constructor() {
     this.animationFrame = null;
@@ -124,6 +198,7 @@ class CircuitSimulator {
 
     // 1960s Military & 1970s Laboratory Equipment Handlers
     this.initMilitaryControls();
+    this.renderLevelTables();
     this.initLevelConverter();
     this.initLTPFaders();
     this.initVoltmeterControls();
@@ -827,40 +902,7 @@ class CircuitSimulator {
   }
 
   setMugglePreset(presetKey) {
-    const presets = {
-      "mic": {
-        vin: 0.1,
-        rout: 150,
-        rload: 2000,
-        desc: "<strong>Dynamic Microphone (-50 dBu / ~2.4 mV to 100 mV):</strong> 150 &Omega; dynamic moving-coil source driving a 2 k&Omega; console preamp input (~13:1 bridging ratio). Ensures maximum signal voltage transfer with minimal loading on the acoustic diaphragm."
-      },
-      "pro-line": {
-        vin: 1.2,
-        rout: 50,
-        rload: 10000,
-        desc: "<strong>Professional Studio Line (+4 dBu / 1.228 VRMS):</strong> Standard differential line-level interconnect. Employs low-impedance voltage bridging (50 &Omega; leg drive into a 10 k&Omega; console input), ensuring &gt;99% voltage transfer with negligible cable loading."
-      },
-      "consumer-line": {
-        vin: 0.3,
-        rout: 100,
-        rload: 10000,
-        desc: "<strong>Consumer Line (-10 dBV / 0.316 VRMS):</strong> Standard Hi-Fi / RCA interconnect level. 100 &Omega; output driving a 10 k&Omega; load (~100:1 bridging ratio). Generates lower line currents but has ~12 dB lower headroom than pro line level."
-      },
-      "instrument": {
-        vin: 0.2,
-        rout: 150,
-        rload: 10000,
-        desc: "<strong>Instrument / DI (-20 dBu / 77 mV):</strong> High-impedance magnetic pickup buffered through an active DI box outputting balanced signal (150 &Omega; source into 10 k&Omega; console input)."
-      },
-      "vintage-600": {
-        vin: 0.8,
-        rout: 100,
-        rload: 600,
-        desc: "<strong>Vintage 600 &Omega; Power Matched (0 dBu / 0.775 VRMS):</strong> Obsolete 1950s telephony standard designed for maximum power transfer rather than voltage fidelity. Heavy current draw and high transmission loss (-6 dB)."
-      }
-    };
-
-    const p = presets[presetKey];
+    const p = PP_LEVEL_PRESETS.find(x => x.key === presetKey);
     if (!p) return;
 
     const vinEl = document.getElementById("pp-vin");
@@ -892,14 +934,91 @@ class CircuitSimulator {
       else rloadPreset.value = "custom";
     }
 
-    const explainerText = document.getElementById("muggle-explainer-text");
-    if (explainerText) explainerText.innerHTML = p.desc;
-
     document.querySelectorAll(".muggle-btn").forEach(btn => {
       btn.classList.toggle("active", btn.getAttribute("data-preset") === presetKey);
     });
 
     this.updatePushPull();
+  }
+
+  // One static engineering table per level type (Circuit 6.1), built from PP_LEVEL_PRESETS with
+  // ppEngineeringMetrics(): every level is shown at once and nothing depends on which preset is selected.
+  renderLevelTables() {
+    const host = document.getElementById("pp-level-tables");
+    if (!host) return;
+
+    const ohms = (r) => r >= 1000 ? `${(r / 1000).toFixed(r % 1000 === 0 ? 0 : 1)} kΩ` : `${r} Ω`;
+    const signed = (x, d) => `${x >= 0 ? "+" : "−"}${Math.abs(x).toFixed(d)}`;
+    const ma = (a) => `${(a * 1000).toFixed(2)} mA`;
+    const pill = (cls, text) => `<span class="rack-status-pill ${cls}">${text}</span>`;
+    const row = (label, value, basis) =>
+      `<tr><th scope="row">${label}</th><td class="level-val">${value}</td><td class="level-basis">${basis}</td></tr>`;
+    const group = (num, color, title, badge) =>
+      `<tr class="level-group"><th colspan="3" scope="colgroup"><span style="color:${color};">${num}. ${title}</span>${badge}</th></tr>`;
+    const note = (html) => `<tr class="level-note-row"><td colspan="3"><div class="deepdive-note">${html}</div></td></tr>`;
+
+    host.innerHTML = PP_LEVEL_PRESETS.map((p) => {
+      const m = ppEngineeringMetrics(p.vin, p.rout, p.rload);
+      const ratio = m.bridgeRatio >= 10 ? m.bridgeRatio.toFixed(0) : m.bridgeRatio.toFixed(1);
+
+      const matchPill = m.matching === "bridging" ? pill("green", `VOLTAGE BRIDGING (${ratio}:1)`)
+        : m.matching === "moderate" ? pill("yellow", `MODERATE LOAD (${ratio}:1)`)
+        : pill("red", `POWER MATCHED (${ratio}:1)`);
+      const matchNote = m.matching === "bridging"
+        ? `✅ <strong>Voltage bridging:</strong> the load is ${ratio}× the loop source impedance, so ${(m.vRatio * 100).toFixed(1)}% of the drive voltage arrives. Cable capacitance barely matters, and one output can feed several inputs in parallel without a noticeable level drop.`
+        : m.matching === "moderate"
+        ? `⚠️ <strong>Moderate loading:</strong> at ${ratio}:1 the source impedance takes ${Math.abs(m.vLossDb).toFixed(2)} dB of the signal. Still voltage-driven, but each extra input paralleled onto this output costs more level.`
+        : `⛔ <strong>Power matched:</strong> at ${ratio}:1 the source and load split the voltage, losing ${Math.abs(m.vLossDb).toFixed(2)} dB. This is the telephone-era power-transfer arrangement, not voltage fidelity; paralleling a second load drops the level further.`;
+
+      const lowCurrent = m.iLoad < 0.001;
+      const drivePill = lowCurrent ? pill("green", "LOW-CURRENT DRIVE") : pill("yellow", "HEAVY CURRENT DRAW");
+      const driveNote = lowCurrent
+        ? `⚡ <strong>Low power, clean signal:</strong> ${ma(m.iLoad)} of line current keeps the output op-amps well inside their comfortable, low-distortion region.`
+        : `🔥 <strong>Real current:</strong> ${ma(m.iLoad)} into ${ohms(p.rload)} means the output stage is delivering power, not just voltage; distortion and dissipation rise with the load current.`;
+
+      const hr = m.headroomDb;
+      const hrPill = pill(hr > 10 ? "green" : (hr > 3 ? "yellow" : "red"), `${signed(hr, 1)} dB HEADROOM`);
+      const hrNote = (hr > 10
+        ? `🛡️ <strong>Ample headroom:</strong> ${signed(hr, 1)} dB between the ${m.vPeak.toFixed(2)} V leg peak and the ±${PP_RAIL_V.toFixed(0)} V rails, so transients pass without clipping or slew limiting.`
+        : `⚠️ <strong>Limited headroom:</strong> only ${signed(hr, 1)} dB to the ±${PP_RAIL_V.toFixed(0)} V rails; transients will clip.`)
+        + ` If a TS plug shorts Pin 3 to ground, the inverting op-amp sources ${(m.iShort * 1000).toFixed(1)} mA into the short` +
+        (m.shortClips ? `, which is above the ${(PP_CLIP_SHORT_A * 1000).toFixed(0)} mA limit, so it goes into current-limit clipping.` : `, which is under the ${(PP_CLIP_SHORT_A * 1000).toFixed(0)} mA current limit.`);
+
+      return `
+        <div class="level-table-section" id="pp-level-${p.key}">
+          <h4 class="level-table-heading" id="pp-level-${p.key}-title"><span aria-hidden="true">${p.icon}</span> ${p.title}</h4>
+          <div class="level-table-desc">${p.desc}</div>
+          <div class="table-responsive">
+          <table class="level-spec-table" aria-labelledby="pp-level-${p.key}-title">
+            <thead><tr><th scope="col">Quantity</th><th scope="col">Value</th><th scope="col">Basis</th></tr></thead>
+            <tbody>
+              ${group(1, "#38bdf8", "Impedance matching &amp; bridging", matchPill)}
+              ${row("Nominal level", p.nominal, "What the level type is named for")}
+              ${row("Simulated leg drive (V<sub>IN</sub>)", `${p.vin.toFixed(2)} V RMS`, "Per leg, as set in the simulation")}
+              ${row("Source impedance (Z<sub>OUT</sub>)", `${m.totalZ} Ω loop (${p.rout} Ω/leg)`, "2 × Z<sub>OUT</sub>")}
+              ${row("Receiver termination (R<sub>LOAD</sub>)", ohms(p.rload), "Differential input")}
+              ${row("Bridging ratio", `${ratio} : 1`, "R<sub>LOAD</sub> ÷ 2Z<sub>OUT</sub>")}
+              ${row("Voltage transfer", `${(m.vRatio * 100).toFixed(1)}% (${signed(m.vLossDb, 2)} dB)`, "R<sub>LOAD</sub> ÷ (2Z<sub>OUT</sub> + R<sub>LOAD</sub>)")}
+              ${note(matchNote)}
+              ${group(2, "#4ade80", "Drive capability &amp; power", drivePill)}
+              ${row("Leg voltage, Pin 2 / Pin 3", `${m.vPin2.toFixed(3)} V RMS each (${signed(m.vPin2Dbu, 1)} dBu)`, "V<sub>IN</sub> − I<sub>LOAD</sub>Z<sub>OUT</sub>, opposite polarity")}
+              ${row("Differential voltage (V<sub>DIFF</sub>)", `${m.vDiff.toFixed(3)} V RMS (${signed(m.vDiffDbu, 1)} dBu / ${signed(m.vDiffDbv, 1)} dBV)`, "Pin 2 − Pin 3 at the load")}
+              ${row("Peak-to-peak differential", `${m.vpp.toFixed(2)} Vpp`, "V<sub>DIFF</sub> × 2√2")}
+              ${row("Load current (I<sub>LOAD</sub>)", ma(m.iLoad), "2V<sub>IN</sub> ÷ (2Z<sub>OUT</sub> + R<sub>LOAD</sub>)")}
+              ${row("Power in load (P<sub>LOAD</sub>)", `${m.pLoadMw.toFixed(3)} mW (${signed(m.pDbm, 1)} dBm)`, "V<sub>DIFF</sub>² ÷ R<sub>LOAD</sub>")}
+              ${note(driveNote)}
+              ${group(3, "#f59e0b", "Headroom &amp; precision adjustments", hrPill)}
+              ${row("Supply rails", `±${PP_RAIL_V.toFixed(1)} V DC (${(2 * PP_RAIL_V).toFixed(0)} V rail-to-rail)`, "Op-amp supply")}
+              ${row("Peak per leg", `${m.vPeak.toFixed(2)} V`, "V<sub>PIN 2</sub> × √2")}
+              ${row("Headroom to rails", `${signed(hr, 1)} dB`, "20 log(18 V ÷ peak)")}
+              ${row("Leg symmetry", "180.0° (equal and opposite)", "Push-pull, no fault")}
+              ${row("TS plug short stress (Pin 3 → ground)", `${(m.iShort * 1000).toFixed(1)} mA${m.shortClips ? " (current limit)" : ""}`, "V<sub>IN</sub> ÷ Z<sub>OUT</sub>")}
+              ${note(hrNote)}
+            </tbody>
+          </table>
+          </div>
+        </div>`;
+    }).join("");
   }
 
   // LTP Fader (Linear Travelling Potentiometer) Canvas Integration
@@ -910,10 +1029,10 @@ class CircuitSimulator {
     const ppVinCont = document.getElementById("pp-vin-ltp");
     if (ppVinCont) {
       this.ltpPpVin = new LTPFader(ppVinCont, {
-        min: 0.1,
+        min: 0.001,
         max: 5.0,
         value: 1.2,
-        step: 0.1,
+        logarithmic: true, // from mic level (mV) to hot line level on one fader
         unit: "V",
         railColor: "#38bdf8",
         width: 80,
@@ -930,7 +1049,7 @@ class CircuitSimulator {
     if (ppRoutCont) {
       this.ltpPpRout = new LTPFader(ppRoutCont, {
         min: 10,
-        max: 200,
+        max: 300,
         value: 50,
         step: 5,
         unit: "Ω",
@@ -1311,7 +1430,7 @@ class CircuitSimulator {
   // Full Screen Circuit Expansion Controller
   initCircuitFullscreen() {
     window.toggleCircuitFullscreen = (btnEl) => {
-      const card = btnEl.closest(".svg-diagram-card") || btnEl.closest(".circuit-subcard") || btnEl.closest(".section");
+      const card = btnEl._fsTarget || btnEl.closest(".svg-diagram-card") || btnEl.closest(".circuit-subcard") || btnEl.closest(".section");
       if (!card) return;
 
       const isFs = card.classList.contains("circuit-fullscreen-active");
@@ -1327,6 +1446,7 @@ class CircuitSimulator {
         }
       } else {
         card.classList.add("circuit-fullscreen-active");
+        card._fsBtn = btnEl;
         document.body.classList.add("has-circuit-fullscreen");
         document.body.style.overflow = "hidden";
 
@@ -1339,15 +1459,25 @@ class CircuitSimulator {
           card.appendChild(exitBtn);
         }
 
-        // Request browser fullscreen if available
-        if (card.requestFullscreen) {
-          card.requestFullscreen().catch(() => {});
+        // Browser fullscreen for the whole page, so the instrument rack and probe wires come along
+        if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
         }
+
+        // Open on the drawing itself, not the top of a long card
+        const drawing = card.matches(".svg-diagram-wrapper") ? null : card.querySelector(".svg-diagram-wrapper");
+        if (drawing) card.scrollTop += drawing.getBoundingClientRect().top - card.getBoundingClientRect().top - 60;
 
         // Trigger resize event for canvas rerendering
         setTimeout(() => window.dispatchEvent(new Event("resize")), 100);
       }
     };
+
+    // Esc inside browser fullscreen never reaches the page: leaving fullscreen closes the expanded circuit too
+    document.addEventListener("fullscreenchange", () => {
+      const fsEl = document.querySelector(".circuit-fullscreen-active");
+      if (!document.fullscreenElement && fsEl && fsEl._fsBtn) window.toggleCircuitFullscreen(fsEl._fsBtn);
+    });
 
     // Global Esc key listener
     window.addEventListener("keydown", (e) => {
@@ -1355,7 +1485,7 @@ class CircuitSimulator {
         document.body.classList.remove("has-circuit-fullscreen");
         const fsEl = document.querySelector(".circuit-fullscreen-active");
         if (fsEl) {
-          const btn = fsEl.querySelector(".btn-circuit-fullscreen");
+          const btn = fsEl._fsBtn || fsEl.querySelector(".btn-circuit-fullscreen");
           if (btn) window.toggleCircuitFullscreen(btn);
           else {
             fsEl.classList.remove("circuit-fullscreen-active");
@@ -1765,60 +1895,6 @@ class CircuitSimulator {
     if (this.ltpPpVin && typeof this.ltpPpVin.setValue === "function") this.ltpPpVin.setValue(vin, true) // sync the fader graphic only; emitting here would recurse;
     if (this.ltpPpRout && typeof this.ltpPpRout.setValue === "function") this.ltpPpRout.setValue(rout, true) // sync the fader graphic only; emitting here would recurse;
     if (this.ltpPpRload && typeof this.ltpPpRload.setValue === "function") this.ltpPpRload.setValue(rload, true) // sync the fader graphic only; emitting here would recurse;
-
-    // Deep Dive Engineering Metrics Calculation
-    const totalZ = 2 * rout;
-    const bridgeRatio = rload / Math.max(1, totalZ);
-    const vRatio = rload / (totalZ + rload);
-    const vPercent = (vRatio * 100).toFixed(1);
-    const vLossDb = (20 * Math.log10(Math.max(0.0001, vRatio))).toFixed(2);
-    const pLoadW = (vDiff * vDiff) / Math.max(1, rload);
-    const pLoadMw = pLoadW * 1000;
-    const pDbm = (10 * Math.log10(Math.max(0.00001, pLoadMw))).toFixed(1);
-    const vPeak = Math.max(0.05, Math.abs(vPin2) * 1.414);
-    const headroomDb = (20 * Math.log10(18.0 / vPeak)).toFixed(1);
-
-    const elTotalZ = document.getElementById("deepdive-total-zout");
-    if (elTotalZ) elTotalZ.textContent = `${totalZ} Ω (${rout} Ω/leg)`;
-    const elRload = document.getElementById("deepdive-rload-echo");
-    if (elRload) elRload.textContent = `${rload >= 1000 ? (rload / 1000).toFixed(1) + ' kΩ' : rload + ' Ω'}`;
-    const elZratio = document.getElementById("deepdive-z-ratio");
-    if (elZratio) elZratio.textContent = `${bridgeRatio.toFixed(1)} : 1`;
-    const elVtransfer = document.getElementById("deepdive-v-transfer");
-    if (elVtransfer) elVtransfer.textContent = `${vPercent}% (${vLossDb >= 0 ? '+' : ''}${vLossDb} dB)`;
-
-    const elVdiff = document.getElementById("deepdive-vdiff");
-    if (elVdiff) elVdiff.textContent = `${vDiff.toFixed(2)} V RMS`;
-    const elVpp = document.getElementById("deepdive-vpp");
-    if (elVpp) elVpp.textContent = `${(vDiff * 2.828).toFixed(2)} Vpp`;
-    const elIload = document.getElementById("deepdive-iload");
-    if (elIload) elIload.textContent = `${(iLoad * 1000).toFixed(2)} mA`;
-    const elPload = document.getElementById("deepdive-power-load");
-    if (elPload) elPload.textContent = `${pLoadMw.toFixed(2)} mW (${pDbm} dBm)`;
-
-    const elHeadroom = document.getElementById("deepdive-headroom");
-    if (elHeadroom) elHeadroom.textContent = `${headroomDb >= 0 ? '+' : ''}${headroomDb} dB`;
-    const elBadgeHeadroom = document.getElementById("deepdive-badge-headroom");
-    if (elBadgeHeadroom) {
-      elBadgeHeadroom.textContent = `${headroomDb >= 0 ? '+' : ''}${headroomDb} dB HEADROOM`;
-      elBadgeHeadroom.className = parseFloat(headroomDb) > 10 ? "rack-status-pill green" : (parseFloat(headroomDb) > 3 ? "rack-status-pill yellow" : "rack-status-pill red");
-    }
-
-    const elStress = document.getElementById("deepdive-fault-stress");
-    if (elStress) elStress.textContent = shortPin3 ? `${(iPin3 * 1000).toFixed(1)} mA (FAULT!)` : "0.0 mA (Normal)";
-    const elBadgeMatching = document.getElementById("deepdive-badge-matching");
-    if (elBadgeMatching) {
-      if (bridgeRatio >= 10) {
-        elBadgeMatching.textContent = `VOLTAGE BRIDGING (${bridgeRatio.toFixed(0)}:1)`;
-        elBadgeMatching.className = "rack-status-pill green";
-      } else if (bridgeRatio >= 1.5) {
-        elBadgeMatching.textContent = `MODERATE LOAD (${bridgeRatio.toFixed(1)}:1)`;
-        elBadgeMatching.className = "rack-status-pill yellow";
-      } else {
-        elBadgeMatching.textContent = `POWER MATCHED (${bridgeRatio.toFixed(1)}:1)`;
-        elBadgeMatching.className = "rack-status-pill red";
-      }
-    }
   }
 
   // ==========================================
