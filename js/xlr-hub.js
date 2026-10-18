@@ -258,58 +258,94 @@ class XLRHubEngine {
       const p2Color = this.getColor(item.pins[2]?.type);
       const p3Color = this.getColor(item.pins[3]?.type);
 
+      // Realistic XLR-3 faces: machined metal shells, black insulators, metal pins / brass sockets.
+      // Pin circles keep r="14" so the lab rack can probe them (see tagProbePoints).
+      const pinFill = "url(#xlr-pin-metal)";
+      const role = (n) => this.getColor(item.pins[n]?.type);
+      const short = (n) => ({ shield: "Screen", hot: "Hot +", cold: "Return −", jumper: "→ Pin 1" })[item.pins[n]?.type] || "n/c";
+      const malePin = (x, y, n) => `
+            <circle cx="${x}" cy="${y}" r="14" fill="${pinFill}" stroke="${role(n)}" stroke-width="2.5"/>
+            <circle cx="${x - 4}" cy="${y - 4}" r="4.5" fill="#ffffff" opacity="0.55"/>
+            <circle cx="${x}" cy="${y}" r="9.5" fill="none" stroke="#475569" stroke-width="0.8" opacity="0.7"/>`;
+      const socket = (x, y, n) => `
+            <circle cx="${x}" cy="${y}" r="14" fill="#030303" stroke="${role(n)}" stroke-width="2.5"/>
+            <circle cx="${x}" cy="${y}" r="8.5" fill="none" stroke="url(#xlr-brass)" stroke-width="3"/>
+            <circle cx="${x}" cy="${y}" r="3.5" fill="#000000"/>`;
+      const shell = (keyway) => `
+            <circle cx="0" cy="0" r="86" fill="url(#xlr-shell-metal)" stroke="#334155" stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="80" fill="none" stroke="#f8fafc" stroke-width="1.2" opacity="0.7"/>
+            <circle cx="0" cy="0" r="74" fill="url(#xlr-shell-inner)" stroke="#475569" stroke-width="1"/>
+            <circle cx="0" cy="0" r="66" fill="url(#xlr-insulator)" stroke="#000000" stroke-width="1.5"/>
+            ${keyway}`;
+
       svgContainer.innerHTML = `
-        <svg viewBox="0 0 540 250" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto;">
-          <!-- Left: MALE Pin Connector (Equipment Output) -->
-          <g transform="translate(130, 115)">
-            <circle cx="0" cy="0" r="76" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/>
-            <circle cx="0" cy="0" r="84" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3,3"/>
-            <!-- Alignment key notch -->
-            <path d="M 42,-58 A 8,8 0 0,1 58,-42" fill="none" stroke="#38bdf8" stroke-width="3"/>
+        <svg viewBox="0 0 640 300" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto;">
+          <defs>
+            <radialGradient id="xlr-shell-metal" cx="38%" cy="30%" r="80%">
+              <stop offset="0%" stop-color="#ffffff"/><stop offset="25%" stop-color="#d7dde5"/>
+              <stop offset="55%" stop-color="#8b95a3"/><stop offset="80%" stop-color="#c3cad3"/><stop offset="100%" stop-color="#5b6573"/>
+            </radialGradient>
+            <radialGradient id="xlr-shell-inner" cx="60%" cy="70%" r="75%">
+              <stop offset="0%" stop-color="#e5e9ee"/><stop offset="60%" stop-color="#7c8794"/><stop offset="100%" stop-color="#3b4450"/>
+            </radialGradient>
+            <radialGradient id="xlr-insulator" cx="45%" cy="40%" r="70%">
+              <stop offset="0%" stop-color="#2a2f36"/><stop offset="100%" stop-color="#07080a"/>
+            </radialGradient>
+            <radialGradient id="xlr-pin-metal" cx="35%" cy="30%" r="75%">
+              <stop offset="0%" stop-color="#ffffff"/><stop offset="40%" stop-color="#d4d9df"/><stop offset="100%" stop-color="#6b7480"/>
+            </radialGradient>
+            <linearGradient id="xlr-brass" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f3d78a"/><stop offset="50%" stop-color="#b8892f"/><stop offset="100%" stop-color="#6e4f17"/>
+            </linearGradient>
+          </defs>
 
-            <!-- Pin 1: Top Left -->
-            <circle cx="-36" cy="-22" r="14" fill="${p1Color}" stroke="#ffffff" stroke-width="2"/>
-            <text x="-36" y="-17" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">1</text>
-            <text x="-58" y="-22" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="end">Pin 1: ${item.pins[1]?.name || 'Screen'}</text>
-
-            <!-- Pin 2: Top Right -->
-            <circle cx="36" cy="-22" r="14" fill="${p2Color}" stroke="#ffffff" stroke-width="2"/>
-            <text x="36" y="-17" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">2</text>
-            <text x="58" y="-22" fill="#10b981" font-size="10" font-weight="600" text-anchor="start">Pin 2: ${item.pins[2]?.name || 'Pos'}</text>
-
-            <!-- Pin 3: Bottom Center -->
-            <circle cx="0" cy="38" r="14" fill="${p3Color}" stroke="#ffffff" stroke-width="2"/>
-            <text x="0" y="43" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">3</text>
-            <text x="0" y="66" fill="#ef4444" font-size="10" font-weight="600" text-anchor="middle">Pin 3: ${item.pins[3]?.name || 'Return'}</text>
-
-            <text x="0" y="105" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle">XLR-3M (PIN CONNECTOR)</text>
-            <text x="0" y="120" fill="#94a3b8" font-size="9.5" text-anchor="middle">Equipment Output (AES14 Table 1)</text>
+          <!-- Pin connector (male) — equipment output -->
+          <g transform="translate(170, 135)">
+            ${shell(`<rect x="-8" y="-88" width="16" height="16" rx="2" fill="#07080a" stroke="#334155"/>`)}
+            ${malePin(-36, -22, 1)}
+            ${malePin(36, -22, 2)}
+            ${malePin(0, 38, 3)}
+            <text x="-36" y="-42" fill="#e5e7eb" font-size="10" font-weight="800" text-anchor="middle">1</text>
+            <text x="36" y="-42" fill="#e5e7eb" font-size="10" font-weight="800" text-anchor="middle">2</text>
+            <text x="20" y="58" fill="#e5e7eb" font-size="10" font-weight="800" text-anchor="middle">3</text>
+            <text x="-94" y="-18" fill="#94a3b8" font-size="10" font-weight="700" text-anchor="end">1 · ${short(1)}</text>
+            <text x="94" y="-18" fill="${role(2)}" font-size="10" font-weight="700" text-anchor="start">2 · ${short(2)}</text>
+            <text x="0" y="104" fill="${role(3)}" font-size="10" font-weight="700" text-anchor="middle">3 · ${short(3)}</text>
+            <text x="0" y="124" fill="#38bdf8" font-size="12" font-weight="800" text-anchor="middle">XLR-3 PIN CONNECTOR (MALE)</text>
+            <text x="0" y="139" fill="#94a3b8" font-size="9.5" text-anchor="middle">Equipment output · mating face (AES14 Table 1)</text>
           </g>
 
-          <!-- Right: FEMALE Socket Connector (Equipment Input) -->
-          <g transform="translate(410, 115)">
-            <circle cx="0" cy="0" r="76" fill="#1e293b" stroke="#10b981" stroke-width="3"/>
-            <circle cx="0" cy="0" r="84" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3,3"/>
-            <!-- Alignment notch -->
-            <path d="M -42,-58 A 8,8 0 0,0 -58,-42" fill="none" stroke="#10b981" stroke-width="3"/>
+          <!-- Socket connector (female) — equipment input -->
+          <g transform="translate(470, 135)">
+            ${shell(`<path d="M -18,-84 L -18,-100 Q -18,-106 -12,-106 L 12,-106 Q 18,-106 18,-100 L 18,-84 Z" fill="url(#xlr-shell-metal)" stroke="#334155" stroke-width="1.2"/>
+            <text x="0" y="-92" fill="#1e293b" font-size="7" font-weight="900" text-anchor="middle">PUSH</text>
+            <rect x="-6" y="-66" width="12" height="9" fill="#2a2f36" stroke="#000"/>`)}
+            ${socket(36, -22, 1)}
+            ${socket(-36, -22, 2)}
+            ${socket(0, 38, 3)}
+            <text x="36" y="-42" fill="#e5e7eb" font-size="10" font-weight="800" text-anchor="middle">1</text>
+            <text x="-36" y="-42" fill="#e5e7eb" font-size="10" font-weight="800" text-anchor="middle">2</text>
+            <text x="20" y="58" fill="#e5e7eb" font-size="10" font-weight="800" text-anchor="middle">3</text>
+            <text x="94" y="-18" fill="#94a3b8" font-size="10" font-weight="700" text-anchor="start">1 · ${short(1)}</text>
+            <text x="-94" y="-18" fill="${role(2)}" font-size="10" font-weight="700" text-anchor="end">2 · ${short(2)}</text>
+            <text x="0" y="104" fill="${role(3)}" font-size="10" font-weight="700" text-anchor="middle">3 · ${short(3)}</text>
+            <text x="0" y="124" fill="#10b981" font-size="12" font-weight="800" text-anchor="middle">XLR-3 SOCKET CONNECTOR (FEMALE)</text>
+            <text x="0" y="139" fill="#94a3b8" font-size="9.5" text-anchor="middle">Equipment input · mating face (AES14 Table 1)</text>
+          </g>
 
-            <!-- Socket 1: Top Right (Mirror of male) -->
-            <circle cx="36" cy="-22" r="14" fill="${p1Color}" stroke="#ffffff" stroke-width="2"/>
-            <circle cx="36" cy="-22" r="4.5" fill="#0f172a"/>
-            <text x="58" y="-22" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="start">Socket 1: Screen</text>
-
-            <!-- Socket 2: Top Left -->
-            <circle cx="-36" cy="-22" r="14" fill="${p2Color}" stroke="#ffffff" stroke-width="2"/>
-            <circle cx="-36" cy="-22" r="4.5" fill="#0f172a"/>
-            <text x="-58" y="-22" fill="#10b981" font-size="10" font-weight="600" text-anchor="end">Socket 2: Pos</text>
-
-            <!-- Socket 3: Bottom Center -->
-            <circle cx="0" cy="38" r="14" fill="${p3Color}" stroke="#ffffff" stroke-width="2"/>
-            <circle cx="0" cy="38" r="4.5" fill="#0f172a"/>
-            <text x="0" y="66" fill="#ef4444" font-size="10" font-weight="600" text-anchor="middle">Socket 3: Return</text>
-
-            <text x="0" y="105" fill="#10b981" font-size="12" font-weight="700" text-anchor="middle">XLR-3F (SOCKET CONNECTOR)</text>
-            <text x="0" y="120" fill="#94a3b8" font-size="9.5" text-anchor="middle">Equipment Input (AES14 Table 1)</text>
+          <!-- Dimensions (drafting style; values per IEC 61076-2-103) -->
+          <g transform="translate(30, 0)" stroke="#64748b" stroke-width="0.8" fill="#94a3b8" font-size="8.5" font-style="italic">
+            <line x1="54" y1="18" x2="226" y2="18"/>
+            <line x1="54" y1="13" x2="54" y2="40" stroke-dasharray="2,2"/><line x1="226" y1="13" x2="226" y2="40" stroke-dasharray="2,2"/>
+            <polygon points="54,18 61,15 61,21" stroke="none"/><polygon points="226,18 219,15 219,21" stroke="none"/>
+            <text x="140" y="14" text-anchor="middle" stroke="none">Ø shell</text>
+            <line x1="104" y1="92" x2="176" y2="92"/>
+            <line x1="104" y1="113" x2="104" y2="88" stroke-dasharray="2,2"/><line x1="176" y1="113" x2="176" y2="88" stroke-dasharray="2,2"/>
+            <polygon points="104,92 110,89 110,95" stroke="none"/><polygon points="176,92 170,89 170,95" stroke="none"/>
+            <text x="140" y="88" text-anchor="middle" stroke="none">pitch 1↔2</text>
+            <line x1="126" y1="190" x2="154" y2="190"/>
+            <text x="140" y="203" text-anchor="middle" stroke="none">Ø pin</text>
+            <text x="290" y="294" text-anchor="middle" stroke="none" font-style="normal">Dimensions: see IEC 61076-2-103 (XLR-type circular connectors), referenced by AES14</text>
           </g>
         </svg>
       `;

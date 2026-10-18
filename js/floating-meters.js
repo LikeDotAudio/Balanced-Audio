@@ -1384,6 +1384,26 @@ class FloatingMeterDock {
 
     document.querySelectorAll("[data-probe-target]").forEach(bindTarget);
 
+    // Hovering any test point (including ones added later, e.g. XLR hub pins) opens every rack
+    // instrument probing it; moving off closes them again (cards opened by hand stay open)
+    let hoverKey = null;
+    document.addEventListener("mouseover", (e) => {
+      const el = e.target.closest && e.target.closest("[data-probe-target]");
+      if (!el || this.dock.contains(el)) return;
+      const key = el.getAttribute("data-probe-target");
+      if (key === hoverKey) return;
+      hoverKey = key;
+      this.hoveredProbeTarget = key;
+      this.openInstrumentsFor(key);
+    });
+    document.addEventListener("mouseout", (e) => {
+      const from = e.target.closest && e.target.closest("[data-probe-target]");
+      if (!from || (e.relatedTarget && from.contains(e.relatedTarget))) return;
+      hoverKey = null;
+      this.hoveredProbeTarget = null;
+      this.openInstrumentsFor(null);
+    });
+
     document.addEventListener("click", (e) => {
       if (!this.isArmed) return;
       const probeTargetEl = e.target.closest("[data-probe-target]");
@@ -1391,6 +1411,34 @@ class FloatingMeterDock {
         const target = probeTargetEl.getAttribute("data-probe-target");
         const label = probeTargetEl.getAttribute("data-probe-label") || probeTargetEl.getAttribute("title") || target;
         this.selectProbeTarget(target, label, probeTargetEl);
+      }
+    });
+  }
+
+  // Rack cards whose instrument is probing this point
+  instrumentsFor(key) {
+    if (!key) return [];
+    const cards = [];
+    if (this.scope8Channels().some(c => c.key === key)) cards.push("rack-card-scope8");
+    if (this.effectiveDmmTarget(1) === key) cards.push("rack-card-dmm1");
+    if (this.effectiveDmmTarget(2) === key) cards.push("rack-card-dmm2");
+    [1, 2, 3, 4].forEach(n => { if (this[`vu${n}Target`] === key) cards.push(`rack-card-vu${n}`); });
+    return cards.map(id => document.getElementById(id)).filter(Boolean);
+  }
+
+  openInstrumentsFor(key) {
+    this.dock.querySelectorAll(".probe-related").forEach(card => {
+      card.classList.remove("probe-related");
+      if (card.dataset.openedByHover) {
+        card.classList.remove("open");
+        delete card.dataset.openedByHover;
+      }
+    });
+    this.instrumentsFor(key).forEach(card => {
+      card.classList.add("probe-related");
+      if (!card.classList.contains("open")) {
+        card.classList.add("open");
+        card.dataset.openedByHover = "1";
       }
     });
   }

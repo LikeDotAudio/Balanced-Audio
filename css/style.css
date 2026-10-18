@@ -8055,3 +8055,8 @@ html[data-theme="paper"] body > section .svg-diagram-wrapper::after {
   font-size: 0.85em;
   color: var(--text-muted);
 }
+
+/* Rack instruments probing the hovered test point */
+.rack-meter-card.probe-related {
+  border-color: #f8fafc !important;
+}
