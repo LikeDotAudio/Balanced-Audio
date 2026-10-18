@@ -6965,7 +6965,7 @@ body.has-story-sidebar.sidebar-taxonomy-active {
   padding-left: 360px !important;
 }
 
-/* Generators A–D in the sidebar, shown only while the 8-CH meters are up */
+/* Generators 0–8 in the sidebar (GEN 0 = master, GEN 1–8 = the eight lines); also the line selector */
 .sidebar-gen-dock {
   display: none;
   flex: 0 0 auto;
@@ -9217,3 +9217,113 @@ html[data-theme="paper"] .floating-meter-dock .rack-credit {
 html[data-theme="paper"] .floating-meter-dock .rack-vu-bezel {
   filter: invert(1) hue-rotate(180deg);
 }
+
+/* Study notes page printed after the posters (js/posters.js) */
+.study-notes-page { display: none; }
+@media print {
+  body.print-poster-only .study-notes-page { display: block; }
+  .study-notes {
+    color: #111;
+    background: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+    padding: 4mm;
+  }
+  .study-notes h2 { font-size: 22pt; margin: 0 0 2mm; border-bottom: 1px solid #111; }
+  .study-sub { font-size: 10pt; color: #444; margin: 0 0 4mm; }
+  .study-group { font-size: 12pt; margin: 4mm 0 1mm; border-bottom: 1px solid #999; }
+  .study-note { display: flex; gap: 3mm; padding: 1.5mm 0; border-bottom: 1px solid #ddd; font-size: 10.5pt; break-inside: avoid; }
+  .study-no { font: 800 11pt monospace; min-width: 8mm; }
+  .study-quote { font-style: italic; color: #555; border-left: 2px solid #999; padding-left: 2mm; margin-bottom: 1mm; }
+  .study-meta { font-size: 8.5pt; color: #666; }
+  .study-lines div { height: 9mm; border-bottom: 1px solid #bbb; }
+}
+
+/* ---- Hess matrix wiring diagrams (js/hess-wiring.js) ---- */
+.hess-wiring { margin: 1.5rem 0 2rem; }
+.hess-wiring-title { color: var(--text-primary); margin: 0 0 0.35rem; font-size: 1.15rem; }
+.hess-wiring-lead { color: var(--text-secondary); font-size: 0.82rem; margin: 0 0 0.75rem; max-width: 70rem; }
+.hess-wiring-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 0;
+  border-top: 1px solid #1e293b;
+  border-left: 1px solid #1e293b;
+}
+.hess-wiring-fig {
+  margin: 0;
+  border-right: 1px solid #1e293b;
+  border-bottom: 1px solid #1e293b;
+  background: #040812;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  scroll-margin-top: 90px;
+}
+.hess-wiring-fig svg { display: block; width: 100%; height: auto; font-family: var(--font-sans); }
+.hess-wiring-head { display: flex; align-items: baseline; gap: 0.55rem; padding: 0.5rem 0.65rem 0.2rem; }
+.hess-wiring-no {
+  font: 900 1.5rem/1 var(--font-mono);
+  color: #38bdf8;
+  text-decoration: none;
+  min-width: 1.2rem;
+}
+.hess-wiring-name { color: var(--text-primary); font-weight: 800; font-size: 0.86rem; line-height: 1.25; }
+.hess-wiring-fig.is-danger .hess-wiring-no,
+.hess-wiring-fig.is-danger .hess-wiring-name { color: #ef4444; }
+.hess-wiring-fig figcaption {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.15rem 0.6rem;
+  padding: 0.35rem 0.65rem 0.6rem;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  margin-top: auto;
+}
+.hess-wiring-fig .hw-k { color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 0.66rem; letter-spacing: 0.05em; padding-top: 0.1rem; }
+.hess-wiring-fig .hw-treat { color: var(--text-primary); font-weight: 700; }
+.hess-wiring-fig .hw-back { grid-column: 1 / -1; color: #38bdf8; font-size: 0.7rem; text-decoration: none; }
+@media print { .hess-wiring-fig { break-inside: avoid; } }
+
+/* Editor's notes: open questions for the committee, visible in the report and the PDF */
+.editor-note {
+  margin: 0.75rem 0 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px dashed #f59e0b;
+  border-left: 4px solid #f59e0b;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 780px;
+}
+.editor-note-label {
+  display: inline-block;
+  margin-right: 0.4rem;
+  font: 900 0.72rem var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f59e0b;
+}
+
+/* Generators 0–8: each card in its line's colour; GEN 0 spans the dock and starts them all */
+.sidebar-gen-dock .bench-gen.on { border-color: var(--line-color, #38bdf8); }
+.sidebar-gen-dock .bench-gen-name {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--line-color, #38bdf8);
+  font: 800 0.64rem var(--font-mono);
+}
+.sidebar-gen-dock .bench-gen-name.active { text-decoration: underline; }
+.bench-gen-follow {
+  background: #111;
+  border: 1px solid #333;
+  color: #888;
+  font: 800 0.58rem var(--font-mono);
+  padding: 0 4px;
+  cursor: pointer;
+  line-height: 1.4;
+}
+.bench-gen-follow.active { background: #e5e7eb; border-color: #e5e7eb; color: #000; }
+.bench-gen-master { margin-bottom: -1px; }
+.bench-gen-master .bench-gen-name { font-size: 0.7rem; }
+.sidebar-gen-dock .sidebar-line-title { display: flex; justify-content: space-between; align-items: center; }

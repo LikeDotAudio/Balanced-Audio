@@ -126,8 +126,14 @@ function buildGallery() {
 }
 
 // Print posters where they stand: everything else is hidden, each poster is sized to one landscape page
-function printPosters(roots, label) {
+function printPosters(roots, label, extraPages = []) {
   const undo = [];
+  // Extra pages (e.g. study notes) are whole elements added to the body for this print only
+  extraPages.forEach(page => {
+    page.classList.add("poster-path");
+    document.body.appendChild(page);
+    undo.push(() => page.remove());
+  });
   roots.forEach(root => {
     for (let n = root.parentElement; n && n !== document.body; n = n.parentElement) {
       if (!n.classList.contains("poster-path")) {
@@ -185,12 +191,57 @@ function printPosters(roots, label) {
   else window.print();
 }
 
+function allPosters() {
+  return [...document.querySelectorAll(".report-poster")].filter(p => !p.closest("#poster-gallery"));
+}
+
 function printAllPosters() {
-  printPosters([...document.querySelectorAll(".report-poster")].filter(p => !p.closest("#poster-gallery")), "Posters");
+  printPosters(allPosters(), "Posters");
+}
+
+// Study notes: the reader's own review notes (review-comments.js), then ruled lines to write on
+function studyNotesPage() {
+  const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const rc = window.reviewComments;
+  const notes = rc ? rc.ordered() : [];
+  let body = "";
+  let lastSection = null;
+  notes.forEach((n, i) => {
+    if (n.sectionTitle !== lastSection) {
+      body += `<h3 class="study-group">${esc(n.sectionTitle)}</h3>`;
+      lastSection = n.sectionTitle;
+    }
+    body += `<div class="study-note"><span class="study-no">${i + 1}</span><div>${n.quote ? `<div class="study-quote">${esc(n.quote)}</div>` : ""}<div>${esc(n.text)}</div><div class="study-meta">${esc(n.author)} · ${new Date(n.created).toLocaleDateString()}</div></div></div>`;
+  });
+  const page = document.createElement("div");
+  page.className = "study-notes-page";
+  page.innerHTML = `
+    <div class="poster-printing study-notes">
+      <h2>Study Notes</h2>
+      <p class="study-sub">${notes.length ? `${notes.length} note${notes.length === 1 ? "" : "s"} from this review` : "No review notes yet: use the lines below."}</p>
+      ${body}
+      <div class="study-lines">${"<div></div>".repeat(notes.length ? 10 : 18)}</div>
+    </div>`;
+  return page;
+}
+
+function printPostersWithNotes() {
+  printPosters(allPosters(), "Posters & Study Notes", [studyNotesPage()]);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("print-posters-btn")?.addEventListener("click", printAllPosters);
+  // A download button with the report's opening actions
+  const actions = document.querySelector("#hero .hero-actions");
+  if (actions) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn-secondary";
+    btn.textContent = "Posters & Study Notes (PDF) 🖨";
+    btn.title = "Save every poster, one landscape page each, plus your study notes, as a PDF";
+    btn.addEventListener("click", printPostersWithNotes);
+    actions.appendChild(btn);
+  }
   setTimeout(findPosters, 0);
   // Tables and inspectors are filled in by other scripts on load: mirror them once they exist
   setTimeout(() => {

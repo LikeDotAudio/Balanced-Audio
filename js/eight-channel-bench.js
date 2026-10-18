@@ -6,10 +6,10 @@
  *    (CH1 = 100 Hz, CH2 = 200 Hz … CH8 = 800 Hz) so every line is recognisable by ear and on the scope.
  * 2. Every line has its own mini oscilloscope and its own level meter (dBu bar + Vrms / Vpk digits),
  *    all eight visible at once with no scrolling.
- * 3. Four simple signal generators (GEN A–D: sine / square / triangle / sawtooth, frequency, level, on/off).
- *    Any line can be re-patched from its own tone to GEN A–D.
- * 3b. The generators live in the left sidebar and appear only while the 8-CH meters are showing.
- * 4. Line selector in the left Story sidebar: picking a line focuses it in the rack (enlarged row,
+ * 3. Nine generators in the left sidebar (sine / square / triangle / sawtooth, frequency, level, on/off):
+ *    GEN 0 is the master (1 kHz) and starts them all; GEN 1–8 drive the eight lines (100–800 Hz).
+ *    Any line can follow GEN 0 ("=0"), or all at once ("ALL =0").
+ * 4. A generator's name selects its line: the line is focused in the rack (enlarged row,
  *    edit strip for frequency / level / mute, optional audible monitor via Web Audio).
  * 5. Fixed 10 ms scope window: CH1 shows 1 cycle, CH8 shows 8 cycles.
  * 5b. QTP mode: while the Multi-Pair Snake / QTP fault simulator is on screen, the 8 scopes become one per
@@ -50,17 +50,15 @@ class EightChannelBench {
       n: i + 1,
       freq: 100 * (i + 1),
       levelDbu: 4,
-      src: "tone", // 'tone' | 'A' | 'B' | 'C' | 'D'
+      wave: "sine",
+      on: true,
+      follow0: false, // true: the line carries GEN 0 instead of its own generator
       muted: false,
       color: BENCH_CH_COLORS[i]
     }));
 
-    this.generators = [
-      { id: "A", on: true, wave: "sine", freq: 1000, levelDbu: 4 },
-      { id: "B", on: true, wave: "square", freq: 440, levelDbu: 0 },
-      { id: "C", on: true, wave: "triangle", freq: 60, levelDbu: -10 },
-      { id: "D", on: false, wave: "sawtooth", freq: 2000, levelDbu: -6 }
-    ];
+    // GEN 0: the master generator that starts them all
+    this.master = { on: true, wave: "sine", freq: 1000, levelDbu: 4 };
 
     this.focus = 1; // 0 = all lines equal
     this.mode = "lines"; // 'lines' (8 balanced lines) | 'qtp' (8 QTP conductors)
@@ -85,7 +83,7 @@ class EightChannelBench {
     document.addEventListener("x152-line-level", (e) => {
       const dbu = Math.max(-40, Math.min(24, e.detail.dbu));
       this.channels.forEach(ch => { ch.levelDbu = dbu; });
-      this.generators.forEach(g => { g.levelDbu = dbu; });
+      this.master.levelDbu = dbu;
       document.querySelectorAll("[data-gen-level]").forEach(inp => { inp.value = Math.round(dbu * 10) / 10; });
       if (this.focus) this.focusLine(this.focus, false);
       this.updateMonitor();
@@ -96,9 +94,8 @@ class EightChannelBench {
   // ---------- Signal model ----------
 
   sourceFor(ch) {
-    if (ch.src === "tone") return { wave: "sine", freq: ch.freq, levelDbu: ch.levelDbu, live: !ch.muted };
-    const g = this.generators.find(x => x.id === ch.src);
-    return { wave: g.wave, freq: g.freq, levelDbu: g.levelDbu, live: g.on && !ch.muted };
+    const g = ch.follow0 ? this.master : ch;
+    return { wave: g.wave, freq: g.freq, levelDbu: g.levelDbu, live: this.master.on && ch.on && !ch.muted };
   }
 
   waveSample(wave, phase) {
@@ -125,33 +122,31 @@ class EightChannelBench {
   // ---------- DOM ----------
 
   renderPanel() {
-    const genHtml = this.generators.map(g => `
-      <div class="bench-gen ${g.on ? "on" : ""}" data-gen="${g.id}">
+    const genCard = (g, id, color) => `
+      <div class="bench-gen ${g.on ? "on" : ""}${id === "0" ? " bench-gen-master" : ""}" data-gen="${id}" style="--line-color: ${color};">
         <div class="bench-gen-top">
-          <span class="bench-gen-name">GEN ${g.id}</span>
-          <button type="button" class="bench-gen-power" data-gen-power="${g.id}">${g.on ? "ON" : "OFF"}</button>
+          <button type="button" class="bench-gen-name" data-select-line="${id}" title="${id === "0" ? "Show all lines" : `Select line ${id}`}">GEN ${id}${id === "0" ? " · ALL" : ""}</button>
+          ${id === "0"
+            ? '<button type="button" class="bench-gen-follow" data-gen-all title="Every line follows GEN 0">ALL =0</button>'
+            : `<button type="button" class="bench-gen-follow" data-gen-follow="${id}" title="Line ${id} follows GEN 0">=0</button>`}
+          <button type="button" class="bench-gen-power" data-gen-power="${id}">${g.on ? "ON" : "OFF"}</button>
         </div>
         <div class="bench-gen-waves">
-          ${BENCH_WAVES.map(w => `<button type="button" class="bench-wave-btn ${w.id === g.wave ? "active" : ""}" data-gen-wave="${g.id}" data-wave="${w.id}" title="${w.id}">${w.glyph}</button>`).join("")}
+          ${BENCH_WAVES.map(w => `<button type="button" class="bench-wave-btn ${w.id === g.wave ? "active" : ""}" data-gen-wave="${id}" data-wave="${w.id}" title="${w.id}">${w.glyph}</button>`).join("")}
         </div>
         <div class="bench-gen-fields">
-          <label><input type="number" class="bench-num" data-gen-freq="${g.id}" min="10" max="20000" step="10" value="${g.freq}"><span>Hz</span></label>
-          <label><input type="number" class="bench-num" data-gen-level="${g.id}" min="-40" max="24" step="1" value="${g.levelDbu}"><span>dBu</span></label>
+          <label><input type="number" class="bench-num" data-gen-freq="${id}" min="10" max="20000" step="10" value="${g.freq}"><span>Hz</span></label>
+          <label><input type="number" class="bench-num" data-gen-level="${id}" min="-40" max="24" step="1" value="${g.levelDbu}"><span>dBu</span></label>
         </div>
-      </div>`).join("");
+      </div>`;
+    const genHtml = this.channels.map(ch => genCard(ch, String(ch.n), ch.color)).join("");
 
     const rowHtml = this.channels.map(ch => `
       <div class="bench-line" data-line="${ch.n}" style="--line-color: ${ch.color};">
         <div class="bench-line-id">
           <span class="bench-line-name">CH${ch.n}</span>
           <span class="bench-line-ref" data-line-ref="${ch.n}">P2↔P3 ACROSS</span>
-          <select class="bench-src" data-line-src="${ch.n}" title="Source patched to CH${ch.n}">
-            <option value="tone">${ch.freq} Hz</option>
-            <option value="A">GEN A</option>
-            <option value="B">GEN B</option>
-            <option value="C">GEN C</option>
-            <option value="D">GEN D</option>
-          </select>
+          <span class="bench-src" data-line-src="${ch.n}" title="Generator driving CH${ch.n}">GEN ${ch.n}</span>
         </div>
         <canvas class="bench-scope" data-line-scope="${ch.n}"></canvas>
         <div class="bench-meter">
@@ -163,8 +158,11 @@ class EightChannelBench {
 
     this.genDock = document.createElement("div");
     this.genDock.id = "sidebar-gen-dock";
-    this.genDock.className = "sidebar-gen-dock";
-    this.genDock.innerHTML = `<div class="sidebar-line-title"><span>⚡ GENERATORS A–D</span></div><div class="bench-gens">${genHtml}</div>`;
+    this.genDock.className = "sidebar-gen-dock shown";
+    this.genDock.innerHTML = `
+      <div class="sidebar-line-title"><span>⚡ GENERATORS 0–8</span><button type="button" class="sidebar-line-all" data-select-line="0">ALL</button></div>
+      ${genCard(this.master, "0", "#e5e7eb")}
+      <div class="bench-gens">${genHtml}</div>`;
 
     this.panel.innerHTML = `
       <div class="bench-lines">${rowHtml}</div>
@@ -186,8 +184,10 @@ class EightChannelBench {
     const p = this.panel;
     const g = this.genDock;
 
+    const genOf = (id) => (id === "0" ? this.master : this.channels[Number(id) - 1]);
+
     g.querySelectorAll("[data-gen-power]").forEach(btn => btn.addEventListener("click", () => {
-      const gen = this.generators.find(x => x.id === btn.dataset.genPower);
+      const gen = genOf(btn.dataset.genPower);
       gen.on = !gen.on;
       btn.textContent = gen.on ? "ON" : "OFF";
       btn.closest(".bench-gen").classList.toggle("on", gen.on);
@@ -195,31 +195,46 @@ class EightChannelBench {
     }));
 
     g.querySelectorAll("[data-gen-wave]").forEach(btn => btn.addEventListener("click", () => {
-      const gen = this.generators.find(x => x.id === btn.dataset.genWave);
-      gen.wave = btn.dataset.wave;
-      this.genDock.querySelectorAll(`[data-gen-wave="${gen.id}"]`).forEach(b => b.classList.toggle("active", b === btn));
+      const id = btn.dataset.genWave;
+      genOf(id).wave = btn.dataset.wave;
+      g.querySelectorAll(`[data-gen-wave="${id}"]`).forEach(b => b.classList.toggle("active", b === btn));
       this.updateMonitor();
     }));
 
     g.querySelectorAll("[data-gen-freq]").forEach(inp => inp.addEventListener("input", () => {
       const v = parseFloat(inp.value);
-      if (!isNaN(v) && v > 0) this.generators.find(x => x.id === inp.dataset.genFreq).freq = Math.min(20000, v);
+      if (!isNaN(v) && v > 0) genOf(inp.dataset.genFreq).freq = Math.min(20000, v);
+      this.syncLineLabels();
+      if (this.focus) this.focusLine(this.focus, false);
       this.updateMonitor();
     }));
 
     g.querySelectorAll("[data-gen-level]").forEach(inp => inp.addEventListener("input", () => {
       const v = parseFloat(inp.value);
-      if (!isNaN(v)) this.generators.find(x => x.id === inp.dataset.genLevel).levelDbu = Math.max(-40, Math.min(24, v));
+      if (!isNaN(v)) genOf(inp.dataset.genLevel).levelDbu = Math.max(-40, Math.min(24, v));
+      if (this.focus) this.focusLine(this.focus, false);
       this.updateMonitor();
     }));
 
-    p.querySelectorAll("[data-line-src]").forEach(sel => sel.addEventListener("change", () => {
-      this.channels[Number(sel.dataset.lineSrc) - 1].src = sel.value;
+    g.querySelectorAll("[data-gen-follow]").forEach(btn => btn.addEventListener("click", () => {
+      const ch = genOf(btn.dataset.genFollow);
+      ch.follow0 = !ch.follow0;
+      this.syncLineLabels();
       this.updateMonitor();
+    }));
+
+    g.querySelector("[data-gen-all]").addEventListener("click", () => {
+      const all = this.channels.every(ch => ch.follow0);
+      this.channels.forEach(ch => { ch.follow0 = !all; });
+      this.syncLineLabels();
+      this.updateMonitor();
+    });
+
+    g.querySelectorAll("[data-select-line]").forEach(btn => btn.addEventListener("click", () => {
+      this.focusLine(Number(btn.dataset.selectLine), true);
     }));
 
     p.querySelectorAll(".bench-line").forEach(row => row.addEventListener("click", (e) => {
-      if (e.target.closest("select")) return;
       const n = Number(row.dataset.line);
       this.focusLine(this.focus === n ? 0 : n, false);
     }));
@@ -229,8 +244,9 @@ class EightChannelBench {
       const v = parseFloat(e.target.value);
       if (!ch || isNaN(v) || v <= 0) return;
       ch.freq = Math.min(20000, v);
-      p.querySelector(`[data-line-src="${ch.n}"] option[value="tone"]`).textContent = `${this.fmtFreq(ch.freq)} Hz`;
-      this.updateSidebarSelector();
+      const inp = this.genDock.querySelector(`[data-gen-freq="${ch.n}"]`);
+      if (inp) inp.value = ch.freq;
+      this.syncLineLabels();
       this.updateMonitor();
     });
 
@@ -238,6 +254,8 @@ class EightChannelBench {
       const ch = this.channels[this.focus - 1];
       if (!ch) return;
       ch.levelDbu = Number(e.target.value);
+      const inp = this.genDock.querySelector(`[data-gen-level="${ch.n}"]`);
+      if (inp) inp.value = ch.levelDbu;
       this.updateMonitor();
     });
 
@@ -257,40 +275,26 @@ class EightChannelBench {
     });
   }
 
+  // The generator dock is the line selector: GEN 1–8 names select their lines, ALL / GEN 0 shows every line
   buildSidebarSelector() {
     const sidebar = document.getElementById("story-index-sidebar");
-    if (!sidebar || document.getElementById("sidebar-line-selector")) return;
-
-    const box = document.createElement("div");
-    box.id = "sidebar-line-selector";
-    box.className = "sidebar-line-selector";
-    box.innerHTML = `
-      <div class="sidebar-line-title">
-        <span>📶 LINE SELECT</span>
-        <button type="button" class="sidebar-line-all" data-select-line="0">ALL</button>
-      </div>
-      <div class="sidebar-line-grid">
-        ${this.channels.map(ch => `
-          <button type="button" class="sidebar-line-btn" data-select-line="${ch.n}" style="--line-color: ${ch.color};">
-            <span class="sidebar-line-ch">CH${ch.n}</span>
-            <span class="sidebar-line-hz" data-sidebar-hz="${ch.n}">${this.fmtFreq(ch.freq)} Hz</span>
-          </button>`).join("")}
-      </div>
-    `;
+    if (!sidebar || document.getElementById("sidebar-gen-dock")) return;
     sidebar.appendChild(this.genDock);
-    sidebar.appendChild(box);
+    this.syncLineLabels();
+  }
 
-    box.querySelectorAll("[data-select-line]").forEach(btn => btn.addEventListener("click", () => {
-      this.focusLine(Number(btn.dataset.selectLine), true);
-    }));
+  // Each line's label says what drives it; "=0" buttons light up for lines following GEN 0
+  syncLineLabels() {
+    this.channels.forEach(ch => {
+      const lbl = this.panel.querySelector(`[data-line-src="${ch.n}"]`);
+      if (lbl) lbl.textContent = ch.follow0 ? `= GEN 0 · ${this.fmtFreq(this.master.freq)} Hz` : `GEN ${ch.n} · ${this.fmtFreq(ch.freq)} Hz`;
+      this.genDock.querySelector(`[data-gen-follow="${ch.n}"]`)?.classList.toggle("active", ch.follow0);
+    });
+    this.genDock.querySelector("[data-gen-all]")?.classList.toggle("active", this.channels.every(ch => ch.follow0));
   }
 
   updateSidebarSelector() {
-    this.channels.forEach(ch => {
-      const hz = document.querySelector(`[data-sidebar-hz="${ch.n}"]`);
-      if (hz) hz.textContent = `${this.fmtFreq(ch.freq)} Hz`;
-    });
-    document.querySelectorAll("[data-select-line]").forEach(btn => {
+    this.genDock.querySelectorAll("[data-select-line]").forEach(btn => {
       btn.classList.toggle("active", Number(btn.dataset.selectLine) === this.focus);
     });
   }
@@ -403,7 +407,7 @@ class EightChannelBench {
       const rxDbu = document.getElementById(`snk-rx-dbu-${ch.n}`);
       const bar = document.getElementById(`snk-rx-bar-${ch.n}`);
       const line = document.getElementById(`snk-line-${ch.n}`);
-      const srcName = ch.src === "tone" ? "" : ` (GEN ${ch.src})`;
+      const srcName = ch.follow0 ? " (GEN 0)" : "";
 
       genTxt.textContent = live ? `${glyph(src.wave)} ${this.fmtFreq(src.freq)} Hz · ${lv.dbu >= 0 ? "+" : ""}${lv.dbu.toFixed(1)} dBu${srcName}` : `OFF${srcName}`;
       rxDbu.textContent = live ? `${lv.dbu >= 0 ? "+" : ""}${lv.dbu.toFixed(1)} dBu ${onGoal ? "✓" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}`}` : "−∞ dBu";
@@ -719,7 +723,7 @@ class EightChannelBench {
         const src = this.sourceFor(ch);
         const lv = this.levels(src);
         // Tones are triggered (static); generator sources free-run slowly so they read as patched-in
-        const drift = ch.src === "tone" ? 0 : (tSec * 0.25) % 1;
+        const drift = ch.follow0 ? (tSec * 0.25) % 1 : 0;
         this.drawScope(this.scopes[i], ch.color, (tMs) => lv.vpk * this.waveSample(src.wave, (src.freq * tMs) / 1000 + drift));
         dbu = lv.dbu;
         vEl.textContent = isFinite(dbu) ? `${lv.vrms.toFixed(3)}V rms · ${lv.vpk.toFixed(2)}pk` : "0.000V rms";
@@ -741,7 +745,6 @@ class EightChannelBench {
       // Only draw while the 8-CH tab is visible
       const benchUp = this.panel.offsetParent !== null;
       if (benchUp) this.renderFrame(ts / 1000);
-      if (this.genDock.classList.contains("shown") !== benchUp) this.genDock.classList.toggle("shown", benchUp);
       this.renderBreakoutWires();
       this.updateSnakeDiagram();
       this.animFrame = requestAnimationFrame(loop);

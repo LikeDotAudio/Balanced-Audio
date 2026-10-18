@@ -1519,13 +1519,17 @@
     <div class="container">
       <div class="section-header">
         <span class="section-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">Multichannel Architecture</span>
-        <h2 class="section-title">Multichannel Interconnection Hierarchy: AES59 &rarr; AES72-4E &rarr; 4&times; XLR / TRS</h2>
+        <h2 class="section-title">Multichannel Interconnection Hierarchy: AES59 &rarr; AES72-4E &rarr; 4&times; XLR (AES14 &middot; AES26) / TRS</h2>
         <p class="section-lead">
-          Drawing on AES59, AES-X249, AES72-4E, AES14, and AES48. 
+          Drawing on AES59, AES-X249, AES72-4E, AES14 (XLR connectors), AES26 (polarity: Pin 2 hot) and AES48. 
           In modern pro audio installations, an 8-path trunk (<strong>AES59 DB25</strong>) splits into two 4-path Quad Twisted Pair lines (<strong>AES72-4E RJ45</strong>), 
           which then break out into discrete <strong>XLR-3</strong> or <strong>1/4″ TRS</strong> terminations. 
           Inspect the hardware icons, twisted-pair pin allocations, and continuous AES48 chassis shield bonding at each stage:
         </p>
+        <aside class="editor-note" role="note">
+          <span class="editor-note-label">Editor's note</span>
+          The AES26 polarity convention as applied in this section (Pin 2 hot through the DB25, RJ45 and XLR/TRS breakouts) could use a review.
+        </aside>
       </div>
 
       <!-- Breakout Controls & Channel Selector -->
@@ -7555,6 +7559,7 @@
   <script src="js/modules-data.js"></script>
   <script src="js/modules-viewer.js"></script>
   <script src="js/activity-wayfinding.js"></script>
+  <script src="js/hess-wiring.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

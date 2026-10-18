@@ -73,6 +73,7 @@ SCRIPTS_ORDER = [
     "js/modules-data.js",
     "js/modules-viewer.js",
     "js/activity-wayfinding.js",
+    "js/hess-wiring.js",
     "js/main.js",
 ]
 
