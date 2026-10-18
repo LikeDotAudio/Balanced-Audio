@@ -318,7 +318,8 @@ class ReviewComments {
     if (section.matches("header")) return "Header";
     if (section.matches("footer")) return "Footer";
     const h = section.querySelector(".section-title, h1, h2");
-    return h ? h.textContent.replace(/\s+/g, " ").trim() : section.id;
+    // Clause numbers are injected as their own span ("1.0" + "Title"), so keep them apart.
+    return h ? h.textContent.replace(/\s+/g, " ").trim().replace(/^(\d+(?:\.\d+)*)(?=\S)/, "$1 ") : section.id;
   }
 
   // A stable-ish address: nearest ancestor with an id, then nth-child steps down to the element.

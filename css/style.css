@@ -8131,3 +8131,225 @@ html[data-theme="paper"] body > section .svg-diagram-wrapper::after {
 .aes14-t2-row.table-row-selected {
   box-shadow: inset 5px 0 0 #10b981;
 }
+
+/* ==========================================================================
+   Reviewer Notes (js/review-comments.js)
+   ========================================================================== */
+.review-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--accent-amber);
+  color: var(--accent-amber);
+  padding: 0.35rem 0.7rem;
+  font: 700 0.8rem var(--font-sans);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.review-toggle-btn:hover,
+.review-toggle-btn.active {
+  background: var(--accent-amber);
+  color: #000;
+}
+
+body.review-mode { cursor: crosshair; }
+body.review-mode .review-hover {
+  outline: 2px dashed var(--accent-amber) !important;
+  outline-offset: 2px;
+  cursor: copy;
+}
+.review-flash {
+  outline: 3px solid var(--accent-amber) !important;
+  outline-offset: 3px;
+}
+
+.review-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 1000100;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  max-width: calc(100vw - 32px);
+  padding: 0.55rem 0.8rem;
+  background: #111;
+  border: 1px solid var(--accent-amber);
+  color: var(--text-primary);
+  font: 500 0.85rem var(--font-sans);
+}
+.review-bar[hidden] { display: none; }
+.review-bar-dot {
+  width: 9px; height: 9px;
+  background: var(--accent-amber);
+  animation: review-blink 1.2s steps(2) infinite;
+}
+@keyframes review-blink { 50% { opacity: 0; } }
+.review-bar-link { color: var(--accent-amber); font-weight: 700; }
+.review-bar-btn,
+.review-action-btn {
+  background: transparent;
+  border: 1px solid var(--border-accent);
+  color: var(--text-primary);
+  padding: 0.3rem 0.7rem;
+  font: 600 0.8rem var(--font-sans);
+  cursor: pointer;
+}
+.review-bar-btn:hover,
+.review-action-btn:hover { border-color: var(--accent-amber); }
+.review-action-btn.primary { background: var(--accent-amber); border-color: var(--accent-amber); color: #000; }
+.review-action-btn.danger { border-color: var(--accent-rose); color: var(--accent-rose); }
+
+.review-pin-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 0; height: 0;
+  z-index: 1000050;
+  pointer-events: none;
+}
+.review-pin {
+  position: absolute;
+  pointer-events: auto;
+  min-width: 22px; height: 22px;
+  padding: 0 4px;
+  background: var(--accent-amber);
+  border: 1px solid #000;
+  color: #000;
+  font: 800 0.72rem var(--font-mono);
+  cursor: pointer;
+}
+.review-pin:hover { background: #fff; }
+
+.review-popover {
+  position: fixed;
+  z-index: 1000200;
+  background: #0c0c0c;
+  border: 1px solid var(--accent-amber);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  cursor: auto;
+}
+.review-popover[hidden] { display: none; }
+.review-pop-head { display: flex; justify-content: space-between; font-weight: 800; color: var(--accent-amber); }
+.review-pop-who { font-family: var(--font-mono); color: var(--text-primary); }
+.review-pop-where { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.review-pop-quote {
+  margin: 0;
+  padding: 0.35rem 0.6rem;
+  border-left: 3px solid var(--accent-amber);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-style: italic;
+  max-height: 6em;
+  overflow: auto;
+}
+.review-popover textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: #000;
+  border: 1px solid var(--border-accent);
+  color: var(--text-primary);
+  font: 0.9rem var(--font-sans);
+  padding: 0.5rem;
+  resize: vertical;
+}
+.review-popover textarea:focus { outline: none; border-color: var(--accent-amber); }
+.review-pop-actions { display: flex; gap: 0.4rem; }
+.review-pop-actions [hidden] { display: none; }
+
+.review-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+.review-to { display: flex; align-items: center; gap: 0.4rem; color: var(--text-secondary); font-size: 0.85rem; }
+.review-to input {
+  background: #000;
+  border: 1px solid var(--border-accent);
+  color: var(--text-primary);
+  padding: 0.3rem 0.5rem;
+  font: 0.85rem var(--font-sans);
+  min-width: 240px;
+  max-width: 100%;
+}
+.review-status { min-height: 1.2em; color: var(--accent-emerald); font-size: 0.85rem; margin: 0 0 0.5rem; }
+.review-empty { color: var(--text-muted); }
+.review-group {
+  font-size: 1rem;
+  color: var(--accent-amber);
+  margin: 1rem 0 0.4rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.25rem;
+}
+.review-item {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--border-color);
+}
+.review-item-num {
+  flex: none;
+  min-width: 26px; height: 26px;
+  background: var(--accent-amber);
+  border: none;
+  color: #000;
+  font: 800 0.75rem var(--font-mono);
+  cursor: pointer;
+}
+.review-item-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.3rem; }
+.review-item-text { margin: 0; white-space: pre-wrap; color: var(--text-primary); }
+.review-item-meta { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); }
+.review-item-del {
+  flex: none;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 26px; height: 26px;
+  cursor: pointer;
+}
+.review-item-del:hover { color: var(--accent-rose); border-color: var(--accent-rose); }
+
+/* 8-channel scope: a square per strip (wires leave from it); header squares no longer used */
+.rack-scope-bezel {
+  position: relative;
+}
+
+.scope8-dots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.scope8-dot {
+  position: absolute;
+  left: 2px;
+  width: 9px !important;
+  height: 9px !important;
+}
+
+#rack-card-scope8 .rack-meter-title .rack-terminal-dot {
+  display: none;
+}
+
+/* Paper View: text boxes float over the probe wires. The wire layers sit beneath the page, whose
+   section and diagram backgrounds are see-through, so filled boxes and labels cover the wires. */
+html[data-theme="paper"] .live-probe-wires-svg {
+  z-index: 1 !important;
+}
+
+html[data-theme="paper"] body > section {
+  position: relative;
+  z-index: 2;
+  background: transparent !important;
+}
+
+html[data-theme="paper"] body > section svg > rect:first-child:not([x]):not([y]) {
+  fill-opacity: 0;
+}
+
+html[data-theme="paper"] body > section svg[style*="background"],
+html[data-theme="paper"] body > section .svg-diagram-wrapper,
+html[data-theme="paper"] body > section .svg-diagram-card {
+  background: transparent !important;
+}

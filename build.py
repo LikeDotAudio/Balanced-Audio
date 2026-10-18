@@ -66,6 +66,7 @@ SCRIPTS_ORDER = [
     "js/defined-in-index.js",
     "js/par-glossary.js",
     "js/landmark-papers.js",
+    "js/review-comments.js",
     "js/modules-data.js",
     "js/modules-viewer.js",
     "js/main.js",

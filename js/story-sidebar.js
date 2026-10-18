@@ -78,24 +78,29 @@ class StorySidebar {
             <a href="#how-to-use" class="chapter-link">★ How to Use This Lab</a>
           </div>
 
+          <div class="story-chapter" data-target="normative-references">
+            <div class="chapter-dot"></div>
+            <a href="#normative-references" class="chapter-link">1.0 Normative References</a>
+          </div>
+
           <div class="story-chapter" data-target="triad">
             <div class="chapter-dot"></div>
-            <a href="#triad" class="chapter-link">1.0 The Three Parts of the Chain</a>
+            <a href="#triad" class="chapter-link">2.0 The Three Parts of the Chain</a>
           </div>
 
           <div class="story-chapter" data-target="pyramid-section">
             <div class="chapter-dot"></div>
-            <a href="#pyramid-section" class="chapter-link">2.0 Dynamic Range &amp; Levels Pyramid</a>
+            <a href="#pyramid-section" class="chapter-link">3.0 Dynamic Range &amp; Levels Pyramid</a>
           </div>
 
           <div class="story-chapter" data-target="enclosure-explorer">
             <div class="chapter-dot"></div>
-            <a href="#enclosure-explorer" class="chapter-link">3.0 Enclosure &amp; Ground Physics</a>
+            <a href="#enclosure-explorer" class="chapter-link">4.0 Enclosure &amp; Ground Physics</a>
           </div>
 
           <div class="story-chapter" data-target="multichannel-hierarchy">
             <div class="chapter-dot"></div>
-            <a href="#multichannel-hierarchy" class="chapter-link">3.2 Multichannel Breakout (DB25 / RJ45)</a>
+            <a href="#multichannel-hierarchy" class="chapter-link">4.2 Multichannel Breakout (DB25 / RJ45)</a>
             <div class="chapter-subnodes fault-subnodes">
               <span class="subnode-heading">Snake / QTP faults</span>
               <a href="#qtp-demo-normal" class="subnode-link fault-subnode active" data-sidebar-fault="normal">✓ Normal Balanced</a>
@@ -112,19 +117,19 @@ class StorySidebar {
 
           <div class="story-chapter" data-target="xlr-hub">
             <div class="chapter-dot"></div>
-            <a href="#xlr-hub" class="chapter-link">3.5 Universal XLR Hub &amp; Polarity</a>
+            <a href="#xlr-hub" class="chapter-link">4.5 Universal XLR Hub &amp; Polarity</a>
           </div>
 
           <div class="story-chapter" data-target="top-level">
             <div class="chapter-dot"></div>
-            <a href="#top-level" class="chapter-link">4.0 Top-Level Normative Rules</a>
+            <a href="#top-level" class="chapter-link">5.0 Top-Level Normative Rules</a>
           </div>
 
 
 
           <div class="story-chapter" data-target="topologies">
             <div class="chapter-dot"></div>
-            <a href="#topologies" class="chapter-link">5.0 Standardized Circuits (6.1–6.8)</a>
+            <a href="#topologies" class="chapter-link">6.0 Standardized Circuits (6.1–6.8)</a>
             <div class="chapter-subnodes">
               <a href="#circuit-6-1" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-1')">6.1 Dual Push-Pull</a>
               <a href="#circuit-6-2" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-2')">6.2 Active Impedance-Balanced</a>
@@ -139,59 +144,59 @@ class StorySidebar {
 
           <div class="story-chapter" data-target="transformer-simulator">
             <div class="chapter-dot"></div>
-            <a href="#transformer-simulator" class="chapter-link">5.5 Audio Transformer Lab &amp; Zobel</a>
+            <a href="#transformer-simulator" class="chapter-link">6.5 Audio Transformer Lab &amp; Zobel</a>
           </div>
 
           <div class="story-chapter" data-target="deepest-dive">
             <div class="chapter-dot"></div>
-            <a href="#deepest-dive" class="chapter-link">6.0 Jim Meyer Thevenin CMRR</a>
+            <a href="#deepest-dive" class="chapter-link">7.0 Jim Meyer Thevenin CMRR</a>
           </div>
 
           <div class="story-chapter" data-target="tutorials-section">
             <div class="chapter-dot"></div>
-            <a href="#tutorials-section" class="chapter-link">7.0 Richard Hess Unbalanced Matrix</a>
+            <a href="#tutorials-section" class="chapter-link">8.0 Richard Hess Unbalanced Matrix</a>
           </div>
 
           <div class="story-chapter" data-target="adapter-wiring-suite">
             <div class="chapter-dot"></div>
-            <a href="#adapter-wiring-suite" class="chapter-link">7.5 Vector Adapter Wiring Suite</a>
+            <a href="#adapter-wiring-suite" class="chapter-link">8.5 Vector Adapter Wiring Suite</a>
           </div>
 
           <div class="story-chapter" data-target="taxonomy-tree">
             <div class="chapter-dot" style="background: var(--accent-cyan); box-shadow: 0 0 6px var(--accent-cyan);"></div>
             <a href="javascript:void(0)" id="sidebar-chapter-tree-btn" class="chapter-link" style="color: var(--accent-cyan); font-weight: 700;">
-              8.0 Standards Taxonomy Tree ↗
+              9.0 Standards Taxonomy Tree ↗
             </a>
           </div>
 
           <div class="story-chapter" data-target="aes-vst">
             <div class="chapter-dot"></div>
-            <a href="#aes-vst" class="chapter-link">9.0 AES-VST Plugin &amp; Map</a>
+            <a href="#aes-vst" class="chapter-link">10.0 AES-VST Plugin &amp; Map</a>
           </div>
 
           <div class="story-chapter" data-target="datasheet-templates">
             <div class="chapter-dot"></div>
-            <a href="#datasheet-templates" class="chapter-link">10.0 Free Datasheet Templates</a>
+            <a href="#datasheet-templates" class="chapter-link">11.0 Free Datasheet Templates</a>
           </div>
 
           <div class="story-chapter" data-target="dennis-bohn-par">
             <div class="chapter-dot"></div>
-            <a href="#dennis-bohn-par" class="chapter-link">11.0 Dennis Bohn PAR Glossary</a>
+            <a href="#dennis-bohn-par" class="chapter-link">12.0 Dennis Bohn PAR Glossary</a>
           </div>
 
           <div class="story-chapter" data-target="landmark-papers">
             <div class="chapter-dot"></div>
-            <a href="#landmark-papers" class="chapter-link">11.5 Landmark Papers Dossier</a>
+            <a href="#landmark-papers" class="chapter-link">12.5 Landmark Papers Dossier</a>
           </div>
 
           <div class="story-chapter" data-target="timeline-section">
             <div class="chapter-dot"></div>
-            <a href="#timeline-section" class="chapter-link">12.0 Standards Timeline</a>
+            <a href="#timeline-section" class="chapter-link">13.0 Standards Timeline</a>
           </div>
 
           <div class="story-chapter" data-target="roster-section">
             <div class="chapter-dot"></div>
-            <a href="#roster-section" class="chapter-link">13.0 Contributor Roster</a>
+            <a href="#roster-section" class="chapter-link">14.0 Contributor Roster</a>
           </div>
         </div>
 
@@ -376,6 +381,7 @@ class StorySidebar {
     const sectionIds = [
       "hero",
       "how-to-use",
+      "normative-references",
       "triad",
       "pyramid-section",
       "enclosure-explorer",

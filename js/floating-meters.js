@@ -1058,7 +1058,7 @@ class FloatingMeterDock {
 
     // Hover tracking on individual meter cards to illuminate specific channel wires
     const cardChannels = {
-      "rack-card-scope8": ["CH1", "CH2", "CH3", "CH4"],
+      "rack-card-scope8": ["SCOPE"],
       "rack-card-dmm1": ["DMM1"],
       "rack-card-dmm2": ["DMM2"],
       "rack-card-vu1": ["VU1"],
@@ -2347,6 +2347,32 @@ class FloatingMeterDock {
   }
 
 
+  // A coloured square at the start of each scope strip; probe wires leave from these
+  placeStripDots(canvas, chans, stripH) {
+    const host = canvas.parentElement;
+    let layer = host.querySelector(".scope8-dots");
+    if (!layer) {
+      layer = document.createElement("div");
+      layer.className = "scope8-dots";
+      host.appendChild(layer);
+    }
+    for (let i = 0; i < 8; i++) {
+      let dot = document.getElementById(`dot-strip-${i}`);
+      if (!dot) {
+        dot = document.createElement("span");
+        dot.id = `dot-strip-${i}`;
+        dot.className = "rack-terminal-dot scope8-dot";
+        layer.appendChild(dot);
+      }
+      const c = chans[i];
+      dot.style.display = c ? "block" : "none";
+      if (c) {
+        dot.style.top = `${canvas.offsetTop + i * stripH + stripH / 2 - 5}px`;
+        dot.style.background = c.color;
+      }
+    }
+  }
+
   renderScope8() {
     const canvas = this.scope8Canvas;
     if (!canvas) return;
@@ -2366,6 +2392,7 @@ class FloatingMeterDock {
     const chans = this.scope8Channels();
     if (!chans.length) return;
     const stripH = (h - RULER) / chans.length;
+    this.placeStripDots(canvas, chans, stripH);
     const totalMs = 10 * this.scopeTimeDiv;
     const halfV = 2 * this.scope8VoltsDiv; // each strip is 4 divisions tall
 
@@ -2406,11 +2433,14 @@ class FloatingMeterDock {
       ctx.font = "bold 9px 'JetBrains Mono', monospace";
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
-      ctx.fillText(c.tag, 3, mid - 5);
+      // Strip named by what it measures (not a channel number)
+      const across = this.isAcrossKey(c.key);
+      const sidePrefix = /^xlrm-/.test(c.key) ? "M " : /^xlrf-/.test(c.key) && !across ? "F " : "";
+      const point = across ? this.measuredLabel(c.key).replace(/PIN (\d) ↔ PIN (\d)/, "PIN $1↔$2") : sidePrefix + this.shortPoint(c.key);
+      ctx.fillText(point, 14, mid - 5);
       ctx.fillStyle = "#9ca3af";
       ctx.font = "7.5px 'JetBrains Mono', monospace";
-      const side = /^xlrm-/.test(c.key) ? "M " : /^xlrf-/.test(c.key) && !this.isAcrossKey(c.key) ? "F " : "";
-      ctx.fillText(side + this.measuredLabel(c.key), 3, mid + 5);
+      ctx.fillText(across ? "ACROSS PAIR" : "→ GND", 14, mid + 5);
       ctx.fillStyle = c.color;
       ctx.textAlign = "right";
       ctx.fillText(`${data.vRms.toFixed(2)}V`, LABEL_W - 4, mid - 5);
@@ -3025,10 +3055,12 @@ class FloatingMeterDock {
 
     // Channel routing: map each instrument dot to its active node
     const connections = [
-      { fromId: "dot-scope1-ch1", targetKey: this.scope1VinTarget || activeCfg?.scope1_ch1 || "xfmr-vin", color: PROBE_COLORS.CH1, badge: "CH1", label: "Scope 1 CH1" },
-      { fromId: "dot-scope1-ch2", targetKey: this.scope1Target || activeCfg?.scope1_ch2 || "xfmr-p2", color: PROBE_COLORS.CH2, badge: "CH2", label: "Scope 1 CH2" },
-      { fromId: "dot-scope2-ch3", targetKey: this.scope2ColdTarget || activeCfg?.scope2_ch3 || "xfmr-p3", color: PROBE_COLORS.CH3, badge: "CH3", label: "Scope 2 CH3" },
-      { fromId: "dot-scope2-ch4", targetKey: this.scope2Target || activeCfg?.scope2_ch4 || "xfmr-load", color: PROBE_COLORS.CH4, badge: "CH4", label: "Scope 2 CH4" },
+      // Scope: one wire per strip, leaving from the square at the start of that strip
+      ...this.scope8Channels().map((c, i) => ({
+        fromId: `dot-strip-${i}`, targetKey: c.key, color: c.color, group: "SCOPE",
+        badge: this.isAcrossKey(c.key) ? this.measuredLabel(c.key).replace(/PIN (\d) ↔ PIN (\d)/, "$1↔$2") : this.shortPoint(c.key).replace(/^PIN /, "P").slice(0, 7),
+        label: `Scope strip ${i + 1}`
+      })),
       { fromId: "dot-dmm1", targetKey: this.effectiveDmmTarget(1) || activeCfg?.dmm1 || "xfmr-p2", color: PROBE_COLORS.DMM1, badge: "DMM1", label: "DMM 1" },
       { fromId: "dot-dmm2", targetKey: this.effectiveDmmTarget(2) || activeCfg?.dmm2 || "xfmr-load", color: PROBE_COLORS.DMM2, badge: "DMM2", label: "DMM 2" },
       { fromId: "dot-vu1", targetKey: this.vu1Target || activeCfg?.vu1 || "xfmr-vin", color: PROBE_COLORS.VU1, badge: "VM1", label: "VM 1" },
@@ -3121,7 +3153,7 @@ class FloatingMeterDock {
       );
       const isChannelHovered = Boolean(
         this.hoveredChannels && (
-          this.hoveredChannels.includes(conn.badge) || this.hoveredChannels === "ALL"
+          this.hoveredChannels.includes(conn.badge) || (conn.group && this.hoveredChannels.includes(conn.group)) || this.hoveredChannels === "ALL"
         )
       );
       const isHighlighted = isChannelHovered || isTargetHovered;

@@ -8142,6 +8142,228 @@ html[data-theme="paper"] body > section .svg-diagram-wrapper::after {
   box-shadow: inset 5px 0 0 #10b981;
 }
 
+/* ==========================================================================
+   Reviewer Notes (js/review-comments.js)
+   ========================================================================== */
+.review-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--accent-amber);
+  color: var(--accent-amber);
+  padding: 0.35rem 0.7rem;
+  font: 700 0.8rem var(--font-sans);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.review-toggle-btn:hover,
+.review-toggle-btn.active {
+  background: var(--accent-amber);
+  color: #000;
+}
+
+body.review-mode { cursor: crosshair; }
+body.review-mode .review-hover {
+  outline: 2px dashed var(--accent-amber) !important;
+  outline-offset: 2px;
+  cursor: copy;
+}
+.review-flash {
+  outline: 3px solid var(--accent-amber) !important;
+  outline-offset: 3px;
+}
+
+.review-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 1000100;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  max-width: calc(100vw - 32px);
+  padding: 0.55rem 0.8rem;
+  background: #111;
+  border: 1px solid var(--accent-amber);
+  color: var(--text-primary);
+  font: 500 0.85rem var(--font-sans);
+}
+.review-bar[hidden] { display: none; }
+.review-bar-dot {
+  width: 9px; height: 9px;
+  background: var(--accent-amber);
+  animation: review-blink 1.2s steps(2) infinite;
+}
+@keyframes review-blink { 50% { opacity: 0; } }
+.review-bar-link { color: var(--accent-amber); font-weight: 700; }
+.review-bar-btn,
+.review-action-btn {
+  background: transparent;
+  border: 1px solid var(--border-accent);
+  color: var(--text-primary);
+  padding: 0.3rem 0.7rem;
+  font: 600 0.8rem var(--font-sans);
+  cursor: pointer;
+}
+.review-bar-btn:hover,
+.review-action-btn:hover { border-color: var(--accent-amber); }
+.review-action-btn.primary { background: var(--accent-amber); border-color: var(--accent-amber); color: #000; }
+.review-action-btn.danger { border-color: var(--accent-rose); color: var(--accent-rose); }
+
+.review-pin-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 0; height: 0;
+  z-index: 1000050;
+  pointer-events: none;
+}
+.review-pin {
+  position: absolute;
+  pointer-events: auto;
+  min-width: 22px; height: 22px;
+  padding: 0 4px;
+  background: var(--accent-amber);
+  border: 1px solid #000;
+  color: #000;
+  font: 800 0.72rem var(--font-mono);
+  cursor: pointer;
+}
+.review-pin:hover { background: #fff; }
+
+.review-popover {
+  position: fixed;
+  z-index: 1000200;
+  background: #0c0c0c;
+  border: 1px solid var(--accent-amber);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  cursor: auto;
+}
+.review-popover[hidden] { display: none; }
+.review-pop-head { display: flex; justify-content: space-between; font-weight: 800; color: var(--accent-amber); }
+.review-pop-who { font-family: var(--font-mono); color: var(--text-primary); }
+.review-pop-where { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.review-pop-quote {
+  margin: 0;
+  padding: 0.35rem 0.6rem;
+  border-left: 3px solid var(--accent-amber);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-style: italic;
+  max-height: 6em;
+  overflow: auto;
+}
+.review-popover textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: #000;
+  border: 1px solid var(--border-accent);
+  color: var(--text-primary);
+  font: 0.9rem var(--font-sans);
+  padding: 0.5rem;
+  resize: vertical;
+}
+.review-popover textarea:focus { outline: none; border-color: var(--accent-amber); }
+.review-pop-actions { display: flex; gap: 0.4rem; }
+.review-pop-actions [hidden] { display: none; }
+
+.review-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+.review-to { display: flex; align-items: center; gap: 0.4rem; color: var(--text-secondary); font-size: 0.85rem; }
+.review-to input {
+  background: #000;
+  border: 1px solid var(--border-accent);
+  color: var(--text-primary);
+  padding: 0.3rem 0.5rem;
+  font: 0.85rem var(--font-sans);
+  min-width: 240px;
+  max-width: 100%;
+}
+.review-status { min-height: 1.2em; color: var(--accent-emerald); font-size: 0.85rem; margin: 0 0 0.5rem; }
+.review-empty { color: var(--text-muted); }
+.review-group {
+  font-size: 1rem;
+  color: var(--accent-amber);
+  margin: 1rem 0 0.4rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.25rem;
+}
+.review-item {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--border-color);
+}
+.review-item-num {
+  flex: none;
+  min-width: 26px; height: 26px;
+  background: var(--accent-amber);
+  border: none;
+  color: #000;
+  font: 800 0.75rem var(--font-mono);
+  cursor: pointer;
+}
+.review-item-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.3rem; }
+.review-item-text { margin: 0; white-space: pre-wrap; color: var(--text-primary); }
+.review-item-meta { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); }
+.review-item-del {
+  flex: none;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 26px; height: 26px;
+  cursor: pointer;
+}
+.review-item-del:hover { color: var(--accent-rose); border-color: var(--accent-rose); }
+
+/* 8-channel scope: a square per strip (wires leave from it); header squares no longer used */
+.rack-scope-bezel {
+  position: relative;
+}
+
+.scope8-dots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.scope8-dot {
+  position: absolute;
+  left: 2px;
+  width: 9px !important;
+  height: 9px !important;
+}
+
+#rack-card-scope8 .rack-meter-title .rack-terminal-dot {
+  display: none;
+}
+
+/* Paper View: text boxes float over the probe wires. The wire layers sit beneath the page, whose
+   section and diagram backgrounds are see-through, so filled boxes and labels cover the wires. */
+html[data-theme="paper"] .live-probe-wires-svg {
+  z-index: 1 !important;
+}
+
+html[data-theme="paper"] body > section {
+  position: relative;
+  z-index: 2;
+  background: transparent !important;
+}
+
+html[data-theme="paper"] body > section svg > rect:first-child:not([x]):not([y]) {
+  fill-opacity: 0;
+}
+
+html[data-theme="paper"] body > section svg[style*="background"],
+html[data-theme="paper"] body > section .svg-diagram-wrapper,
+html[data-theme="paper"] body > section .svg-diagram-card {
+  background: transparent !important;
+}
+
 </style>
   
   <!-- Google Fonts: Inter & JetBrains Mono -->
@@ -8340,6 +8562,77 @@ html[data-theme="paper"] body > section .svg-diagram-wrapper::after {
         <a href="#multichannel-hierarchy" class="htu-start-btn">Multichannel Snake</a>
         <a href="#xlr-hub" class="htu-start-btn">XLR Pin Hub</a>
         <a href="#topologies" class="htu-start-btn">Circuits 6.1–6.8</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 1: Normative References — the AES / IEC standards this reference aligns with -->
+  <section id="normative-references" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Normative References</span>
+        <h2 class="section-title">Normative References &amp; Standards Alignment</h2>
+      </div>
+      <!-- Alignment of AES Standards Table -->
+      <div>
+        <h3 style="color: var(--text-primary); margin-bottom: 1rem;">Alignment of Audio Engineering Society Standards</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+          How the AES-X152 specification harmonizes with established AES standards and international IEC norms:
+        </p>
+
+        <div class="table-responsive">
+          <table class="alignment-table">
+            <thead>
+              <tr>
+                <th>Standard</th>
+                <th>Working Group</th>
+                <th>Normative Scope &amp; AES-X152 Alignment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="#xlr-hub" class="alignment-link-badge">AES14 (s2014)</a></td>
+                <td>SC-05-05</td>
+                <td>Application of 3-pin and 5-pin circular connectors (XLR). Defines Table 1: Pin connector (male) = Equipment Output; Socket connector (female) = Equipment Input. Pin 1 Shield, Pin 2 Hot (+), Pin 3 Cold (-).</td>
+              </tr>
+              <tr>
+                <td><a href="#xlr-hub" class="alignment-link-badge">AES26 (s2017)</a></td>
+                <td>SC-05-05</td>
+                <td>Conservation of Polarity. Defines that positive acoustic pressure produces positive-going voltage on Pin 2 relative to Pin 3 throughout the entire system.</td>
+              </tr>
+              <tr>
+                <td><a href="#enclosures" class="alignment-link-badge">AES48 (s2019)</a></td>
+                <td>SC-05-05</td>
+                <td>Grounding &amp; EMC practices. Connector shields must bond directly to chassis enclosure; Pin 1 must never enter internal audio PCB ground.</td>
+              </tr>
+              <tr>
+                <td><a href="#multichannel-hierarchy" class="alignment-link-badge">AES59 (2012)</a></td>
+                <td>SC-05-05</td>
+                <td>Multichannel 25-way D-type connector pin assignment (DB25). Defines 8 balanced audio channels across 25 pins.</td>
+              </tr>
+              <tr>
+                <td><a href="#multichannel-hierarchy" class="alignment-link-badge">AES-X249</a></td>
+                <td>SC-05-05</td>
+                <td>Shields of 25-way D-type connectors. Mandates shroud flange (C<sub>sf</sub>) and jack screws (C<sub>js</sub>) direct metal-to-metal bonding to chassis.</td>
+              </tr>
+              <tr>
+                <td><a href="#multichannel-hierarchy" class="alignment-link-badge">AES72-4E (2019)</a></td>
+                <td>SC-05-05</td>
+                <td>Quad Twisted Pair (QTP) RJ45 audio interconnection. Pin assignments for 4 balanced channels over Category 5e/6 cable.</td>
+              </tr>
+              <tr>
+                <td><a href="#enclosures" class="alignment-link-badge">SC-04-04</a></td>
+                <td>SC-04-04</td>
+                <td>Microphones: P48/P12 phantom power supply, output impedance balance tolerances, capsule RF shielding.</td>
+              </tr>
+              <tr>
+                <td><a href="#enclosures" class="alignment-link-badge">IEC 61938</a></td>
+                <td>TC 100</td>
+                <td>Power supply systems for microphones: P48 (+48 VDC via 6.81 k&Omega; &plusmn; 0.1%) and P12 phantom power specifications.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>
@@ -10778,67 +11071,7 @@ html[data-theme="paper"] body > section .svg-diagram-wrapper::after {
         </div>
       </div>
 
-      <!-- Alignment of AES Standards Table -->
-      <div style="margin-top: 3.5rem;">
-        <h3 style="color: var(--text-primary); margin-bottom: 1rem;">Alignment of Audio Engineering Society Standards</h3>
-        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-          How the AES-X152 specification harmonizes with established AES standards and international IEC norms:
-        </p>
 
-        <div class="table-responsive">
-          <table class="alignment-table">
-            <thead>
-              <tr>
-                <th>Standard</th>
-                <th>Working Group</th>
-                <th>Normative Scope &amp; AES-X152 Alignment</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><a href="#xlr-hub" class="alignment-link-badge">AES14 (s2014)</a></td>
-                <td>SC-05-05</td>
-                <td>Application of 3-pin and 5-pin circular connectors (XLR). Defines Table 1: Pin connector (male) = Equipment Output; Socket connector (female) = Equipment Input. Pin 1 Shield, Pin 2 Hot (+), Pin 3 Cold (-).</td>
-              </tr>
-              <tr>
-                <td><a href="#xlr-hub" class="alignment-link-badge">AES26 (s2017)</a></td>
-                <td>SC-05-05</td>
-                <td>Conservation of Polarity. Defines that positive acoustic pressure produces positive-going voltage on Pin 2 relative to Pin 3 throughout the entire system.</td>
-              </tr>
-              <tr>
-                <td><a href="#enclosures" class="alignment-link-badge">AES48 (s2019)</a></td>
-                <td>SC-05-05</td>
-                <td>Grounding &amp; EMC practices. Connector shields must bond directly to chassis enclosure; Pin 1 must never enter internal audio PCB ground.</td>
-              </tr>
-              <tr>
-                <td><a href="#multichannel-hierarchy" class="alignment-link-badge">AES59 (2012)</a></td>
-                <td>SC-05-05</td>
-                <td>Multichannel 25-way D-type connector pin assignment (DB25). Defines 8 balanced audio channels across 25 pins.</td>
-              </tr>
-              <tr>
-                <td><a href="#multichannel-hierarchy" class="alignment-link-badge">AES-X249</a></td>
-                <td>SC-05-05</td>
-                <td>Shields of 25-way D-type connectors. Mandates shroud flange (C<sub>sf</sub>) and jack screws (C<sub>js</sub>) direct metal-to-metal bonding to chassis.</td>
-              </tr>
-              <tr>
-                <td><a href="#multichannel-hierarchy" class="alignment-link-badge">AES72-4E (2019)</a></td>
-                <td>SC-05-05</td>
-                <td>Quad Twisted Pair (QTP) RJ45 audio interconnection. Pin assignments for 4 balanced channels over Category 5e/6 cable.</td>
-              </tr>
-              <tr>
-                <td><a href="#enclosures" class="alignment-link-badge">SC-04-04</a></td>
-                <td>SC-04-04</td>
-                <td>Microphones: P48/P12 phantom power supply, output impedance balance tolerances, capsule RF shielding.</td>
-              </tr>
-              <tr>
-                <td><a href="#enclosures" class="alignment-link-badge">IEC 61938</a></td>
-                <td>TC 100</td>
-                <td>Power supply systems for microphones: P48 (+48 VDC via 6.81 k&Omega; &plusmn; 0.1%) and P12 phantom power specifications.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -16965,24 +17198,29 @@ class StorySidebar {
             <a href="#how-to-use" class="chapter-link">★ How to Use This Lab</a>
           </div>
 
+          <div class="story-chapter" data-target="normative-references">
+            <div class="chapter-dot"></div>
+            <a href="#normative-references" class="chapter-link">1.0 Normative References</a>
+          </div>
+
           <div class="story-chapter" data-target="triad">
             <div class="chapter-dot"></div>
-            <a href="#triad" class="chapter-link">1.0 The Three Parts of the Chain</a>
+            <a href="#triad" class="chapter-link">2.0 The Three Parts of the Chain</a>
           </div>
 
           <div class="story-chapter" data-target="pyramid-section">
             <div class="chapter-dot"></div>
-            <a href="#pyramid-section" class="chapter-link">2.0 Dynamic Range &amp; Levels Pyramid</a>
+            <a href="#pyramid-section" class="chapter-link">3.0 Dynamic Range &amp; Levels Pyramid</a>
           </div>
 
           <div class="story-chapter" data-target="enclosure-explorer">
             <div class="chapter-dot"></div>
-            <a href="#enclosure-explorer" class="chapter-link">3.0 Enclosure &amp; Ground Physics</a>
+            <a href="#enclosure-explorer" class="chapter-link">4.0 Enclosure &amp; Ground Physics</a>
           </div>
 
           <div class="story-chapter" data-target="multichannel-hierarchy">
             <div class="chapter-dot"></div>
-            <a href="#multichannel-hierarchy" class="chapter-link">3.2 Multichannel Breakout (DB25 / RJ45)</a>
+            <a href="#multichannel-hierarchy" class="chapter-link">4.2 Multichannel Breakout (DB25 / RJ45)</a>
             <div class="chapter-subnodes fault-subnodes">
               <span class="subnode-heading">Snake / QTP faults</span>
               <a href="#qtp-demo-normal" class="subnode-link fault-subnode active" data-sidebar-fault="normal">✓ Normal Balanced</a>
@@ -16999,19 +17237,19 @@ class StorySidebar {
 
           <div class="story-chapter" data-target="xlr-hub">
             <div class="chapter-dot"></div>
-            <a href="#xlr-hub" class="chapter-link">3.5 Universal XLR Hub &amp; Polarity</a>
+            <a href="#xlr-hub" class="chapter-link">4.5 Universal XLR Hub &amp; Polarity</a>
           </div>
 
           <div class="story-chapter" data-target="top-level">
             <div class="chapter-dot"></div>
-            <a href="#top-level" class="chapter-link">4.0 Top-Level Normative Rules</a>
+            <a href="#top-level" class="chapter-link">5.0 Top-Level Normative Rules</a>
           </div>
 
 
 
           <div class="story-chapter" data-target="topologies">
             <div class="chapter-dot"></div>
-            <a href="#topologies" class="chapter-link">5.0 Standardized Circuits (6.1–6.8)</a>
+            <a href="#topologies" class="chapter-link">6.0 Standardized Circuits (6.1–6.8)</a>
             <div class="chapter-subnodes">
               <a href="#circuit-6-1" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-1')">6.1 Dual Push-Pull</a>
               <a href="#circuit-6-2" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-2')">6.2 Active Impedance-Balanced</a>
@@ -17026,59 +17264,59 @@ class StorySidebar {
 
           <div class="story-chapter" data-target="transformer-simulator">
             <div class="chapter-dot"></div>
-            <a href="#transformer-simulator" class="chapter-link">5.5 Audio Transformer Lab &amp; Zobel</a>
+            <a href="#transformer-simulator" class="chapter-link">6.5 Audio Transformer Lab &amp; Zobel</a>
           </div>
 
           <div class="story-chapter" data-target="deepest-dive">
             <div class="chapter-dot"></div>
-            <a href="#deepest-dive" class="chapter-link">6.0 Jim Meyer Thevenin CMRR</a>
+            <a href="#deepest-dive" class="chapter-link">7.0 Jim Meyer Thevenin CMRR</a>
           </div>
 
           <div class="story-chapter" data-target="tutorials-section">
             <div class="chapter-dot"></div>
-            <a href="#tutorials-section" class="chapter-link">7.0 Richard Hess Unbalanced Matrix</a>
+            <a href="#tutorials-section" class="chapter-link">8.0 Richard Hess Unbalanced Matrix</a>
           </div>
 
           <div class="story-chapter" data-target="adapter-wiring-suite">
             <div class="chapter-dot"></div>
-            <a href="#adapter-wiring-suite" class="chapter-link">7.5 Vector Adapter Wiring Suite</a>
+            <a href="#adapter-wiring-suite" class="chapter-link">8.5 Vector Adapter Wiring Suite</a>
           </div>
 
           <div class="story-chapter" data-target="taxonomy-tree">
             <div class="chapter-dot" style="background: var(--accent-cyan); box-shadow: 0 0 6px var(--accent-cyan);"></div>
             <a href="javascript:void(0)" id="sidebar-chapter-tree-btn" class="chapter-link" style="color: var(--accent-cyan); font-weight: 700;">
-              8.0 Standards Taxonomy Tree ↗
+              9.0 Standards Taxonomy Tree ↗
             </a>
           </div>
 
           <div class="story-chapter" data-target="aes-vst">
             <div class="chapter-dot"></div>
-            <a href="#aes-vst" class="chapter-link">9.0 AES-VST Plugin &amp; Map</a>
+            <a href="#aes-vst" class="chapter-link">10.0 AES-VST Plugin &amp; Map</a>
           </div>
 
           <div class="story-chapter" data-target="datasheet-templates">
             <div class="chapter-dot"></div>
-            <a href="#datasheet-templates" class="chapter-link">10.0 Free Datasheet Templates</a>
+            <a href="#datasheet-templates" class="chapter-link">11.0 Free Datasheet Templates</a>
           </div>
 
           <div class="story-chapter" data-target="dennis-bohn-par">
             <div class="chapter-dot"></div>
-            <a href="#dennis-bohn-par" class="chapter-link">11.0 Dennis Bohn PAR Glossary</a>
+            <a href="#dennis-bohn-par" class="chapter-link">12.0 Dennis Bohn PAR Glossary</a>
           </div>
 
           <div class="story-chapter" data-target="landmark-papers">
             <div class="chapter-dot"></div>
-            <a href="#landmark-papers" class="chapter-link">11.5 Landmark Papers Dossier</a>
+            <a href="#landmark-papers" class="chapter-link">12.5 Landmark Papers Dossier</a>
           </div>
 
           <div class="story-chapter" data-target="timeline-section">
             <div class="chapter-dot"></div>
-            <a href="#timeline-section" class="chapter-link">12.0 Standards Timeline</a>
+            <a href="#timeline-section" class="chapter-link">13.0 Standards Timeline</a>
           </div>
 
           <div class="story-chapter" data-target="roster-section">
             <div class="chapter-dot"></div>
-            <a href="#roster-section" class="chapter-link">13.0 Contributor Roster</a>
+            <a href="#roster-section" class="chapter-link">14.0 Contributor Roster</a>
           </div>
         </div>
 
@@ -17263,6 +17501,7 @@ class StorySidebar {
     const sectionIds = [
       "hero",
       "how-to-use",
+      "normative-references",
       "triad",
       "pyramid-section",
       "enclosure-explorer",
@@ -18443,7 +18682,7 @@ class FloatingMeterDock {
 
     // Hover tracking on individual meter cards to illuminate specific channel wires
     const cardChannels = {
-      "rack-card-scope8": ["CH1", "CH2", "CH3", "CH4"],
+      "rack-card-scope8": ["SCOPE"],
       "rack-card-dmm1": ["DMM1"],
       "rack-card-dmm2": ["DMM2"],
       "rack-card-vu1": ["VU1"],
@@ -19732,6 +19971,32 @@ class FloatingMeterDock {
   }
 
 
+  // A coloured square at the start of each scope strip; probe wires leave from these
+  placeStripDots(canvas, chans, stripH) {
+    const host = canvas.parentElement;
+    let layer = host.querySelector(".scope8-dots");
+    if (!layer) {
+      layer = document.createElement("div");
+      layer.className = "scope8-dots";
+      host.appendChild(layer);
+    }
+    for (let i = 0; i < 8; i++) {
+      let dot = document.getElementById(`dot-strip-${i}`);
+      if (!dot) {
+        dot = document.createElement("span");
+        dot.id = `dot-strip-${i}`;
+        dot.className = "rack-terminal-dot scope8-dot";
+        layer.appendChild(dot);
+      }
+      const c = chans[i];
+      dot.style.display = c ? "block" : "none";
+      if (c) {
+        dot.style.top = `${canvas.offsetTop + i * stripH + stripH / 2 - 5}px`;
+        dot.style.background = c.color;
+      }
+    }
+  }
+
   renderScope8() {
     const canvas = this.scope8Canvas;
     if (!canvas) return;
@@ -19751,6 +20016,7 @@ class FloatingMeterDock {
     const chans = this.scope8Channels();
     if (!chans.length) return;
     const stripH = (h - RULER) / chans.length;
+    this.placeStripDots(canvas, chans, stripH);
     const totalMs = 10 * this.scopeTimeDiv;
     const halfV = 2 * this.scope8VoltsDiv; // each strip is 4 divisions tall
 
@@ -19791,11 +20057,14 @@ class FloatingMeterDock {
       ctx.font = "bold 9px 'JetBrains Mono', monospace";
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
-      ctx.fillText(c.tag, 3, mid - 5);
+      // Strip named by what it measures (not a channel number)
+      const across = this.isAcrossKey(c.key);
+      const sidePrefix = /^xlrm-/.test(c.key) ? "M " : /^xlrf-/.test(c.key) && !across ? "F " : "";
+      const point = across ? this.measuredLabel(c.key).replace(/PIN (\d) ↔ PIN (\d)/, "PIN $1↔$2") : sidePrefix + this.shortPoint(c.key);
+      ctx.fillText(point, 14, mid - 5);
       ctx.fillStyle = "#9ca3af";
       ctx.font = "7.5px 'JetBrains Mono', monospace";
-      const side = /^xlrm-/.test(c.key) ? "M " : /^xlrf-/.test(c.key) && !this.isAcrossKey(c.key) ? "F " : "";
-      ctx.fillText(side + this.measuredLabel(c.key), 3, mid + 5);
+      ctx.fillText(across ? "ACROSS PAIR" : "→ GND", 14, mid + 5);
       ctx.fillStyle = c.color;
       ctx.textAlign = "right";
       ctx.fillText(`${data.vRms.toFixed(2)}V`, LABEL_W - 4, mid - 5);
@@ -20410,10 +20679,12 @@ class FloatingMeterDock {
 
     // Channel routing: map each instrument dot to its active node
     const connections = [
-      { fromId: "dot-scope1-ch1", targetKey: this.scope1VinTarget || activeCfg?.scope1_ch1 || "xfmr-vin", color: PROBE_COLORS.CH1, badge: "CH1", label: "Scope 1 CH1" },
-      { fromId: "dot-scope1-ch2", targetKey: this.scope1Target || activeCfg?.scope1_ch2 || "xfmr-p2", color: PROBE_COLORS.CH2, badge: "CH2", label: "Scope 1 CH2" },
-      { fromId: "dot-scope2-ch3", targetKey: this.scope2ColdTarget || activeCfg?.scope2_ch3 || "xfmr-p3", color: PROBE_COLORS.CH3, badge: "CH3", label: "Scope 2 CH3" },
-      { fromId: "dot-scope2-ch4", targetKey: this.scope2Target || activeCfg?.scope2_ch4 || "xfmr-load", color: PROBE_COLORS.CH4, badge: "CH4", label: "Scope 2 CH4" },
+      // Scope: one wire per strip, leaving from the square at the start of that strip
+      ...this.scope8Channels().map((c, i) => ({
+        fromId: `dot-strip-${i}`, targetKey: c.key, color: c.color, group: "SCOPE",
+        badge: this.isAcrossKey(c.key) ? this.measuredLabel(c.key).replace(/PIN (\d) ↔ PIN (\d)/, "$1↔$2") : this.shortPoint(c.key).replace(/^PIN /, "P").slice(0, 7),
+        label: `Scope strip ${i + 1}`
+      })),
       { fromId: "dot-dmm1", targetKey: this.effectiveDmmTarget(1) || activeCfg?.dmm1 || "xfmr-p2", color: PROBE_COLORS.DMM1, badge: "DMM1", label: "DMM 1" },
       { fromId: "dot-dmm2", targetKey: this.effectiveDmmTarget(2) || activeCfg?.dmm2 || "xfmr-load", color: PROBE_COLORS.DMM2, badge: "DMM2", label: "DMM 2" },
       { fromId: "dot-vu1", targetKey: this.vu1Target || activeCfg?.vu1 || "xfmr-vin", color: PROBE_COLORS.VU1, badge: "VM1", label: "VM 1" },
@@ -20506,7 +20777,7 @@ class FloatingMeterDock {
       );
       const isChannelHovered = Boolean(
         this.hoveredChannels && (
-          this.hoveredChannels.includes(conn.badge) || this.hoveredChannels === "ALL"
+          this.hoveredChannels.includes(conn.badge) || (conn.group && this.hoveredChannels.includes(conn.group)) || this.hoveredChannels === "ALL"
         )
       );
       const isHighlighted = isChannelHovered || isTargetHovered;
@@ -43927,10 +44198,618 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+/* ===== BUNDLED: js/review-comments.js ===== */
+/**
+ * review-comments.js — Reviewer sign-in, click-to-comment notes, and an emailable summary
+ *
+ * - "Review" button in the header: the reviewer signs in with a name or initials (e.g. APK).
+ * - While commenting is on, clicking any paragraph, heading, card or figure opens a note box.
+ *   Selected text is quoted into the note automatically.
+ * - Each note shows as a numbered pin beside the thing it is about; click a pin to edit/delete.
+ * - The "Review Notes" section at the end of the page lists every note by section, with
+ *   Email / Copy / Download buttons so the summary can be sent back to the authors.
+ *
+ * Notes live in this browser's localStorage only — nothing is uploaded anywhere.
+ */
+
+// Address pre-filled in the "To:" box of the review summary (reviewers can change it).
+const REVIEW_AUTHORS_EMAIL = "";
+
+class ReviewComments {
+  constructor() {
+    this.KEY_NAME = "ba-review-name";
+    this.KEY_NOTES = "ba-review-notes";
+    this.KEY_TO = "ba-review-to";
+    this.name = this.load(this.KEY_NAME, "");
+    this.notes = this.load(this.KEY_NOTES, []);
+    this.active = false;
+    this.hoverEl = null;
+    this.init();
+  }
+
+  load(key, fallback) {
+    try {
+      const v = localStorage.getItem(key);
+      return v === null ? fallback : JSON.parse(v);
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  save(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) { /* private window: notes last for this visit only */ }
+  }
+
+  init() {
+    this.buildHeaderButton();
+    this.buildBar();
+    this.buildPinLayer();
+    this.buildSummarySection();
+    this.buildPopover();
+
+    document.addEventListener("mouseover", (e) => this.onHover(e), true);
+    document.addEventListener("click", (e) => this.onClick(e), true);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        if (this.popover.hidden) this.setActive(false);
+        else this.closePopover();
+      }
+    });
+
+    // Layout shifts constantly (sims, meters, collapsibles) so pins re-place on a timer.
+    window.addEventListener("resize", () => this.placePins());
+    setInterval(() => this.placePins(), 1000);
+    this.renderAll();
+  }
+
+  /* ---------- UI construction ---------- */
+
+  buildHeaderButton() {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.id = "review-toggle";
+    btn.className = "review-toggle-btn";
+    btn.title = "Sign in and click anything on the page to leave a review note";
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.setActive(!this.active);
+    });
+    const theme = document.getElementById("theme-toggle");
+    if (theme && theme.parentNode) theme.parentNode.insertBefore(btn, theme);
+    else document.body.appendChild(btn);
+    this.toggleBtn = btn;
+  }
+
+  buildBar() {
+    const bar = document.createElement("div");
+    bar.id = "review-bar";
+    bar.className = "review-bar";
+    bar.hidden = true;
+    bar.innerHTML = `
+      <span class="review-bar-dot"></span>
+      <span>Commenting as <strong id="review-bar-name"></strong> &mdash; click anything to add a note (select text first to quote it). Esc to stop.</span>
+      <a href="#review-summary" class="review-bar-link">Summary (<span id="review-bar-count">0</span>)</a>
+      <button type="button" id="review-bar-switch" class="review-bar-btn">Switch reviewer</button>
+      <button type="button" id="review-bar-done" class="review-bar-btn">Done</button>`;
+    document.body.appendChild(bar);
+    bar.querySelector("#review-bar-done").addEventListener("click", () => this.setActive(false));
+    bar.querySelector("#review-bar-switch").addEventListener("click", () => {
+      if (this.signIn(true)) this.renderAll();
+    });
+    this.bar = bar;
+  }
+
+  buildPinLayer() {
+    const layer = document.createElement("div");
+    layer.id = "review-pin-layer";
+    layer.className = "review-pin-layer";
+    document.body.appendChild(layer);
+    this.pinLayer = layer;
+  }
+
+  buildSummarySection() {
+    const section = document.createElement("section");
+    section.id = "review-summary";
+    section.className = "section review-summary";
+    section.innerHTML = `
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Reviewer Notes</span>
+          <h2 class="section-title">Review Comment Summary</h2>
+          <p class="section-lead" style="margin: 0;">
+            Press <strong>Review</strong> in the header, sign in with your name or initials, then click anything
+            on the page to leave a note. Every note is collected here &mdash; email the summary back to the authors when you are done.
+            Notes are saved in this browser only.
+          </p>
+        </div>
+        <div class="review-actions">
+          <label class="review-to">To: <input type="email" id="review-to" placeholder="authors@example.com"></label>
+          <button type="button" class="review-action-btn primary" id="review-email">✉ Email to authors</button>
+          <button type="button" class="review-action-btn" id="review-copy">Copy text</button>
+          <button type="button" class="review-action-btn" id="review-download">Download .txt</button>
+          <button type="button" class="review-action-btn" id="review-start">Start commenting</button>
+          <button type="button" class="review-action-btn danger" id="review-clear">Clear all notes</button>
+        </div>
+        <p class="review-status" id="review-status" aria-live="polite"></p>
+        <div id="review-list" class="review-list"></div>
+      </div>`;
+
+    const footer = document.querySelector(".site-footer");
+    if (footer) footer.parentNode.insertBefore(section, footer);
+    else document.body.appendChild(section);
+
+    const to = section.querySelector("#review-to");
+    to.value = this.load(this.KEY_TO, REVIEW_AUTHORS_EMAIL);
+    to.addEventListener("input", () => this.save(this.KEY_TO, to.value.trim()));
+
+    section.querySelector("#review-email").addEventListener("click", () => this.emailSummary());
+    section.querySelector("#review-copy").addEventListener("click", () => this.copySummary());
+    section.querySelector("#review-download").addEventListener("click", () => this.downloadSummary());
+    section.querySelector("#review-start").addEventListener("click", () => this.setActive(true));
+    section.querySelector("#review-clear").addEventListener("click", () => {
+      if (!this.notes.length) return;
+      if (!confirm(`Delete all ${this.notes.length} review notes from this browser?`)) return;
+      this.notes = [];
+      this.persist();
+    });
+    section.querySelector("#review-list").addEventListener("click", (e) => {
+      const go = e.target.closest("[data-review-go]");
+      const del = e.target.closest("[data-review-del]");
+      if (go) this.jumpTo(go.dataset.reviewGo);
+      if (del) this.deleteNote(del.dataset.reviewDel);
+    });
+    this.summary = section;
+  }
+
+  buildPopover() {
+    const pop = document.createElement("div");
+    pop.id = "review-popover";
+    pop.className = "review-popover";
+    pop.hidden = true;
+    pop.innerHTML = `
+      <div class="review-pop-head">
+        <span id="review-pop-title">New note</span>
+        <span id="review-pop-who" class="review-pop-who"></span>
+      </div>
+      <div id="review-pop-where" class="review-pop-where"></div>
+      <blockquote id="review-pop-quote" class="review-pop-quote" hidden></blockquote>
+      <textarea id="review-pop-text" rows="4" placeholder="Your comment…"></textarea>
+      <div class="review-pop-actions">
+        <button type="button" id="review-pop-delete" class="review-action-btn danger">Delete</button>
+        <span style="flex:1"></span>
+        <button type="button" id="review-pop-cancel" class="review-action-btn">Cancel</button>
+        <button type="button" id="review-pop-save" class="review-action-btn primary">Save note</button>
+      </div>`;
+    document.body.appendChild(pop);
+    pop.querySelector("#review-pop-cancel").addEventListener("click", () => this.closePopover());
+    pop.querySelector("#review-pop-save").addEventListener("click", () => this.savePopover());
+    pop.querySelector("#review-pop-delete").addEventListener("click", () => {
+      if (this.draft && this.draft.id) this.deleteNote(this.draft.id);
+      this.closePopover();
+    });
+    pop.querySelector("#review-pop-text").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) this.savePopover();
+    });
+    this.popover = pop;
+  }
+
+  /* ---------- Sign-in & mode ---------- */
+
+  signIn(force) {
+    if (this.name && !force) return true;
+    const entered = prompt("Reviewer name or initials (e.g. APK):", this.name || "");
+    if (entered === null) return !!this.name;
+    const clean = entered.trim().slice(0, 40);
+    if (!clean) return !!this.name;
+    this.name = clean;
+    this.save(this.KEY_NAME, clean);
+    return true;
+  }
+
+  setActive(on) {
+    if (on && !this.signIn(false)) return;
+    this.active = on;
+    document.body.classList.toggle("review-mode", on);
+    this.bar.hidden = !on;
+    if (!on) {
+      this.clearHover();
+      this.closePopover();
+    }
+    this.renderToggle();
+  }
+
+  renderToggle() {
+    const n = this.notes.length;
+    const who = this.name ? ` · ${this.name}` : "";
+    this.toggleBtn.textContent = this.active ? `💬 Commenting${who}` : `💬 Review${n ? ` (${n})` : ""}`;
+    this.toggleBtn.classList.toggle("active", this.active);
+    const nameEl = document.getElementById("review-bar-name");
+    if (nameEl) nameEl.textContent = this.name;
+    const countEl = document.getElementById("review-bar-count");
+    if (countEl) countEl.textContent = n;
+  }
+
+  /* ---------- Picking a target ---------- */
+
+  isOwnUI(el) {
+    return !!el.closest("#review-popover, #review-bar, #review-pin-layer, #review-toggle, #review-summary");
+  }
+
+  // The element a click "is about": the nearest readable block, not a tiny span or the whole section.
+  pickTarget(el) {
+    const block = el.closest(
+      "p, li, h1, h2, h3, h4, h5, h6, blockquote, figure, table, pre, svg, canvas, img, " +
+      "[class*='card'], [class*='panel'], .section-header, .container > div"
+    );
+    let t = block || el;
+    // Clicks inside an SVG drawing should pin to the whole drawing.
+    if (t.ownerSVGElement) t = t.ownerSVGElement;
+    while (t.ownerSVGElement) t = t.ownerSVGElement;
+    if (t === document.body || t.matches("section, main, html")) return null;
+    return t;
+  }
+
+  onHover(e) {
+    if (!this.active || !this.popover.hidden) return;
+    const t = this.isOwnUI(e.target) ? null : this.pickTarget(e.target);
+    if (t === this.hoverEl) return;
+    this.clearHover();
+    if (t) {
+      t.classList.add("review-hover");
+      this.hoverEl = t;
+    }
+  }
+
+  clearHover() {
+    if (this.hoverEl) this.hoverEl.classList.remove("review-hover");
+    this.hoverEl = null;
+  }
+
+  onClick(e) {
+    const pin = e.target.closest(".review-pin");
+    if (pin) {
+      e.preventDefault();
+      e.stopPropagation();
+      const note = this.notes.find((n) => n.id === pin.dataset.id);
+      if (note) this.openPopover(note, this.resolve(note));
+      return;
+    }
+    if (!this.active || this.isOwnUI(e.target)) return;
+    if (!this.popover.hidden) {
+      this.closePopover();
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    const target = this.pickTarget(e.target);
+    if (!target) return;
+    // Swallow the click so links, sims and toggles do not fire while commenting.
+    e.preventDefault();
+    e.stopPropagation();
+
+    const sel = window.getSelection();
+    let quote = sel && !sel.isCollapsed ? sel.toString().trim() : "";
+    if (!quote) quote = this.snippet(target);
+
+    const section = target.closest("section[id], footer, header");
+    this.openPopover({
+      id: null,
+      author: this.name,
+      path: this.pathOf(target),
+      sectionId: section && section.id ? section.id : "",
+      sectionTitle: this.sectionTitle(section),
+      quote: quote.slice(0, 300),
+      text: "",
+      created: new Date().toISOString(),
+    }, target);
+  }
+
+  snippet(el) {
+    if (el.matches("svg, canvas, img")) {
+      return "[" + (el.getAttribute("aria-label") || el.getAttribute("alt") || el.tagName.toLowerCase() + " drawing") + "]";
+    }
+    const t = (el.innerText || el.textContent || "").replace(/\s+/g, " ").trim();
+    return t.length > 160 ? t.slice(0, 157) + "…" : t;
+  }
+
+  sectionTitle(section) {
+    if (!section) return "Page";
+    if (section.matches("header")) return "Header";
+    if (section.matches("footer")) return "Footer";
+    const h = section.querySelector(".section-title, h1, h2");
+    // Clause numbers are injected as their own span ("1.0" + "Title"), so keep them apart.
+    return h ? h.textContent.replace(/\s+/g, " ").trim().replace(/^(\d+(?:\.\d+)*)(?=\S)/, "$1 ") : section.id;
+  }
+
+  // A stable-ish address: nearest ancestor with an id, then nth-child steps down to the element.
+  pathOf(el) {
+    const steps = [];
+    let cur = el;
+    while (cur && cur !== document.body) {
+      if (cur.id && !cur.id.startsWith("review-")) {
+        steps.unshift("#" + CSS.escape(cur.id));
+        break;
+      }
+      const parent = cur.parentElement;
+      if (!parent) break;
+      const idx = Array.prototype.indexOf.call(parent.children, cur) + 1;
+      steps.unshift(`${cur.tagName.toLowerCase()}:nth-child(${idx})`);
+      cur = parent;
+    }
+    return steps.join(" > ");
+  }
+
+  resolve(note) {
+    let el = null;
+    try {
+      el = note.path ? document.querySelector(note.path) : null;
+    } catch (e) { /* stale selector */ }
+    if (!el && note.sectionId) el = document.getElementById(note.sectionId);
+    return el;
+  }
+
+  /* ---------- Popover ---------- */
+
+  openPopover(note, anchor) {
+    this.draft = { ...note };
+    this.clearHover();
+    const pop = this.popover;
+    pop.querySelector("#review-pop-title").textContent = note.id ? `Note #${this.numberOf(note.id)}` : "New note";
+    pop.querySelector("#review-pop-who").textContent = note.author;
+    pop.querySelector("#review-pop-where").textContent = note.sectionTitle;
+    const q = pop.querySelector("#review-pop-quote");
+    q.textContent = note.quote;
+    q.hidden = !note.quote;
+    const ta = pop.querySelector("#review-pop-text");
+    ta.value = note.text;
+    pop.querySelector("#review-pop-delete").hidden = !note.id;
+    pop.hidden = false;
+
+    // Place next to the anchor, kept inside the viewport.
+    const r = anchor ? anchor.getBoundingClientRect() : { left: 40, top: 80, bottom: 80, right: 40 };
+    const w = Math.min(360, window.innerWidth - 32);
+    pop.style.width = w + "px";
+    let left = Math.min(Math.max(16, r.left), window.innerWidth - w - 16);
+    let top = r.bottom + 8;
+    const h = pop.offsetHeight;
+    if (top + h > window.innerHeight - 16) top = Math.max(16, r.top - h - 8);
+    if (top + h > window.innerHeight - 16) top = Math.max(16, window.innerHeight - h - 16);
+    pop.style.left = left + "px";
+    pop.style.top = top + "px";
+    ta.focus();
+  }
+
+  closePopover() {
+    this.popover.hidden = true;
+    this.draft = null;
+  }
+
+  savePopover() {
+    const d = this.draft;
+    if (!d) return;
+    const text = this.popover.querySelector("#review-pop-text").value.trim();
+    if (!text) {
+      this.popover.querySelector("#review-pop-text").focus();
+      return;
+    }
+    if (d.id) {
+      const n = this.notes.find((x) => x.id === d.id);
+      if (n) {
+        n.text = text;
+        n.edited = new Date().toISOString();
+      }
+    } else {
+      d.id = "n" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      d.text = text;
+      this.notes.push(d);
+    }
+    this.closePopover();
+    this.persist();
+  }
+
+  deleteNote(id) {
+    this.notes = this.notes.filter((n) => n.id !== id);
+    this.persist();
+  }
+
+  persist() {
+    this.save(this.KEY_NOTES, this.notes);
+    this.renderAll();
+  }
+
+  /* ---------- Rendering ---------- */
+
+  // Notes are numbered in page order so the summary reads top to bottom.
+  ordered() {
+    const withEl = this.notes.map((n) => ({ n, el: this.resolve(n) }));
+    withEl.sort((a, b) => {
+      if (a.el && b.el && a.el !== b.el) {
+        return a.el.compareDocumentPosition(b.el) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+      }
+      return a.n.created < b.n.created ? -1 : 1;
+    });
+    return withEl.map((x) => x.n);
+  }
+
+  numberOf(id) {
+    return this.ordered().findIndex((n) => n.id === id) + 1;
+  }
+
+  renderAll() {
+    this.renderToggle();
+    this.renderPins();
+    this.renderSummary();
+  }
+
+  renderPins() {
+    this.pinLayer.innerHTML = "";
+    this.ordered().forEach((n, i) => {
+      const pin = document.createElement("button");
+      pin.type = "button";
+      pin.className = "review-pin";
+      pin.dataset.id = n.id;
+      pin.textContent = i + 1;
+      pin.title = `${n.author}: ${n.text}`;
+      this.pinLayer.appendChild(pin);
+    });
+    this.placePins();
+  }
+
+  placePins() {
+    const pins = this.pinLayer.children;
+    const stack = new Map();
+    for (const pin of pins) {
+      const note = this.notes.find((n) => n.id === pin.dataset.id);
+      const el = note && this.resolve(note);
+      if (!el || !el.getClientRects().length) {
+        pin.style.display = "none";
+        continue;
+      }
+      const r = el.getBoundingClientRect();
+      const key = Math.round(r.top) + ":" + Math.round(r.right);
+      const k = stack.get(key) || 0;
+      stack.set(key, k + 1);
+      pin.style.display = "";
+      pin.style.top = r.top + window.scrollY - 6 + "px";
+      pin.style.left = Math.min(r.right + window.scrollX - 10 - k * 24, document.documentElement.scrollWidth - 26) + "px";
+    }
+  }
+
+  renderSummary() {
+    const list = this.summary.querySelector("#review-list");
+    const notes = this.ordered();
+    if (!notes.length) {
+      list.innerHTML = `<p class="review-empty">No notes yet. Press <strong>Start commenting</strong> and click anything on the page.</p>`;
+      return;
+    }
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    let html = "";
+    let lastSection = null;
+    notes.forEach((n, i) => {
+      if (n.sectionTitle !== lastSection) {
+        if (lastSection !== null) html += "</div>";
+        html += `<h3 class="review-group">${esc(n.sectionTitle)}</h3><div class="review-group-items">`;
+        lastSection = n.sectionTitle;
+      }
+      html += `
+        <div class="review-item">
+          <button type="button" class="review-item-num" data-review-go="${n.id}" title="Show on page">${i + 1}</button>
+          <div class="review-item-body">
+            ${n.quote ? `<blockquote class="review-pop-quote">${esc(n.quote)}</blockquote>` : ""}
+            <p class="review-item-text">${esc(n.text)}</p>
+            <span class="review-item-meta">${esc(n.author)} &bull; ${new Date(n.created).toLocaleString()}</span>
+          </div>
+          <button type="button" class="review-item-del" data-review-del="${n.id}" title="Delete note">✕</button>
+        </div>`;
+    });
+    html += "</div>";
+    list.innerHTML = html;
+  }
+
+  jumpTo(id) {
+    const note = this.notes.find((n) => n.id === id);
+    const el = note && this.resolve(note);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.classList.add("review-flash");
+    setTimeout(() => el.classList.remove("review-flash"), 1600);
+  }
+
+  /* ---------- Export ---------- */
+
+  summaryText() {
+    const notes = this.ordered();
+    const reviewers = [...new Set(notes.map((n) => n.author))].join(", ");
+    const lines = [
+      `Review comments — ${document.title}`,
+      `Reviewer: ${reviewers || this.name || "(unnamed)"}`,
+      `Date: ${new Date().toLocaleString()}`,
+      `Page: ${location.href.split("#")[0]}`,
+      `Notes: ${notes.length}`,
+      "",
+    ];
+    let lastSection = null;
+    notes.forEach((n, i) => {
+      if (n.sectionTitle !== lastSection) {
+        lines.push("", `== ${n.sectionTitle} ==`, "");
+        lastSection = n.sectionTitle;
+      }
+      lines.push(`${i + 1}. [${n.author}] ${n.text}`);
+      if (n.quote) lines.push(`   > "${n.quote}"`);
+      lines.push("");
+    });
+    return lines.join("\n");
+  }
+
+  status(msg) {
+    const el = this.summary.querySelector("#review-status");
+    el.textContent = msg;
+    clearTimeout(this.statusTimer);
+    this.statusTimer = setTimeout(() => (el.textContent = ""), 6000);
+  }
+
+  copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+    } finally {
+      ta.remove();
+    }
+    return Promise.resolve();
+  }
+
+  copySummary() {
+    if (!this.notes.length) return this.status("No notes to copy yet.");
+    this.copyText(this.summaryText())
+      .then(() => this.status("Summary copied to the clipboard."))
+      .catch(() => this.status("Could not copy — use Download .txt instead."));
+  }
+
+  downloadSummary() {
+    if (!this.notes.length) return this.status("No notes to download yet.");
+    const blob = new Blob([this.summaryText()], { type: "text/plain" });
+    const a = document.createElement("a");
+    const who = (this.name || "review").replace(/[^\w-]+/g, "_");
+    a.href = URL.createObjectURL(blob);
+    a.download = `review-notes-${who}-${new Date().toISOString().slice(0, 10)}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  emailSummary() {
+    if (!this.notes.length) return this.status("No notes to email yet.");
+    const to = this.summary.querySelector("#review-to").value.trim();
+    const text = this.summaryText();
+    const subject = `Review comments (${this.name || "reviewer"}) — ${document.title}`;
+    // Mail clients truncate long mailto links, so big summaries go via the clipboard.
+    let body = text;
+    if (encodeURIComponent(text).length > 1800) {
+      body = "The full review summary is on the clipboard — paste it here.\n\n" +
+        "(If it is not, use \"Download .txt\" on the page and attach the file.)";
+      this.copyText(text).catch(() => {});
+      this.status("Summary is long — copied to the clipboard; paste it into the email.");
+    }
+    location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  window.reviewComments = new ReviewComments();
+});
+
+
 /* ===== BUNDLED: js/modules-data.js ===== */
 /**
  * Balanced Audio & AES-X152 100-Module Reference Curriculum Dataset
- * Compiled by build.py on 2026-10-18 01:48
+ * Compiled by build.py on 2026-10-18 01:51
  */
 
 const BALANCED_MODULES_DATA = [
