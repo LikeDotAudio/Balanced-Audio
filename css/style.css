@@ -4802,8 +4802,8 @@ body.sidebar-is-scrolling {
 .rack-instruments-bay {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 2px;
+  gap: 0;
+  padding: 0;
   background: #000000;
 }
 
@@ -6462,7 +6462,7 @@ body.has-circuit-fullscreen #floating-meter-dock:hover {
 .bench-gens {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2px;
+  gap: 0;
   flex: 0 0 auto;
 }
 
@@ -6554,7 +6554,7 @@ body.has-circuit-fullscreen #floating-meter-dock:hover {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0;
 }
 
 .bench-line {
@@ -6690,7 +6690,7 @@ body.has-circuit-fullscreen #floating-meter-dock:hover {
 .sidebar-line-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 3px;
+  gap: 0;
 }
 
 .sidebar-line-btn,
@@ -7029,7 +7029,7 @@ body.has-story-sidebar.sidebar-taxonomy-active {
 .rack-vm-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2px;
+  gap: 0;
 }
 
 .rack-vm-card {
@@ -8353,3 +8353,13 @@ html[data-theme="paper"] body > section .svg-diagram-wrapper,
 html[data-theme="paper"] body > section .svg-diagram-card {
   background: transparent !important;
 }
+
+/* Zero space between frames: neighbouring frames share one border line */
+.rack-instruments-bay > * + *,
+.bench-lines > * + * { margin-top: -1px; }
+.rack-vm-grid > *,
+.bench-gens > *,
+.sidebar-line-grid > * { margin: 0 -1px -1px 0; }
+.rack-meter-card:hover,
+.bench-gen:hover,
+.sidebar-line-btn:hover { position: relative; z-index: 1; }

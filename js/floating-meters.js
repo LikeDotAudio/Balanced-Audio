@@ -369,7 +369,7 @@ class FloatingMeterDock {
   // from where the zoom began, on a quick shake, or on Esc. Re-arms after the pointer leaves the card.
   initHoverZoom() {
     const MAX_ZOOM = 5;
-    const DWELL_MS = 350;
+    const DWELL_MS = 1000; // hold still about a second before an instrument zooms
     const FAR_PX = 420;
     const dock = this.dock;
     let timer = null;
@@ -2467,11 +2467,32 @@ class FloatingMeterDock {
       const baseFrac = Math.max(-0.82, Math.min(0.82, dcShown / halfV));
       const baseY = mid - baseFrac * (stripH / 2 - 1);
 
+      // Hum + buzz + RFI riding on the signal (shield current through the PCB 0V): drifts in time,
+      // drawn on its own in red behind the trace so you can see what is riding the sine wave
+      const tNow = performance.now() / 1000;
+      const humAt = (t) => data.humVpk * (Math.sin(2 * Math.PI * 60 * t + tNow * 2.1)
+        + 0.45 * Math.sin(2 * Math.PI * 180 * t + 0.7 + tNow * 3.3)
+        + 0.2 * Math.sin(2 * Math.PI * 300 * t + tNow)
+        + 0.25 * Math.sin(2 * Math.PI * 2900 * t + tNow * 9));
+
       // Trace
       ctx.save();
       ctx.beginPath();
       ctx.rect(LABEL_W, top + 1, plotW, stripH - 2);
       ctx.clip();
+      if (data.humVpk) {
+        ctx.strokeStyle = "rgba(239, 68, 68, 0.95)";
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        const n = Math.max(120, Math.round(plotW));
+        for (let k = 0; k <= n; k++) {
+          const t = (k / n) * totalMs / 1000;
+          const x = LABEL_W + (k / n) * plotW;
+          const y = baseY - (humAt(t) / halfV) * (stripH / 2 - 1);
+          if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
       ctx.strokeStyle = c.color;
       ctx.lineWidth = 2.2;
       ctx.shadowColor = c.color;
@@ -2482,8 +2503,7 @@ class FloatingMeterDock {
         const t = (sIdx / samples) * totalMs / 1000;
         let v = 0;
         if (data.humVpk) {
-          v = (data.sigVpk || 0) * Math.sin(2 * Math.PI * data.freq * t)
-            + data.humVpk * (Math.sin(2 * Math.PI * 60 * t) + 0.45 * Math.sin(2 * Math.PI * 180 * t + 0.7) + 0.2 * Math.sin(2 * Math.PI * 300 * t));
+          v = (data.sigVpk || 0) * Math.sin(2 * Math.PI * data.freq * t) + humAt(t);
         } else if (data.shape !== "flatline") {
           v = data.vPk * Math.sin(2 * Math.PI * data.freq * t + (data.shape === "hum" ? 0 : (data.phase || 0)));
           if (data.status && data.status.includes("CLIP")) v = Math.max(-1.5, Math.min(1.5, v * 1.8));
