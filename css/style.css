@@ -7462,3 +7462,181 @@ body.has-story-sidebar.sidebar-taxonomy-active {
     border-width: 0;
   }
 }
+
+/* ================= How to Use This Lab ================= */
+.how-to-use .section-header {
+  margin-bottom: 1.25rem;
+}
+
+.htu-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 1.15fr) 1fr minmax(220px, 0.8fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .htu-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .htu-legend {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .htu-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.htu-map svg {
+  display: block;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+}
+
+.htu-steps {
+  list-style: none;
+  counter-reset: htu;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.htu-steps li {
+  counter-increment: htu;
+  display: grid;
+  grid-template-columns: 2.4rem 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 0.6rem;
+  align-items: baseline;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid #38bdf8;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+.htu-steps li::before {
+  content: counter(htu, decimal-leading-zero);
+  grid-row: 1 / span 2;
+  font-size: 1.6rem;
+  font-weight: 900;
+  line-height: 1;
+  color: #38bdf8;
+  font-variant-numeric: tabular-nums;
+}
+
+.htu-steps b {
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.htu-steps span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.htu-steps code {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: #facc15;
+  background: #0b1220;
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
+.htu-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: #060910;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+}
+
+.htu-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.htu-legend-row > svg,
+.htu-legend-row > .htu-drop {
+  flex: 0 0 auto;
+}
+
+.htu-drop {
+  position: relative;
+  width: 78px;
+  height: 14px;
+  background: #111827;
+  border: 1px solid #333333;
+}
+
+.htu-drop::after {
+  content: "";
+  position: absolute;
+  left: 75%;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  background: #ffffff;
+}
+
+.htu-drop i {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+}
+
+.htu-drop.on i { left: 74%; width: 3%; background: #4ade80; }
+.htu-drop.leg i { left: 60%; width: 15%; background: #facc15; }
+.htu-drop.off i { left: 25%; width: 50%; background: #f87171; }
+
+.htu-drop b {
+  position: absolute;
+  left: 3px;
+  top: -1px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 900;
+  color: #f8fafc;
+  text-shadow: 0 0 3px #000000;
+}
+
+.htu-start {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.htu-start-label {
+  font-weight: 800;
+  color: #facc15;
+  margin-right: 0.25rem;
+}
+
+.htu-start-btn {
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  border-radius: 4px;
+  padding: 0.35rem 0.8rem;
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.htu-start-btn:hover {
+  background: #38bdf8;
+  color: #000000;
+}

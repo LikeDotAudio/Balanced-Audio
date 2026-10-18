@@ -72,6 +72,11 @@ class StorySidebar {
             <a href="#hero" class="chapter-link">0. Prologue &amp; Mandate</a>
           </div>
 
+          <div class="story-chapter" data-target="how-to-use">
+            <div class="chapter-dot"></div>
+            <a href="#how-to-use" class="chapter-link">★ How to Use This Lab</a>
+          </div>
+
           <div class="story-chapter" data-target="enclosure-explorer">
             <div class="chapter-dot"></div>
             <a href="#enclosure-explorer" class="chapter-link">0.0 Enclosure &amp; Ground Physics</a>
@@ -366,6 +371,7 @@ class StorySidebar {
   setupIntersectionObserver() {
     const sectionIds = [
       "hero",
+      "how-to-use",
       "enclosure-explorer",
       "multichannel-hierarchy",
       "xlr-hub",
