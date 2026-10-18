@@ -7651,6 +7651,77 @@ body.has-story-sidebar.sidebar-taxonomy-active {
   color: #000000;
 }
 
+/* Controls float over the circuit they change (circuit-overlay.js) */
+.circuit-overlay-host {
+  position: relative;
+}
+
+.circuit-overlay-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.circuit-overlay-cell {
+  position: absolute;
+  pointer-events: auto;
+  padding: 0.4rem 0.5rem !important;
+  background: rgba(9, 13, 22, 0.9) !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6) !important;
+}
+
+.circuit-overlay-cell .military-cell-header {
+  margin-bottom: 0.15rem;
+}
+
+.circuit-overlay-cell .military-fader-label {
+  font-size: 0.6rem;
+}
+
+.circuit-overlay-cell .military-fader-readout {
+  font-size: 0.8rem;
+  padding: 1px 5px;
+}
+
+.circuit-overlay-cell .military-ltp-slot {
+  min-height: 140px;
+  padding: 0;
+}
+
+/* Direct-value row: the readout already shows the number; type into it on hover */
+.circuit-overlay-cell > div:last-child:not(.military-cell-header) {
+  display: none !important;
+}
+
+.circuit-overlay-cell:hover > div:last-child:not(.military-cell-header) {
+  display: flex !important;
+}
+
+.circuit-overlay-leader {
+  position: absolute;
+  width: 0;
+  border-left: 1.5px dashed #38bdf8;
+  opacity: 0.8;
+}
+
+/* LUCKY DMM LCR readout rows */
+.rack-dmm-lcr {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px 6px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  padding: 2px 4px;
+  border: 1px solid #facc15;
+}
+
+.rack-dmm-lcr[hidden],
+.rack-dmm-matrix[hidden] {
+  display: none !important;
+}
+
 </style>
   
   <!-- Google Fonts: Inter & JetBrains Mono -->
@@ -9183,6 +9254,143 @@ body.has-story-sidebar.sidebar-taxonomy-active {
 
               <rect x="15" y="250" width="890" height="22" rx="4" fill="rgba(16, 185, 129, 0.08)" stroke="rgba(16, 185, 129, 0.25)"/>
               <text x="460" y="265" fill="#10b981" font-size="10.5" font-weight="700" text-anchor="middle">AES48 MANDATE: Pin 1 must bond directly to metal chassis at connector entry. Never route shield currents through PCB audio 0V traces!</text>
+            </svg>
+          </div>
+          <div class="svg-diagram-wrapper aes59-ground-diagram">
+            <svg viewBox="0 0 920 360" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+              <rect width="920" height="360" fill="#090d16" rx="8"/>
+              <line x1="460" y1="20" x2="460" y2="290" stroke="#374151" stroke-width="1.5" stroke-dasharray="4,4"/>
+              <text x="230" y="24" fill="#10b981" font-size="11" font-weight="800" letter-spacing="0.05em" text-anchor="middle">✓ AES-X249 SHIELD PLANE (EVERY GROUND BONDS AT ENTRY)</text>
+              <rect x="196" y="44" width="12" height="236" fill="#334155" stroke="#64748b" stroke-width="1.5" rx="2"/>
+              <text x="202" y="40" fill="#94a3b8" font-size="8.5" font-weight="600" text-anchor="middle">Chassis Wall</text>
+              <rect x="188" y="52" width="8" height="216" fill="#10b981"/>
+              <text transform="translate(221,160) rotate(-90)" fill="#10b981" font-size="8" font-weight="800" text-anchor="middle">SHIELD PLANE · SHELL ⇄ CHASSIS 360°</text>
+              <rect x="146" y="60" width="34" height="196" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5" rx="4"/>
+              <text x="163" y="270" fill="#94a3b8" font-size="8.5" text-anchor="middle">DB25</text>
+              <line x1="20" y1="64" x2="188" y2="64" stroke="#94a3b8" stroke-width="3"/>
+              <text x="60" y="58" fill="#cbd5e1" font-size="8.5" font-weight="600" text-anchor="middle">Overall shield</text>
+              <line x1="20" y1="78" x2="146" y2="78" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="163" cy="78" r="3.5" fill="#94a3b8"/><text x="140" y="81" fill="#94a3b8" font-size="7" text-anchor="end">G25</text>
+              <line x1="166" y1="78" x2="188" y2="78" stroke="#10b981" stroke-width="2"/>
+              <line x1="20" y1="100" x2="146" y2="100" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="163" cy="100" r="3.5" fill="#94a3b8"/><text x="140" y="103" fill="#94a3b8" font-size="7" text-anchor="end">G11</text>
+              <line x1="166" y1="100" x2="188" y2="100" stroke="#10b981" stroke-width="2"/>
+              <line x1="20" y1="122" x2="146" y2="122" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="163" cy="122" r="3.5" fill="#94a3b8"/><text x="140" y="125" fill="#94a3b8" font-size="7" text-anchor="end">G22</text>
+              <line x1="166" y1="122" x2="188" y2="122" stroke="#10b981" stroke-width="2"/>
+              <line x1="20" y1="144" x2="146" y2="144" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="163" cy="144" r="3.5" fill="#94a3b8"/><text x="140" y="147" fill="#94a3b8" font-size="7" text-anchor="end">G8</text>
+              <line x1="166" y1="144" x2="188" y2="144" stroke="#10b981" stroke-width="2"/>
+              <line x1="20" y1="166" x2="146" y2="166" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="163" cy="166" r="3.5" fill="#94a3b8"/><text x="140" y="169" fill="#94a3b8" font-size="7" text-anchor="end">G19</text>
+              <line x1="166" y1="166" x2="188" y2="166" stroke="#10b981" stroke-width="2"/>
+              <line x1="20" y1="188" x2="146" y2="188" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="163" cy="188" r="3.5" fill="#94a3b8"/><text x="140" y="191" fill="#94a3b8" font-size="7" text-anchor="end">G5</text>
+              <line x1="166" y1="188" x2="188" y2="188" stroke="#10b981" stroke-width="2"/>
+              <line x1="20" y1="210" x2="146" y2="210" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="163" cy="210" r="3.5" fill="#94a3b8"/><text x="140" y="213" fill="#94a3b8" font-size="7" text-anchor="end">G16</text>
+              <line x1="166" y1="210" x2="188" y2="210" stroke="#10b981" stroke-width="2"/>
+              <line x1="20" y1="232" x2="146" y2="232" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="163" cy="232" r="3.5" fill="#94a3b8"/><text x="140" y="235" fill="#94a3b8" font-size="7" text-anchor="end">G2</text>
+              <line x1="166" y1="232" x2="188" y2="232" stroke="#10b981" stroke-width="2"/>
+              <text x="70" y="270" fill="#cbd5e1" font-size="8.5" font-weight="600" text-anchor="middle">8 pair drains (CH1–8)</text>
+              <line x1="202" y1="268" x2="202" y2="286" stroke="#10b981" stroke-width="3"/>
+              <line x1="194" y1="286" x2="210" y2="286" stroke="#10b981" stroke-width="2.5"/><line x1="197" y1="290" x2="207" y2="290" stroke="#10b981" stroke-width="2"/>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 20 78 L 192 78 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 20 78 L 192 78 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 20 100 L 192 100 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 20 100 L 192 100 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 20 122 L 192 122 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 20 122 L 192 122 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 20 144 L 192 144 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 20 144 L 192 144 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 20 166 L 192 166 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 20 166 L 192 166 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 20 188 L 192 188 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 20 188 L 192 188 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 20 210 L 192 210 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 20 210 L 192 210 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 20 232 L 192 232 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 20 232 L 192 232 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 20 64 L 192 64 L 192 268 L 202 286"/></circle>
+              <circle r="3" fill="#10b981"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 20 64 L 192 64 L 192 268 L 202 286"/></circle>
+              <rect x="232" y="60" width="210" height="160" fill="rgba(15, 23, 42, 0.85)" stroke="#10b981" stroke-width="1.5" rx="6"/>
+              <text x="337" y="76" fill="#10b981" font-size="9.5" font-weight="700" text-anchor="middle">INTERNAL AUDIO PCB · 8 CH</text>
+              <text x="244" y="91" fill="#64748b" font-size="7">CH1</text><path d="M 268 88 q 6 -5 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0" fill="none" stroke="#10b981" stroke-width="1.4"/>
+              <text x="244" y="106" fill="#64748b" font-size="7">CH2</text><path d="M 268 103 q 6 -5 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0" fill="none" stroke="#10b981" stroke-width="1.4"/>
+              <text x="244" y="121" fill="#64748b" font-size="7">CH3</text><path d="M 268 118 q 6 -5 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0" fill="none" stroke="#10b981" stroke-width="1.4"/>
+              <text x="244" y="136" fill="#64748b" font-size="7">CH4</text><path d="M 268 133 q 6 -5 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0" fill="none" stroke="#10b981" stroke-width="1.4"/>
+              <text x="244" y="151" fill="#64748b" font-size="7">CH5</text><path d="M 268 148 q 6 -5 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0" fill="none" stroke="#10b981" stroke-width="1.4"/>
+              <text x="244" y="166" fill="#64748b" font-size="7">CH6</text><path d="M 268 163 q 6 -5 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0" fill="none" stroke="#10b981" stroke-width="1.4"/>
+              <text x="244" y="181" fill="#64748b" font-size="7">CH7</text><path d="M 268 178 q 6 -5 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0" fill="none" stroke="#10b981" stroke-width="1.4"/>
+              <text x="244" y="196" fill="#64748b" font-size="7">CH8</text><path d="M 268 193 q 6 -5 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0" fill="none" stroke="#10b981" stroke-width="1.4"/>
+              <text x="337" y="212" fill="#6ee7b7" font-size="8.5" font-weight="700" text-anchor="middle">Audio 0V never carries shield current</text>
+              <text x="690" y="24" fill="#ef4444" font-size="11" font-weight="800" letter-spacing="0.05em" text-anchor="middle">✗ THE D-SUB GROUND-PIN PROBLEM (AES59: 8 GROUNDS TO PCB)</text>
+              <rect x="656" y="44" width="12" height="236" fill="#334155" stroke="#64748b" stroke-width="1.5" rx="2"/>
+              <text x="662" y="40" fill="#94a3b8" font-size="8.5" font-weight="600" text-anchor="middle">Chassis Wall</text>
+              <rect x="606" y="60" width="34" height="196" fill="#1e293b" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3" rx="4"/>
+              <text x="623" y="270" fill="#ef4444" font-size="8" font-weight="700" text-anchor="middle">SHELL NOT BONDED</text>
+              <line x1="480" y1="64" x2="606" y2="64" stroke="#94a3b8" stroke-width="3"/>
+              <text x="520" y="58" fill="#cbd5e1" font-size="8.5" font-weight="600" text-anchor="middle">Overall shield</text>
+              <line x1="720" y1="70" x2="720" y2="240" stroke="#ef4444" stroke-width="3.5"/>
+              <text x="740" y="268" fill="#fca5a5" font-size="8" font-weight="800">← PCB 0V BUS</text>
+              <line x1="480" y1="78" x2="606" y2="78" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="623" cy="78" r="3.5" fill="#ef4444"/><text x="600" y="81" fill="#94a3b8" font-size="7" text-anchor="end">G25</text>
+              <line x1="626" y1="78" x2="720" y2="78" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="3,2"/>
+              <line x1="480" y1="100" x2="606" y2="100" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="623" cy="100" r="3.5" fill="#ef4444"/><text x="600" y="103" fill="#94a3b8" font-size="7" text-anchor="end">G11</text>
+              <line x1="626" y1="100" x2="720" y2="100" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="3,2"/>
+              <line x1="480" y1="122" x2="606" y2="122" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="623" cy="122" r="3.5" fill="#ef4444"/><text x="600" y="125" fill="#94a3b8" font-size="7" text-anchor="end">G22</text>
+              <line x1="626" y1="122" x2="720" y2="122" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="3,2"/>
+              <line x1="480" y1="144" x2="606" y2="144" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="623" cy="144" r="3.5" fill="#ef4444"/><text x="600" y="147" fill="#94a3b8" font-size="7" text-anchor="end">G8</text>
+              <line x1="626" y1="144" x2="720" y2="144" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="3,2"/>
+              <line x1="480" y1="166" x2="606" y2="166" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="623" cy="166" r="3.5" fill="#ef4444"/><text x="600" y="169" fill="#94a3b8" font-size="7" text-anchor="end">G19</text>
+              <line x1="626" y1="166" x2="720" y2="166" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="3,2"/>
+              <line x1="480" y1="188" x2="606" y2="188" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="623" cy="188" r="3.5" fill="#ef4444"/><text x="600" y="191" fill="#94a3b8" font-size="7" text-anchor="end">G5</text>
+              <line x1="626" y1="188" x2="720" y2="188" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="3,2"/>
+              <line x1="480" y1="210" x2="606" y2="210" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="623" cy="210" r="3.5" fill="#ef4444"/><text x="600" y="213" fill="#94a3b8" font-size="7" text-anchor="end">G16</text>
+              <line x1="626" y1="210" x2="720" y2="210" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="3,2"/>
+              <line x1="480" y1="232" x2="606" y2="232" stroke="#64748b" stroke-width="1.6"/>
+              <circle cx="623" cy="232" r="3.5" fill="#ef4444"/><text x="600" y="235" fill="#94a3b8" font-size="7" text-anchor="end">G2</text>
+              <line x1="626" y1="232" x2="720" y2="232" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="3,2"/>
+              <rect x="706" y="244" width="28" height="12" fill="#1e293b" stroke="#ef4444" rx="2"/><text x="720" y="253" fill="#fca5a5" font-size="7" font-weight="700" text-anchor="middle">Z_bus</text>
+              <line x1="720" y1="256" x2="720" y2="280" stroke="#ef4444" stroke-width="2.5"/>
+              <line x1="712" y1="280" x2="728" y2="280" stroke="#ef4444" stroke-width="2.5"/>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 480 78 L 720 78 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 480 78 L 720 78 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 480 100 L 720 100 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 480 100 L 720 100 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 480 122 L 720 122 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 480 122 L 720 122 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 480 144 L 720 144 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 480 144 L 720 144 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 480 166 L 720 166 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 480 166 L 720 166 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 480 188 L 720 188 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 480 188 L 720 188 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 480 210 L 720 210 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 480 210 L 720 210 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" path="M 480 232 L 720 232 L 720 280"/></circle>
+              <circle r="3" fill="#ef4444"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" path="M 480 232 L 720 232 L 720 280"/></circle>
+              <rect x="744" y="60" width="160" height="160" fill="rgba(15, 23, 42, 0.85)" stroke="#ef4444" stroke-width="1.5" rx="6"/>
+              <text x="824" y="76" fill="#ef4444" font-size="9.5" font-weight="700" text-anchor="middle">8 CH SHARE THE DIRTY 0V</text>
+              <text x="752" y="91" fill="#64748b" font-size="7">CH1</text><path d="M 774 88 q 3 -6 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0" fill="none" stroke="#ef4444" stroke-width="1.4"/>
+              <text x="752" y="106" fill="#64748b" font-size="7">CH2</text><path d="M 774 103 q 3 -6 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0" fill="none" stroke="#ef4444" stroke-width="1.4"/>
+              <text x="752" y="121" fill="#64748b" font-size="7">CH3</text><path d="M 774 118 q 3 -6 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0" fill="none" stroke="#ef4444" stroke-width="1.4"/>
+              <text x="752" y="136" fill="#64748b" font-size="7">CH4</text><path d="M 774 133 q 3 -6 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0" fill="none" stroke="#ef4444" stroke-width="1.4"/>
+              <text x="752" y="151" fill="#64748b" font-size="7">CH5</text><path d="M 774 148 q 3 -6 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0" fill="none" stroke="#ef4444" stroke-width="1.4"/>
+              <text x="752" y="166" fill="#64748b" font-size="7">CH6</text><path d="M 774 163 q 3 -6 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0" fill="none" stroke="#ef4444" stroke-width="1.4"/>
+              <text x="752" y="181" fill="#64748b" font-size="7">CH7</text><path d="M 774 178 q 3 -6 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0" fill="none" stroke="#ef4444" stroke-width="1.4"/>
+              <text x="752" y="196" fill="#64748b" font-size="7">CH8</text><path d="M 774 193 q 3 -6 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0 t 6 0 q 6 -9 12 0 t 6 0 t 6 0" fill="none" stroke="#ef4444" stroke-width="1.4"/>
+              <text x="824" y="212" fill="#fca5a5" font-size="8" font-weight="800" text-anchor="middle">V_noise = Σ I_drain × Z_bus</text>
+              <rect x="15" y="300" width="890" height="50" rx="4" fill="rgba(16, 185, 129, 0.08)" stroke="rgba(16, 185, 129, 0.35)"/>
+              <text x="30" y="318" font-size="10"><tspan fill="#10b981" font-size="10.5" font-weight="900">SHIELD PLANE (AES-X249): </tspan><tspan fill="#cbd5e1">the continuous conductive surface formed by the D-sub shell bonded all round to the chassis panel.</tspan></text>
+              <text x="30" y="337" fill="#cbd5e1" font-size="10">Every ground pin and drain of every pair, plus the overall shield, terminates on it at entry — never on the PCB audio 0V. One plane, many grounds.</text>
             </svg>
           </div>
         </div>
@@ -17232,6 +17440,8 @@ class FloatingMeterDock {
             <span id="rack-dmm1-val2" class="rack-dmm-sub-digits" style="color: ${PROBE_COLORS.DMM1};">+4.0 dBu</span>
           </div>
           <div class="rack-ref-line" id="rack-dmm1-ref"><button type="button" class="rack-com-btn" data-dmm-com="1" title="Move the COM lead: ground (single-ended) or across both wires of the pair">COM: GND</button><span class="rack-ref-text"></span><span class="rack-goal"></span><span class="rack-drop" title="Level against the +4 dBu goal"><i></i><b></b></span></div>
+          <!-- LCR mode (shown while a resistance / capacitance control is being turned) -->
+          <div class="rack-dmm-lcr" id="rack-dmm1-lcr" hidden></div>
           <!-- All Engineering Values & Equivalents Multi-Matrix -->
           <div class="rack-dmm-matrix" id="rack-dmm1-matrix">
             <div class="matrix-item"><span class="m-lbl">Vpk:</span><span id="dmm1-mat-vpk" class="m-val">1.737V</span></div>
@@ -18561,6 +18771,62 @@ class FloatingMeterDock {
     el.querySelector("b").textContent = dbu <= -119 ? "—" : onGoal ? "+4 ✓" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} dB`;
   }
 
+  // LUCKY DMM #1 jumps to Ω or C while a resistance / capacitance control is being turned
+  showLcr({ kind, value, label }) {
+    this.lcr = { kind, value, label };
+    clearTimeout(this.lcrTimer);
+    this.lcrTimer = setTimeout(() => {
+      this.lcr = null;
+      this.updateFromActiveCircuit();
+    }, 4000);
+    this.updateFromActiveCircuit();
+  }
+
+  renderLcr() {
+    const lcrEl = document.getElementById("rack-dmm1-lcr");
+    const matrix = document.getElementById("rack-dmm1-matrix");
+    const on = !!this.lcr;
+    if (lcrEl) lcrEl.hidden = !on;
+    if (matrix) matrix.hidden = on;
+    if (!on) return false;
+
+    const si = (v, unit) => {
+      const steps = [[1e6, "M"], [1e3, "k"], [1, ""], [1e-3, "m"], [1e-6, "µ"], [1e-9, "n"], [1e-12, "p"]];
+      const [m, p] = steps.find(([m]) => Math.abs(v) >= m) || steps[steps.length - 1];
+      const n = v / m;
+      return `${n >= 100 ? n.toFixed(0) : n >= 10 ? n.toFixed(1) : n.toFixed(2)} ${p}${unit}`;
+    };
+    const { kind, value, label } = this.lcr;
+    const name = label.replace(/\(.*?\)/, "").trim() || (kind === "C" ? "CAPACITANCE" : "RESISTANCE");
+    const v1 = document.getElementById("rack-dmm1-val1");
+    const v2 = document.getElementById("rack-dmm1-val2");
+    if (v1) v1.textContent = si(value, kind === "C" ? "F" : "Ω");
+    if (v2) v2.textContent = kind === "C" ? "C · LCR" : "Ω · LCR";
+    const nameEl = document.getElementById("rack-dmm1-name");
+    if (nameEl) nameEl.textContent = `${kind === "C" ? "C" : "R"} · ${name}`;
+    const status = document.getElementById("rack-dmm1-status");
+    if (status) {
+      status.textContent = kind === "C" ? "CAPACITANCE" : "RESISTANCE";
+      status.className = "rack-status-pill yellow";
+    }
+
+    let rows;
+    if (kind === "C") {
+      // Reactance at audio frequencies: Xc = 1 / (2πfC)
+      rows = [100, 1000, 10000, 20000].map(f => [`Xc @ ${f >= 1000 ? f / 1000 + "k" : f}Hz`, si(1 / (2 * Math.PI * f * value), "Ω")]);
+    } else {
+      const vLine = 1.228; // +4 dBu across it
+      rows = [
+        ["Z (all f)", si(value, "Ω")],
+        ["G", si(1 / value, "S")],
+        ["I @ +4 dBu", si(vLine / value, "A")],
+        ["P @ +4 dBu", si((vLine * vLine) / value, "W")]
+      ];
+    }
+    if (lcrEl) lcrEl.innerHTML = rows.map(([k, v]) => `<div class="matrix-item"><span class="m-lbl">${k}:</span><span class="m-val">${v}</span></div>`).join("");
+    return true;
+  }
+
   updateFromActiveCircuit() {
     const data1 = this.getSignalForTarget(this.effectiveDmmTarget(1));
     const data2 = this.getSignalForTarget(this.effectiveDmmTarget(2));
@@ -18743,6 +19009,9 @@ class FloatingMeterDock {
     if (sc2Tel) {
       sc2Tel.textContent = `CH3 (Pink Cold): 1.23V • CH4 (${sc2Data.name}): ${sc2Data.vRms.toFixed(2)}V RMS (${sc2Data.status})`;
     }
+
+    // LCR mode overrides DMM #1 while a resistance / capacitance control is being turned
+    this.renderLcr();
 
     // 5. Append sample to Trend Recorder
     if (this.trendRunning) {
@@ -24578,6 +24847,180 @@ window.animator = window.circuitSim;
 document.addEventListener("DOMContentLoaded", () => {
   window.circuitSim.init();
 });
+
+
+/* ===== BUNDLED: js/circuit-overlay.js ===== */
+/**
+ * circuit-overlay.js — Put interactive controls over the circuit they change
+ *
+ * 1. Each military fader cell is lifted out of its control panel and floated over the schematic,
+ *    centred above the part it adjusts (found by matching the fader label to text in the SVG:
+ *    drive → "Driver In"/V_in, turns ratio → transformer, load → the Ω resistor …), with a
+ *    dashed leader down to that part. Unmatched faders fill the gaps left to right.
+ * 2. Turning a resistance or capacitance control switches the LUCKY DMM to Ω or C (LCR) mode
+ *    for a few seconds, showing the value and, for capacitors, the reactance at several frequencies.
+ */
+
+const OVERLAY_ANCHORS = [
+  { label: /DRIVE|V<sub>IN|V<sub>PO|SOURCE/i, svg: /driver in|v[_\s]?in|v[_\s]?sig|source|generator|v[_\s]?po/i },
+  { label: /TURNS|RATIO/i, svg: /1\s*:\s*n|turns|ratio|transformer|core/i },
+  { label: /LOAD|BRIDGING/i, svg: /\d\s*(k)?\s*Ω|r[_\s]?load|load/i },
+  { label: /R<sub>OUT|MATCH/i, svg: /r[_\s]?out|z[_\s]?out|50\s*Ω/i },
+  { label: /HOT \(Z/i, svg: /z[_\s]?po|hot/i },
+  { label: /COLD \(Z/i, svg: /z[_\s]?ro|cold/i },
+  { label: /CMZ/i, svg: /cmz|z[_\s]?cm|common/i },
+  { label: /SHIELD \(C|C<sub>/i, svg: /c[_\s]?stray|c[_\s]?ps|shield|capac/i },
+  { label: /HUM/i, svg: /v[_\s]?gvd|hum|ground/i }
+];
+
+class CircuitOverlay {
+  constructor() {
+    this.groups = [];
+    document.querySelectorAll(".vintage-military-panel").forEach(panel => this.adopt(panel));
+    if (!this.groups.length) return;
+
+    const relayout = () => this.groups.forEach(g => this.layout(g));
+    window.addEventListener("resize", relayout);
+    if ("ResizeObserver" in window) {
+      const ro = new ResizeObserver(relayout);
+      this.groups.forEach(g => ro.observe(g.wrapper));
+    }
+    relayout();
+    this.bindLcr();
+  }
+
+  // Pair a control panel with the schematic that follows it in the same card
+  adopt(panel) {
+    let wrapper = null;
+    for (let el = panel.nextElementSibling; el; el = el.nextElementSibling) {
+      if (el.classList.contains("svg-diagram-wrapper")) { wrapper = el; break; }
+      if (el.querySelector && el.querySelector(".svg-diagram-wrapper")) { wrapper = el.querySelector(".svg-diagram-wrapper"); break; }
+    }
+    const svg = wrapper && wrapper.querySelector("svg");
+    const cells = [...panel.querySelectorAll(".military-fader-cell")];
+    if (!svg || !cells.length) return;
+
+    wrapper.classList.add("circuit-overlay-host");
+    const layer = document.createElement("div");
+    layer.className = "circuit-overlay-layer";
+    wrapper.appendChild(layer);
+
+    const items = cells.map(cell => {
+      const label = cell.querySelector(".military-fader-label")?.innerHTML || "";
+      const leader = document.createElement("div");
+      leader.className = "circuit-overlay-leader";
+      layer.appendChild(leader);
+      layer.appendChild(cell);
+      cell.classList.add("circuit-overlay-cell");
+      return { cell, leader, label };
+    });
+    panel.querySelector(".military-faders-grid")?.remove();
+    this.groups.push({ panel, wrapper, svg, layer, items });
+  }
+
+  // Centre of the first SVG text that matches the fader's part, relative to the wrapper
+  findAnchor(svg, wrapperRect, pattern, used) {
+    const texts = [...svg.querySelectorAll("text")];
+    for (const t of texts) {
+      if (used.has(t) || !pattern.test(t.textContent || "")) continue;
+      const r = t.getBoundingClientRect();
+      if (!r.width) continue;
+      used.add(t);
+      return { x: r.left + r.width / 2 - wrapperRect.left, y: r.top - wrapperRect.top };
+    }
+    return null;
+  }
+
+  // Transformer core: two long, close, parallel vertical lines
+  findCore(svg, wrapperRect) {
+    const verticals = [...svg.querySelectorAll("line")].filter(l => {
+      const x1 = +l.getAttribute("x1"), x2 = +l.getAttribute("x2");
+      const len = Math.abs(+l.getAttribute("y2") - +l.getAttribute("y1"));
+      return x1 === x2 && len > 60;
+    });
+    for (const a of verticals) {
+      const b = verticals.find(o => o !== a && Math.abs(+o.getAttribute("x1") - +a.getAttribute("x1")) < 16);
+      if (!b) continue;
+      const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+      return { x: (ra.left + rb.right) / 2 - wrapperRect.left, y: Math.min(ra.top, rb.top) - wrapperRect.top };
+    }
+    return null;
+  }
+
+  layout(g) {
+    if (g.wrapper.offsetParent === null) return;
+    g.wrapper.style.paddingTop = "";
+    const wr = g.wrapper.getBoundingClientRect();
+    const svgTop = g.svg.getBoundingClientRect().top - wr.top;
+    const used = new Set();
+    const CELL_W = 156;
+
+    // Match anchors, then give unmatched faders evenly spaced slots
+    g.items.forEach(it => {
+      const rule = OVERLAY_ANCHORS.find(a => a.label.test(it.label));
+      it.anchor = rule ? this.findAnchor(g.svg, wr, rule.svg, used) : null;
+      if (!it.anchor && /TURNS|RATIO/i.test(it.label)) it.anchor = this.findCore(g.svg, wr);
+    });
+    const free = g.items.filter(it => !it.anchor);
+    free.forEach((it, k) => {
+      it.anchor = { x: ((k + 1) / (free.length + 1)) * wr.width, y: svgTop + 40, guessed: true };
+    });
+
+    // One row of cells across the top; the drawing is pushed down below them so nothing is covered
+    const cellH = Math.max(...g.items.map(it => it.cell.offsetHeight || 0));
+    const pad = cellH + 18;
+    g.wrapper.style.paddingTop = `${pad}px`;
+
+    // Spread cells so they never overlap, keeping each as close above its part as possible
+    const order = [...g.items].sort((a, b) => a.anchor.x - b.anchor.x);
+    let lastRight = -Infinity;
+    order.forEach(it => {
+      let left = Math.max(4, Math.min(wr.width - CELL_W - 4, it.anchor.x - CELL_W / 2));
+      left = Math.max(left, lastRight + 6);
+      lastRight = left + CELL_W;
+      Object.assign(it.cell.style, { left: `${left}px`, top: "6px", width: `${CELL_W}px` });
+
+      // Leader from the cell's bottom edge down to its part
+      const leaderTop = 6 + it.cell.offsetHeight;
+      const leaderH = Math.max(0, it.anchor.y + pad - leaderTop - 2);
+      Object.assign(it.leader.style, {
+        left: `${it.anchor.x}px`,
+        top: `${leaderTop}px`,
+        height: `${leaderH}px`,
+        display: it.anchor.guessed || leaderH < 4 ? "none" : "block"
+      });
+    });
+  }
+
+  // Resistance / capacitance controls drive the LUCKY DMM into Ω or C mode
+  bindLcr() {
+    const parse = (txt) => {
+      const m = (txt || "").replace(/,/g, "").match(/(-?[\d.]+)\s*([pnuµmkM]?)\s*(Ω|F)/);
+      if (!m) return null;
+      const mult = { p: 1e-12, n: 1e-9, u: 1e-6, "µ": 1e-6, m: 1e-3, k: 1e3, M: 1e6, "": 1 }[m[2]];
+      return { value: parseFloat(m[1]) * mult, kind: m[3] === "F" ? "C" : "R" };
+    };
+    const onChange = (e) => {
+      const cell = e.target.closest(".military-fader-cell");
+      if (!cell || !window.floatingMeterDock || typeof window.floatingMeterDock.showLcr !== "function") return;
+      requestAnimationFrame(() => {
+        const readout = cell.querySelector(".military-fader-readout");
+        const parsed = parse(readout && readout.textContent);
+        if (!parsed) return;
+        const label = (cell.querySelector(".military-fader-label")?.textContent || "").replace(/\s+/g, " ").trim();
+        window.floatingMeterDock.showLcr({ ...parsed, label });
+      });
+    };
+    document.addEventListener("input", onChange, true);
+    document.addEventListener("pointermove", (e) => { if (e.buttons) onChange(e); }, true);
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => setTimeout(() => { window.circuitOverlay = new CircuitOverlay(); }, 0));
+} else {
+  window.circuitOverlay = new CircuitOverlay();
+}
 
 
 /* ===== BUNDLED: js/multichannel-breakout.js ===== */
@@ -41680,7 +42123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ===== BUNDLED: js/modules-data.js ===== */
 /**
  * Balanced Audio & AES-X152 100-Module Reference Curriculum Dataset
- * Compiled by build.py on 2026-10-17 23:23
+ * Compiled by build.py on 2026-10-17 23:56
  */
 
 const BALANCED_MODULES_DATA = [

@@ -53,6 +53,7 @@ SCRIPTS_ORDER = [
     "js/simulators.js",
     "js/definition-sims.js",
     "js/circuit-animator.js",
+    "js/circuit-overlay.js",
     "js/multichannel-breakout.js",
     "js/adapter-wiring.js",
     "js/xlr-hub.js",

@@ -7640,3 +7640,74 @@ body.has-story-sidebar.sidebar-taxonomy-active {
   background: #38bdf8;
   color: #000000;
 }
+
+/* Controls float over the circuit they change (circuit-overlay.js) */
+.circuit-overlay-host {
+  position: relative;
+}
+
+.circuit-overlay-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.circuit-overlay-cell {
+  position: absolute;
+  pointer-events: auto;
+  padding: 0.4rem 0.5rem !important;
+  background: rgba(9, 13, 22, 0.9) !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6) !important;
+}
+
+.circuit-overlay-cell .military-cell-header {
+  margin-bottom: 0.15rem;
+}
+
+.circuit-overlay-cell .military-fader-label {
+  font-size: 0.6rem;
+}
+
+.circuit-overlay-cell .military-fader-readout {
+  font-size: 0.8rem;
+  padding: 1px 5px;
+}
+
+.circuit-overlay-cell .military-ltp-slot {
+  min-height: 140px;
+  padding: 0;
+}
+
+/* Direct-value row: the readout already shows the number; type into it on hover */
+.circuit-overlay-cell > div:last-child:not(.military-cell-header) {
+  display: none !important;
+}
+
+.circuit-overlay-cell:hover > div:last-child:not(.military-cell-header) {
+  display: flex !important;
+}
+
+.circuit-overlay-leader {
+  position: absolute;
+  width: 0;
+  border-left: 1.5px dashed #38bdf8;
+  opacity: 0.8;
+}
+
+/* LUCKY DMM LCR readout rows */
+.rack-dmm-lcr {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px 6px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  padding: 2px 4px;
+  border: 1px solid #facc15;
+}
+
+.rack-dmm-lcr[hidden],
+.rack-dmm-matrix[hidden] {
+  display: none !important;
+}

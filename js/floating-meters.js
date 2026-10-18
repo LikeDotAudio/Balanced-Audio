@@ -455,6 +455,8 @@ class FloatingMeterDock {
             <span id="rack-dmm1-val2" class="rack-dmm-sub-digits" style="color: ${PROBE_COLORS.DMM1};">+4.0 dBu</span>
           </div>
           <div class="rack-ref-line" id="rack-dmm1-ref"><button type="button" class="rack-com-btn" data-dmm-com="1" title="Move the COM lead: ground (single-ended) or across both wires of the pair">COM: GND</button><span class="rack-ref-text"></span><span class="rack-goal"></span><span class="rack-drop" title="Level against the +4 dBu goal"><i></i><b></b></span></div>
+          <!-- LCR mode (shown while a resistance / capacitance control is being turned) -->
+          <div class="rack-dmm-lcr" id="rack-dmm1-lcr" hidden></div>
           <!-- All Engineering Values & Equivalents Multi-Matrix -->
           <div class="rack-dmm-matrix" id="rack-dmm1-matrix">
             <div class="matrix-item"><span class="m-lbl">Vpk:</span><span id="dmm1-mat-vpk" class="m-val">1.737V</span></div>
@@ -1784,6 +1786,62 @@ class FloatingMeterDock {
     el.querySelector("b").textContent = dbu <= -119 ? "—" : onGoal ? "+4 ✓" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} dB`;
   }
 
+  // LUCKY DMM #1 jumps to Ω or C while a resistance / capacitance control is being turned
+  showLcr({ kind, value, label }) {
+    this.lcr = { kind, value, label };
+    clearTimeout(this.lcrTimer);
+    this.lcrTimer = setTimeout(() => {
+      this.lcr = null;
+      this.updateFromActiveCircuit();
+    }, 4000);
+    this.updateFromActiveCircuit();
+  }
+
+  renderLcr() {
+    const lcrEl = document.getElementById("rack-dmm1-lcr");
+    const matrix = document.getElementById("rack-dmm1-matrix");
+    const on = !!this.lcr;
+    if (lcrEl) lcrEl.hidden = !on;
+    if (matrix) matrix.hidden = on;
+    if (!on) return false;
+
+    const si = (v, unit) => {
+      const steps = [[1e6, "M"], [1e3, "k"], [1, ""], [1e-3, "m"], [1e-6, "µ"], [1e-9, "n"], [1e-12, "p"]];
+      const [m, p] = steps.find(([m]) => Math.abs(v) >= m) || steps[steps.length - 1];
+      const n = v / m;
+      return `${n >= 100 ? n.toFixed(0) : n >= 10 ? n.toFixed(1) : n.toFixed(2)} ${p}${unit}`;
+    };
+    const { kind, value, label } = this.lcr;
+    const name = label.replace(/\(.*?\)/, "").trim() || (kind === "C" ? "CAPACITANCE" : "RESISTANCE");
+    const v1 = document.getElementById("rack-dmm1-val1");
+    const v2 = document.getElementById("rack-dmm1-val2");
+    if (v1) v1.textContent = si(value, kind === "C" ? "F" : "Ω");
+    if (v2) v2.textContent = kind === "C" ? "C · LCR" : "Ω · LCR";
+    const nameEl = document.getElementById("rack-dmm1-name");
+    if (nameEl) nameEl.textContent = `${kind === "C" ? "C" : "R"} · ${name}`;
+    const status = document.getElementById("rack-dmm1-status");
+    if (status) {
+      status.textContent = kind === "C" ? "CAPACITANCE" : "RESISTANCE";
+      status.className = "rack-status-pill yellow";
+    }
+
+    let rows;
+    if (kind === "C") {
+      // Reactance at audio frequencies: Xc = 1 / (2πfC)
+      rows = [100, 1000, 10000, 20000].map(f => [`Xc @ ${f >= 1000 ? f / 1000 + "k" : f}Hz`, si(1 / (2 * Math.PI * f * value), "Ω")]);
+    } else {
+      const vLine = 1.228; // +4 dBu across it
+      rows = [
+        ["Z (all f)", si(value, "Ω")],
+        ["G", si(1 / value, "S")],
+        ["I @ +4 dBu", si(vLine / value, "A")],
+        ["P @ +4 dBu", si((vLine * vLine) / value, "W")]
+      ];
+    }
+    if (lcrEl) lcrEl.innerHTML = rows.map(([k, v]) => `<div class="matrix-item"><span class="m-lbl">${k}:</span><span class="m-val">${v}</span></div>`).join("");
+    return true;
+  }
+
   updateFromActiveCircuit() {
     const data1 = this.getSignalForTarget(this.effectiveDmmTarget(1));
     const data2 = this.getSignalForTarget(this.effectiveDmmTarget(2));
@@ -1966,6 +2024,9 @@ class FloatingMeterDock {
     if (sc2Tel) {
       sc2Tel.textContent = `CH3 (Pink Cold): 1.23V • CH4 (${sc2Data.name}): ${sc2Data.vRms.toFixed(2)}V RMS (${sc2Data.status})`;
     }
+
+    // LCR mode overrides DMM #1 while a resistance / capacitance control is being turned
+    this.renderLcr();
 
     // 5. Append sample to Trend Recorder
     if (this.trendRunning) {
