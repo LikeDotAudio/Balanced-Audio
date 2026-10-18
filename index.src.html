@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AES-X152: Balanced Audio Interconnection & Interface Parameters</title>
-  <meta name="description" content="Master technical reference, report of findings, interactive engineering tools, SVG schematics, AES-X249, AES72-4E, SC-04-04, Jim Meyer Thevenin model, transformer winding simulator, and Dennis A. Bohn Pro Audio Reference for AES-X152 (SC-05-05).">
+  <title>Balanced Audio Interconnection: A Report on AES-X152</title>
+  <meta name="description" content="Report of findings on balanced audio interconnection for AES project X152 (SC-05-05): interactive engineering tools, SVG schematics, AES-X249, AES72-4E, SC-04-04, Jim Meyer Thevenin model, transformer winding simulator, and Dennis A. Bohn Pro Audio Reference for AES-X152 (SC-05-05).">
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
   
-  <!-- Google Fonts: Inter & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Fonts: Inter & JetBrains Mono, served locally (inlined by build.py) -->
+  <link rel="stylesheet" href="css/fonts.css">
 </head>
 <body>
 
@@ -49,7 +47,7 @@
         <a href="#enclosure-explorer" class="nav-link">Box &amp; Enclosure</a>
         <a href="#multichannel-hierarchy" class="nav-link">Multichannel Snake</a>
         <a href="#xlr-hub" class="nav-link">Universal XLR Hub</a>
-        <a href="#top-level" class="nav-link">Top Level Rules</a>
+        <a href="#top-level" class="nav-link">Key Findings</a>
         <a href="#topologies" class="nav-link">SVG Circuits</a>
         <a href="#transformer-simulator" class="nav-link">Transformer Lab</a>
         <a href="#deepest-dive" class="nav-link">The Deepest Dive</a>
@@ -76,7 +74,7 @@
         <a href="#enclosure-explorer" class="sub-nav-pill">Enclosure Box</a>
         <a href="#multichannel-hierarchy" class="sub-nav-pill" style="border-color: #c084fc; color: #c084fc;">DB25 &rarr; RJ45 &rarr; XLR/TRS</a>
         <a href="#xlr-hub" class="sub-nav-pill">Universal XLR Hub</a>
-        <a href="#top-level" class="sub-nav-pill">Top-Level Rules</a>
+        <a href="#top-level" class="sub-nav-pill">Key Findings</a>
         <a href="#topologies" class="sub-nav-pill">SVG Circuits (6.1–6.8)</a>
         <a href="#transformer-simulator" class="sub-nav-pill" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">Transformer Lab</a>
         <a href="#deepest-dive" class="sub-nav-pill">Jim Meyer Thevenin</a>
@@ -98,17 +96,21 @@
   <section id="hero" class="hero-section">
     <div class="container hero-content">
       <div class="hero-badge-row">
-        <span class="badge badge-accent">AES SC-05-05 Standards Working Group</span>
-        <span class="badge badge-warning">Standardization Project AES-X152</span>
-        <span class="badge badge-success">Conforming to AES48, AES14, AES26, AES59 &amp; AES72</span>
+        <span class="badge badge-accent">Report &bull; AES SC-05-05 Working Group</span>
+        <span class="badge badge-warning">On Project AES-X152</span>
+        <span class="badge badge-success">Draws on AES48, AES14, AES26, AES59 &amp; AES72</span>
       </div>
       <h1 class="hero-title">
-        The Definitive Standard for <span class="gradient-text">Balanced Audio Interconnection</span>
+        A Report on <span class="gradient-text">Balanced Audio Interconnection</span>
       </h1>
       <p class="hero-lead">
-        Standard for Presenting Signal Levels, Circuit Impedances, and Topologies of Analog Audio System Components for Product Data Sheets. 
-        Interactive engineering tools, continuous vector SVG circuit schematics, Jim Meyer Thevenin 3-impedance models, audio transformer winding simulation, 
+        Findings on how signal levels, circuit impedances, and topologies of analog audio equipment should be presented on product data sheets,
+        prepared in support of AES project X152. Interactive engineering tools, continuous vector SVG circuit schematics, Jim Meyer Thevenin 3-impedance models, audio transformer winding simulation, 
         and Dennis A. Bohn's complete Pro Audio Reference.
+      </p>
+      <p class="hero-status">
+        <strong>Status: Report &mdash; informative only.</strong> This is not a standard and sets no requirements.
+        Where it quotes a published AES or IEC standard, that standard governs.
       </p>
       <div class="hero-actions">
         <a href="#transformer-simulator" class="btn btn-primary">Open Transformer Lab ⚡</a>
@@ -206,18 +208,18 @@
     </div>
   </section>
 
-  <!-- Section 1: Normative References — the AES / IEC standards this reference aligns with -->
+  <!-- Section 1: References — the AES / IEC standards this report draws on -->
   <section id="normative-references" class="section">
     <div class="container">
       <div class="section-header">
-        <span class="section-badge">Normative References</span>
-        <h2 class="section-title">Normative References &amp; Standards Alignment</h2>
+        <span class="section-badge">References</span>
+        <h2 class="section-title">Standards Referenced in This Report</h2>
       </div>
       <!-- Alignment of AES Standards Table -->
       <div>
         <h3 style="color: var(--text-primary); margin-bottom: 1rem;">Alignment of Audio Engineering Society Standards</h3>
         <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-          How the AES-X152 specification harmonizes with established AES standards and international IEC norms:
+          The established AES standards and international IEC norms this report draws on, and how each relates to the AES-X152 project:
         </p>
 
         <div class="table-responsive">
@@ -226,7 +228,7 @@
               <tr>
                 <th>Standard</th>
                 <th>Working Group</th>
-                <th>Normative Scope &amp; AES-X152 Alignment</th>
+                <th>Scope &amp; Relevance to AES-X152</th>
               </tr>
             </thead>
             <tbody>
@@ -1403,7 +1405,7 @@
         <span class="section-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">Multichannel Architecture</span>
         <h2 class="section-title">Multichannel Interconnection Hierarchy: AES59 &rarr; AES72-4E &rarr; 4&times; XLR / TRS</h2>
         <p class="section-lead">
-          Conforming to AES59, AES-X249, AES72-4E, AES14, and AES48. 
+          Drawing on AES59, AES-X249, AES72-4E, AES14, and AES48. 
           In modern pro audio installations, an 8-path trunk (<strong>AES59 DB25</strong>) splits into two 4-path Quad Twisted Pair lines (<strong>AES72-4E RJ45</strong>), 
           which then break out into discrete <strong>XLR-3</strong> or <strong>1/4″ TRS</strong> terminations. 
           Inspect the hardware icons, twisted-pair pin allocations, and continuous AES48 chassis shield bonding at each stage:
@@ -1887,12 +1889,12 @@
     </div>
   </section>
 
-  <!-- Section 1: Top-Level Rules, Definitions & Alignment -->
+  <!-- Key Findings: rules, definitions & alignment -->
   <section id="top-level" class="section">
     <div class="container">
       <div class="section-header">
-        <span class="section-badge">Core Principles</span>
-        <h2 class="section-title">Top-Level Rules, Definitions &amp; Standards Alignment</h2>
+        <span class="section-badge">Key Findings</span>
+        <h2 class="section-title">Key Findings: Rules of Thumb, Definitions &amp; Standards Alignment</h2>
         <p class="section-lead">
           The foundation of balanced audio interconnection. Ground hum, buzz, and interference rejection
  
@@ -4896,7 +4898,7 @@
         <span class="section-badge">Practical Engineering Guide</span>
         <h2 class="section-title">Richard Hess Interconnection Compatibility Matrix &amp; Tutorials</h2>
         <p class="section-lead">
-          Normative engineering guidance for connecting balanced equipment to unbalanced inputs and outputs. 
+          Engineering guidance for connecting balanced equipment to unbalanced inputs and outputs. 
           Based on the definitive compatibility matrix by Richard L. Hess (AES Fellow).
         </p>
       </div>
@@ -5520,7 +5522,7 @@
         <span class="section-badge">Free Resources</span>
         <h2 class="section-title">Free AES Data Sheet Templates &amp; Specification Generator</h2>
         <p class="section-lead">
-          Normative product data sheet templates conforming to AES-X152 Parts 1 through 4. 
+          Example product data sheet templates following the AES-X152 draft, Parts 1 through 4. 
           Use the live interactive builder below to customize parameters, download pristine <strong>Blank Templates</strong>, 
           and watch the specification assemble in real time as you build.
         </p>
@@ -6822,6 +6824,14 @@
     </div>
   </section>
 
+  <!-- 13.0 Contributor Roster -->
+  <section id="roster-section" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Credits</span>
+        <h2 class="section-title">Contributor Roster</h2>
+      </div>
+
       <!-- SC-05-05 Working Group Roster & Key Contributors Card -->
       <div id="sc0505-roster" class="detail-card" style="margin-top: 2.5rem; border: 1.5px solid #38bdf8; background: #090d16;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
@@ -7172,17 +7182,17 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
-          <h5>About AES-X152</h5>
+          <h5>About This Report</h5>
           <p>
-            Standard for Presenting Signal Levels, Circuit Impedances, and Topologies of Analog Audio System Components for Product Data Sheets. 
-            Published by the Audio Engineering Society Standards Committee SC-05-05 Working Group.
+            A report of findings on presenting signal levels, circuit impedances, and topologies of analog audio components on product data sheets,
+            prepared for AES project X152 (Standards Committee SC-05-05). Informative only &mdash; not a standard.
           </p>
         </div>
 
         <div class="footer-col">
-          <h5>Normative Standards</h5>
+          <h5>Standards Referenced</h5>
           <ul>
-            <li><a href="#top-level">AES-X152 Specification</a></li>
+            <li><a href="#top-level">AES-X152 Project (draft)</a></li>
             <li><a href="#xlr-hub">AES14 Circular Connectors (XLR)</a></li>
             <li><a href="#xlr-hub">AES26 Conservation of Polarity</a></li>
             <li><a href="#top-level">AES48 Connector Shield Grounding</a></li>

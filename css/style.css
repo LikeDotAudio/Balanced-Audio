@@ -263,6 +263,16 @@ code, pre {
   margin-bottom: 2rem;
 }
 
+.hero-status {
+  display: inline-block;
+  margin: -1rem 0 2rem;
+  padding: 0.5rem 0.9rem;
+  border-left: 3px solid var(--accent-amber);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  text-align: left;
+}
+
 .hero-cta-group {
   display: flex;
   justify-content: center;
@@ -5023,6 +5033,14 @@ body.sidebar-is-scrolling {
   pointer-events: none !important;
   z-index: 9999 !important;
   transition: opacity 0.25s ease;
+}
+
+/* Settled wires: blended into the page so text and diagrams stay on top of them */
+.live-probe-wires-under {
+  mix-blend-mode: screen;
+}
+html[data-theme="paper"] .live-probe-wires-under {
+  mix-blend-mode: multiply;
 }
 
 .live-wire-group {

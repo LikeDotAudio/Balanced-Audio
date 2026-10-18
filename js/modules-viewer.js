@@ -177,3 +177,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial render
   renderModules(modules);
 });
+
+// Standalone build: the .md files are embedded by build.py, so "Raw .MD" links download from the page itself
+document.addEventListener("click", (e) => {
+  const link = e.target.closest('a[href^="modules/"][href$=".md"]');
+  const store = document.getElementById("bundled-markdown");
+  if (!link || !store) return;
+  const name = link.getAttribute("href").slice("modules/".length);
+  if (!window.BUNDLED_MARKDOWN) window.BUNDLED_MARKDOWN = JSON.parse(store.textContent);
+  const text = window.BUNDLED_MARKDOWN[name];
+  if (text === undefined) return;
+  e.preventDefault();
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type: "text/markdown" }));
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});

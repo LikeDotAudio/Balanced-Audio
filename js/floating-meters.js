@@ -154,6 +154,9 @@ const PROBE_COLORS = {
 };
 
 // HP-style voltmeter ranges (full-scale volts); each step is ~10 dB
+// A newly connected wire launches grey and warms to its colour over this long, then sinks behind the page
+const WIRE_LAUNCH_MS = 900;
+
 const VM_RANGES = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100];
 // Level-pyramid zones drawn on the decibel arc (dBu)
 const VM_ZONES = [
@@ -179,8 +182,9 @@ class FloatingMeterDock {
     this.autoTrack = true;
     this.currentActiveSchematic = null;
 
-    // Wire Style & Hover State (Default: light gray while reading, vivid on hover)
-    this.wireStyle = "reading-gray"; // 'reading-gray' | 'vivid' | 'ghost'
+    // Wire Style & Hover State (Default: vivid, drawn behind the text and diagrams)
+    this.wireStyle = "vivid"; // 'reading-gray' | 'vivid' | 'ghost'
+    this.wireLaunch = new Map(); // wire key -> time it connected (for the grey launch)
     this.hoveredChannels = null; // ['CH1', 'CH2'], etc.
     this.hoveredProbeTarget = null; // Target key when schematic node is hovered
     this.isHoveringRack = false;
@@ -530,7 +534,7 @@ class FloatingMeterDock {
         </div>
         <div class="rack-quick-actions">
           <button id="rack-btn-track" class="rack-action-btn track-btn active" title="Automatically attach probe leads to the schematic in view as you scroll">🔄 AUTO</button>
-          <button id="rack-btn-wire-mode" class="rack-action-btn wire-btn active" title="Wire style: Light Gray while reading text vs Vivid on hover">🌫️ GRAY</button>
+          <button id="rack-btn-wire-mode" class="rack-action-btn wire-btn" title="Wire style: Vivid behind the page, Ghost (faint), or Gray">🌈 VIVID</button>
           <button id="rack-btn-anchor" class="rack-action-btn anchor-btn" title="Click to drop a persistent circuit test anchor anywhere!">⚓ ANCHOR</button>
           <button id="rack-btn-poke" class="rack-action-btn poke-btn" title="Click any wire or component on schematics to poke it!">🎯 POKE</button>
         </div>
@@ -873,6 +877,11 @@ class FloatingMeterDock {
 
     // Fullscreen SVG Overlay for Dynamic Bézier Wires
     if (!document.getElementById("live-probe-wires-svg")) {
+      // Settled wires live in a layer blended into the page, so text and diagrams read on top of them
+      const underSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      underSvg.id = "live-probe-wires-under";
+      underSvg.setAttribute("class", "live-probe-wires-svg live-probe-wires-under");
+      document.body.appendChild(underSvg);
       const wiresSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       wiresSvg.id = "live-probe-wires-svg";
       wiresSvg.setAttribute("class", "live-probe-wires-svg");
@@ -3163,7 +3172,10 @@ class FloatingMeterDock {
    */
   renderWires() {
     const svg = document.getElementById("live-probe-wires-svg");
+    const underSvg = document.getElementById("live-probe-wires-under");
     if (!svg) return;
+    const now = performance.now();
+    const liveWires = new Set();
 
     const activeCfg = this.getActiveSchematic();
 
@@ -3191,6 +3203,7 @@ class FloatingMeterDock {
 
     const targetIndexTracker = {};
     let svgHtml = "";
+    let underHtml = "";
 
     connections.forEach(conn => {
       const dotEl = document.getElementById(conn.fromId);
@@ -3233,6 +3246,11 @@ class FloatingMeterDock {
       // A wire exists only while its test point is on screen: it breaks as the section scrolls
       // away (never stretching across titles) and reconnects when the next diagram arrives
       if (!isVisible) return;
+
+      const wireKey = `${conn.fromId}>${conn.targetKey}`;
+      liveWires.add(wireKey);
+      if (!this.wireLaunch.has(wireKey)) this.wireLaunch.set(wireKey, now);
+      const launchT = Math.min(1, (now - this.wireLaunch.get(wireKey)) / WIRE_LAUNCH_MS);
 
       // Calculate staggered vertical offset if multiple probes share the same target
       const count = targetCounts[conn.targetKey] || 1;
@@ -3312,6 +3330,13 @@ class FloatingMeterDock {
         glintOpacity = finalWireOpacity * 0.8;
       }
 
+      // Launch: start grey on top, warm to the wire's colour, then settle behind the page
+      const launching = launchT < 1 && this.wireStyle !== "ghost";
+      if (launching) {
+        wireStrokeColor = this.mixHex("#94a3b8", wireStrokeColor, launchT * launchT);
+        finalWireOpacity = Math.max(finalWireOpacity, 0.8);
+      }
+
       // Determine wire destination coordinates
       let endX, endY;
       if (isVisible) {
@@ -3345,15 +3370,18 @@ class FloatingMeterDock {
       const pathData = `M ${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${endX} ${endY}`;
       const groupClass = isHighlighted ? "live-wire-group highlighted" : (isWireStyleGray ? "live-wire-group reading-dimmed" : "live-wire-group");
 
-      svgHtml += `
+      const wireHtml = `
         <g class="${groupClass}" data-channel="${conn.badge}">
           <!-- Wire Shadow (soft or subtle when reading) -->
-          ${shadowStroke !== "none" ? `<path class="wire-shadow" d="${pathData}" fill="none" stroke="${shadowStroke}" stroke-width="${shadowWidth}" stroke-linecap="round"/>` : ""}
+          ${shadowStroke !== "none" && (launching || !underSvg) ? `<path class="wire-shadow" d="${pathData}" fill="none" stroke="${shadowStroke}" stroke-width="${shadowWidth}" stroke-linecap="round"/>` : ""}
           <!-- Insulated Physical Colored Wire Body -->
           <path class="wire-body" d="${pathData}" fill="none" stroke="${wireStrokeColor}" stroke-width="${wireStrokeWidth}" stroke-linecap="round" opacity="${finalWireOpacity}"/>
           <!-- Glossy Glint Along Wire Core -->
           <path class="wire-glint" d="${pathData}" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.6" stroke-linecap="round" opacity="${glintOpacity}"/>
-      `;
+        </g>`;
+      if (launching || !underSvg) svgHtml += wireHtml;
+      else underHtml += wireHtml;
+      svgHtml += `<g class="${groupClass}" data-channel="${conn.badge}">`;
 
       if (isVisible) {
         const barrelBorder = isHighlighted ? conn.color : (isWireStyleGray ? "#475569" : conn.color);
@@ -3384,6 +3412,9 @@ class FloatingMeterDock {
     });
 
     svg.innerHTML = svgHtml;
+    if (underSvg) underSvg.innerHTML = underHtml;
+    // A wire that broke off launches grey again when it reconnects
+    for (const key of this.wireLaunch.keys()) if (!liveWires.has(key)) this.wireLaunch.delete(key);
   }
 }
 

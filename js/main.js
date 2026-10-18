@@ -550,10 +550,10 @@ function selectBoxType(typeKey) {
       ${data.svg}
     </div>
 
-    <!-- Normative Engineering Takeaways -->
+    <!-- Engineering Takeaways -->
     <div style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-top: 1rem;">
       <h5 style="margin: 0 0 0.5rem; color: var(--accent-cyan); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.04em;">
-        Critical Hardware &amp; Interconnection Norms:
+        Key Hardware &amp; Interconnection Takeaways:
       </h5>
       <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
         ${data.norms.map(norm => `<li>${norm}</li>`).join("")}

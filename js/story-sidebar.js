@@ -80,7 +80,7 @@ class StorySidebar {
 
           <div class="story-chapter" data-target="normative-references">
             <div class="chapter-dot"></div>
-            <a href="#normative-references" class="chapter-link">1.0 Normative References</a>
+            <a href="#normative-references" class="chapter-link">1.0 References</a>
           </div>
 
           <div class="story-chapter" data-target="triad">
@@ -122,7 +122,7 @@ class StorySidebar {
 
           <div class="story-chapter" data-target="top-level">
             <div class="chapter-dot"></div>
-            <a href="#top-level" class="chapter-link">5.0 Top-Level Normative Rules</a>
+            <a href="#top-level" class="chapter-link">5.0 Key Findings</a>
           </div>
 
 
@@ -423,7 +423,7 @@ class StorySidebar {
     else if (er.bottom > lr.bottom) list.scrollBy({ top: er.bottom - lr.bottom + 8, behavior: "smooth" });
   }
 
-  // Standards-document clause numbers: each section title gets its chapter number
+  // Report section numbers: each section title gets its chapter number
   numberClauses() {
     if (!this.sidebar) return;
     this.sidebar.querySelectorAll(".story-chapter[data-target]").forEach(ch => {

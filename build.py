@@ -712,6 +712,21 @@ def generate_standalone_curriculum_html(modules):
     sz = os.path.getsize(curriculum_html_path)
     print(f"Generated Standalone Illustrated Monograph -> {curriculum_html_path.relative_to(BASE_DIR)} ({sz:,} bytes / {sz/1024/1024:.2f} MB)")
 
+def data_uri(path):
+    """Read a file and return it as a base64 data: URI."""
+    import base64
+    import mimetypes
+    mime = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+    if path.suffix == ".woff2":
+        mime = "font/woff2"
+    return f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode("ascii")
+
+def inline_font_css():
+    """css/fonts.css with every url(...) font file replaced by a data URI."""
+    css_dir = BASE_DIR / "css"
+    css = (css_dir / "fonts.css").read_text(encoding="utf-8")
+    return re.sub(r"url\(([^)]+\.woff2)\)", lambda m: f"url({data_uri((css_dir / m.group(1)).resolve())})", css)
+
 def bundle_portal(timestamp=None):
     """Compile and bundle modular source files into standalone single-file distribution artifacts."""
     if not CSS_PATH.exists():
@@ -740,6 +755,11 @@ def bundle_portal(timestamp=None):
     with open(source_html_path, "r", encoding="utf-8") as f:
         html = f.read()
 
+    # 0. Inline fonts: css/fonts.css with each woff2 as a data URI
+    fonts_link = '<link rel="stylesheet" href="css/fonts.css">'
+    if fonts_link in html:
+        html = html.replace(fonts_link, f'<style id="bundled-fonts">\n{inline_font_css()}\n</style>')
+
     # 1. Inline CSS
     css_link = '<link rel="stylesheet" href="css/style.css">'
     if css_link in html:
@@ -767,6 +787,18 @@ def bundle_portal(timestamp=None):
     else:
         print("Error: Could not locate script block markers in HTML source.")
         sys.exit(1)
+
+    # 3. Inline images under assets/ as data URIs
+    bundled_html = re.sub(r'src="(assets/[^"]+)"', lambda m: f'src="{data_uri(BASE_DIR / m.group(1))}"', bundled_html)
+
+    # 4. Embed the module Markdown so the "Raw .MD" buttons work offline (js/modules-viewer.js)
+    md_files = {p.name: p.read_text(encoding="utf-8") for p in sorted(MODULES_DIR.glob("*.md"))}
+    md_json = json.dumps(md_files, ensure_ascii=False).replace("</", "<\\/")
+    # (the last </body>: bundled scripts contain "</body>" inside generated-document strings)
+    end = bundled_html.rfind("</body>")
+    bundled_html = (bundled_html[:end]
+                    + f'  <script id="bundled-markdown" type="application/json">{md_json}</script>\n'
+                    + bundled_html[end:])
 
     out_paths = [
         BASE_DIR / "index.htm",
