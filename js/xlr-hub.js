@@ -154,7 +154,35 @@ class XLRHubEngine {
     place();
   }
 
+  // A small mating face for each Table 2 row: pins coloured by role, plus an Inspect cue
+  decorateTableRows() {
+    const pos3 = { 1: [-11, -7], 2: [11, -7], 3: [0, 11] };
+    const pos5 = { 1: [-10, -9], 2: [-13, 5], 3: [0, 13], 4: [13, 5], 5: [10, -9] };
+    document.querySelectorAll(".aes14-t2-row").forEach(row => {
+      const item = AES14_TABLE2_DATA.find(d => d.id === parseInt(row.dataset.circuitId, 10));
+      const cell = row.querySelector("td");
+      if (!item || !cell || cell.querySelector(".t2-mini-face")) return;
+      const pos = item.is5Pin ? pos5 : pos3;
+      const dots = Object.entries(pos).map(([n, [x, y]]) => {
+        const pin = item.pins[n];
+        return `<circle cx="${x}" cy="${y}" r="${item.is5Pin ? 3.6 : 4.4}" fill="${pin ? this.getColor(pin.type) : "#1f2937"}" stroke="#e5e7eb" stroke-width="0.8"/>
+          <text x="${x}" y="${y + 2.2}" fill="#0b1220" font-size="5.5" font-weight="900" text-anchor="middle">${n}</text>`;
+      }).join("");
+      const power = /phantom/i.test(item.name) ? "P48" : /A-B/.test(item.name) ? "T12" : "";
+      cell.insertAdjacentHTML("afterbegin", `
+        <svg class="t2-mini-face" viewBox="-24 -26 48 52" width="64" height="70" aria-hidden="true">
+          <circle r="22" fill="#c7cdd5" stroke="#475569" stroke-width="1.2"/>
+          <circle r="18" fill="#0f1115" stroke="#000"/>
+          <rect x="-3" y="-23" width="6" height="5" fill="#0f1115"/>
+          ${dots}
+          ${power ? `<text y="25" fill="#f59e0b" font-size="7" font-weight="900" text-anchor="middle">${power}</text>` : ""}
+        </svg>`);
+      cell.insertAdjacentHTML("beforeend", `<span class="t2-inspect">Inspect ▸</span><span class="t2-showing">● Showing</span>`);
+    });
+  }
+
   init() {
+    this.decorateTableRows();
     this.initFollowInspector();
     this.bindEvents();
     this.renderCircuit(1);

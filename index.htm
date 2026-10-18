@@ -8088,6 +8088,60 @@ html[data-theme="paper"] body > section .svg-diagram-wrapper::after {
   font-weight: 800;
 }
 
+/* AES14 Table 2: each row shows its connector and invites a click; the selected row says so */
+.aes14-t2-row td:first-child {
+  white-space: normal;
+}
+
+.t2-mini-face {
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.t2-inspect,
+.t2-showing {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+}
+
+.t2-showing {
+  display: none;
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.aes14-t2-row.table-row-selected .t2-inspect {
+  display: none;
+}
+
+.aes14-t2-row.table-row-selected .t2-showing {
+  display: inline-block;
+}
+
+.aes14-t2-row {
+  transition: background 0.15s ease;
+}
+
+.aes14-t2-row:hover {
+  background: rgba(56, 189, 248, 0.08) !important;
+  outline: 1px solid #38bdf8;
+}
+
+.aes14-t2-row:hover .t2-inspect {
+  background: #38bdf8;
+  color: #000000;
+}
+
+.aes14-t2-row.table-row-selected {
+  box-shadow: inset 5px 0 0 #10b981;
+}
+
 </style>
   
   <!-- Google Fonts: Inter & JetBrains Mono -->
@@ -27053,7 +27107,35 @@ class XLRHubEngine {
     place();
   }
 
+  // A small mating face for each Table 2 row: pins coloured by role, plus an Inspect cue
+  decorateTableRows() {
+    const pos3 = { 1: [-11, -7], 2: [11, -7], 3: [0, 11] };
+    const pos5 = { 1: [-10, -9], 2: [-13, 5], 3: [0, 13], 4: [13, 5], 5: [10, -9] };
+    document.querySelectorAll(".aes14-t2-row").forEach(row => {
+      const item = AES14_TABLE2_DATA.find(d => d.id === parseInt(row.dataset.circuitId, 10));
+      const cell = row.querySelector("td");
+      if (!item || !cell || cell.querySelector(".t2-mini-face")) return;
+      const pos = item.is5Pin ? pos5 : pos3;
+      const dots = Object.entries(pos).map(([n, [x, y]]) => {
+        const pin = item.pins[n];
+        return `<circle cx="${x}" cy="${y}" r="${item.is5Pin ? 3.6 : 4.4}" fill="${pin ? this.getColor(pin.type) : "#1f2937"}" stroke="#e5e7eb" stroke-width="0.8"/>
+          <text x="${x}" y="${y + 2.2}" fill="#0b1220" font-size="5.5" font-weight="900" text-anchor="middle">${n}</text>`;
+      }).join("");
+      const power = /phantom/i.test(item.name) ? "P48" : /A-B/.test(item.name) ? "T12" : "";
+      cell.insertAdjacentHTML("afterbegin", `
+        <svg class="t2-mini-face" viewBox="-24 -26 48 52" width="64" height="70" aria-hidden="true">
+          <circle r="22" fill="#c7cdd5" stroke="#475569" stroke-width="1.2"/>
+          <circle r="18" fill="#0f1115" stroke="#000"/>
+          <rect x="-3" y="-23" width="6" height="5" fill="#0f1115"/>
+          ${dots}
+          ${power ? `<text y="25" fill="#f59e0b" font-size="7" font-weight="900" text-anchor="middle">${power}</text>` : ""}
+        </svg>`);
+      cell.insertAdjacentHTML("beforeend", `<span class="t2-inspect">Inspect ▸</span><span class="t2-showing">● Showing</span>`);
+    });
+  }
+
   init() {
+    this.decorateTableRows();
     this.initFollowInspector();
     this.bindEvents();
     this.renderCircuit(1);
@@ -43848,7 +43930,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ===== BUNDLED: js/modules-data.js ===== */
 /**
  * Balanced Audio & AES-X152 100-Module Reference Curriculum Dataset
- * Compiled by build.py on 2026-10-18 01:46
+ * Compiled by build.py on 2026-10-18 01:48
  */
 
 const BALANCED_MODULES_DATA = [
