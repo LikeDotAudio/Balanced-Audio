@@ -9215,7 +9215,7 @@ body.has-circuit-fullscreen #floating-meter-dock:hover {
           <span class="probe-pill">Parasitics: <strong id="metric-parasitics">L_leak: 0.8 mH | C_w: 120 pF</strong></span>
           <span class="probe-pill">Resonant Tank: <strong id="metric-fres" style="color: #f59e0b;">51.3 kHz</strong></span>
           <span class="probe-pill">Core Flux (B_peak): <strong id="metric-flux" style="color: #38bdf8;">0.12 T / 0.8 T (15%)</strong></span>
-          <span class="probe-pill">Zobel Snubber: <strong id="best-term-rz" style="color: #34d399;">8,165 &Omega;</strong> + <strong id="best-term-cz" style="color: #34d399;">240 pF</strong></span>
+          <span class="probe-pill">Zobel Snubber: <strong id="xfmr-telemetry-rz" style="color: #34d399;">8,165 &Omega;</strong> + <strong id="xfmr-telemetry-cz" style="color: #34d399;">240 pF</strong></span>
         </div>
 
         <!-- 1. The Full-Width Vector SVG Audio Transformer Schematic -->
@@ -20508,10 +20508,12 @@ class AudioTransformerSimulator {
       }
     }
 
-    // Recommendation card
+    // Recommendation card & telemetry strip
     setTxt("best-term-rz", `${physics.rZobel} Ω`);
     setTxt("best-term-cz", `${physics.cZobelPf} pF (${physics.cZobelNf} nF)`);
     setTxt("best-term-zeta", `Damping Factor ζ = ${physics.zeta} (Target: 0.707 Butterworth)`);
+    setTxt("xfmr-telemetry-rz", `${physics.rZobel} Ω`);
+    setTxt("xfmr-telemetry-cz", `${physics.cZobelPf} pF`);
 
     const statusMsg = document.getElementById("best-term-status");
     if (statusMsg) {
