@@ -714,16 +714,96 @@ const ENCLOSURE_PRESETS = {
   }
 };
 
-function selectEnclosureBox(eqKey) {
+const ENCLOSURE_KEYS = ['mic', 'line-src', 'digital', 'db25', 'qtp'];
+const ENCLOSURE_ANGLES = {
+  'mic': -60,
+  'line-src': -30,
+  'digital': 0,
+  'db25': 30,
+  'qtp': 60
+};
+const ENCLOSURE_TITLES = {
+  'mic': 'ACTIVE: 1. MICROPHONE TRANSDUCER (SC-04-04)',
+  'line-src': 'ACTIVE: 2. LINE LEVEL SOURCE (AES14)',
+  'digital': 'ACTIVE: 3. DIGITAL AUDIO AES3 & SYNC (AES11)',
+  'db25': 'ACTIVE: 4. MULTICHANNEL DB25 (AES59 & AES-X249)',
+  'qtp': 'ACTIVE: 5. QUAD TWISTED PAIR RJ45 (AES72-4E)'
+};
+
+function playSwitchClick() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    if (!window._switchAudioCtx) window._switchAudioCtx = new AudioContext();
+    const ctx = window._switchAudioCtx;
+    if (ctx.state === 'suspended') ctx.resume();
+    
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    
+    // Snappy mechanical rotary detent "clack"
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(380, now);
+    osc.frequency.exponentialRampToValueAtTime(45, now + 0.035);
+    
+    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+    
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.04);
+  } catch (e) {}
+}
+
+function selectEnclosureBox(eqKey, playSound = true) {
   const data = ENCLOSURE_PRESETS[eqKey];
   if (!data) return;
 
-  // Update tabs
+  if (playSound) playSwitchClick();
+
+  // 1. Rotate Big Rotary Knob Pointer inside the Circuit
+  const knobPointer = document.getElementById('enc-rotary-pointer-group');
+  if (knobPointer) {
+    const angle = ENCLOSURE_ANGLES[eqKey] !== undefined ? ENCLOSURE_ANGLES[eqKey] : 0;
+    knobPointer.style.transform = `rotate(${angle}deg)`;
+  }
+
+  // 2. Update radial switch detent steps inside the circuit
+  document.querySelectorAll('.enc-switch-step').forEach(step => {
+    const isAct = step.dataset.eq === eqKey;
+    step.classList.toggle('active', isAct);
+    const stud = step.querySelector('.enc-stud');
+    if (stud) {
+      stud.setAttribute('fill', isAct ? '#fbbf24' : '#64748b');
+      stud.setAttribute('stroke', isAct ? '#d97706' : '#334155');
+    }
+    const led = step.querySelector('.enc-led');
+    if (led) {
+      led.setAttribute('fill', isAct ? '#38bdf8' : '#1e293b');
+      if (isAct) led.setAttribute('filter', 'url(#enc-pointer-glow)');
+      else led.removeAttribute('filter');
+    }
+    const txt = step.querySelector('text');
+    if (txt) {
+      txt.setAttribute('fill', isAct ? '#38bdf8' : '#94a3b8');
+      txt.style.fontWeight = isAct ? '800' : '700';
+    }
+  });
+
+  // 3. Update Switch Readout Badge text
+  const badgeTxt = document.getElementById('enc-active-standard-txt');
+  if (badgeTxt && ENCLOSURE_TITLES[eqKey]) {
+    badgeTxt.textContent = ENCLOSURE_TITLES[eqKey];
+  }
+
+  // 4. Update legacy hidden tabs for accessibility
   document.querySelectorAll('.equipment-tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.eq === eqKey);
   });
 
-  // Update SVG
+  // 5. Update SVG schematic node values
   const setTxt = (id, val) => {
     const el = document.getElementById(id);
     if (el) el.textContent = val;
@@ -740,7 +820,7 @@ function selectEnclosureBox(eqKey) {
   setTxt('svg-rx-circuit-name', data.rxCircuit);
   setTxt('svg-rx-zin', data.rxZin);
 
-  // Update Detail Card
+  // 6. Update Detail Card
   setTxt('eq-detail-title', data.title);
   setTxt('eq-detail-badge', data.badge);
   setTxt('eq-detail-desc', data.desc);
@@ -751,7 +831,7 @@ function selectEnclosureBox(eqKey) {
   const connEl = document.getElementById('eq-metric-connector');
   if (connEl) connEl.innerHTML = data.connector;
 
-  // Toggle dedicated related content panels for each enclosure
+  // 7. Toggle dedicated related content panels for each enclosure
   const panels = {
     'mic': 'enclosure-panel-mic',
     'line-src': 'enclosure-panel-line-src',
@@ -776,6 +856,77 @@ function selectEnclosureBox(eqKey) {
 }
 
 function initEnclosureTabs() {
+  // 1. Direct clicks on the 5 radial switch steps inside the SVG
+  document.querySelectorAll('.enc-switch-step').forEach(step => {
+    step.addEventListener('click', () => {
+      const eq = step.dataset.eq;
+      if (eq) selectEnclosureBox(eq);
+    });
+  });
+
+  // 2. Interactive Big Rotary Knob Dial inside the circuit
+  const knob = document.getElementById('enclosure-selector-knob');
+  if (knob) {
+    // Single click on the knob steps forward to next standard
+    knob.addEventListener('click', () => {
+      const activeStep = document.querySelector('.enc-switch-step.active');
+      const curKey = activeStep ? activeStep.dataset.eq : 'mic';
+      const curIdx = ENCLOSURE_KEYS.indexOf(curKey);
+      const nextIdx = (curIdx + 1) % ENCLOSURE_KEYS.length;
+      selectEnclosureBox(ENCLOSURE_KEYS[nextIdx]);
+    });
+
+    // Scroll wheel on knob sweeps through standards
+    knob.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const activeStep = document.querySelector('.enc-switch-step.active');
+      const curKey = activeStep ? activeStep.dataset.eq : 'mic';
+      let idx = ENCLOSURE_KEYS.indexOf(curKey);
+      if (e.deltaY > 0) {
+        idx = Math.min(ENCLOSURE_KEYS.length - 1, idx + 1);
+      } else {
+        idx = Math.max(0, idx - 1);
+      }
+      selectEnclosureBox(ENCLOSURE_KEYS[idx]);
+    }, { passive: false });
+
+    // Drag pointer support
+    let isDragging = false;
+    let startY = 0;
+    let startIdx = 0;
+
+    knob.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      startY = e.clientY;
+      const activeStep = document.querySelector('.enc-switch-step.active');
+      startIdx = ENCLOSURE_KEYS.indexOf(activeStep ? activeStep.dataset.eq : 'mic');
+      knob.style.cursor = 'grabbing';
+
+      const onPointerMove = (ev) => {
+        if (!isDragging) return;
+        const dy = startY - ev.clientY; // drag up/down
+        const stepDelta = Math.round(dy / 25);
+        const nextIdx = Math.max(0, Math.min(ENCLOSURE_KEYS.length - 1, startIdx + stepDelta));
+        const activeKey = ENCLOSURE_KEYS[nextIdx];
+        const curActive = document.querySelector('.enc-switch-step.active');
+        if (!curActive || curActive.dataset.eq !== activeKey) {
+          selectEnclosureBox(activeKey);
+        }
+      };
+
+      const onPointerUp = () => {
+        isDragging = false;
+        knob.style.cursor = 'grab';
+        window.removeEventListener('pointermove', onPointerMove);
+        window.removeEventListener('pointerup', onPointerUp);
+      };
+
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+    });
+  }
+
+  // Legacy tab buttons fallback
   document.querySelectorAll('.equipment-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const eq = btn.dataset.eq;
@@ -788,7 +939,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Default box type
   selectBoxType("mic");
   initEnclosureTabs();
-  selectEnclosureBox("mic");
+  selectEnclosureBox("mic", false);
 
   // Default circuit topology (Only bring up 6.1 initially)
   switchCircuit("6-1");

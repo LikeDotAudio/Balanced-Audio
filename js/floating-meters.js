@@ -21,6 +21,74 @@
  * 7. Strict Aesthetics: Squares (border-radius: 0), pure black (#000000), grey borders (#333333), zero wasted padding.
  */
 
+const SCHEMATIC_CONFIGS = [
+  {
+    id: "enclosure-svg",
+    name: "Section 1: Enclosure Grounding & AES48 Standard",
+    shortName: "Sec 1: AES48 Enclosure",
+    scope1_ch1: "enc-chassisa",
+    scope1_ch2: "enc-shield",
+    scope2_ch3: "enc-pin1bond",
+    scope2_ch4: "enc-chassisb",
+    dmm1: "enc-chassisa",
+    dmm2: "enc-pin1bond",
+    vu1: "enc-shield",
+    vu2: "enc-chassisb"
+  },
+  {
+    id: "pp-schematic-svg",
+    name: "Section 4: Push-Pull Active Balanced Driver",
+    shortName: "Sec 4: Push-Pull Driver",
+    scope1_ch1: "pp-vin",
+    scope1_ch2: "pp-p2",
+    scope2_ch3: "pp-p3",
+    scope2_ch4: "pp-load",
+    dmm1: "pp-p2",
+    dmm2: "pp-load",
+    vu1: "pp-vin",
+    vu2: "pp-load"
+  },
+  {
+    id: "ib-schematic-svg",
+    name: "Section 5: Active Impedance-Balanced Output",
+    shortName: "Sec 5: Impedance-Balanced",
+    scope1_ch1: "ib-vin",
+    scope1_ch2: "ib-p2",
+    scope2_ch3: "ib-p3",
+    scope2_ch4: "ib-load",
+    dmm1: "ib-p2",
+    dmm2: "ib-load",
+    vu1: "ib-vin",
+    vu2: "ib-load"
+  },
+  {
+    id: "xfmr-schematic-svg",
+    name: "Section 6: Audio Transformer Simulator",
+    shortName: "Sec 6: Audio Transformer",
+    scope1_ch1: "xfmr-vin",
+    scope1_ch2: "xfmr-p2",
+    scope2_ch3: "xfmr-p3",
+    scope2_ch4: "xfmr-load",
+    dmm1: "xfmr-p2",
+    dmm2: "xfmr-load",
+    vu1: "xfmr-vin",
+    vu2: "xfmr-load"
+  },
+  {
+    id: "meyer-schematic-svg",
+    name: "Section 7: Meyer CMRR Test Bench",
+    shortName: "Sec 7: Meyer CMRR",
+    scope1_ch1: "meyer-vpo",
+    scope1_ch2: "meyer-p2",
+    scope2_ch3: "meyer-p3",
+    scope2_ch4: "meyer-diff",
+    dmm1: "meyer-p2",
+    dmm2: "meyer-diff",
+    vu1: "meyer-vpo",
+    vu2: "meyer-diff"
+  }
+];
+
 class FloatingMeterDock {
   constructor() {
     this.dock = null;
@@ -30,13 +98,25 @@ class FloatingMeterDock {
     this.anchors = []; // User-created test anchors
     this.anchorCounter = 1;
 
-    // Active Probe Targets for instruments
-    this.scope1Target = "6-1-p2";
-    this.scope2Target = "6-1-load";
-    this.dmm1Target = "6-1-p2";
-    this.dmm2Target = "6-1-load";
-    this.vu1Target = "6-1-vin";
-    this.vu2Target = "6-1-load";
+    // Automatic Scroll Tracking
+    this.autoTrack = true;
+    this.currentActiveSchematic = null;
+
+    // Wire Style & Hover State (Default: light gray while reading, vivid on hover)
+    this.wireStyle = "reading-gray"; // 'reading-gray' | 'vivid' | 'ghost'
+    this.hoveredChannels = null; // ['CH1', 'CH2'], etc.
+    this.hoveredProbeTarget = null; // Target key when schematic node is hovered
+    this.isHoveringRack = false;
+
+    // Active Probe Targets for instruments (Default to Section 6 Audio Transformer)
+    this.scope1VinTarget = "xfmr-vin";
+    this.scope1Target = "xfmr-p2";
+    this.scope2ColdTarget = "xfmr-p3";
+    this.scope2Target = "xfmr-load";
+    this.dmm1Target = "xfmr-p2";
+    this.dmm2Target = "xfmr-load";
+    this.vu1Target = "xfmr-vin";
+    this.vu2Target = "xfmr-load";
     this.dmm1Mode = "rms"; // 'rms' | 'dbu' | 'peak' | 'crest'
     this.dmm2Mode = "diff"; // 'diff' | 'thd' | 'cmrr' | 'error'
 
@@ -192,6 +272,7 @@ class FloatingMeterDock {
     this.attachEventListeners();
     this.setupGlobalProbeHooks();
     this.initAnchorEngine();
+    this.initScrollTracker();
     this.startMainInstrumentLoop();
     this.updateFromActiveCircuit();
   }
@@ -211,12 +292,20 @@ class FloatingMeterDock {
       <div class="rack-header">
         <div class="rack-nav-tabs">
           <button id="rack-tab-rack" class="rack-nav-tab active" title="6 Laboratory Instruments">🎛️ LAB RACK</button>
+          <button id="rack-tab-8ch" class="rack-nav-tab" title="8 Lines (100–800 Hz) with a scope and meter per line, plus 4 simple generators">📶 8-CH</button>
+          <button id="rack-tab-gen" class="rack-nav-tab" title="Signal Generator Quick Access">⚡ GEN</button>
           <button id="rack-tab-hp353a" class="rack-nav-tab" title="HP 353A Patch Panel">🎛️ HP 353A</button>
           <button id="rack-tab-chart" class="rack-nav-tab" title="Multi-Channel Trend Graph">📉 TREND</button>
         </div>
         <div class="rack-quick-actions">
+          <button id="rack-btn-track" class="rack-action-btn track-btn active" title="Automatically attach probe leads to the schematic in view as you scroll">🔄 AUTO</button>
+          <button id="rack-btn-wire-mode" class="rack-action-btn wire-btn active" title="Wire style: Light Gray while reading text vs Vivid on hover">🌫️ GRAY</button>
           <button id="rack-btn-anchor" class="rack-action-btn anchor-btn" title="Click to drop a persistent circuit test anchor anywhere!">⚓ ANCHOR</button>
           <button id="rack-btn-poke" class="rack-action-btn poke-btn" title="Click any wire or component on schematics to poke it!">🎯 POKE</button>
+        </div>
+        <div id="rack-active-circuit-bar" class="rack-active-circuit-bar">
+          <span class="rack-active-circuit-title"><span class="rack-live-pulse"></span> TRACKING:</span>
+          <span id="rack-active-circuit-badge" class="rack-active-circuit-name">Sec 6: Audio Transformer</span>
         </div>
       </div>
 
@@ -325,6 +414,17 @@ class FloatingMeterDock {
             <span id="rack-dmm1-val1" class="rack-dmm-digits" style="color: #facc15;">1.228 V</span>
             <span id="rack-dmm1-val2" class="rack-dmm-sub-digits" style="color: #facc15;">+4.0 dBu</span>
           </div>
+          <!-- All Engineering Values & Equivalents Multi-Matrix -->
+          <div class="rack-dmm-matrix" id="rack-dmm1-matrix">
+            <div class="matrix-item"><span class="m-lbl">Vpk:</span><span id="dmm1-mat-vpk" class="m-val">1.737V</span></div>
+            <div class="matrix-item"><span class="m-lbl">Vpp:</span><span id="dmm1-mat-vpp" class="m-val">3.474V</span></div>
+            <div class="matrix-item"><span class="m-lbl">dBu:</span><span id="dmm1-mat-dbu" class="m-val">+4.00</span></div>
+            <div class="matrix-item"><span class="m-lbl">dBV:</span><span id="dmm1-mat-dbv" class="m-val">+1.78</span></div>
+            <div class="matrix-item"><span class="m-lbl">dBm:</span><span id="dmm1-mat-dbm" class="m-val">+4.00</span></div>
+            <div class="matrix-item"><span class="m-lbl">mW:</span><span id="dmm1-mat-pmw" class="m-val">2.51</span></div>
+            <div class="matrix-item"><span class="m-lbl">mA:</span><span id="dmm1-mat-ima" class="m-val">2.05</span></div>
+            <div class="matrix-item"><span class="m-lbl">Zref:</span><span id="dmm1-mat-refz" class="m-val">600Ω</span></div>
+          </div>
           <!-- Collapsible Drawer: No text until clicked -->
           <div class="meter-collapsible-drawer">
             <div class="dmm-keypad-mini">
@@ -332,6 +432,18 @@ class FloatingMeterDock {
               <button class="dmm-key" data-dmm1-mode="dbu">dBm LEVEL</button>
               <button class="dmm-key" data-dmm1-mode="peak">PEAK</button>
               <button class="dmm-key" id="rack-btn-refz" title="Cycle Fluke 8050A Reference Impedance R (50Ω to 10kΩ)">REF Z: 600 Ω</button>
+            </div>
+            <!-- Comprehensive Equivalents Conversion Table -->
+            <div class="dmm-equivalents-table" style="margin-top: 5px; background: rgba(5, 8, 17, 0.9); border: 1px solid #1e293b; padding: 5px; border-radius: 2px;">
+              <div style="font-size: 0.62rem; color: #38bdf8; font-weight: 800; margin-bottom: 3px;">📊 SIGNAL CONVERSION &amp; EQUIVALENTS:</div>
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px 6px; font-size: 0.63rem;">
+                <div><span style="color: #64748b;">Peak-to-Peak:</span> <span id="dmm1-tbl-vpp" style="color: #facc15; font-weight: 700;">3.474 Vpp</span></div>
+                <div><span style="color: #64748b;">Peak Voltage:</span> <span id="dmm1-tbl-vpk" style="color: #facc15; font-weight: 700;">1.737 Vpk</span></div>
+                <div><span style="color: #64748b;">dBu (0.775V):</span> <span id="dmm1-tbl-dbu" style="color: #facc15; font-weight: 700;">+4.00 dBu</span></div>
+                <div><span style="color: #64748b;">dBV (1.000V):</span> <span id="dmm1-tbl-dbv" style="color: #facc15; font-weight: 700;">+1.78 dBV</span></div>
+                <div><span style="color: #64748b;">Power in Zref:</span> <span id="dmm1-tbl-pwr" style="color: #facc15; font-weight: 700;">2.51 mW</span></div>
+                <div><span style="color: #64748b;">Loop Current:</span> <span id="dmm1-tbl-cur" style="color: #facc15; font-weight: 700;">2.05 mA</span></div>
+              </div>
             </div>
             <div class="rack-telemetry-text" id="dmm1-detail-text">
               Probed Signal: Pin 2 Hot Output (+4.0 dBu Ref 0.775V)
@@ -362,6 +474,17 @@ class FloatingMeterDock {
             <span id="rack-dmm2-val1" class="rack-dmm-digits" style="color: #facc15;">2.456 V</span>
             <span id="rack-dmm2-val2" class="rack-dmm-sub-digits" style="color: #facc15;">0.003% THD</span>
           </div>
+          <!-- All Engineering Values & Equivalents Multi-Matrix -->
+          <div class="rack-dmm-matrix" id="rack-dmm2-matrix">
+            <div class="matrix-item"><span class="m-lbl">Vpk:</span><span id="dmm2-mat-vpk" class="m-val">3.474V</span></div>
+            <div class="matrix-item"><span class="m-lbl">Vpp:</span><span id="dmm2-mat-vpp" class="m-val">6.947V</span></div>
+            <div class="matrix-item"><span class="m-lbl">dBu:</span><span id="dmm2-mat-dbu" class="m-val">+10.0</span></div>
+            <div class="matrix-item"><span class="m-lbl">dBV:</span><span id="dmm2-mat-dbv" class="m-val">+7.78</span></div>
+            <div class="matrix-item"><span class="m-lbl">dBm:</span><span id="dmm2-mat-dbm" class="m-val">+10.0</span></div>
+            <div class="matrix-item"><span class="m-lbl">Pload:</span><span id="dmm2-mat-pmw" class="m-val">10.05mW</span></div>
+            <div class="matrix-item"><span class="m-lbl">THD:</span><span id="dmm2-mat-thd" class="m-val">0.003%</span></div>
+            <div class="matrix-item"><span class="m-lbl">CMRR:</span><span id="dmm2-mat-cmrr" class="m-val">>95dB</span></div>
+          </div>
           <!-- Collapsible Drawer: No text until clicked -->
           <div class="meter-collapsible-drawer">
             <div class="dmm-keypad-mini">
@@ -369,6 +492,18 @@ class FloatingMeterDock {
               <button class="dmm-key" data-dmm2-mode="thd">THD+N %</button>
               <button class="dmm-key" data-dmm2-mode="cmrr">CMRR dB</button>
               <button class="dmm-key" id="rack-btn-refz2" title="Cycle Fluke 8050A Reference Impedance R (50Ω to 10kΩ)">REF Z: 600 Ω</button>
+            </div>
+            <!-- Comprehensive Differential Equivalents Table -->
+            <div class="dmm-equivalents-table" style="margin-top: 5px; background: rgba(5, 8, 17, 0.9); border: 1px solid #1e293b; padding: 5px; border-radius: 2px;">
+              <div style="font-size: 0.62rem; color: #4ade80; font-weight: 800; margin-bottom: 3px;">📊 DIFFERENTIAL EQUIVALENTS &amp; DISTORTION:</div>
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px 6px; font-size: 0.63rem;">
+                <div><span style="color: #64748b;">Differential Vpp:</span> <span id="dmm2-tbl-vpp" style="color: #facc15; font-weight: 700;">6.947 Vpp</span></div>
+                <div><span style="color: #64748b;">Differential Vpk:</span> <span id="dmm2-tbl-vpk" style="color: #facc15; font-weight: 700;">3.474 Vpk</span></div>
+                <div><span style="color: #64748b;">Diff Level (dBu):</span> <span id="dmm2-tbl-dbu" style="color: #facc15; font-weight: 700;">+10.0 dBu</span></div>
+                <div><span style="color: #64748b;">Diff Level (dBV):</span> <span id="dmm2-tbl-dbv" style="color: #facc15; font-weight: 700;">+7.78 dBV</span></div>
+                <div><span style="color: #64748b;">Load Power:</span> <span id="dmm2-tbl-pwr" style="color: #facc15; font-weight: 700;">10.05 mW</span></div>
+                <div><span style="color: #64748b;">Common-Mode Rej:</span> <span id="dmm2-tbl-cmrr" style="color: #4ade80; font-weight: 700;">>95.0 dB</span></div>
+              </div>
             </div>
             <div class="rack-telemetry-text" id="dmm2-detail-text">
               Differential Load: 2.456V RMS &bull; CMRR: >95.0 dB &bull; THD: 0.003%
@@ -460,6 +595,95 @@ class FloatingMeterDock {
 
       </div>
 
+      <!-- ================= 1.5 Signal Generator Quick Bay ================= -->
+      <div id="rack-panel-gen" class="rack-instrument-panel" style="display: none; padding: 6px;">
+        <div class="hp353a-panel-card" style="margin-top: 0; background: #070d18; border: 1px solid #1e293b; border-radius: 4px;">
+          <div class="hp353a-header" style="background: #0f172a; border-bottom: 1px solid #334155; padding: 6px 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="background: #0284c7; color: #fff; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 900; padding: 1px 5px; border-radius: 2px;">AN/URM-1960</span>
+              <span style="font-family: var(--font-mono); font-weight: 800; font-size: 0.72rem; color: #38bdf8;">LAB GENERATOR</span>
+            </div>
+            <button type="button" id="rack-siggen-mute-btn" class="siggen-toggle-btn active" style="font-size: 0.65rem; padding: 2px 7px;">OUT ON</button>
+          </div>
+          
+          <div style="padding: 8px; display: flex; flex-direction: column; gap: 8px;">
+            <!-- Waveform select -->
+            <div>
+              <div style="font-size: 0.65rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Waveform:</div>
+              <div class="siggen-wave-btn-group" style="display: flex; gap: 4px;">
+                <button type="button" class="siggen-wave-btn active rack-gen-wave" data-wave="sine" style="flex: 1; font-size: 0.68rem; padding: 3px 2px;">∿ Sine</button>
+                <button type="button" class="siggen-wave-btn rack-gen-wave" data-wave="square" style="flex: 1; font-size: 0.68rem; padding: 3px 2px;">⊓ Sq</button>
+                <button type="button" class="siggen-wave-btn rack-gen-wave" data-wave="triangle" style="flex: 1; font-size: 0.68rem; padding: 3px 2px;">▲ Tri</button>
+                <button type="button" class="siggen-wave-btn rack-gen-wave" data-wave="noise" style="flex: 1; font-size: 0.68rem; padding: 3px 2px;">〰 Pink</button>
+              </div>
+            </div>
+
+            <!-- Frequency & Presets -->
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;">
+                <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Frequency:</span>
+                <span id="rack-gen-freq-display" style="font-family: monospace; font-weight: 800; color: #38bdf8; font-size: 0.82rem;">1,000 Hz</span>
+              </div>
+              <select id="rack-gen-spot-select" class="military-preset-select" style="width: 100%; font-size: 0.72rem; padding: 3px 5px;">
+                <option value="20">20 Hz (Sub-Bass Limit)</option>
+                <option value="100">100 Hz (Mains Hum Ref)</option>
+                <option value="400">400 Hz (AES Standard Test)</option>
+                <option value="1000" selected>1 kHz (0 dBu Pro Ref)</option>
+                <option value="10000">10 kHz (HF Bandwidth)</option>
+                <option value="20000">20 kHz (Audio Band Edge)</option>
+              </select>
+            </div>
+
+            <!-- Continuous slider -->
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.6rem; color: #64748b; font-family: monospace; margin-bottom: 2px;">
+                <span>10 Hz</span>
+                <span>100 Hz</span>
+                <span>1 kHz</span>
+                <span>10 kHz</span>
+                <span>100 kHz</span>
+              </div>
+              <input type="range" id="rack-gen-freq-slider" class="range-slider" min="1.0" max="5.0" step="0.005" value="3.0" style="width: 100%;" />
+            </div>
+
+            <!-- Live speaker audition -->
+            <div style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(51, 65, 85, 0.6); border-radius: 4px; padding: 5px 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" id="rack-gen-speaker-btn" class="siggen-speaker-btn" style="font-size: 0.68rem; padding: 3px 6px;">
+                  <span id="rack-gen-speaker-icon">🔇</span>
+                  <span id="rack-gen-speaker-txt">Monitor: Muted</span>
+                </button>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <span style="font-size: 0.6rem; color: #94a3b8; font-weight: 700;">VOL:</span>
+                  <input type="range" id="rack-gen-speaker-vol" min="0" max="0.5" step="0.01" value="0.15" style="width: 50px; height: 4px;" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Level / Drive shortcut -->
+            <div style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(51, 65, 85, 0.6); border-radius: 4px; padding: 6px 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Drive Voltage (V<sub>IN</sub>):</span>
+                <span id="rack-gen-vin-disp" style="font-family: monospace; font-weight: 800; color: #38bdf8; font-size: 0.8rem;">1.2 V</span>
+              </div>
+              <input type="range" id="rack-gen-vin-slider" min="0.1" max="5.0" step="0.1" value="1.2" style="width: 100%;" />
+            </div>
+
+            <!-- Quick Muggle Level Selectors inside the rack -->
+            <div style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(51, 65, 85, 0.6); border-radius: 4px; padding: 6px 8px;">
+              <div style="font-size: 0.65rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Quick Audio Model:</div>
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px;">
+                <button type="button" class="rack-muggle-quick-btn" data-preset="mic" style="background: #0f172a; border: 1px solid #334155; border-radius: 3px; font-size: 0.65rem; color: #e2e8f0; padding: 3px; cursor: pointer; text-align: left;">🎙️ Mic (-50dBu)</button>
+                <button type="button" class="rack-muggle-quick-btn" data-preset="pro-line" style="background: #0f172a; border: 1px solid #38bdf8; border-radius: 3px; font-size: 0.65rem; color: #38bdf8; padding: 3px; cursor: pointer; text-align: left;">🎛️ Pro (+4dBu)</button>
+                <button type="button" class="rack-muggle-quick-btn" data-preset="consumer-line" style="background: #0f172a; border: 1px solid #334155; border-radius: 3px; font-size: 0.65rem; color: #e2e8f0; padding: 3px; cursor: pointer; text-align: left;">📻 Cons (-10dBV)</button>
+                <button type="button" class="rack-muggle-quick-btn" data-preset="vintage-600" style="background: #0f172a; border: 1px solid #334155; border-radius: 3px; font-size: 0.65rem; color: #e2e8f0; padding: 3px; cursor: pointer; text-align: left;">🏛️ 600Ω Match</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
       <!-- ================= 2. HP 353A Patch Panel Bay ================= -->
       <div id="rack-panel-hp353a" class="rack-instrument-panel" style="display: none; padding: 6px;">
         <div class="hp353a-panel-card" style="margin-top: 0; background: #000000; border: 1px solid #333333; border-radius: 0;">
@@ -509,6 +733,9 @@ class FloatingMeterDock {
       </div>
 
       <!-- ================= 3. Multi-Channel Trend Recorder Bay ================= -->
+      <!-- 8-Line Bench: populated by eight-channel-bench.js -->
+      <div id="rack-panel-8ch" class="rack-instrument-panel bench-panel" style="display: none;"></div>
+
       <div id="rack-panel-chart" class="rack-instrument-panel" style="display: none; padding: 6px;">
         <div class="trend-recorder-card" style="margin-top: 0; background: #000000; border: 1px solid #333333; border-radius: 0;">
           <div class="trend-toolbar" style="display: flex; justify-content: space-between; align-items: center; padding: 6px; background: #0a0a0a; border-bottom: 1px solid #222222;">
@@ -573,31 +800,199 @@ class FloatingMeterDock {
 
     // Navigation Tabs
     const tabRack = dock.querySelector("#rack-tab-rack");
+    const tabGen = dock.querySelector("#rack-tab-gen");
     const tabHp = dock.querySelector("#rack-tab-hp353a");
     const tabChart = dock.querySelector("#rack-tab-chart");
+    const tab8ch = dock.querySelector("#rack-tab-8ch");
 
     const bayInstruments = dock.querySelector("#rack-instruments-bay");
+    const bayGen = dock.querySelector("#rack-panel-gen");
     const bayHp = dock.querySelector("#rack-panel-hp353a");
     const bayChart = dock.querySelector("#rack-panel-chart");
+    const bay8ch = dock.querySelector("#rack-panel-8ch");
 
     const switchTab = (tab) => {
       this.currentTab = tab;
       tabRack?.classList.toggle("active", tab === "rack");
+      tabGen?.classList.toggle("active", tab === "gen");
       tabHp?.classList.toggle("active", tab === "hp353a");
       tabChart?.classList.toggle("active", tab === "chart");
+      tab8ch?.classList.toggle("active", tab === "8ch");
 
       if (bayInstruments) bayInstruments.style.display = tab === "rack" ? "flex" : "none";
+      if (bayGen) bayGen.style.display = tab === "gen" ? "block" : "none";
       if (bayHp) bayHp.style.display = tab === "hp353a" ? "block" : "none";
       if (bayChart) bayChart.style.display = tab === "chart" ? "block" : "none";
+      if (bay8ch) bay8ch.style.display = tab === "8ch" ? "flex" : "none";
     };
+    this.switchRackTab = switchTab;
 
     tabRack?.addEventListener("click", () => switchTab("rack"));
+    tabGen?.addEventListener("click", () => switchTab("gen"));
     tabHp?.addEventListener("click", () => switchTab("hp353a"));
     tabChart?.addEventListener("click", () => switchTab("chart"));
+    tab8ch?.addEventListener("click", () => switchTab("8ch"));
+
+    // Sync Generator Rack Controls
+    const rackMuteBtn = dock.querySelector("#rack-siggen-mute-btn");
+    rackMuteBtn?.addEventListener("click", () => {
+      if (window.signalGenerator) {
+        window.signalGenerator.setOutputActive(!window.signalGenerator.outputActive);
+        rackMuteBtn.classList.toggle("active", window.signalGenerator.outputActive);
+        rackMuteBtn.textContent = window.signalGenerator.outputActive ? "OUT ON" : "MUTED";
+      }
+    });
+
+    dock.querySelectorAll(".rack-gen-wave").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const wave = btn.getAttribute("data-wave");
+        if (window.signalGenerator) window.signalGenerator.setWaveform(wave);
+        dock.querySelectorAll(".rack-gen-wave").forEach(b => b.classList.toggle("active", b === btn));
+      });
+    });
+
+    const rackFreqSlider = dock.querySelector("#rack-gen-freq-slider");
+    const rackFreqDisp = dock.querySelector("#rack-gen-freq-display");
+    const rackSpotSelect = dock.querySelector("#rack-gen-spot-select");
+
+    rackFreqSlider?.addEventListener("input", (e) => {
+      const val = parseFloat(e.target.value);
+      const freq = Math.round(Math.pow(10, val));
+      if (window.signalGenerator) window.signalGenerator.setFrequency(freq, "slider");
+      if (rackFreqDisp) rackFreqDisp.textContent = `${freq.toLocaleString()} Hz`;
+    });
+
+    rackSpotSelect?.addEventListener("change", (e) => {
+      const freq = parseFloat(e.target.value);
+      if (!isNaN(freq)) {
+        if (window.signalGenerator) window.signalGenerator.setFrequency(freq, "spot");
+        if (rackFreqSlider) rackFreqSlider.value = Math.log10(freq).toFixed(3);
+        if (rackFreqDisp) rackFreqDisp.textContent = `${freq.toLocaleString()} Hz`;
+      }
+    });
+
+    const rackSpeakerBtn = dock.querySelector("#rack-gen-speaker-btn");
+    const rackSpeakerIcon = dock.querySelector("#rack-gen-speaker-icon");
+    const rackSpeakerTxt = dock.querySelector("#rack-gen-speaker-txt");
+    const rackSpeakerVol = dock.querySelector("#rack-gen-speaker-vol");
+
+    rackSpeakerBtn?.addEventListener("click", () => {
+      if (window.signalGenerator) {
+        const state = !window.signalGenerator.monitorAudible;
+        window.signalGenerator.setMonitorAudible(state);
+        if (rackSpeakerIcon) rackSpeakerIcon.textContent = state ? "🔊" : "🔇";
+        if (rackSpeakerTxt) rackSpeakerTxt.textContent = state ? "Audition ON" : "Monitor: Muted";
+        rackSpeakerBtn.classList.toggle("active", state);
+      }
+    });
+
+    rackSpeakerVol?.addEventListener("input", (e) => {
+      const vol = parseFloat(e.target.value);
+      if (window.signalGenerator) window.signalGenerator.setVolume(vol);
+    });
+
+    // Quick Drive Vin Slider on Rack
+    const rackVinSlider = dock.querySelector("#rack-gen-vin-slider");
+    const rackVinDisp = dock.querySelector("#rack-gen-vin-disp");
+    rackVinSlider?.addEventListener("input", (e) => {
+      const val = parseFloat(e.target.value);
+      if (rackVinDisp) rackVinDisp.textContent = `${val.toFixed(1)} V`;
+      const vinEl = document.getElementById("pp-vin");
+      if (vinEl) {
+        vinEl.value = val;
+        if (window.circuitAnimator) window.circuitAnimator.updatePushPull();
+      }
+    });
+
+    // Quick Muggle Buttons on Rack
+    dock.querySelectorAll(".rack-muggle-quick-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const preset = btn.getAttribute("data-preset");
+        if (window.circuitAnimator) window.circuitAnimator.setMugglePreset(preset);
+        dock.querySelectorAll(".rack-muggle-quick-btn").forEach(b => {
+          const isActive = (b === btn);
+          b.style.borderColor = isActive ? "#38bdf8" : "#334155";
+          b.style.color = isActive ? "#38bdf8" : "#e2e8f0";
+        });
+        if (rackVinSlider) {
+          const vinEl = document.getElementById("pp-vin");
+          if (vinEl) {
+            rackVinSlider.value = vinEl.value;
+            if (rackVinDisp) rackVinDisp.textContent = `${parseFloat(vinEl.value).toFixed(1)} V`;
+          }
+        }
+      });
+    });
 
     // Quick Actions
+    const trackBtn = dock.querySelector("#rack-btn-track");
+    const wireBtn = dock.querySelector("#rack-btn-wire-mode");
     const anchorBtn = dock.querySelector("#rack-btn-anchor");
     const pokeBtn = dock.querySelector("#rack-btn-poke");
+
+    wireBtn?.addEventListener("click", () => {
+      if (this.wireStyle === "reading-gray") {
+        this.wireStyle = "vivid";
+        wireBtn.textContent = "🌈 VIVID";
+        wireBtn.classList.remove("active");
+        this.showToast("Wire Style: Vivid (All wires fully colored)");
+      } else if (this.wireStyle === "vivid") {
+        this.wireStyle = "ghost";
+        wireBtn.textContent = "👻 GHOST";
+        wireBtn.classList.remove("active");
+        this.showToast("Wire Style: Ghost (Ultra-faint traces)");
+      } else {
+        this.wireStyle = "reading-gray";
+        wireBtn.textContent = "🌫️ GRAY";
+        wireBtn.classList.add("active");
+        this.showToast("Wire Style: Reading Gray (Light gray during reading, vivid on meter hover)");
+      }
+      this.renderWires();
+    });
+
+    // Hover tracking on individual meter cards to illuminate specific channel wires
+    const cardChannels = {
+      "rack-card-scope1": ["CH1", "CH2"],
+      "rack-card-scope2": ["CH3", "CH4"],
+      "rack-card-dmm1": ["DMM1"],
+      "rack-card-dmm2": ["DMM2"],
+      "rack-card-vu1": ["VU1"],
+      "rack-card-vu2": ["VU2"]
+    };
+
+    Object.entries(cardChannels).forEach(([cardId, channels]) => {
+      const card = dock.querySelector(`#${cardId}`);
+      if (card) {
+        card.addEventListener("mouseenter", () => {
+          this.hoveredChannels = channels;
+          this.isHoveringRack = true;
+        });
+        card.addEventListener("mouseleave", () => {
+          this.hoveredChannels = null;
+        });
+      }
+    });
+
+    dock.addEventListener("mouseenter", () => {
+      this.isHoveringRack = true;
+    });
+    dock.addEventListener("mouseleave", () => {
+      this.isHoveringRack = false;
+      this.hoveredChannels = null;
+    });
+
+    trackBtn?.addEventListener("click", () => {
+      this.autoTrack = !this.autoTrack;
+      trackBtn.classList.toggle("active", this.autoTrack);
+      if (this.autoTrack) {
+        this.currentActiveSchematic = null;
+        this.updateActiveSchematicFromScroll();
+        this.renderWires();
+        this.showToast("🔄 Auto-Track: Probes actively tracking schematic in view");
+      } else {
+        this.showToast("🔒 Locked: Probes holding current test points");
+      }
+    });
 
     anchorBtn?.addEventListener("click", () => {
       this.isCreatingAnchor = !this.isCreatingAnchor;
@@ -852,6 +1247,13 @@ class FloatingMeterDock {
         const label = el.getAttribute("data-probe-label") || el.getAttribute("title") || target;
         this.selectProbeTarget(target, label, el);
       });
+      el.addEventListener("mouseenter", () => {
+        const target = el.getAttribute("data-probe-target");
+        if (target) this.hoveredProbeTarget = target;
+      });
+      el.addEventListener("mouseleave", () => {
+        this.hoveredProbeTarget = null;
+      });
     };
 
     document.querySelectorAll("[data-probe-target]").forEach(bindTarget);
@@ -868,15 +1270,132 @@ class FloatingMeterDock {
   }
 
   selectProbeTarget(targetKey, customLabel = null, clickedEl = null) {
+    this.autoTrack = false;
+    const trackBtn = this.dock?.querySelector("#rack-btn-track");
+    if (trackBtn) trackBtn.classList.remove("active");
+
     this.scope1Target = targetKey;
     this.dmm1Target = targetKey;
 
-    this.dock.querySelectorAll("[data-probe-select='scope1'], [data-probe-select='dmm1']").forEach(sel => {
+    this.dock?.querySelectorAll("[data-probe-select='scope1'], [data-probe-select='dmm1']").forEach(sel => {
       sel.value = targetKey;
     });
 
+    const badge = this.dock?.querySelector("#rack-active-circuit-badge");
+    if (badge) {
+      badge.textContent = customLabel ? `Manual: ${customLabel.length > 15 ? customLabel.substring(0, 15) : customLabel}` : `Manual: ${targetKey}`;
+      badge.title = `Manually pinned to ${customLabel || targetKey}`;
+    }
+
     this.updateFromActiveCircuit();
+    this.renderWires();
     this.showToast(`⚡ Probing: ${customLabel || targetKey}`);
+  }
+
+  getActiveSchematic() {
+    const vh = window.innerHeight;
+    const viewCenter = vh * 0.5;
+
+    let bestConfig = null;
+    let maxVisibleHeight = 0;
+    let closestToCenter = Infinity;
+
+    for (const cfg of SCHEMATIC_CONFIGS) {
+      const el = document.getElementById(cfg.id);
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+
+      // Check vertical intersection with viewport [0, vh]
+      const visibleTop = Math.max(0, rect.top);
+      const visibleBottom = Math.min(vh, rect.bottom);
+      const visibleHeight = visibleBottom - visibleTop;
+
+      if (visibleHeight > 40) {
+        const elCenter = (rect.top + rect.bottom) / 2;
+        const distFromCenter = Math.abs(elCenter - viewCenter);
+        if (visibleHeight > maxVisibleHeight * 0.7 && distFromCenter < closestToCenter) {
+          closestToCenter = distFromCenter;
+          maxVisibleHeight = Math.max(maxVisibleHeight, visibleHeight);
+          bestConfig = cfg;
+        } else if (visibleHeight > maxVisibleHeight) {
+          maxVisibleHeight = visibleHeight;
+          bestConfig = cfg;
+        }
+      }
+    }
+
+    if (!bestConfig && this.currentActiveSchematic) {
+      const currEl = document.getElementById(this.currentActiveSchematic.id);
+      if (currEl) {
+        const r = currEl.getBoundingClientRect();
+        if (r.bottom > 0 && r.top < vh) {
+          return this.currentActiveSchematic;
+        }
+      }
+      let minDistance = Infinity;
+      for (const cfg of SCHEMATIC_CONFIGS) {
+        const el = document.getElementById(cfg.id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        const dist = Math.abs((rect.top + rect.bottom) / 2 - viewCenter);
+        if (dist < minDistance) {
+          minDistance = dist;
+          bestConfig = cfg;
+        }
+      }
+    }
+
+    return bestConfig || SCHEMATIC_CONFIGS[3]; // default to Section 6 Audio Transformer
+  }
+
+  updateActiveSchematicFromScroll() {
+    if (!this.autoTrack) return;
+
+    const activeCfg = this.getActiveSchematic();
+    if (!activeCfg) return;
+
+    if (!this.currentActiveSchematic || this.currentActiveSchematic.id !== activeCfg.id) {
+      this.currentActiveSchematic = activeCfg;
+
+      this.scope1VinTarget = activeCfg.scope1_ch1;
+      this.scope1Target = activeCfg.scope1_ch2;
+      this.scope2ColdTarget = activeCfg.scope2_ch3;
+      this.scope2Target = activeCfg.scope2_ch4;
+      this.dmm1Target = activeCfg.dmm1;
+      this.dmm2Target = activeCfg.dmm2;
+      this.vu1Target = activeCfg.vu1;
+      this.vu2Target = activeCfg.vu2;
+
+      // Update dropdown selections in drawer if open
+      this.dock?.querySelectorAll("[data-probe-select='scope1']").forEach(sel => sel.value = this.scope1Target);
+      this.dock?.querySelectorAll("[data-probe-select='scope2']").forEach(sel => sel.value = this.scope2Target);
+      this.dock?.querySelectorAll("[data-probe-select='dmm1']").forEach(sel => sel.value = this.dmm1Target);
+      this.dock?.querySelectorAll("[data-probe-select='dmm2']").forEach(sel => sel.value = this.dmm2Target);
+      this.dock?.querySelectorAll("[data-probe-select='vu1']").forEach(sel => sel.value = this.vu1Target);
+      this.dock?.querySelectorAll("[data-probe-select='vu2']").forEach(sel => sel.value = this.vu2Target);
+
+      // Update active circuit badge in dock header
+      const badge = this.dock?.querySelector("#rack-active-circuit-badge");
+      if (badge) {
+        badge.textContent = activeCfg.shortName || activeCfg.name;
+        badge.title = `Currently tracking ${activeCfg.name}`;
+      }
+
+      this.updateFromActiveCircuit();
+    }
+  }
+
+  initScrollTracker() {
+    const handleScrollOrResize = () => {
+      this.updateActiveSchematicFromScroll();
+      this.renderWires();
+    };
+
+    window.addEventListener("scroll", handleScrollOrResize, { passive: true });
+    window.addEventListener("resize", handleScrollOrResize, { passive: true });
+
+    // Initial evaluation
+    this.updateActiveSchematicFromScroll();
   }
 
   showToast(msg) {
@@ -911,9 +1430,9 @@ class FloatingMeterDock {
     let iLoad = 0.002;
     let name = "Test Node";
 
-    if (!key) key = "6-1-p2";
+    if (!key) key = "xfmr-p2";
 
-    if (key.startsWith("6-1")) {
+    if (key.startsWith("6-1") || key.startsWith("pp")) {
       const vin = isMuted ? 0.0 : parseFloat(document.getElementById("pp-vin")?.value || 1.2);
       const rout = parseFloat(document.getElementById("pp-rout")?.value || 50);
       const rload = parseFloat(document.getElementById("pp-rload")?.value || 600);
@@ -938,99 +1457,105 @@ class FloatingMeterDock {
         thd = iLoad > 0.05 ? 12.5 : 0.085;
       }
 
-      if (key === "6-1-p2") {
+      if (key === "6-1-p2" || key === "pp-p2") {
         vRms = vPin2;
-        name = "Pin 2 Hot (Output +)";
-      } else if (key === "6-1-p3") {
+        name = "Push-Pull Pin 2 (HOT +)";
+      } else if (key === "6-1-p3" || key === "pp-p3") {
         vRms = shortPin3 ? 0.0001 : Math.abs(vPin3);
         phase = Math.PI;
-        name = "Pin 3 Cold (Output −)";
-      } else if (key === "6-1-load") {
+        name = "Push-Pull Pin 3 (COLD -)";
+      } else if (key === "6-1-load" || key === "pp-load") {
         vRms = vDiff;
         name = "Differential Across Load";
-      } else if (key === "6-1-vin") {
+      } else if (key === "6-1-vin" || key === "pp-vin") {
         vRms = vin;
-        name = "Audio Input Drive";
-      } else if (key === "6-1-op1") {
+        name = "Audio Input Drive (Vin)";
+      } else if (key === "6-1-op1" || key === "pp-op1") {
         vRms = vin;
         name = "Op-Amp A1 Output (Hot)";
-      } else if (key === "6-1-op2") {
+      } else if (key === "6-1-op2" || key === "pp-op2") {
         vRms = shortPin3 ? 14.0 : vin;
         phase = Math.PI;
         shape = shortPin3 ? "clipped" : "sine";
         name = "Op-Amp A2 Output (Inverting)";
-      } else if (key === "6-1-p1") {
-        vRms = 0.001;
+      } else if (key === "6-1-p1" || key === "pp-p1") {
+        vRms = 0.0001;
         shape = "flatline";
         name = "Pin 1 Chassis Ground";
       }
-    } else if (key.startsWith("6-2")) {
+    } else if (key.startsWith("6-2") || key.startsWith("ib")) {
       const vin = isMuted ? 0.0 : parseFloat(document.getElementById("ib-vin")?.value || 1.2);
       const rout = parseFloat(document.getElementById("ib-rout")?.value || 50);
       const rload = parseFloat(document.getElementById("ib-rload")?.value || 10000);
       iLoad = vin / (rout + rload);
       const vPin2 = iLoad * rload;
 
-      if (key === "6-2-p2") {
+      if (key === "6-2-p2" || key === "ib-p2") {
         vRms = vPin2;
         status = "ACTIVE DRIVEN (+)";
-        name = "Pin 2 Hot (Active)";
-      } else if (key === "6-2-p3") {
+        name = "Impedance-Balanced Pin 2 (HOT +)";
+      } else if (key === "6-2-p3" || key === "ib-p3") {
         vRms = 0.0001;
         shape = "flatline";
         status = "PASSIVE MATCH (0V SIGNAL, 50Ω Z)";
-        name = "Pin 3 Cold (Passive 0V)";
-      } else if (key === "6-2-load") {
+        name = "Impedance-Balanced Pin 3 (COLD -)";
+      } else if (key === "6-2-load" || key === "ib-load") {
         vRms = vPin2;
         status = "DIFFERENTIAL LOAD OK";
         name = "Differential Across Load";
+      } else if (key === "6-2-p1" || key === "ib-p1") {
+        vRms = 0.0001;
+        shape = "flatline";
+        name = "Pin 1 Chassis Ground";
       } else {
         vRms = vin;
         name = "Audio Input Drive";
       }
-    } else if (key.startsWith("6-3")) {
-      const vin = isMuted ? 0.0 : parseFloat(document.getElementById("tx-vin")?.value || 1.23);
-      const ratio = parseFloat(document.getElementById("tx-ratio")?.value || 1.0);
-      const rload = parseFloat(document.getElementById("tx-rload")?.value || 600);
-      const groundPin3 = document.getElementById("tx-ground-pin3")?.checked || false;
-      const vSec = vin * ratio;
-      iLoad = vSec / (40 + rload);
-      const vLoad = iLoad * rload;
-
-      if (key === "6-3-pri") {
-        vRms = vin;
-        status = "PRIMARY GENERATOR";
-        name = "Primary Audio Drive";
-      } else if (key === "6-3-sec" || key === "6-3-p2") {
-        vRms = vLoad;
-        status = groundPin3 ? "EARTHED REFERENCE" : "GALVANIC FLOATING";
-        name = "Secondary Pins 2 & 3";
-      } else if (key === "6-3-p3") {
-        vRms = groundPin3 ? 0.0001 : vLoad;
-        phase = groundPin3 ? 0 : Math.PI;
-        status = groundPin3 ? "TIED TO CHASSIS" : "GALVANIC FLOATING";
-        name = "Secondary Pin 3";
-      }
-    } else if (key.startsWith("xfmr")) {
+    } else if (key.startsWith("xfmr") || key.startsWith("6-3")) {
       let simVin = isMuted ? 0.0 : 1.23;
       let ratio = 1.0;
       if (window.audioTransformerSim && window.audioTransformerSim.state) {
         simVin = isMuted ? 0.0 : (window.audioTransformerSim.state.vin || 1.23);
         ratio = (window.audioTransformerSim.state.n2 || 1500) / (window.audioTransformerSim.state.n1 || 1500);
       }
-      if (key === "xfmr-pri") {
+      const vSec = simVin * ratio;
+
+      if (key === "xfmr-vin" || key === "6-3-pri") {
         vRms = simVin;
-        status = "TRANSFORMER PRIMARY DRIVE";
-        name = "Transformer Primary Input";
-      } else if (key === "xfmr-sec") {
-        vRms = simVin * ratio;
-        status = "SECONDARY TRANSFORMED OUT";
-        name = "Transformer Secondary Output";
+        status = "PRIMARY GENERATOR";
+        name = "Transformer Gen In (Vin)";
+      } else if (key === "xfmr-pri") {
+        vRms = simVin;
+        status = "PRIMARY WINDING DRIVE";
+        name = "Transformer Primary (N1)";
+      } else if (key === "xfmr-sec" || key === "xfmr-p2" || key === "6-3-p2" || key === "6-3-sec") {
+        vRms = vSec;
+        status = "TRANSFORMED SECONDARY (+)";
+        name = "Transformer Pin 2 (HOT +)";
+      } else if (key === "xfmr-p3" || key === "6-3-p3") {
+        vRms = vSec;
+        phase = Math.PI;
+        status = "FLOATING SECONDARY (-)";
+        name = "Transformer Pin 3 (COLD -)";
+      } else if (key === "xfmr-load") {
+        vRms = vSec;
+        status = "TRANSFORMER LOAD OUT";
+        name = "Secondary Load Resistor";
+      } else if (key === "xfmr-p1") {
+        vRms = 0.0001;
+        shape = "flatline";
+        status = "AES48 CHASSIS GROUND";
+        name = "Transformer Pin 1 (CHASSIS)";
+      } else if (key === "xfmr-shield") {
+        vRms = 0.0005;
+        shape = "flatline";
+        status = "FARADAY SHIELD";
+        name = "Faraday Shield Foil";
       } else if (key === "xfmr-core") {
         vRms = 0.15;
         shape = "sine";
         status = "CORE MAGNETIC FLUX";
-        name = "Core Saturation";
+        name = "Core Saturation Flux";
       } else if (key === "xfmr-zobel") {
         vRms = simVin * ratio * 0.98;
         status = "ZOBEL DAMPED SECONDARY";
@@ -1138,46 +1663,103 @@ class FloatingMeterDock {
     const vRefZ = Math.sqrt(0.001 * refZ);
     const rTxt = refZ >= 1000 ? `${(refZ / 1000).toFixed(refZ % 1000 === 0 ? 0 : 1)} k` : `${refZ}`;
 
+    const setElText = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    const formatBadge = (status) => {
+      if (!status) return "LIVE";
+      if (status.includes("CLIP")) return "CLIPPING";
+      if (status.includes("FAULT")) return "FAULT";
+      if (status.includes("GENERATOR HOT")) return "GEN HOT";
+      if (status.includes("GENERATOR RETURN")) return "GEN COLD";
+      if (status.includes("TRANSFORMED SECONDARY")) return "XFMR SEC";
+      if (status.includes("FLOATING SECONDARY")) return "XFMR COLD";
+      if (status.includes("PRIMARY WINDING")) return "XFMR PRI";
+      if (status.includes("CHASSIS")) return "CHASSIS";
+      if (status.includes("FARADAY")) return "SHIELD";
+      if (status.includes("CM-TO-DM")) return "CM ERROR";
+      if (status.includes("RECEIVER DIFFERENTIAL")) return "RX DIFF";
+      if (status.includes("DIFFERENTIAL")) return "DIFF OUT";
+      if (status.includes("BALANCED")) return "BALANCED";
+      if (status.includes("HOT")) return "+VE HOT";
+      if (status.includes("COLD")) return "-VE COLD";
+      return status.length > 12 ? status.substring(0, 11).trim() : status;
+    };
+
     // 1. Update DMM 1 (Lucky 8050A #1)
+    const v1Rms = Math.max(0, data1.vRms);
+    const v1Pk = v1Rms * Math.SQRT2;
+    const v1Pp = v1Pk * 2;
+    const dbu1 = (v1Rms > 0.00001) ? 20 * Math.log10(v1Rms / 0.7746) : -120;
+    const dbv1 = (v1Rms > 0.00001) ? 20 * Math.log10(v1Rms / 1.0) : -120;
+    const dbm1 = (v1Rms > 0.00001) ? 20 * Math.log10(v1Rms / vRefZ) : -120;
+    const pMw1 = (v1Rms * v1Rms / Math.max(1, refZ)) * 1000;
+    const iMa1 = (v1Rms / Math.max(1, refZ)) * 1000;
+
     const dmm1Val1 = document.getElementById("rack-dmm1-val1");
     const dmm1Val2 = document.getElementById("rack-dmm1-val2");
     const dmm1Status = document.getElementById("rack-dmm1-status");
     const dmm1Detail = document.getElementById("dmm1-detail-text");
 
     if (dmm1Val1 && dmm1Val2) {
-      const dbm1 = 20 * Math.log10(Math.max(0.0001, data1.vRms / vRefZ));
       if (this.dmm1Mode === "rms") {
-        dmm1Val1.textContent = `${data1.vRms.toFixed(3)} V`;
+        dmm1Val1.textContent = `${v1Rms.toFixed(3)} V`;
         dmm1Val2.textContent = `${dbm1 >= 0 ? "+" : ""}${dbm1.toFixed(1)} dBm`;
       } else if (this.dmm1Mode === "dbu") {
         dmm1Val1.textContent = `${dbm1 >= 0 ? "+" : ""}${dbm1.toFixed(2)} dBm`;
-        dmm1Val2.textContent = `${data1.vRms.toFixed(3)} V RMS`;
+        dmm1Val2.textContent = `${v1Rms.toFixed(3)} V RMS`;
       } else if (this.dmm1Mode === "peak") {
-        dmm1Val1.textContent = `${data1.vPk.toFixed(3)} Vpk`;
-        dmm1Val2.textContent = `${(data1.vPk * 2).toFixed(3)} Vpp`;
+        dmm1Val1.textContent = `${v1Pk.toFixed(3)} Vpk`;
+        dmm1Val2.textContent = `${v1Pp.toFixed(3)} Vpp`;
       } else {
         dmm1Val1.textContent = `1.414 CF`;
         dmm1Val2.textContent = `${rTxt} Ω (REF Z)`;
       }
     }
     if (dmm1Status) {
-      dmm1Status.textContent = data1.status.includes("CLIP") ? "CLIPPING" : (data1.status.length > 12 ? data1.status.substring(0, 12) : data1.status);
+      dmm1Status.textContent = formatBadge(data1.status);
       dmm1Status.className = data1.status.includes("CLIP") || data1.status.includes("FAULT") ? "rack-status-pill amber" : "rack-status-pill yellow";
     }
     if (dmm1Detail) {
-      dmm1Detail.textContent = `Probed: ${data1.name} • ${data1.vRms.toFixed(3)}V RMS • ${data1.status}`;
+      dmm1Detail.textContent = `Probed: ${data1.name} • ${v1Rms.toFixed(3)}V RMS • ${data1.status}`;
     }
 
+    // Populate DMM 1 Matrix & Equivalents Table
+    setElText("dmm1-mat-vpk", `${v1Pk.toFixed(3)}V`);
+    setElText("dmm1-mat-vpp", `${v1Pp.toFixed(3)}V`);
+    setElText("dmm1-mat-dbu", `${dbu1 >= 0 ? "+" : ""}${dbu1.toFixed(2)}`);
+    setElText("dmm1-mat-dbv", `${dbv1 >= 0 ? "+" : ""}${dbv1.toFixed(2)}`);
+    setElText("dmm1-mat-dbm", `${dbm1 >= 0 ? "+" : ""}${dbm1.toFixed(2)}`);
+    setElText("dmm1-mat-pmw", `${pMw1.toFixed(2)}`);
+    setElText("dmm1-mat-ima", `${iMa1.toFixed(2)}`);
+    setElText("dmm1-mat-refz", `${rTxt}Ω`);
+
+    setElText("dmm1-tbl-vpp", `${v1Pp.toFixed(3)} Vpp`);
+    setElText("dmm1-tbl-vpk", `${v1Pk.toFixed(3)} Vpk`);
+    setElText("dmm1-tbl-dbu", `${dbu1 >= 0 ? "+" : ""}${dbu1.toFixed(2)} dBu`);
+    setElText("dmm1-tbl-dbv", `${dbv1 >= 0 ? "+" : ""}${dbv1.toFixed(2)} dBV`);
+    setElText("dmm1-tbl-pwr", `${pMw1.toFixed(2)} mW`);
+    setElText("dmm1-tbl-cur", `${iMa1.toFixed(2)} mA`);
+
     // 2. Update DMM 2 (Lucky 8050A #2)
+    const v2Rms = Math.max(0, data2.vRms);
+    const v2Pk = v2Rms * Math.SQRT2;
+    const v2Pp = v2Pk * 2;
+    const dbu2 = (v2Rms > 0.00001) ? 20 * Math.log10(v2Rms / 0.7746) : -120;
+    const dbv2 = (v2Rms > 0.00001) ? 20 * Math.log10(v2Rms / 1.0) : -120;
+    const dbm2 = (v2Rms > 0.00001) ? 20 * Math.log10(v2Rms / vRefZ) : -120;
+    const pMw2 = (v2Rms * v2Rms / Math.max(1, refZ)) * 1000;
+
     const dmm2Val1 = document.getElementById("rack-dmm2-val1");
     const dmm2Val2 = document.getElementById("rack-dmm2-val2");
     const dmm2Status = document.getElementById("rack-dmm2-status");
     const dmm2Detail = document.getElementById("dmm2-detail-text");
 
     if (dmm2Val1 && dmm2Val2) {
-      const dbm2 = 20 * Math.log10(Math.max(0.0001, data2.vRms / vRefZ));
       if (this.dmm2Mode === "diff") {
-        dmm2Val1.textContent = `${data2.vRms.toFixed(3)} V`;
+        dmm2Val1.textContent = `${v2Rms.toFixed(3)} V`;
         dmm2Val2.textContent = `${data2.thd.toFixed(3)}% THD`;
       } else if (this.dmm2Mode === "thd") {
         dmm2Val1.textContent = `${data2.thd.toFixed(3)} %`;
@@ -1192,12 +1774,29 @@ class FloatingMeterDock {
       }
     }
     if (dmm2Status) {
-      dmm2Status.textContent = data2.cmrr >= 80 ? "BALANCED" : (data2.status.length > 12 ? data2.status.substring(0, 12) : data2.status);
+      dmm2Status.textContent = data2.cmrr >= 80 ? "BALANCED" : formatBadge(data2.status);
       dmm2Status.className = data2.cmrr >= 80 ? "rack-status-pill green" : "rack-status-pill amber";
     }
     if (dmm2Detail) {
-      dmm2Detail.textContent = `Probed: ${data2.name} • ${data2.vRms.toFixed(3)}V RMS • CMRR: ${data2.cmrr.toFixed(1)} dB • THD: ${data2.thd.toFixed(3)}%`;
+      dmm2Detail.textContent = `Probed: ${data2.name} • ${v2Rms.toFixed(3)}V RMS • CMRR: ${data2.cmrr.toFixed(1)} dB • THD: ${data2.thd.toFixed(3)}%`;
     }
+
+    // Populate DMM 2 Matrix & Equivalents Table
+    setElText("dmm2-mat-vpk", `${v2Pk.toFixed(3)}V`);
+    setElText("dmm2-mat-vpp", `${v2Pp.toFixed(3)}V`);
+    setElText("dmm2-mat-dbu", `${dbu2 >= 0 ? "+" : ""}${dbu2.toFixed(2)}`);
+    setElText("dmm2-mat-dbv", `${dbv2 >= 0 ? "+" : ""}${dbv2.toFixed(2)}`);
+    setElText("dmm2-mat-dbm", `${dbm2 >= 0 ? "+" : ""}${dbm2.toFixed(2)}`);
+    setElText("dmm2-mat-pmw", `${pMw2.toFixed(2)}mW`);
+    setElText("dmm2-mat-thd", `${data2.thd.toFixed(3)}%`);
+    setElText("dmm2-mat-cmrr", data2.cmrr >= 100 ? ">100dB" : `${data2.cmrr.toFixed(1)}dB`);
+
+    setElText("dmm2-tbl-vpp", `${v2Pp.toFixed(3)} Vpp`);
+    setElText("dmm2-tbl-vpk", `${v2Pk.toFixed(3)} Vpk`);
+    setElText("dmm2-tbl-dbu", `${dbu2 >= 0 ? "+" : ""}${dbu2.toFixed(2)} dBu`);
+    setElText("dmm2-tbl-dbv", `${dbv2 >= 0 ? "+" : ""}${dbv2.toFixed(2)} dBV`);
+    setElText("dmm2-tbl-pwr", `${pMw2.toFixed(2)} mW`);
+    setElText("dmm2-tbl-cmrr", data2.cmrr >= 100 ? ">100.0 dB" : `${data2.cmrr.toFixed(1)} dB`);
 
     // 3. Update Target VU Meter dB levels
     this.vu1TargetDbu = 20 * Math.log10(Math.max(0.00005, vu1Data.vRms / (this.vu1Range || 3.0)));
@@ -1254,7 +1853,8 @@ class FloatingMeterDock {
         this.renderTrendGraph();
       }
 
-      // 5. Render Dynamic SVG Wires
+      // 5. Update Active Schematic from scroll position & Render Dynamic SVG Wires
+      this.updateActiveSchematicFromScroll();
       this.renderWires();
 
       this.animFrame = requestAnimationFrame(loop);
@@ -1293,7 +1893,7 @@ class FloatingMeterDock {
     // Graticule Grid
     this.drawGraticule(ctx, w, h);
 
-    const vinData = this.getSignalForTarget("6-1-vin");
+    const vinData = this.getSignalForTarget(this.scope1VinTarget || "xfmr-vin");
     const sc1Data = this.getSignalForTarget(this.scope1Target);
     const voltsPerDiv = this.scope1VoltsDiv;
     const timePerDiv = this.scopeTimeDiv * 0.001;
@@ -1341,10 +1941,11 @@ class FloatingMeterDock {
     ctx.font = "bold 8.5px 'JetBrains Mono', monospace";
     ctx.fillStyle = "#facc15";
     ctx.textAlign = "left";
-    ctx.fillText("CH1: VIN", 6, 11);
+    const lblVin = vinData.name.length > 9 ? vinData.name.substring(0, 9).toUpperCase() : vinData.name.toUpperCase();
+    ctx.fillText(`CH1: ${lblVin}`, 6, 11);
     ctx.fillStyle = "#38bdf8";
-    const lbl1 = sc1Data.name.length > 15 ? sc1Data.name.substring(0, 15).toUpperCase() : sc1Data.name.toUpperCase();
-    ctx.fillText(`CH2: ${lbl1}`, 60, 11);
+    const lbl1 = sc1Data.name.length > 13 ? sc1Data.name.substring(0, 13).toUpperCase() : sc1Data.name.toUpperCase();
+    ctx.fillText(`CH2: ${lbl1}`, 64, 11);
     ctx.fillStyle = "#888888";
     ctx.textAlign = "right";
     ctx.fillText(`${voltsPerDiv}V/DIV`, w - 6, 11);
@@ -1361,7 +1962,7 @@ class FloatingMeterDock {
 
     this.drawGraticule(ctx, w, h);
 
-    const coldData = this.getSignalForTarget("6-1-p3");
+    const coldData = this.getSignalForTarget(this.scope2ColdTarget || "xfmr-p3");
     const sc2Data = this.getSignalForTarget(this.scope2Target);
     const voltsPerDiv = this.scope2VoltsDiv;
     const timePerDiv = this.scopeTimeDiv * 0.001;
@@ -1412,9 +2013,10 @@ class FloatingMeterDock {
     ctx.font = "bold 8.5px 'JetBrains Mono', monospace";
     ctx.fillStyle = "#f43f5e";
     ctx.textAlign = "left";
-    ctx.fillText("CH3: COLD", 6, 11);
+    const lblCold = coldData.name.length > 9 ? coldData.name.substring(0, 9).toUpperCase() : coldData.name.toUpperCase();
+    ctx.fillText(`CH3: ${lblCold}`, 6, 11);
     ctx.fillStyle = "#4ade80";
-    const lbl2 = sc2Data.name.length > 15 ? sc2Data.name.substring(0, 15).toUpperCase() : sc2Data.name.toUpperCase();
+    const lbl2 = sc2Data.name.length > 13 ? sc2Data.name.substring(0, 13).toUpperCase() : sc2Data.name.toUpperCase();
     ctx.fillText(`CH4: ${lbl2}`, 68, 11);
     ctx.fillStyle = "#888888";
     ctx.textAlign = "right";
@@ -1618,24 +2220,35 @@ class FloatingMeterDock {
     const svg = document.getElementById("live-probe-wires-svg");
     if (!svg) return;
 
+    const activeCfg = this.getActiveSchematic();
+
+    // Channel routing: map each instrument dot to its active node
     const connections = [
-      { fromId: "dot-scope1-ch1", targetKey: "6-1-vin", color: "#facc15", label: "Scope 1 CH1 (Vin)" },
-      { fromId: "dot-scope1-ch2", targetKey: this.scope1Target, color: "#38bdf8", label: "Scope 1 CH2 (+VE)" },
-      { fromId: "dot-scope2-ch3", targetKey: "6-1-p3", color: "#f43f5e", label: "Scope 2 CH3 (-VE)" },
-      { fromId: "dot-scope2-ch4", targetKey: this.scope2Target, color: "#4ade80", label: "Scope 2 CH4 (Diff)" },
-      { fromId: "dot-dmm1", targetKey: this.dmm1Target, color: "#facc15", label: "DMM 1 (+VE)" },
-      { fromId: "dot-dmm2", targetKey: this.dmm2Target, color: "#4ade80", label: "DMM 2 (Diff)" },
-      { fromId: "dot-vu1", targetKey: this.vu1Target, color: "#facc15", label: "VU 1 (Drive)" },
-      { fromId: "dot-vu2", targetKey: this.vu2Target, color: "#4ade80", label: "VU 2 (Load)" }
+      { fromId: "dot-scope1-ch1", targetKey: this.scope1VinTarget || activeCfg?.scope1_ch1 || "xfmr-vin", color: "#facc15", badge: "CH1", label: "Scope 1 CH1" },
+      { fromId: "dot-scope1-ch2", targetKey: this.scope1Target || activeCfg?.scope1_ch2 || "xfmr-p2", color: "#38bdf8", badge: "CH2", label: "Scope 1 CH2" },
+      { fromId: "dot-scope2-ch3", targetKey: this.scope2ColdTarget || activeCfg?.scope2_ch3 || "xfmr-p3", color: "#f43f5e", badge: "CH3", label: "Scope 2 CH3" },
+      { fromId: "dot-scope2-ch4", targetKey: this.scope2Target || activeCfg?.scope2_ch4 || "xfmr-load", color: "#4ade80", badge: "CH4", label: "Scope 2 CH4" },
+      { fromId: "dot-dmm1", targetKey: this.dmm1Target || activeCfg?.dmm1 || "xfmr-p2", color: "#facc15", badge: "DMM1", label: "DMM 1" },
+      { fromId: "dot-dmm2", targetKey: this.dmm2Target || activeCfg?.dmm2 || "xfmr-load", color: "#4ade80", badge: "DMM2", label: "DMM 2" },
+      { fromId: "dot-vu1", targetKey: this.vu1Target || activeCfg?.vu1 || "xfmr-vin", color: "#facc15", badge: "VU1", label: "VU 1" },
+      { fromId: "dot-vu2", targetKey: this.vu2Target || activeCfg?.vu2 || "xfmr-load", color: "#4ade80", badge: "VU2", label: "VU 2" }
     ];
 
+    // Count how many probes connect to each targetKey to calculate non-overlapping offsets
+    const targetCounts = {};
+    connections.forEach(conn => {
+      targetCounts[conn.targetKey] = (targetCounts[conn.targetKey] || 0) + 1;
+    });
+
+    const targetIndexTracker = {};
     let svgHtml = "";
 
     connections.forEach(conn => {
       const dotEl = document.getElementById(conn.fromId);
       if (!dotEl) return;
       const dotRect = dotEl.getBoundingClientRect();
-      const x1 = dotRect.right;
+      // Right-side rack: wire leaves from the LEFT edge of terminal dot
+      const x1 = dotRect.left;
       const y1 = dotRect.top + dotRect.height / 2;
 
       // Find target element in page or user anchors
@@ -1644,45 +2257,177 @@ class FloatingMeterDock {
         targetEl = document.getElementById(conn.targetKey);
       }
 
-      let x2, y2;
+      // Fallbacks for alternative IDs
+      if (!targetEl) {
+        if (conn.targetKey.includes("p2")) targetEl = document.querySelector('[data-probe-target="pp-p2"]') || document.querySelector('[data-probe-target="xfmr-p2"]');
+        else if (conn.targetKey.includes("p3")) targetEl = document.querySelector('[data-probe-target="pp-p3"]') || document.querySelector('[data-probe-target="xfmr-p3"]');
+        else if (conn.targetKey.includes("load")) targetEl = document.querySelector('[data-probe-target="pp-load"]') || document.querySelector('[data-probe-target="xfmr-load"]');
+        else if (conn.targetKey.includes("vin")) targetEl = document.querySelector('[data-probe-target="pp-vin"]') || document.querySelector('[data-probe-target="xfmr-vin"]');
+      }
+
+      let x2 = 420;
+      let y2 = y1 + 30;
       let isVisible = false;
+      let targetRect = null;
 
       if (targetEl) {
-        const tRect = targetEl.getBoundingClientRect();
-        // Check if target is in visible viewport
-        if (tRect.bottom > 0 && tRect.top < window.innerHeight && tRect.right > 350 && tRect.left < window.innerWidth) {
-          x2 = tRect.left + tRect.width / 2;
-          y2 = tRect.top + tRect.height / 2;
+        targetRect = targetEl.getBoundingClientRect();
+        // Check if target is inside the visible viewport and not under the right rack (width 350px)
+        if (targetRect.bottom > 0 && targetRect.top < window.innerHeight && targetRect.left < window.innerWidth - 350 && targetRect.right > 0) {
+          x2 = targetRect.left + targetRect.width / 2;
+          y2 = targetRect.top + targetRect.height / 2;
           isVisible = true;
         }
       }
 
-      // If target is off-screen or not found, drape wire naturally across rightward
-      if (!isVisible) {
-        // Point toward middle-right of screen
-        x2 = Math.min(window.innerWidth - 30, 420 + Math.sin(y1 * 0.05) * 40);
-        y2 = Math.max(80, Math.min(window.innerHeight - 80, y1 + 30));
+      // Calculate staggered vertical offset if multiple probes share the same target
+      const count = targetCounts[conn.targetKey] || 1;
+      const idx = targetIndexTracker[conn.targetKey] || 0;
+      targetIndexTracker[conn.targetKey] = idx + 1;
+
+      let yOffset = 0;
+      if (count === 2) {
+        yOffset = idx === 0 ? -7 : 7;
+      } else if (count === 3) {
+        yOffset = idx === 0 ? -12 : (idx === 1 ? 0 : 12);
+      } else if (count > 3) {
+        yOffset = (idx - (count - 1) / 2) * 9;
       }
 
-      // Compute smooth cubic Bézier spline
-      const dx = Math.abs(x2 - x1);
-      const cx1 = x1 + dx * 0.5;
-      const cy1 = y1;
-      const cx2 = x2 - dx * 0.3;
-      const cy2 = y2 + 20;
+      const finalY2 = isVisible ? y2 + yOffset : y1 + 30;
+      const finalX2 = isVisible ? x2 : 420;
+
+      // Probe barrel dimensions: matte lab enclosure with colored collar
+      // Wire originates from right rack, so barrel sits to the right of the circuit node
+      const barrelW = 26;
+      const barrelH = 11;
+      const barrelX = finalX2 + 8;
+      const barrelY = finalY2 - barrelH / 2;
+
+      // Check if wire is explicitly highlighted (e.g. hovered meter card or probed node)
+      const isTargetHovered = Boolean(
+        this.hoveredProbeTarget && (
+          conn.targetKey === this.hoveredProbeTarget ||
+          (targetEl && targetEl.getAttribute("data-probe-target") === this.hoveredProbeTarget)
+        )
+      );
+      const isChannelHovered = Boolean(
+        this.hoveredChannels && (
+          this.hoveredChannels.includes(conn.badge) || this.hoveredChannels === "ALL"
+        )
+      );
+      const isHighlighted = isChannelHovered || isTargetHovered;
+
+      // Determine wire mode styling
+      const isWireStyleGray = this.wireStyle !== "vivid";
+      const isGhost = this.wireStyle === "ghost";
+
+      let wireStrokeColor, wireStrokeWidth, finalWireOpacity, shadowStroke, shadowWidth, glintOpacity;
+
+      if (isHighlighted) {
+        // High-contrast vivid highlight on focused instrument/probe
+        wireStrokeColor = conn.color;
+        wireStrokeWidth = 3.2;
+        finalWireOpacity = 1.0;
+        shadowStroke = "rgba(0, 0, 0, 0.65)";
+        shadowWidth = 5.0;
+        glintOpacity = 0.8;
+      } else if (isGhost) {
+        // Ghost mode: ultra faint
+        wireStrokeColor = "#94a3b8";
+        wireStrokeWidth = 1.2;
+        finalWireOpacity = 0.12;
+        shadowStroke = "none";
+        shadowWidth = 0;
+        glintOpacity = 0;
+      } else if (isWireStyleGray) {
+        // Reading Mode (Default): Lighter, light gray so the user can easily read the text
+        wireStrokeColor = "#94a3b8"; // Clean, light neutral slate/silver gray
+        wireStrokeWidth = 1.6;
+        finalWireOpacity = isVisible ? 0.30 : 0.14;
+        // Soft, faint shadow so it NEVER strikes through white text
+        shadowStroke = "rgba(0, 0, 0, 0.08)";
+        shadowWidth = 2.0;
+        glintOpacity = 0.2;
+      } else {
+        // Classic vivid workbench mode
+        wireStrokeColor = conn.color;
+        wireStrokeWidth = 2.6;
+        finalWireOpacity = isVisible ? 0.95 : 0.22;
+        shadowStroke = "rgba(0, 0, 0, 0.6)";
+        shadowWidth = 4.5;
+        glintOpacity = finalWireOpacity * 0.8;
+      }
+
+      // Determine wire destination coordinates
+      let endX, endY;
+      if (isVisible) {
+        endX = barrelX + barrelW;
+        endY = finalY2;
+      } else {
+        if (targetRect && targetRect.bottom <= 0) {
+          // Off-screen above viewport
+          endX = Math.max(60, window.innerWidth - 450);
+          endY = -15;
+        } else if (targetRect && targetRect.top >= window.innerHeight) {
+          // Off-screen below viewport
+          endX = Math.max(60, window.innerWidth - 450);
+          endY = window.innerHeight + 15;
+        } else {
+          // Natural resting drape heading leftward from right rack
+          endX = Math.max(60, x1 - 80 + Math.sin(y1 * 0.05) * 30);
+          endY = Math.max(60, Math.min(window.innerHeight - 60, y1 + 25));
+        }
+      }
+
+      // Compute smooth cubic Bézier spline curving leftward from right rack
+      const spanX = Math.max(50, Math.abs(x1 - endX));
+      const drape = Math.min(60, Math.max(16, spanX * 0.07));
+
+      const cx1 = x1 - spanX * 0.42;
+      const cy1 = y1 + drape * 0.45;
+      const cx2 = endX + spanX * 0.35;
+      const cy2 = endY + drape * 0.25;
+
+      const pathData = `M ${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${endX} ${endY}`;
+      const groupClass = isHighlighted ? "live-wire-group highlighted" : (isWireStyleGray ? "live-wire-group reading-dimmed" : "live-wire-group");
 
       svgHtml += `
-        <g class="live-wire-group">
-          <!-- Shadow -->
-          <path d="M ${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x2} ${y2}"
-                fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="4" stroke-linecap="round"/>
-          <!-- Physical colored wire lead -->
-          <path d="M ${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x2} ${y2}"
-                fill="none" stroke="${conn.color}" stroke-width="2.2" stroke-linecap="round" opacity="0.88"/>
-          <!-- Needle Probe Tip at destination -->
-          <circle cx="${x2}" cy="${y2}" r="3.5" fill="${conn.color}" stroke="#000000" stroke-width="1.5"/>
-        </g>
+        <g class="${groupClass}" data-channel="${conn.badge}">
+          <!-- Wire Shadow (soft or subtle when reading) -->
+          ${shadowStroke !== "none" ? `<path class="wire-shadow" d="${pathData}" fill="none" stroke="${shadowStroke}" stroke-width="${shadowWidth}" stroke-linecap="round"/>` : ""}
+          <!-- Insulated Physical Colored Wire Body -->
+          <path class="wire-body" d="${pathData}" fill="none" stroke="${wireStrokeColor}" stroke-width="${wireStrokeWidth}" stroke-linecap="round" opacity="${finalWireOpacity}"/>
+          <!-- Glossy Glint Along Wire Core -->
+          <path class="wire-glint" d="${pathData}" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.6" stroke-linecap="round" opacity="${glintOpacity}"/>
       `;
+
+      if (isVisible) {
+        const barrelBorder = isHighlighted ? conn.color : (isWireStyleGray ? "#475569" : conn.color);
+        const barrelTextFill = isHighlighted ? conn.color : (isWireStyleGray ? conn.color : conn.color);
+        const barrelOpacity = isHighlighted ? 1.0 : (isWireStyleGray ? 0.85 : 1.0);
+        const haloOpacity = isHighlighted ? 0.8 : (isWireStyleGray ? 0.35 : 0.65);
+
+        svgHtml += `
+          <!-- Probe Barrel Collar & Strain Relief (Facing Left into Node) -->
+          <rect x="${barrelX}" y="${barrelY}" width="${barrelW}" height="${barrelH}" rx="2" fill="#141416" stroke="${barrelBorder}" stroke-width="1.2" opacity="${barrelOpacity}"/>
+          <line x1="${barrelX + barrelW - 4}" y1="${barrelY}" x2="${barrelX + barrelW - 4}" y2="${barrelY + barrelH}" stroke="${conn.color}" stroke-width="2.5" opacity="${barrelOpacity}"/>
+          <text x="${barrelX + 11}" y="${finalY2 + 3.2}" fill="${barrelTextFill}" font-family="'JetBrains Mono', monospace" font-size="7.5" font-weight="900" text-anchor="middle" letter-spacing="-0.5px">${conn.badge}</text>
+          
+          <!-- Gold Needle Probe Tip touching circuit node from the right -->
+          <line x1="${finalX2}" y1="${finalY2}" x2="${barrelX}" y2="${finalY2}" stroke="#fbbf24" stroke-width="1.8" stroke-linecap="round"/>
+          
+          <!-- Glowing Contact Halo at circuit node -->
+          <circle cx="${finalX2}" cy="${finalY2}" r="3.5" fill="${conn.color}" stroke="#000000" stroke-width="1.2"/>
+          <circle cx="${finalX2}" cy="${finalY2}" r="6.5" fill="none" stroke="${conn.color}" stroke-width="1" opacity="${haloOpacity}"/>
+          <circle cx="${finalX2}" cy="${finalY2}" r="11" fill="none" stroke="${conn.color}" stroke-width="0.8" opacity="${haloOpacity * 0.5}">
+            <animate attributeName="r" values="3.5;13" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="${haloOpacity};0" dur="2s" repeatCount="indefinite"/>
+          </circle>
+        `;
+      }
+
+      svgHtml += `</g>`;
     });
 
     svg.innerHTML = svgHtml;

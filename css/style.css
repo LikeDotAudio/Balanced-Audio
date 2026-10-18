@@ -2270,6 +2270,196 @@ code, pre {
   color: #94a3b8;
 }
 
+/* Simple Model for Muggles (Mic • Line • Audio Modes) */
+.military-muggle-bar {
+  background: rgba(10, 15, 26, 0.85);
+  border: 1px solid #38bdf8;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.1);
+}
+
+.muggle-bar-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.muggle-badge {
+  background: #38bdf8;
+  color: #000000;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.muggle-hint {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.muggle-preset-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+
+.muggle-btn {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  transition: all 0.18s ease;
+}
+
+.muggle-btn:hover {
+  border-color: #38bdf8;
+  background: #1e293b;
+}
+
+.muggle-btn.active {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.muggle-icon {
+  font-size: 1rem;
+  margin-bottom: 2px;
+}
+
+.muggle-title {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: 0.03em;
+}
+
+.muggle-sub {
+  font-size: 0.66rem;
+  color: #94a3b8;
+  margin-top: 2px;
+  line-height: 1.25;
+}
+
+.muggle-explainer {
+  background: rgba(15, 23, 42, 0.7);
+  border-left: 3px solid #38bdf8;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.muggle-explainer-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #38bdf8;
+  margin-right: 4px;
+}
+
+/* Deep Dive into Matching, Drive & Adjustments */
+.military-deep-dive-console {
+  background: rgba(10, 15, 26, 0.9);
+  border: 1px solid #475569;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1.25rem;
+}
+
+.deepdive-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.85rem;
+  font-family: var(--font-mono);
+}
+
+.deepdive-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #f59e0b;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.deepdive-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.85rem;
+}
+
+.deepdive-card {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.deepdive-card-title {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.deepdive-metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 3px 0;
+  font-size: 0.74rem;
+  border-bottom: 1px dashed rgba(51, 65, 85, 0.4);
+}
+
+.deepdive-metric-val {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.deepdive-metric-label {
+  color: #94a3b8;
+  font-size: 0.72rem;
+}
+
+.deepdive-note {
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  color: #cbd5e1;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 4px;
+  padding: 5px 7px;
+  border-left: 2px solid #38bdf8;
+}
+
 /* Master Equipment Grid: Controls, Knobs, VU Meter & DMM Display */
 .military-controls-layout {
   display: grid;
@@ -2401,6 +2591,57 @@ code, pre {
   border-radius: 1px;
   transform: translateX(-50%);
   box-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+}
+
+/* ==========================================================================
+   Section 0: Enclosure Big Rotary Selector Switch inside Circuit
+   ========================================================================== */
+#enclosure-selector-knob {
+  cursor: grab;
+  transition: filter 0.15s ease;
+}
+#enclosure-selector-knob:hover {
+  filter: brightness(1.15) drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
+}
+#enclosure-selector-knob:active {
+  cursor: grabbing;
+}
+.enc-switch-step {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.enc-switch-step:hover text {
+  fill: #38bdf8 !important;
+  filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.6));
+}
+.enc-switch-step:hover .enc-stud {
+  fill: #f59e0b !important;
+  stroke: #fbbf24 !important;
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.8));
+}
+.enc-switch-step.active text {
+  fill: #38bdf8 !important;
+  font-weight: 900 !important;
+  filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.7));
+}
+.enc-switch-step.active .enc-stud {
+  fill: #fbbf24 !important;
+  stroke: #d97706 !important;
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.9));
+}
+.enc-switch-step.active .enc-led {
+  fill: #38bdf8 !important;
+  filter: drop-shadow(0 0 8px #38bdf8);
+}
+.enc-switch-step:not(.active) text {
+  fill: #64748b;
+}
+.enc-switch-step:not(.active) .enc-stud {
+  fill: #475569;
+  stroke: #1e293b;
+}
+.enc-switch-step:not(.active) .enc-led {
+  fill: #0f172a;
 }
 
 /* 1960s Military Slider Potentiometer */
@@ -4163,6 +4404,20 @@ code, pre {
   transform: translateX(0);
 }
 
+/* Hide on scrolling so content is never obstructed */
+.story-index-sidebar.scrolling-hidden,
+.story-index-sidebar.mobile-open.scrolling-hidden {
+  transform: translateX(-100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease !important;
+}
+
+body.sidebar-is-scrolling {
+  padding-left: 0 !important;
+  transition: padding-left 0.25s ease !important;
+}
+
 @media (min-width: 1280px) {
   body.has-story-sidebar {
     padding-left: 270px;
@@ -4371,12 +4626,14 @@ code, pre {
 
 @media (min-width: 1024px) {
   body {
-    margin-left: 350px !important;
+    margin-left: 0 !important;
+    margin-right: 350px !important;
     padding: 0 !important;
     background: #000000 !important;
   }
   .site-header {
     margin-left: 0 !important;
+    margin-right: 0 !important;
     background: #050505 !important;
     border-bottom: 1px solid #333333 !important;
     padding: 0.5rem 1rem !important;
@@ -4384,14 +4641,17 @@ code, pre {
 }
 
 .floating-meter-dock,
+.permanent-right-rack,
 .permanent-left-rack {
   position: fixed !important;
-  left: 0 !important;
+  right: 0 !important;
+  left: auto !important;
   top: 0 !important;
   bottom: 0 !important;
   width: 350px !important;
   background: #000000 !important;
-  border-right: 1px solid #333333 !important;
+  border-left: 1px solid #333333 !important;
+  border-right: none !important;
   border-radius: 0 !important;
   z-index: 1000 !important;
   overflow-y: auto !important;
@@ -4399,7 +4659,7 @@ code, pre {
   display: flex !important;
   flex-direction: column !important;
   padding: 0 !important;
-  box-shadow: none !important;
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.7) !important;
   backdrop-filter: none !important;
   user-select: none;
 }
@@ -4456,6 +4716,16 @@ code, pre {
   border-radius: 0 !important;
 }
 
+.rack-action-btn.track-btn {
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.rack-action-btn.track-btn.active {
+  background: #38bdf8;
+  color: #000000;
+}
+
 .rack-action-btn.anchor-btn {
   border-color: #facc15;
   color: #facc15;
@@ -4474,6 +4744,59 @@ code, pre {
 .rack-action-btn.poke-btn.active {
   background: #ef4444;
   color: #000000;
+}
+
+.rack-action-btn.wire-btn {
+  border-color: #94a3b8;
+  color: #94a3b8;
+}
+
+.rack-action-btn.wire-btn.active {
+  background: #94a3b8;
+  color: #000000;
+}
+
+.rack-active-circuit-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 6px;
+  background: #080808;
+  border-bottom: 1px solid #222222;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: #888888;
+}
+
+.rack-active-circuit-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+}
+
+.rack-live-pulse {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+  animation: live-pulse-anim 1.6s infinite ease-in-out;
+}
+
+@keyframes live-pulse-anim {
+  0%, 100% { opacity: 0.3; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.rack-active-circuit-name {
+  color: #38bdf8;
+  font-weight: 800;
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .rack-instruments-bay {
@@ -4583,6 +4906,39 @@ code, pre {
   font-weight: 700;
 }
 
+/* All Engineering Values & Equivalents Multi-Matrix */
+.rack-dmm-matrix {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px 4px;
+  background: #050811;
+  border: 1px solid #1e293b;
+  border-top: none;
+  padding: 3px 6px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+}
+
+.matrix-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  line-height: 1.25;
+}
+
+.m-lbl {
+  color: #64748b;
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.m-val {
+  color: #facc15;
+  font-weight: 800;
+  font-size: 0.62rem;
+}
+
 /* "no text until someone clicks the meter" */
 .meter-collapsible-drawer {
   display: none;
@@ -4666,6 +5022,20 @@ code, pre {
   height: 100vh !important;
   pointer-events: none !important;
   z-index: 9999 !important;
+  transition: opacity 0.25s ease;
+}
+
+.live-wire-group {
+  transition: opacity 0.2s ease;
+}
+
+.live-wire-group.reading-dimmed {
+  opacity: 0.35;
+}
+
+.live-wire-group.highlighted {
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
 }
 
 /* User-Created Circuit Test Anchors */
@@ -6076,4 +6446,321 @@ body.has-circuit-fullscreen #floating-meter-dock:hover {
   font-size: 0.9rem;
   color: var(--text-secondary, #94a3b8);
   line-height: 1.6;
+}
+
+/* ================= 8-Line Bench (Rack "8-CH" tab) ================= */
+.bench-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px;
+  background: #000000;
+  font-family: var(--font-mono);
+}
+
+.bench-gens {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  flex: 0 0 auto;
+}
+
+.bench-gen {
+  border: 1px solid #333333;
+  padding: 2px 4px;
+  opacity: 0.55;
+}
+
+.bench-gen.on {
+  opacity: 1;
+  border-color: #38bdf8;
+}
+
+.bench-gen-top,
+.bench-gen-waves,
+.bench-gen-fields {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+}
+
+.bench-gen-name {
+  color: #38bdf8;
+  font-size: 0.64rem;
+  font-weight: 800;
+}
+
+.bench-gen-power,
+.bench-wave-btn,
+.bench-edit-btn {
+  background: #111111;
+  border: 1px solid #333333;
+  color: #888888;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 0 5px;
+  cursor: pointer;
+  border-radius: 0;
+  line-height: 1.4;
+}
+
+.bench-wave-btn {
+  flex: 1;
+  font-size: 0.72rem;
+  padding: 0;
+}
+
+.bench-gen.on .bench-gen-power,
+.bench-wave-btn.active,
+.bench-edit-btn.active {
+  background: #38bdf8;
+  border-color: #38bdf8;
+  color: #000000;
+}
+
+.bench-gen-fields label,
+.bench-edit label {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #888888;
+  font-size: 0.58rem;
+}
+
+.bench-num {
+  width: 46px;
+  background: #000000;
+  border: 1px solid #333333;
+  color: #facc15;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  padding: 0 2px;
+  border-radius: 0;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.bench-num::-webkit-outer-spin-button,
+.bench-num::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.bench-lines {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bench-line {
+  flex: 1 1 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 52px 1fr 104px;
+  gap: 3px;
+  align-items: stretch;
+  border: 1px solid #222222;
+  border-left: 3px solid var(--line-color);
+  padding: 1px 2px;
+  cursor: pointer;
+  transition: flex-grow 0.2s ease, opacity 0.2s ease;
+}
+
+.bench-line.focused {
+  flex-grow: 1.8;
+  border-color: var(--line-color);
+}
+
+.bench-line.dimmed {
+  opacity: 0.6;
+}
+
+.bench-line-id {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  min-width: 0;
+}
+
+.bench-line-name {
+  color: var(--line-color);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.bench-src {
+  width: 100%;
+  background: #000000;
+  border: 1px solid #333333;
+  color: #cccccc;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  padding: 0;
+  border-radius: 0;
+}
+
+.bench-scope {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: block;
+  border: 1px solid #1a1a1a;
+}
+
+.bench-meter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  min-width: 0;
+}
+
+.bench-meter-dbu {
+  color: #facc15;
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-shadow: 0 0 4px rgba(250, 204, 21, 0.5);
+  white-space: nowrap;
+}
+
+.bench-meter-v {
+  color: #a3a3a3;
+  font-size: 0.52rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.bench-meter-bar {
+  width: 100%;
+  height: 7px;
+  display: block;
+}
+
+.bench-edit {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--line-color, #333333);
+  padding: 2px 4px;
+}
+
+.bench-edit.disabled label,
+.bench-edit.disabled #bench-edit-mute {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.bench-edit-name {
+  color: var(--line-color, #888888);
+  font-size: 0.7rem;
+  font-weight: 800;
+  min-width: 26px;
+}
+
+.bench-edit input[type="range"] {
+  width: 60px;
+  height: 4px;
+}
+
+/* ================= Left Sidebar Line Selector ================= */
+.sidebar-line-selector {
+  flex: 0 0 auto;
+  border-top: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 6px 8px 8px;
+  font-family: var(--font-mono);
+}
+
+.sidebar-line-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #38bdf8;
+  font-size: 0.66rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.sidebar-line-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+}
+
+.sidebar-line-btn,
+.sidebar-line-all {
+  background: #000000;
+  border: 1px solid #333333;
+  border-left: 3px solid var(--line-color, #38bdf8);
+  color: #cccccc;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  border-radius: 0;
+  padding: 2px 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.sidebar-line-all {
+  border-left-width: 1px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 1px 6px;
+}
+
+.sidebar-line-ch {
+  color: var(--line-color);
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+.sidebar-line-hz {
+  font-size: 0.56rem;
+  color: #888888;
+}
+
+.sidebar-line-btn.active,
+.sidebar-line-all.active {
+  border-color: var(--line-color, #38bdf8);
+  background: #0a0a0a;
+}
+
+/* ================= No visible scrollbars anywhere (scrolling still works) ================= */
+html,
+body,
+* {
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none;
+}
+
+/* Rack header: tabs on one row, quick actions on the next — never overflows the 350px rack */
+.rack-header {
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.rack-nav-tabs,
+.rack-quick-actions {
+  flex: 1 1 100%;
+}
+
+.rack-nav-tab,
+.rack-quick-actions .rack-action-btn {
+  flex: 1 1 0;
+  white-space: nowrap;
+  padding-left: 2px;
+  padding-right: 2px;
 }

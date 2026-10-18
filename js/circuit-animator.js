@@ -805,6 +805,90 @@ class CircuitSimulator {
     bindPresetAndManual("pp-vin", "pp-vin-preset", "pp-vin-manual", () => this.updatePushPull());
     bindPresetAndManual("pp-rout", "pp-rout-preset", "pp-rout-manual", () => this.updatePushPull());
     bindPresetAndManual("pp-rload", "pp-rload-preset", "pp-rload-manual", () => this.updatePushPull());
+
+    // Simple Model for Muggles (Mic, Pro Line, Consumer Line, Instrument, 600Ω)
+    document.querySelectorAll(".muggle-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const preset = btn.getAttribute("data-preset");
+        this.setMugglePreset(preset);
+      });
+    });
+  }
+
+  setMugglePreset(presetKey) {
+    const presets = {
+      "mic": {
+        vin: 0.1,
+        rout: 150,
+        rload: 2000,
+        desc: "<strong>Dynamic Microphone (-50 dBu / ~2.4 mV to 100 mV):</strong> 150 &Omega; dynamic moving-coil source driving a 2 k&Omega; console preamp input (~13:1 bridging ratio). Ensures maximum signal voltage transfer with minimal loading on the acoustic diaphragm."
+      },
+      "pro-line": {
+        vin: 1.2,
+        rout: 50,
+        rload: 10000,
+        desc: "<strong>Professional Studio Line (+4 dBu / 1.228 VRMS):</strong> Standard differential line-level interconnect. Employs low-impedance voltage bridging (50 &Omega; leg drive into a 10 k&Omega; console input), ensuring &gt;99% voltage transfer with negligible cable loading."
+      },
+      "consumer-line": {
+        vin: 0.3,
+        rout: 100,
+        rload: 10000,
+        desc: "<strong>Consumer Line (-10 dBV / 0.316 VRMS):</strong> Standard Hi-Fi / RCA interconnect level. 100 &Omega; output driving a 10 k&Omega; load (~100:1 bridging ratio). Generates lower line currents but has ~12 dB lower headroom than pro line level."
+      },
+      "instrument": {
+        vin: 0.2,
+        rout: 150,
+        rload: 10000,
+        desc: "<strong>Instrument / DI (-20 dBu / 77 mV):</strong> High-impedance magnetic pickup buffered through an active DI box outputting balanced signal (150 &Omega; source into 10 k&Omega; console input)."
+      },
+      "vintage-600": {
+        vin: 0.8,
+        rout: 100,
+        rload: 600,
+        desc: "<strong>Vintage 600 &Omega; Power Matched (0 dBu / 0.775 VRMS):</strong> Obsolete 1950s telephony standard designed for maximum power transfer rather than voltage fidelity. Heavy current draw and high transmission loss (-6 dB)."
+      }
+    };
+
+    const p = presets[presetKey];
+    if (!p) return;
+
+    const vinEl = document.getElementById("pp-vin");
+    const routEl = document.getElementById("pp-rout");
+    const rloadEl = document.getElementById("pp-rload");
+    if (vinEl) vinEl.value = p.vin;
+    if (routEl) routEl.value = p.rout;
+    if (rloadEl) rloadEl.value = p.rload;
+
+    const vinPreset = document.getElementById("pp-vin-preset");
+    if (vinPreset) {
+      if (p.vin === 1.2) vinPreset.value = "1.2";
+      else if (p.vin === 0.8) vinPreset.value = "0.775";
+      else vinPreset.value = "custom";
+    }
+
+    const routPreset = document.getElementById("pp-rout-preset");
+    if (routPreset) {
+      if (p.rout === 50) routPreset.value = "50";
+      else if (p.rout === 100) routPreset.value = "100";
+      else if (p.rout === 150) routPreset.value = "150";
+      else routPreset.value = "custom";
+    }
+
+    const rloadPreset = document.getElementById("pp-rload-preset");
+    if (rloadPreset) {
+      if (p.rload === 600) rloadPreset.value = "600";
+      else if (p.rload === 10000) rloadPreset.value = "10000";
+      else rloadPreset.value = "custom";
+    }
+
+    const explainerText = document.getElementById("muggle-explainer-text");
+    if (explainerText) explainerText.innerHTML = p.desc;
+
+    document.querySelectorAll(".muggle-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-preset") === presetKey);
+    });
+
+    this.updatePushPull();
   }
 
   // LTP Fader (Linear Travelling Potentiometer) Canvas Integration
@@ -1521,6 +1605,65 @@ class CircuitSimulator {
         statusEl.textContent = "Normal Symmetrical Balanced Operation";
       }
     });
+
+    // Synchronize LTP faders if instantiated
+    if (this.ltpPpVin && typeof this.ltpPpVin.setValue === "function") this.ltpPpVin.setValue(vin, false);
+    if (this.ltpPpRout && typeof this.ltpPpRout.setValue === "function") this.ltpPpRout.setValue(rout, false);
+    if (this.ltpPpRload && typeof this.ltpPpRload.setValue === "function") this.ltpPpRload.setValue(rload, false);
+
+    // Deep Dive Engineering Metrics Calculation
+    const totalZ = 2 * rout;
+    const bridgeRatio = rload / Math.max(1, totalZ);
+    const vRatio = rload / (totalZ + rload);
+    const vPercent = (vRatio * 100).toFixed(1);
+    const vLossDb = (20 * Math.log10(Math.max(0.0001, vRatio))).toFixed(2);
+    const pLoadW = (vDiff * vDiff) / Math.max(1, rload);
+    const pLoadMw = pLoadW * 1000;
+    const pDbm = (10 * Math.log10(Math.max(0.00001, pLoadMw))).toFixed(1);
+    const vPeak = Math.max(0.05, Math.abs(vPin2) * 1.414);
+    const headroomDb = (20 * Math.log10(18.0 / vPeak)).toFixed(1);
+
+    const elTotalZ = document.getElementById("deepdive-total-zout");
+    if (elTotalZ) elTotalZ.textContent = `${totalZ} Ω (${rout} Ω/leg)`;
+    const elRload = document.getElementById("deepdive-rload-echo");
+    if (elRload) elRload.textContent = `${rload >= 1000 ? (rload / 1000).toFixed(1) + ' kΩ' : rload + ' Ω'}`;
+    const elZratio = document.getElementById("deepdive-z-ratio");
+    if (elZratio) elZratio.textContent = `${bridgeRatio.toFixed(1)} : 1`;
+    const elVtransfer = document.getElementById("deepdive-v-transfer");
+    if (elVtransfer) elVtransfer.textContent = `${vPercent}% (${vLossDb >= 0 ? '+' : ''}${vLossDb} dB)`;
+
+    const elVdiff = document.getElementById("deepdive-vdiff");
+    if (elVdiff) elVdiff.textContent = `${vDiff.toFixed(2)} V RMS`;
+    const elVpp = document.getElementById("deepdive-vpp");
+    if (elVpp) elVpp.textContent = `${(vDiff * 2.828).toFixed(2)} Vpp`;
+    const elIload = document.getElementById("deepdive-iload");
+    if (elIload) elIload.textContent = `${(iLoad * 1000).toFixed(2)} mA`;
+    const elPload = document.getElementById("deepdive-power-load");
+    if (elPload) elPload.textContent = `${pLoadMw.toFixed(2)} mW (${pDbm} dBm)`;
+
+    const elHeadroom = document.getElementById("deepdive-headroom");
+    if (elHeadroom) elHeadroom.textContent = `${headroomDb >= 0 ? '+' : ''}${headroomDb} dB`;
+    const elBadgeHeadroom = document.getElementById("deepdive-badge-headroom");
+    if (elBadgeHeadroom) {
+      elBadgeHeadroom.textContent = `${headroomDb >= 0 ? '+' : ''}${headroomDb} dB HEADROOM`;
+      elBadgeHeadroom.className = parseFloat(headroomDb) > 10 ? "rack-status-pill green" : (parseFloat(headroomDb) > 3 ? "rack-status-pill yellow" : "rack-status-pill red");
+    }
+
+    const elStress = document.getElementById("deepdive-fault-stress");
+    if (elStress) elStress.textContent = shortPin3 ? `${(iPin3 * 1000).toFixed(1)} mA (FAULT!)` : "0.0 mA (Normal)";
+    const elBadgeMatching = document.getElementById("deepdive-badge-matching");
+    if (elBadgeMatching) {
+      if (bridgeRatio >= 10) {
+        elBadgeMatching.textContent = `VOLTAGE BRIDGING (${bridgeRatio.toFixed(0)}:1)`;
+        elBadgeMatching.className = "rack-status-pill green";
+      } else if (bridgeRatio >= 1.5) {
+        elBadgeMatching.textContent = `MODERATE LOAD (${bridgeRatio.toFixed(1)}:1)`;
+        elBadgeMatching.className = "rack-status-pill yellow";
+      } else {
+        elBadgeMatching.textContent = `POWER MATCHED (${bridgeRatio.toFixed(1)}:1)`;
+        elBadgeMatching.className = "rack-status-pill red";
+      }
+    }
   }
 
   // ==========================================

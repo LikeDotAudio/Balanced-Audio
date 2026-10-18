@@ -319,22 +319,65 @@ class StorySidebar {
   }
 
   setupScrollListener() {
+    let scrollTimer = null;
+
     window.addEventListener("scroll", () => {
       const currentScrollY = window.scrollY;
 
-      // Scroll past hero triggers auto-hide of top header and display of story sidebar
+      // When user is scrolling, hide the sidebar so it never obstructs content
+      if (this.sidebar) {
+        this.sidebar.classList.add("scrolling-hidden");
+        document.body.classList.add("sidebar-is-scrolling");
+        if (this.sidebar.classList.contains("mobile-open")) {
+          this.sidebar.classList.remove("mobile-open");
+        }
+      }
+
+      // Hide top header when scrolled past hero
       if (currentScrollY > 180) {
         if (this.header) this.header.classList.add("header-hidden");
-        if (this.sidebar) this.sidebar.classList.add("sidebar-visible");
-        document.body.classList.add("has-story-sidebar");
       } else {
         if (this.header) this.header.classList.remove("header-hidden");
-        if (this.sidebar) this.sidebar.classList.remove("sidebar-visible");
-        document.body.classList.remove("has-story-sidebar");
       }
+
+      // Once scrolling stops for 750ms, restore visibility if past hero
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        if (this.sidebar) {
+          this.sidebar.classList.remove("scrolling-hidden");
+          document.body.classList.remove("sidebar-is-scrolling");
+          if (currentScrollY > 180) {
+            this.sidebar.classList.add("sidebar-visible");
+            document.body.classList.add("has-story-sidebar");
+          } else {
+            this.sidebar.classList.remove("sidebar-visible");
+            document.body.classList.remove("has-story-sidebar");
+          }
+        }
+      }, 750);
 
       this.lastScrollY = currentScrollY;
     }, { passive: true });
+
+    // Allow user to reveal sidebar instantly by hovering near left edge (<= 45px)
+    window.addEventListener("mousemove", (e) => {
+      if (e.clientX <= 45 && window.scrollY > 180) {
+        if (this.sidebar) {
+          this.sidebar.classList.remove("scrolling-hidden");
+          this.sidebar.classList.add("sidebar-visible");
+          document.body.classList.remove("sidebar-is-scrolling");
+        }
+      }
+    }, { passive: true });
+
+    // Hide sidebar immediately when clicking any chapter link
+    if (this.sidebar) {
+      this.sidebar.querySelectorAll(".chapter-link").forEach(link => {
+        link.addEventListener("click", () => {
+          this.sidebar.classList.add("scrolling-hidden");
+        });
+      });
+    }
   }
 
   setupIntersectionObserver() {

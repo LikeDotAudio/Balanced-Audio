@@ -44,6 +44,7 @@ SCRIPTS_ORDER = [
     "js/signal-generator.js",
     "js/story-sidebar.js",
     "js/floating-meters.js",
+    "js/eight-channel-bench.js",
     "js/tree-data.js",
     "js/tree-viewer.js",
     "js/simulators.js",

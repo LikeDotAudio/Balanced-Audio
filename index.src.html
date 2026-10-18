@@ -122,8 +122,8 @@
         </p>
       </div>
 
-      <!-- Equipment Type Tabs -->
-      <div class="equipment-tabs" id="enclosure-tabs">
+      <!-- Equipment Type Tabs (Hidden legacy container for accessibility/compat) -->
+      <div class="equipment-tabs" id="enclosure-tabs" style="display: none;">
         <button class="equipment-tab-btn active" data-eq="mic">1. Microphone (SC-04-04)</button>
         <button class="equipment-tab-btn" data-eq="line-src">2. Line Source (AES14)</button>
         <button class="equipment-tab-btn" data-eq="digital">3. Digital AES3 &amp; Sync (AES11)</button>
@@ -131,7 +131,7 @@
         <button class="equipment-tab-btn" data-eq="qtp">5. Quad Twisted Pair (AES72-4E)</button>
       </div>
 
-      <!-- Interactive SVG Enclosure Diagram -->
+      <!-- Interactive SVG Enclosure Diagram with Big Rotary Knob Selector Switch Inside -->
       <div class="enclosure-diagram-container">
         <div style="display: flex; justify-content: flex-end; margin-bottom: 0.5rem;">
           <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
@@ -140,22 +140,133 @@
           </button>
         </div>
         <div class="svg-diagram-wrapper">
-          <svg viewBox="0 0 1000 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" id="enclosure-svg">
-            <rect width="1000" height="320" fill="var(--bg-secondary)" rx="8"/>
-            
+          <svg viewBox="0 0 1000 450" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" id="enclosure-svg">
+            <defs>
+              <linearGradient id="enc-switch-plate" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#0c1527"/>
+                <stop offset="100%" stop-color="#050a14"/>
+              </linearGradient>
+              <radialGradient id="enc-knob-metal" cx="40%" cy="40%" r="60%">
+                <stop offset="0%" stop-color="#e2e8f0"/>
+                <stop offset="50%" stop-color="#64748b"/>
+                <stop offset="100%" stop-color="#1e293b"/>
+              </radialGradient>
+              <filter id="enc-pointer-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+              </filter>
+            </defs>
+
+            <rect width="1000" height="450" fill="var(--bg-secondary)" rx="8"/>
+
+            <!-- =======================================================
+                 BIG ROTARY SELECTOR SWITCH INSIDE THE CIRCUIT
+                 Positions: 1. MIC | 2. LINE | 3. DIGITAL | 4. DB25 | 5. QTP
+                 ======================================================= -->
+            <g id="circuit-rotary-switch-panel">
+              <!-- Switch Bezel Plate -->
+              <rect x="130" y="12" width="740" height="158" rx="10" fill="url(#enc-switch-plate)" stroke="#334155" stroke-width="2"/>
+              <rect x="134" y="16" width="732" height="150" rx="8" fill="none" stroke="#1e293b" stroke-width="1"/>
+              
+              <!-- Fastener Screws -->
+              <circle cx="145" cy="26" r="3" fill="#475569" stroke="#1e293b"/>
+              <circle cx="855" cy="26" r="3" fill="#475569" stroke="#1e293b"/>
+              <circle cx="145" cy="156" r="3" fill="#475569" stroke="#1e293b"/>
+              <circle cx="855" cy="156" r="3" fill="#475569" stroke="#1e293b"/>
+
+              <!-- Plaque Header -->
+              <text x="500" y="30" fill="#38bdf8" font-size="11" font-weight="800" font-family="monospace" letter-spacing="0.1em" text-anchor="middle">⚡ MASTER SYSTEM ARCHITECTURE SELECTOR SWITCH</text>
+              <text x="500" y="44" fill="#64748b" font-size="8.5" font-weight="600" text-anchor="middle">CLICK / DRAG KNOB OR SELECT DETENT TO RECONFIGURE SYSTEM TOPOLOGY</text>
+
+              <!-- Radial Guide Arc -->
+              <path d="M 442,78 A 66,66 0 0,1 558,78" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="3,3"/>
+
+              <!-- Position 1: 1. Microphone (-60 deg) -->
+              <g id="enc-step-mic" class="enc-switch-step active" data-eq="mic" cursor="pointer">
+                <line x1="442" y1="78" x2="475" y2="93" stroke="#334155" stroke-width="1.5" stroke-dasharray="2,2"/>
+                <circle cx="442" cy="78" r="5" class="enc-stud" fill="#fbbf24" stroke="#d97706" stroke-width="1.5"/>
+                <circle cx="430" cy="78" r="3.5" id="enc-led-mic" class="enc-led" fill="#38bdf8" filter="url(#enc-pointer-glow)"/>
+                <text x="418" y="82" fill="#38bdf8" font-size="10.5" font-weight="800" font-family="monospace" text-anchor="end">1. MIC (SC-04-04)</text>
+              </g>
+
+              <!-- Position 2: 2. Line Source (-30 deg) -->
+              <g id="enc-step-line-src" class="enc-switch-step" data-eq="line-src" cursor="pointer">
+                <line x1="466" y1="58" x2="488" y2="82" stroke="#334155" stroke-width="1.5" stroke-dasharray="2,2"/>
+                <circle cx="466" cy="58" r="5" class="enc-stud" fill="#64748b" stroke="#334155" stroke-width="1.5"/>
+                <circle cx="456" cy="52" r="3.5" id="enc-led-line-src" class="enc-led" fill="#1e293b"/>
+                <text x="444" y="48" fill="#94a3b8" font-size="10.5" font-weight="700" font-family="monospace" text-anchor="end">2. LINE SOURCE (AES14)</text>
+              </g>
+
+              <!-- Position 3: 3. Digital AES3 (0 deg) -->
+              <g id="enc-step-digital" class="enc-switch-step" data-eq="digital" cursor="pointer">
+                <line x1="500" y1="52" x2="500" y2="78" stroke="#334155" stroke-width="1.5" stroke-dasharray="2,2"/>
+                <circle cx="500" cy="52" r="5" class="enc-stud" fill="#64748b" stroke="#334155" stroke-width="1.5"/>
+                <circle cx="500" cy="40" r="3.5" id="enc-led-digital" class="enc-led" fill="#1e293b"/>
+                <text x="500" y="34" fill="#94a3b8" font-size="10.5" font-weight="700" font-family="monospace" text-anchor="middle">3. DIGITAL AES3 (AES11)</text>
+              </g>
+
+              <!-- Position 4: 4. DB25 Multi (+30 deg) -->
+              <g id="enc-step-db25" class="enc-switch-step" data-eq="db25" cursor="pointer">
+                <line x1="534" y1="58" x2="512" y2="82" stroke="#334155" stroke-width="1.5" stroke-dasharray="2,2"/>
+                <circle cx="534" cy="58" r="5" class="enc-stud" fill="#64748b" stroke="#334155" stroke-width="1.5"/>
+                <circle cx="544" cy="52" r="3.5" id="enc-led-db25" class="enc-led" fill="#1e293b"/>
+                <text x="556" y="48" fill="#94a3b8" font-size="10.5" font-weight="700" font-family="monospace" text-anchor="start">4. DB25 MULTI (AES59)</text>
+              </g>
+
+              <!-- Position 5: 5. Quad Pair (+60 deg) -->
+              <g id="enc-step-qtp" class="enc-switch-step" data-eq="qtp" cursor="pointer">
+                <line x1="558" y1="78" x2="525" y2="93" stroke="#334155" stroke-width="1.5" stroke-dasharray="2,2"/>
+                <circle cx="558" cy="78" r="5" class="enc-stud" fill="#64748b" stroke="#334155" stroke-width="1.5"/>
+                <circle cx="570" cy="78" r="3.5" id="enc-led-qtp" class="enc-led" fill="#1e293b"/>
+                <text x="582" y="82" fill="#94a3b8" font-size="10.5" font-weight="700" font-family="monospace" text-anchor="start">5. QUAD PAIR (AES72-4E)</text>
+              </g>
+
+              <!-- BIG ROTARY SELECTOR KNOB (Interactive Dial) -->
+              <g id="enclosure-selector-knob" cursor="grab" title="Click or Drag Rotary Knob to Switch Standard">
+                <!-- Knob Outer Skirt Bezel -->
+                <circle cx="500" cy="104" r="42" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+                <circle cx="500" cy="104" r="36" fill="#1e293b" stroke="#475569" stroke-width="2.5"/>
+
+                <!-- 12 Knurled Gripping Flutes -->
+                <path d="M 500,68 L 500,74 M 500,134 L 500,140 M 464,104 L 470,104 M 530,104 L 536,104 M 474,78 L 478,82 M 522,126 L 526,130 M 474,130 L 478,126 M 522,82 L 526,78" stroke="#334155" stroke-width="2.5"/>
+
+                <!-- Inner Spun Aluminum Center Cap -->
+                <circle cx="500" cy="104" r="24" fill="url(#enc-knob-metal)" stroke="#94a3b8" stroke-width="1.5"/>
+
+                <!-- Rotating Pointer Arm Group -->
+                <g id="enc-rotary-pointer-group" style="transform-origin: 500px 104px; transform: rotate(-60deg); transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                  <polygon points="496,104 504,104 502,52 498,52" fill="#f8fafc" stroke="#0f172a" stroke-width="1"/>
+                  <polygon points="493,52 507,52 500,36" fill="#38bdf8" filter="url(#enc-pointer-glow)"/>
+                  <circle cx="500" cy="104" r="6" fill="#0284c7" stroke="#ffffff" stroke-width="1.5"/>
+                </g>
+              </g>
+
+              <!-- Active Mode Readout Badge -->
+              <rect x="330" y="142" width="340" height="20" rx="4" fill="#030712" stroke="#1e293b"/>
+              <text id="enc-active-standard-txt" x="500" y="156" fill="#38bdf8" font-size="10" font-weight="800" font-family="monospace" text-anchor="middle">ACTIVE: 1. MICROPHONE TRANSDUCER (SC-04-04)</text>
+
+              <!-- Circuit Switching Feed Wires Entering Circuit Below -->
+              <path d="M 360,170 C 360,190 200,185 200,195" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4,3" class="animated-current-flow"/>
+              <path d="M 640,170 C 640,210 500,210 500,265" fill="none" stroke="#10b981" stroke-width="2.5" stroke-dasharray="4,3" class="animated-current-flow"/>
+            </g>
+
+            <!-- =======================================================
+                 CIRCUIT TOPOLOGY SCHEMATIC (TX -> CABLE -> RX)
+                 ======================================================= -->
+
             <!-- Box 1: Transmitter Enclosure -->
-            <rect id="svg-box-tx" data-probe-target="enc-chassisa" data-probe-label="Equipment A Chassis Ground" class="probe-clickable-node" title="Click to Probe: Equipment A Chassis Ground" class="enclosure-box" x="40" y="40" width="260" height="230" rx="10" 
+            <rect id="svg-box-tx" data-probe-target="enc-chassisa" data-probe-label="Equipment A Chassis Ground" class="probe-clickable-node enclosure-box" title="Click to Probe: Equipment A Chassis Ground" x="40" y="195" width="260" height="205" rx="10" 
                   fill="#1e293b" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="none"/>
-            <text id="svg-tx-title" x="170" y="70" fill="#38bdf8" font-size="14" font-weight="700" text-anchor="middle">TRANSMITTER ENCLOSURE</text>
-            <text id="svg-tx-sub" x="170" y="90" fill="#94a3b8" font-size="11" text-anchor="middle">Metal Chassis Shield Entry</text>
+            <text id="svg-tx-title" x="170" y="222" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle">TRANSMITTER ENCLOSURE</text>
+            <text id="svg-tx-sub" x="170" y="240" fill="#94a3b8" font-size="10.5" text-anchor="middle">Metal Chassis Shield Entry</text>
 
             <!-- Box 1 Internal Circuit -->
-            <rect x="60" y="110" width="100" height="70" rx="6" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
-            <text id="svg-tx-circuit-name" x="110" y="145" fill="#f8fafc" font-size="11" font-weight="600" text-anchor="middle">Output Stage</text>
-            <text id="svg-tx-zout" x="110" y="165" fill="#38bdf8" font-size="10" text-anchor="middle">Z_out: 100 &Omega;</text>
+            <rect x="60" y="258" width="100" height="65" rx="6" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
+            <text id="svg-tx-circuit-name" x="110" y="288" fill="#f8fafc" font-size="11" font-weight="600" text-anchor="middle">Output Stage</text>
+            <text id="svg-tx-zout" x="110" y="306" fill="#38bdf8" font-size="10" text-anchor="middle">Z_out: 150 &Omega;</text>
 
             <!-- Box 1 Connector (e.g. XLR Male / DB25 / RJ45) -->
-            <g id="svg-tx-connector" class="connector-group" transform="translate(260, 115)">
+            <g id="svg-tx-connector" class="connector-group" transform="translate(260, 258)">
               <rect x="0" y="0" width="40" height="60" rx="4" fill="#334155" stroke="#94a3b8" stroke-width="2"/>
               <circle cx="20" cy="18" r="4" fill="#10b981"/>
               <circle cx="20" cy="32" r="4" fill="#ef4444"/>
@@ -164,33 +275,33 @@
             </g>
 
             <!-- Chassis Bond Line (AES48 Pin 1 Direct to Enclosure Entry - Shortest Path) -->
-            <path id="svg-tx-pin1-bond" data-probe-target="enc-pin1bond" data-probe-label="AES48 Pin 1 Direct Chassis Bond" class="probe-clickable-node" title="Click to Probe: AES48 Pin 1 Direct Chassis Bond" d="M 280,161 L 300,161 L 300,270" fill="none" stroke="#10b981" stroke-width="3"/>
-            <circle cx="280" cy="161" r="3" fill="#10b981"/>
-            <circle cx="300" cy="161" r="4" fill="#10b981"/>
-            <path d="M 295,190 L 305,190 M 297,194 L 303,194 M 299,198 L 301,198" stroke="#10b981" stroke-width="1.8"/>
-            <text x="235" y="220" fill="#10b981" font-size="10" font-weight="700" text-anchor="middle">AES48 Direct Chassis Entry</text>
-            <text x="235" y="233" fill="#6ee7b7" font-size="9" text-anchor="middle">(Right to Chassis &bull; 0mm Lead)</text>
+            <path id="svg-tx-pin1-bond" data-probe-target="enc-pin1bond" data-probe-label="AES48 Pin 1 Direct Chassis Bond" class="probe-clickable-node" title="Click to Probe: AES48 Pin 1 Direct Chassis Bond" d="M 280,304 L 300,304 L 300,400" fill="none" stroke="#10b981" stroke-width="3"/>
+            <circle cx="280" cy="304" r="3" fill="#10b981"/>
+            <circle cx="300" cy="304" r="4" fill="#10b981"/>
+            <path d="M 295,330 L 305,330 M 297,334 L 303,334 M 299,338 L 301,338" stroke="#10b981" stroke-width="1.8"/>
+            <text x="235" y="355" fill="#10b981" font-size="10" font-weight="700" text-anchor="middle">AES48 Direct Chassis Entry</text>
+            <text x="235" y="368" fill="#6ee7b7" font-size="9" text-anchor="middle">(Right to Chassis &bull; 0mm Lead)</text>
 
             <!-- Cable Medium (Balanced Twisted Pair + Shield) -->
-            <rect id="svg-cable-body" data-probe-target="enc-shield" data-probe-label="Cable Overall Shield" class="probe-clickable-node" title="Click to Probe: Cable Overall Shield" class="cable-sheath" x="320" y="125" width="360" height="40" rx="6" fill="rgba(30, 41, 59, 0.8)" stroke="#64748b" stroke-width="1.5"/>
-            <line x1="300" y1="133" x2="700" y2="133" stroke="#10b981" stroke-width="2.5"/>
-            <line x1="300" y1="147" x2="700" y2="147" stroke="#ef4444" stroke-width="2.5"/>
-            <line x1="300" y1="161" x2="700" y2="161" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,4"/>
-            <text id="svg-cable-label" x="500" y="115" fill="#e2e8f0" font-size="12" font-weight="600" text-anchor="middle">Shielded Twisted Pair (Part 2)</text>
-            <text id="svg-cable-sub" x="500" y="180" fill="#94a3b8" font-size="10" text-anchor="middle">Mutual Capacitance C_dm | Loop R_c | Shield Z_t</text>
+            <rect id="svg-cable-body" data-probe-target="enc-shield" data-probe-label="Cable Overall Shield" class="probe-clickable-node cable-sheath" title="Click to Probe: Cable Overall Shield" x="320" y="265" width="360" height="40" rx="6" fill="rgba(30, 41, 59, 0.8)" stroke="#64748b" stroke-width="1.5"/>
+            <line x1="300" y1="273" x2="700" y2="273" stroke="#10b981" stroke-width="2.5"/>
+            <line x1="300" y1="287" x2="700" y2="287" stroke="#ef4444" stroke-width="2.5"/>
+            <line x1="300" y1="301" x2="700" y2="301" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,4"/>
+            <text id="svg-cable-label" x="500" y="255" fill="#e2e8f0" font-size="12" font-weight="600" text-anchor="middle">Shielded Twisted Pair (Part 2)</text>
+            <text id="svg-cable-sub" x="500" y="320" fill="#94a3b8" font-size="10" text-anchor="middle">Mutual Capacitance C_dm | Loop R_c | Shield Z_t</text>
 
             <!-- Animated Current Flow Indicators -->
-            <path class="animated-current-flow" data-flow-speed="1.8" d="M 160,133 L 300,133 L 700,133 L 840,133" fill="none" stroke="#10b981" stroke-width="2.5"/>
-            <path class="animated-current-flow" data-flow-speed="1.8" d="M 840,147 L 700,147 L 300,147 L 160,147" fill="none" stroke="#ef4444" stroke-width="2.5"/>
+            <path class="animated-current-flow" data-flow-speed="1.8" d="M 160,273 L 300,273 L 700,273 L 840,273" fill="none" stroke="#10b981" stroke-width="2.5"/>
+            <path class="animated-current-flow" data-flow-speed="1.8" d="M 840,287 L 700,287 L 300,287 L 160,287" fill="none" stroke="#ef4444" stroke-width="2.5"/>
 
             <!-- Box 2: Receiver Enclosure -->
-            <rect id="svg-box-rx" data-probe-target="enc-chassisb" data-probe-label="Equipment B Chassis Ground" class="probe-clickable-node" title="Click to Probe: Equipment B Chassis Ground" class="enclosure-box" x="700" y="40" width="260" height="230" rx="10" 
+            <rect id="svg-box-rx" data-probe-target="enc-chassisb" data-probe-label="Equipment B Chassis Ground" class="probe-clickable-node enclosure-box" title="Click to Probe: Equipment B Chassis Ground" x="700" y="195" width="260" height="205" rx="10" 
                   fill="#1e293b" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="none"/>
-            <text id="svg-rx-title" x="830" y="70" fill="#38bdf8" font-size="14" font-weight="700" text-anchor="middle">RECEIVER ENCLOSURE</text>
-            <text id="svg-rx-sub" x="830" y="90" fill="#94a3b8" font-size="11" text-anchor="middle">Differential Bridging Input</text>
+            <text id="svg-rx-title" x="830" y="222" fill="#38bdf8" font-size="13" font-weight="700" text-anchor="middle">RECEIVER ENCLOSURE</text>
+            <text id="svg-rx-sub" x="830" y="240" fill="#94a3b8" font-size="10.5" text-anchor="middle">Differential Bridging Input</text>
 
             <!-- Box 2 Connector (e.g. XLR Female / DB25 / RJ45) -->
-            <g id="svg-rx-connector" class="connector-group" transform="translate(700, 115)">
+            <g id="svg-rx-connector" class="connector-group" transform="translate(700, 258)">
               <rect x="0" y="0" width="40" height="60" rx="4" fill="#334155" stroke="#94a3b8" stroke-width="2"/>
               <circle cx="20" cy="18" r="4" fill="#10b981"/>
               <circle cx="20" cy="32" r="4" fill="#ef4444"/>
@@ -199,23 +310,23 @@
             </g>
 
             <!-- Box 2 Internal Receiver Circuit -->
-            <rect x="760" y="110" width="120" height="70" rx="6" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
-            <text id="svg-rx-circuit-name" x="820" y="145" fill="#f8fafc" font-size="11" font-weight="600" text-anchor="middle">Differential Amp</text>
-            <text id="svg-rx-zin" x="820" y="165" fill="#10b981" font-size="10" text-anchor="middle">Z_in: 20 k&Omega; (Bridging)</text>
+            <rect x="760" y="258" width="120" height="65" rx="6" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
+            <text id="svg-rx-circuit-name" x="820" y="288" fill="#f8fafc" font-size="11" font-weight="600" text-anchor="middle">Differential Amp</text>
+            <text id="svg-rx-zin" x="820" y="306" fill="#10b981" font-size="10" text-anchor="middle">Z_in: 2.4 k&Omega; (Bridging)</text>
 
             <!-- Box 2 Chassis Bond Line (AES48 Direct to Enclosure Entry - Shortest Path) -->
-            <path id="svg-rx-pin1-bond" d="M 720,161 L 700,161 L 700,270" fill="none" stroke="#10b981" stroke-width="3"/>
-            <circle cx="720" cy="161" r="3" fill="#10b981"/>
-            <circle cx="700" cy="161" r="4" fill="#10b981"/>
-            <path d="M 695,190 L 705,190 M 697,194 L 703,194 M 699,198 L 701,198" stroke="#10b981" stroke-width="1.8"/>
-            <text x="765" y="220" fill="#10b981" font-size="10" font-weight="700" text-anchor="middle">AES48 Direct Chassis Entry</text>
-            <text x="765" y="233" fill="#6ee7b7" font-size="9" text-anchor="middle">(Left to Chassis &bull; 0mm Lead)</text>
+            <path id="svg-rx-pin1-bond" d="M 720,301 L 700,301 L 700,400" fill="none" stroke="#10b981" stroke-width="3"/>
+            <circle cx="720" cy="301" r="3" fill="#10b981"/>
+            <circle cx="700" cy="301" r="4" fill="#10b981"/>
+            <path d="M 695,330 L 705,330 M 697,334 L 703,334 M 699,338 L 701,338" stroke="#10b981" stroke-width="1.8"/>
+            <text x="765" y="355" fill="#10b981" font-size="10" font-weight="700" text-anchor="middle">AES48 Direct Chassis Entry</text>
+            <text x="765" y="368" fill="#6ee7b7" font-size="9" text-anchor="middle">(Left to Chassis &bull; 0mm Lead)</text>
 
             <!-- Earth Ground / Ground Loop Potential Difference (V_gvd) -->
-            <line x1="40" y1="290" x2="960" y2="290" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6,6"/>
-            <text x="500" y="285" fill="#f59e0b" font-size="11" font-weight="600" text-anchor="middle">Ground Voltage Difference (V_GVD) &bull; Safety Earth Potential Difference</text>
-            <path d="M 300,270 L 300,290" stroke="#64748b" stroke-width="1.5"/>
-            <path d="M 700,270 L 700,290" stroke="#64748b" stroke-width="1.5"/>
+            <line x1="40" y1="425" x2="960" y2="425" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6,6"/>
+            <text x="500" y="420" fill="#f59e0b" font-size="11" font-weight="600" text-anchor="middle">Ground Voltage Difference (V_GVD) &bull; Safety Earth Potential Difference</text>
+            <path d="M 300,400 L 300,425" stroke="#64748b" stroke-width="1.5"/>
+            <path d="M 700,400 L 700,425" stroke="#64748b" stroke-width="1.5"/>
           </svg>
         </div>
 
@@ -2421,89 +2532,48 @@
               <span class="military-spec-badge">MIL-T-28800B &bull; CALIBRATED</span>
             </div>
 
+            <!-- Simple Model for Muggles (Mic • Line • Audio Modes) -->
+            <div class="military-muggle-bar">
+              <div class="muggle-bar-header">
+                <span class="muggle-badge">⚡ AUDIO LEVEL QUICK-SELECT</span>
+                <span class="muggle-hint">Simple Model for Muggles: Click a standard audio preset to automatically align drive, impedance, and load</span>
+              </div>
+              <div class="muggle-preset-row">
+                <button type="button" class="muggle-btn" data-preset="mic">
+                  <span class="muggle-icon">🎙️</span>
+                  <span class="muggle-title">MIC LEVEL</span>
+                  <span class="muggle-sub">Dynamic Mic &bull; -50 dBu (2.4 mV) &bull; 150 &Omega; Source into 2 k&Omega; Preamp</span>
+                </button>
+                <button type="button" class="muggle-btn active" data-preset="pro-line">
+                  <span class="muggle-icon">🎛️</span>
+                  <span class="muggle-title">PRO LINE LEVEL</span>
+                  <span class="muggle-sub">Studio Ref &bull; +4 dBu (1.23 V) &bull; 50 &Omega; Source into 10 k&Omega; Bridging</span>
+                </button>
+                <button type="button" class="muggle-btn" data-preset="consumer-line">
+                  <span class="muggle-icon">📻</span>
+                  <span class="muggle-title">CONSUMER LINE</span>
+                  <span class="muggle-sub">RCA / Hi-Fi &bull; -10 dBV (0.32 V) &bull; 100 &Omega; Source into 10 k&Omega; Input</span>
+                </button>
+                <button type="button" class="muggle-btn" data-preset="instrument">
+                  <span class="muggle-icon">🎸</span>
+                  <span class="muggle-title">INSTRUMENT / DI</span>
+                  <span class="muggle-sub">Guitar/Bass &bull; -20 dBu (77 mV) &bull; High-Z into Active Direct Box</span>
+                </button>
+                <button type="button" class="muggle-btn" data-preset="vintage-600">
+                  <span class="muggle-icon">🏛️</span>
+                  <span class="muggle-title">600&Omega; MATCHED (VINTAGE)</span>
+                  <span class="muggle-sub">Telecom &bull; 0 dBu (0.775 V) &bull; 600 &Omega; Source into 600 &Omega; Power Match</span>
+                </button>
+              </div>
+              <div id="muggle-explainer" class="muggle-explainer">
+                <span class="muggle-explainer-tag">CURRENT MODE:</span>
+                <span id="muggle-explainer-text"><strong>Professional Studio Line (+4 dBu / 1.228 VRMS):</strong> Standard differential line-level interconnect. Employs low-impedance voltage bridging (50 &Omega; leg drive into a 10 k&Omega; console input), ensuring &gt;99% voltage transfer with negligible cable loading.</span>
+              </div>
+            </div>
+
             <!-- Instrument Bays Grid -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
               
-              <!-- Bay 0: Calibrated Audio Signal Generator -->
-              <div class="military-fader-cell siggen-bay">
-                <div class="control-label" style="display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-weight: 800; letter-spacing: 0.05em; color: #38bdf8;">SIGNAL GENERATOR</span>
-                  <div style="display: flex; align-items: center; gap: 0.4rem;">
-                    <div id="siggen-led" class="siggen-led active" title="Generator Output Active"></div>
-                    <button type="button" id="siggen-mute-btn" class="siggen-toggle-btn active" title="Toggle Signal Output Relay">OUT ON</button>
-                  </div>
-                </div>
-
-                <!-- Waveform Selectors -->
-                <div class="siggen-waveform-bar" style="margin: 0.45rem 0;">
-                  <span style="font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Waveform:</span>
-                  <div class="siggen-wave-btn-group">
-                    <button type="button" class="siggen-wave-btn active" data-wave="sine" title="Pure Sine Wave (Low THD+N)">∿ Sine</button>
-                    <button type="button" class="siggen-wave-btn" data-wave="square" title="Square Wave (Transient Test)">⊓ Sq</button>
-                    <button type="button" class="siggen-wave-btn" data-wave="triangle" title="Triangle Wave">▲ Tri</button>
-                    <button type="button" class="siggen-wave-btn" data-wave="noise" title="Pink Noise (-3dB/oct)">〰 Pink</button>
-                  </div>
-                </div>
-
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin: 0.35rem 0;">
-                  <!-- Rotary Frequency Dial Knob -->
-                  <div class="knob-unit">
-                    <div id="siggen-freq-knob" class="rotary-knob" style="transform: rotate(0deg); cursor: grab;" title="Drag or Scroll to Sweep Frequency">
-                      <div class="knob-cap">
-                        <div class="knob-line" style="background: #38bdf8;"></div>
-                      </div>
-                    </div>
-                    <span class="knob-label">FREQ TUNE</span>
-                  </div>
-
-                  <!-- Spot Frequency Dropdown -->
-                  <div style="flex: 1;">
-                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                      <label style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Frequency:</label>
-                      <span id="siggen-freq-display" style="font-family: monospace; font-weight: 800; color: #38bdf8; font-size: 0.85rem;">1,000 Hz</span>
-                    </div>
-                    <select id="siggen-spot-select" class="military-preset-select" style="width: 100%; margin-top: 0.2rem;">
-                      <option value="20">20 Hz (Sub-Bass Limit)</option>
-                      <option value="100">100 Hz (Mains Hum Ref)</option>
-                      <option value="400">400 Hz (AES Standard Test)</option>
-                      <option value="1000" selected>1 kHz (0 dBu Pro Ref)</option>
-                      <option value="10000">10 kHz (HF Bandwidth)</option>
-                      <option value="20000">20 kHz (Audio Band Edge)</option>
-                      <option value="custom">Continuous Dial Sweep</option>
-                    </select>
-                  </div>
-                </div>
-
-                <!-- Continuous Logarithmic Frequency Slider (10 Hz – 100 kHz) -->
-                <div style="margin: 0.3rem 0 0.4rem;">
-                  <div style="display: flex; justify-content: space-between; font-size: 0.65rem; color: #64748b; font-family: monospace; margin-bottom: 2px;">
-                    <span>10 Hz</span>
-                    <span>100 Hz</span>
-                    <span>1 kHz</span>
-                    <span>10 kHz</span>
-                    <span>100 kHz</span>
-                  </div>
-                  <input type="range" id="siggen-freq-slider" class="range-slider" min="1.0" max="5.0" step="0.005" value="3.0" style="width: 100%;" title="Continuous Log Frequency Sweep" />
-                </div>
-
-                <!-- Live Audible Monitor Speaker Control -->
-                <div class="siggen-speaker-bar" style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(51, 65, 85, 0.8); border-radius: 4px; padding: 0.35rem 0.5rem; margin-top: 0.25rem;">
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <button type="button" id="siggen-speaker-btn" class="siggen-speaker-btn" title="Toggle Live Audible Audition via Web Audio API">
-                      <span id="siggen-speaker-icon">🔇</span>
-                      <span id="siggen-speaker-txt">Monitor: Muted</span>
-                    </button>
-                    <div style="display: flex; align-items: center; gap: 0.35rem;">
-                      <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 700;">VOL:</span>
-                      <input type="range" id="siggen-speaker-vol" min="0" max="0.5" step="0.01" value="0.15" style="width: 55px; height: 4px;" title="Monitor Volume" />
-                    </div>
-                  </div>
-                  <div style="font-size: 0.64rem; color: #64748b; margin-top: 0.25rem; text-align: center;">
-                    ⚡ 100 kHz Calibrated Meter L.P. Roll-Off Filter
-                  </div>
-                </div>
-              </div>
-
               <!-- Bay 1: Input Drive Voltage (V_IN) -->
               <div class="military-fader-cell">
                 <div class="control-label">
@@ -2632,6 +2702,86 @@
                 </div>
               </div>
 
+              <!-- Bay 0 (Relocated to Right Side): Calibrated Audio Signal Generator -->
+              <div class="military-fader-cell siggen-bay">
+                <div class="control-label" style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-weight: 800; letter-spacing: 0.05em; color: #38bdf8;">SIGNAL GENERATOR</span>
+                  <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <div id="siggen-led" class="siggen-led active" title="Generator Output Active"></div>
+                    <button type="button" id="siggen-mute-btn" class="siggen-toggle-btn active" title="Toggle Signal Output Relay">OUT ON</button>
+                  </div>
+                </div>
+
+                <!-- Waveform Selectors -->
+                <div class="siggen-waveform-bar" style="margin: 0.45rem 0;">
+                  <span style="font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Waveform:</span>
+                  <div class="siggen-wave-btn-group">
+                    <button type="button" class="siggen-wave-btn active" data-wave="sine" title="Pure Sine Wave (Low THD+N)">∿ Sine</button>
+                    <button type="button" class="siggen-wave-btn" data-wave="square" title="Square Wave (Transient Test)">⊓ Sq</button>
+                    <button type="button" class="siggen-wave-btn" data-wave="triangle" title="Triangle Wave">▲ Tri</button>
+                    <button type="button" class="siggen-wave-btn" data-wave="noise" title="Pink Noise (-3dB/oct)">〰 Pink</button>
+                  </div>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin: 0.35rem 0;">
+                  <!-- Rotary Frequency Dial Knob -->
+                  <div class="knob-unit">
+                    <div id="siggen-freq-knob" class="rotary-knob" style="transform: rotate(0deg); cursor: grab;" title="Drag or Scroll to Sweep Frequency">
+                      <div class="knob-cap">
+                        <div class="knob-line" style="background: #38bdf8;"></div>
+                      </div>
+                    </div>
+                    <span class="knob-label">FREQ TUNE</span>
+                  </div>
+
+                  <!-- Spot Frequency Dropdown -->
+                  <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                      <label style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Frequency:</label>
+                      <span id="siggen-freq-display" style="font-family: monospace; font-weight: 800; color: #38bdf8; font-size: 0.85rem;">1,000 Hz</span>
+                    </div>
+                    <select id="siggen-spot-select" class="military-preset-select" style="width: 100%; margin-top: 0.2rem;">
+                      <option value="20">20 Hz (Sub-Bass Limit)</option>
+                      <option value="100">100 Hz (Mains Hum Ref)</option>
+                      <option value="400">400 Hz (AES Standard Test)</option>
+                      <option value="1000" selected>1 kHz (0 dBu Pro Ref)</option>
+                      <option value="10000">10 kHz (HF Bandwidth)</option>
+                      <option value="20000">20 kHz (Audio Band Edge)</option>
+                      <option value="custom">Continuous Dial Sweep</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Continuous Logarithmic Frequency Slider (10 Hz – 100 kHz) -->
+                <div style="margin: 0.3rem 0 0.4rem;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.65rem; color: #64748b; font-family: monospace; margin-bottom: 2px;">
+                    <span>10 Hz</span>
+                    <span>100 Hz</span>
+                    <span>1 kHz</span>
+                    <span>10 kHz</span>
+                    <span>100 kHz</span>
+                  </div>
+                  <input type="range" id="siggen-freq-slider" class="range-slider" min="1.0" max="5.0" step="0.005" value="3.0" style="width: 100%;" title="Continuous Log Frequency Sweep" />
+                </div>
+
+                <!-- Live Audible Monitor Speaker Control -->
+                <div class="siggen-speaker-bar" style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(51, 65, 85, 0.8); border-radius: 4px; padding: 0.35rem 0.5rem; margin-top: 0.25rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <button type="button" id="siggen-speaker-btn" class="siggen-speaker-btn" title="Toggle Live Audible Audition via Web Audio API">
+                      <span id="siggen-speaker-icon">🔇</span>
+                      <span id="siggen-speaker-txt">Monitor: Muted</span>
+                    </button>
+                    <div style="display: flex; align-items: center; gap: 0.35rem;">
+                      <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 700;">VOL:</span>
+                      <input type="range" id="siggen-speaker-vol" min="0" max="0.5" step="0.01" value="0.15" style="width: 55px; height: 4px;" title="Monitor Volume" />
+                    </div>
+                  </div>
+                  <div style="font-size: 0.64rem; color: #64748b; margin-top: 0.25rem; text-align: center;">
+                    ⚡ 100 kHz Calibrated Meter L.P. Roll-Off Filter
+                  </div>
+                </div>
+              </div>
+
               <!-- Bay 4: TS Fault Switch & Overload Indicator -->
               <div class="military-fader-cell" style="display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
@@ -2651,6 +2801,106 @@
                 </div>
               </div>
 
+            </div>
+
+            <!-- Interactive Engineering Deep Dive Console -->
+            <div class="military-deep-dive-console">
+              <div class="deepdive-header">
+                <div class="deepdive-title">
+                  <span>🔬</span>
+                  <span>ENGINEERING DEEP DIVE &bull; MATCHING &bull; DRIVE &bull; ADJUSTMENTS</span>
+                </div>
+                <span style="font-size: 0.68rem; color: #94a3b8; font-family: monospace;">AES-X152 / IEC 60268-3 REAL-TIME ANALYZER</span>
+              </div>
+
+              <div class="deepdive-cards-grid">
+                <!-- Card 1: Impedance Matching & Bridging Ratio -->
+                <div class="deepdive-card">
+                  <div class="deepdive-card-title">
+                    <span style="color: #38bdf8;">1. IMPEDANCE MATCHING & BRIDGING</span>
+                    <span id="deepdive-badge-matching" class="rack-status-pill green">VOLTAGE BRIDGING (200:1)</span>
+                  </div>
+                  <div class="deepdive-metrics">
+                    <div class="deepdive-metric-row">
+                      <span class="deepdive-metric-label">Total Loop Source Z (2 &times; Z<sub>OUT</sub>):</span>
+                      <span id="deepdive-total-zout" class="deepdive-metric-val">100 &Omega; (50 &Omega;/leg)</span>
+                    </div>
+                    <div class="deepdive-metric-row">
+                      <span class="deepdive-metric-label">Receiver Termination (R<sub>LOAD</sub>):</span>
+                      <span id="deepdive-rload-echo" class="deepdive-metric-val">10,000 &Omega;</span>
+                    </div>
+                    <div class="deepdive-metric-row">
+                      <span class="deepdive-metric-label">Bridging Ratio (R<sub>L</sub> / 2Z<sub>OUT</sub>):</span>
+                      <span id="deepdive-z-ratio" class="deepdive-metric-val">100.0 : 1</span>
+                    </div>
+                    <div class="deepdive-metric-row">
+                      <span class="deepdive-metric-label">Voltage Transfer Efficiency:</span>
+                      <span id="deepdive-v-transfer" class="deepdive-metric-val">99.0% (-0.09 dB)</span>
+                    </div>
+                  </div>
+                  <div id="deepdive-matching-note" class="deepdive-note">
+                    ✅ <strong>Modern Voltage Bridging:</strong> Source Z is far lower than load Z. Preserves full signal voltage, ignores cable capacitance resonance, and allows 1 output to drive multiple parallel inputs without level drop.
+                  </div>
+                </div>
+
+                <!-- Card 2: Drive Dynamics & Power Dissipation -->
+                <div class="deepdive-card">
+                  <div class="deepdive-card-title">
+                    <span style="color: #4ade80;">2. DRIVE CAPABILITY & POWER</span>
+                    <span id="deepdive-badge-drive" class="rack-status-pill green">OPTIMAL DRIVE</span>
+                  </div>
+                  <div class="deepdive-metrics">
+                    <div class="deepdive-metric-row">
+                      <span class="deepdive-metric-label">Differential Drive Voltage (V<sub>DIFF</sub>):</span>
+                      <span id="deepdive-vdiff" class="deepdive-metric-val">2.43 V RMS</span>
+                    </div>
+                    <div class="deepdive-metric-row">
+                      <span class="deepdive-metric-label">Peak-to-Peak Differential (V<sub>PP</sub>):</span>
+                      <span id="deepdive-vpp" class="deepdive-metric-val">6.88 Vpp</span>
+                    </div>
+                    <div class="deepdive-metric-row">
+                      <span class="deepdive-metric-label">Load Current Delivery (I<sub>LOAD</sub>):</span>
+                      <span id="deepdive-iload" class="deepdive-metric-val">0.24 mA</span>
+                    </div>
+                    <div class="deepdive-metric-row">
+                      <span class="deepdive-metric-label">Power Dissipated in Load (P<sub>LOAD</sub>):</span>
+                      <span id="deepdive-power-load" class="deepdive-metric-val">0.59 mW (-2.3 dBm)</span>
+                    </div>
+                  </div>
+                  <div id="deepdive-drive-note" class="deepdive-note">
+                    ⚡ <strong>Low Power, Pure Signal:</strong> High bridging impedance keeps line current below 1 mA, running output op-amps deep in pure Class-A sweet spot for minimum THD+N.
+                  </div>
+                </div>
+
+                <!-- Card 3: Headroom & Fine Calibration Adjustments -->
+                <div class="deepdive-card">
+                  <div class="deepdive-card-title">
+                    <span style="color: #f59e0b;">3. HEADROOM & PRECISION ADJUSTMENTS</span>
+                    <span id="deepdive-badge-headroom" class="rack-status-pill yellow">+20.4 dB HEADROOM</span>
+                  </div>
+                  <div class="deepdive-metrics">
+                    <div class="deepdive-metric-row">
+                      <span class="deepdive-metric-label">Internal Rails (&plusmn;18V Supply):</span>
+                      <span class="deepdive-metric-val">&plusmn;18.0 V DC (36V Rail-to-Rail)</span>
+                    </div>
+                    <div class="deepdive-metric-row">
+                      <span class="deepdive-metric-label">Instantaneous Peak Rail Margin:</span>
+                      <span id="deepdive-headroom" class="deepdive-metric-val">+20.4 dB</span>
+                    </div>
+                    <div class="deepdive-metric-row">
+                      <span class="deepdive-metric-label">Single-Ended Leg Symmetry:</span>
+                      <span id="deepdive-symmetry" class="deepdive-metric-val">180.0&deg; Perfect Null</span>
+                    </div>
+                    <div class="deepdive-metric-row">
+                      <span class="deepdive-metric-label">TS Plug Insertion Stress:</span>
+                      <span id="deepdive-fault-stress" class="deepdive-metric-val">0.0 mA (Normal)</span>
+                    </div>
+                  </div>
+                  <div id="deepdive-headroom-note" class="deepdive-note">
+                    🛡️ <strong>Broadcast Headroom:</strong> Ample margin before op-amp rail clipping. Transients pass transparently without intermodulation or slew-rate limiting.
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Laboratory Test Bench: HP 400FL Precision AC Voltmeter + Fluke 8050A Benchtop DMM -->
@@ -4459,7 +4709,28 @@
               <td>Shorting Pin 3 safely transfers drive gain to Pin 2 emulating a true floating winding.</td>
             </tr>
             <tr>
-              <td><strong>Unbalanced Output to Balanced Input</strong></td>
+              <td><strong>3.5mm (1/8″) Stereo TRS to Dual Balanced XLR / 1/4″ TS</strong></td>
+              <td>Tip &rarr; Left Pin 2, Ring &rarr; Right Pin 2, Sleeve &rarr; Both Pins 1 &amp; 3</td>
+              <td><span class="badge badge-success">STEREO SPLITTER REQUIRED</span></td>
+              <td>0.0 dB Loss</td>
+              <td>Correct way to connect phones, laptops, and field recorders to pro balanced stereo inputs. Keeps L &amp; R channels independent.</td>
+            </tr>
+            <tr>
+              <td><strong>3.5mm (1/8″) Stereo TRS into Single Balanced Mono XLR/TRS</strong></td>
+              <td>Tip &rarr; Pin 2 (+), Ring &rarr; Pin 3 (-)</td>
+              <td><span class="badge badge-danger">DO NOT USE DIRECT CABLE!</span></td>
+              <td>-&infin; dB Loss (Center vocals &amp; bass cancelled!)</td>
+              <td><strong>THE DIFFERENTIAL CANCELLATION DISASTER:</strong> The balanced receiver subtracts (Tip - Ring). Center mono signals (vocals, kick, bass) are completely subtracted to 0V! Requires summing box or stereo DI.</td>
+            </tr>
+            <tr>
+              <td><strong>3.5mm (1/8″) Mono TS (Modular Synth / Eurorack)</strong></td>
+              <td>Tip &rarr; Pin 2, Sleeve &rarr; Pin 1 (Pin 3 Impedance Matched)</td>
+              <td><span class="badge badge-accent">Tie Pin 3 to Gnd via Z_match</span></td>
+              <td>Full level preserved</td>
+              <td>High-level 10Vpp Eurorack modular signals feeding balanced interface. Impedance balance prevents ground hum loops.</td>
+            </tr>
+            <tr>
+              <td><strong>Unbalanced Output to Balanced Input (1/4″ TS &amp; RCA)</strong></td>
               <td>Tip to Pin 2, Sleeve to Pin 3</td>
               <td><span class="badge badge-accent">Connect Sleeve to Pin 3 at Source</span></td>
               <td>Full level preserved</td>
@@ -4469,8 +4740,289 @@
         </table>
       </div>
 
-      <!-- Vector SVG Wiring Diagrams for Adapters (TS, RCA, Floating Transformer) -->
-      <h3 style="color: var(--text-primary); margin: 2rem 0 1rem;">Vector SVG Adapter Wiring Schematics</h3>
+      <!-- Connector Plug Anatomy Master Vector Illustration -->
+      <h3 style="color: var(--text-primary); margin: 2rem 0 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span>🔌 Connector Plug Anatomy: 1/8″ (3.5mm), 1/4″ (6.35mm), RCA Phono &amp; XLR</span>
+        <span class="badge badge-accent">Pinout Standards</span>
+      </h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+        Understanding where audio signals and chassis shield connect across consumer mini-jacks (3.5mm), instrument phone plugs (1/4″ TS/TRS), consumer hi-fi (RCA), and professional XLR.
+      </p>
+
+      <div class="detail-card" style="margin-bottom: 1.5rem; background: #070d18; border: 1px solid #1e293b;">
+        <svg viewBox="0 0 920 180" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+          <rect width="920" height="180" fill="#040812" rx="4"/>
+
+          <!-- 1. 3.5mm (1/8") Stereo TRS Mini-Plug -->
+          <g transform="translate(15, 20)">
+            <text x="90" y="14" fill="#38bdf8" font-size="11" font-weight="800" text-anchor="middle">1/8″ (3.5mm) STEREO TRS MINI-PLUG</text>
+            <!-- Plug Barrel Handle -->
+            <rect x="0" y="35" width="45" height="34" rx="2" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+            <!-- Sleeve (Ground) -->
+            <rect x="45" y="44" width="40" height="16" fill="#64748b" stroke="#0f172a" stroke-width="1"/>
+            <!-- Insulating Ring 1 -->
+            <rect x="85" y="44" width="4" height="16" fill="#000000"/>
+            <!-- Ring (Right Channel) -->
+            <rect x="89" y="44" width="22" height="16" fill="#f43f5e" stroke="#0f172a" stroke-width="1"/>
+            <!-- Insulating Ring 2 -->
+            <rect x="111" y="44" width="4" height="16" fill="#000000"/>
+            <!-- Tip (Left Channel) -->
+            <path d="M 115,44 L 132,44 C 137,44 140,48 142,52 C 140,56 137,60 132,60 L 115,60 Z" fill="#38bdf8"/>
+
+            <!-- Pinout Labels -->
+            <line x1="128" y1="36" x2="128" y2="44" stroke="#38bdf8" stroke-width="1.2"/>
+            <text x="128" y="32" fill="#38bdf8" font-size="8.5" font-weight="700" text-anchor="middle">TIP: LEFT (+)</text>
+            <line x1="100" y1="68" x2="100" y2="60" stroke="#f43f5e" stroke-width="1.2"/>
+            <text x="100" y="80" fill="#f43f5e" font-size="8.5" font-weight="700" text-anchor="middle">RING: RIGHT (+)</text>
+            <line x1="65" y1="68" x2="65" y2="60" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="65" y="93" fill="#94a3b8" font-size="8.5" font-weight="700" text-anchor="middle">SLEEVE: COMMON GND</text>
+            <text x="90" y="135" fill="#64748b" font-size="8" text-anchor="middle">Laptops, Phones, Portable Recorders</text>
+          </g>
+
+          <!-- Divider -->
+          <line x1="205" y1="15" x2="205" y2="165" stroke="#1e293b" stroke-width="1"/>
+
+          <!-- 2. 1/4" (6.35mm) TS & TRS Phone Plug -->
+          <g transform="translate(225, 20)">
+            <text x="105" y="14" fill="#facc15" font-size="11" font-weight="800" text-anchor="middle">1/4″ (6.35mm) TS / TRS PHONE PLUG</text>
+            <!-- Plug Barrel Handle -->
+            <rect x="0" y="33" width="55" height="38" rx="2" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+            <!-- Sleeve -->
+            <rect x="55" y="42" width="55" height="20" fill="#64748b" stroke="#0f172a" stroke-width="1"/>
+            <!-- Insulator -->
+            <rect x="110" y="42" width="5" height="20" fill="#000000"/>
+            <!-- Ring (TRS) / Body -->
+            <rect x="115" y="42" width="28" height="20" fill="#f43f5e" stroke="#0f172a" stroke-width="1"/>
+            <!-- Insulator -->
+            <rect x="143" y="42" width="5" height="20" fill="#000000"/>
+            <!-- Tip -->
+            <path d="M 148,42 L 170,42 C 176,42 182,47 185,52 C 182,57 176,62 170,62 L 148,62 Z" fill="#facc15"/>
+
+            <text x="168" y="32" fill="#facc15" font-size="8.5" font-weight="700" text-anchor="middle">TIP: HOT / AUDIO (+)</text>
+            <text x="130" y="80" fill="#f43f5e" font-size="8.5" font-weight="700" text-anchor="middle">RING: COLD (-) [TRS]</text>
+            <text x="80" y="93" fill="#94a3b8" font-size="8.5" font-weight="700" text-anchor="middle">SLEEVE: SHIELD / GND</text>
+            <text x="105" y="135" fill="#64748b" font-size="8" text-anchor="middle">Guitars (TS), Balanced Aux/Patch (TRS)</text>
+          </g>
+
+          <!-- Divider -->
+          <line x1="445" y1="15" x2="445" y2="165" stroke="#1e293b" stroke-width="1"/>
+
+          <!-- 3. RCA Phono Plug -->
+          <g transform="translate(465, 20)">
+            <text x="95" y="14" fill="#fb923c" font-size="11" font-weight="800" text-anchor="middle">RCA PHONO PLUG (UNBALANCED)</text>
+            <!-- Plug Barrel -->
+            <rect x="10" y="35" width="60" height="34" rx="3" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+            <!-- Ground Shell Petals -->
+            <path d="M 70,39 L 105,39 L 105,65 L 70,65 Z" fill="#64748b" stroke="#0f172a" stroke-width="1"/>
+            <!-- Center Pin Hot -->
+            <rect x="105" y="47" width="30" height="10" rx="3" fill="#fb923c"/>
+
+            <text x="120" y="34" fill="#fb923c" font-size="8.5" font-weight="700" text-anchor="middle">CENTER PIN: HOT (+)</text>
+            <text x="88" y="85" fill="#94a3b8" font-size="8.5" font-weight="700" text-anchor="middle">OUTER SHELL: SHIELD / GND</text>
+            <text x="95" y="135" fill="#64748b" font-size="8" text-anchor="middle">Consumer Hi-Fi, Turntables, DJ Gear</text>
+          </g>
+
+          <!-- Divider -->
+          <line x1="680" y1="15" x2="680" y2="165" stroke="#1e293b" stroke-width="1"/>
+
+          <!-- 4. XLR-3 Pinout -->
+          <g transform="translate(700, 20)">
+            <text x="100" y="14" fill="#4ade80" font-size="11" font-weight="800" text-anchor="middle">XLR-3 PROFESSIONAL BALANCED</text>
+            <!-- XLR Circular Barrel Shell -->
+            <circle cx="100" cy="52" r="30" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+            <!-- Pin 1 Top Left -->
+            <circle cx="86" cy="44" r="6.5" fill="#94a3b8" stroke="#000000" stroke-width="1"/>
+            <text x="86" y="47" fill="#000000" font-size="7.5" font-weight="900" text-anchor="middle">1</text>
+            <!-- Pin 2 Top Right -->
+            <circle cx="114" cy="44" r="6.5" fill="#38bdf8" stroke="#000000" stroke-width="1"/>
+            <text x="114" y="47" fill="#000000" font-size="7.5" font-weight="900" text-anchor="middle">2</text>
+            <!-- Pin 3 Bottom Center -->
+            <circle cx="100" cy="66" r="6.5" fill="#f43f5e" stroke="#000000" stroke-width="1"/>
+            <text x="100" y="69" fill="#000000" font-size="7.5" font-weight="900" text-anchor="middle">3</text>
+
+            <text x="100" y="100" fill="#f1f5f9" font-size="8.5" font-weight="700" text-anchor="middle"><span style="color:#94a3b8">1: SHIELD</span> &bull; <span style="color:#38bdf8">2: HOT (+)</span> &bull; <span style="color:#f43f5e">3: COLD (-)</span></text>
+            <text x="100" y="135" fill="#64748b" font-size="8" text-anchor="middle">AES14 Pro Audio Standard Standard</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Vector SVG Wiring Diagrams for Adapters (3.5mm TRS, 3.5mm TS, 1/4" TS, RCA) -->
+      <h3 style="color: var(--text-primary); margin: 2rem 0 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span>🎯 Three Probe-Equipped Adapter Circuits &amp; Interconnects</span>
+        <span class="badge badge-success">Live Probe Anchors &bull; Signal Gen &bull; Chassis Enclosures</span>
+      </h3>
+
+      <div class="triad-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem;">
+        
+        <!-- Circuit 1: 1/8" (3.5mm) Stereo TRS to Dual XLR-M / Dual TS Splitter -->
+        <div class="detail-card" style="background: #090e1a; border: 1.5px solid #1e3a5f;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4 style="margin: 0; color: #38bdf8; font-size: 1rem;">1. 1/8″ (3.5mm) TRS to Dual XLR-M Splitter</h4>
+            <span class="badge badge-success">Pro Stereo Split</span>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+            Signal generator feeding 3.5mm stereo unbalanced output. Tip splits to Left Channel, Ring splits to Right Channel. Chassis shield ties to Pin 1.
+          </p>
+          <svg viewBox="0 0 340 180" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="background: #040812; border-radius: 4px; border: 1px solid #1e293b;">
+            <!-- Equipment A Chassis Box (Laptop / Source) -->
+            <rect x="8" y="15" width="105" height="150" rx="3" fill="#081020" stroke="#334155" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <text x="60" y="30" fill="#94a3b8" font-size="8" font-weight="700" text-anchor="middle">EQUIPMENT A (SOURCE)</text>
+            <!-- Signal Generator Plugged In -->
+            <rect x="16" y="38" width="88" height="34" rx="2" fill="#0f172a" stroke="#facc15" stroke-width="1.2"/>
+            <text x="60" y="52" fill="#facc15" font-size="8.5" font-weight="900" text-anchor="middle">⚡ GEN (1 kHz SINE)</text>
+            <text x="60" y="65" fill="#94a3b8" font-size="7.5" text-anchor="middle">1.0V RMS Stereo L/R</text>
+
+            <!-- 3.5mm Plug Contacts with Live Probe Badges -->
+            <circle cx="85" cy="85" r="5" fill="#38bdf8" data-probe-target="adp-35mm-tip" title="Probe 3.5mm Tip (Left Audio Hot)" style="cursor: crosshair;"/>
+            <text x="75" y="88" fill="#38bdf8" font-size="8" font-weight="700" text-anchor="end">Tip (L)</text>
+            <circle cx="85" cy="115" r="5" fill="#f43f5e" data-probe-target="adp-35mm-ring" title="Probe 3.5mm Ring (Right Audio Hot)" style="cursor: crosshair;"/>
+            <text x="75" y="118" fill="#f43f5e" font-size="8" font-weight="700" text-anchor="end">Ring (R)</text>
+            <circle cx="85" cy="145" r="5" fill="#94a3b8" data-probe-target="adp-35mm-sleeve" title="Probe 3.5mm Sleeve (Common Ground)" style="cursor: crosshair;"/>
+            <text x="75" y="148" fill="#94a3b8" font-size="8" font-weight="700" text-anchor="end">Sleeve</text>
+
+            <!-- Chassis Ground Lug -->
+            <line x1="60" y1="165" x2="60" y2="175" stroke="#94a3b8" stroke-width="1.5"/>
+            <line x1="53" y1="175" x2="67" y2="175" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="56" y1="178" x2="64" y2="178" stroke="#94a3b8" stroke-width="1.5"/>
+
+            <!-- Equipment B Chassis Box (Dual XLR Receiver) -->
+            <rect x="225" y="15" width="105" height="150" rx="3" fill="#081020" stroke="#334155" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <text x="277" y="30" fill="#94a3b8" font-size="8" font-weight="700" text-anchor="middle">EQUIPMENT B (RECEIVER)</text>
+
+            <!-- Left XLR Output Box -->
+            <rect x="235" y="38" width="85" height="55" rx="2" fill="#0f172a" stroke="#38bdf8" stroke-width="1.2"/>
+            <text x="277" y="50" fill="#38bdf8" font-size="8" font-weight="800" text-anchor="middle">CH 1: LEFT XLR-M</text>
+            <circle cx="248" cy="62" r="4.5" fill="#38bdf8" data-probe-target="adp-xlr-left" title="Probe Left XLR Pin 2 Hot" style="cursor: crosshair;"/>
+            <text x="256" y="65" fill="#38bdf8" font-size="7.5">Pin 2 (Hot)</text>
+            <circle cx="248" cy="74" r="4" fill="#94a3b8"/>
+            <text x="256" y="77" fill="#94a3b8" font-size="7.5">Pin 1 &amp; 3 Gnd</text>
+
+            <!-- Right XLR Output Box -->
+            <rect x="235" y="100" width="85" height="55" rx="2" fill="#0f172a" stroke="#f43f5e" stroke-width="1.2"/>
+            <text x="277" y="112" fill="#f43f5e" font-size="8" font-weight="800" text-anchor="middle">CH 2: RIGHT XLR-M</text>
+            <circle cx="248" cy="124" r="4.5" fill="#f43f5e" data-probe-target="adp-xlr-right" title="Probe Right XLR Pin 2 Hot" style="cursor: crosshair;"/>
+            <text x="256" y="127" fill="#f43f5e" font-size="7.5">Pin 2 (Hot)</text>
+            <circle cx="248" cy="136" r="4" fill="#94a3b8"/>
+            <text x="256" y="139" fill="#94a3b8" font-size="7.5">Pin 1 &amp; 3 Gnd</text>
+
+            <!-- Wiring Leads Crossing Cable -->
+            <!-- Tip -> Left Pin 2 -->
+            <path d="M 90,85 L 160,85 L 160,62 L 243,62" fill="none" stroke="#38bdf8" stroke-width="2"/>
+            <!-- Ring -> Right Pin 2 -->
+            <path d="M 90,115 L 175,115 L 175,124 L 243,124" fill="none" stroke="#f43f5e" stroke-width="2"/>
+            <!-- Sleeve Common Shield split to both -->
+            <path d="M 90,145 L 195,145 L 195,74 L 243,74" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="3,2"/>
+            <path d="M 195,136 L 243,136" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="3,2"/>
+          </svg>
+        </div>
+
+        <!-- Circuit 2: 1/8" (3.5mm) TS Mono (Eurorack / Modular Synth) to Balanced XLR -->
+        <div class="detail-card" style="background: #090e1a; border: 1.5px solid #14532d;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4 style="margin: 0; color: #4ade80; font-size: 1rem;">2. 1/8″ (3.5mm) TS Synth to Balanced XLR</h4>
+            <span class="badge badge-success">Eurorack &bull; Modular</span>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+            Modular synth &amp; mini-mic unbalanced 3.5mm TS feeding pro balanced XLR. Pin 3 impedance-balanced or referenced to Pin 1.
+          </p>
+          <svg viewBox="0 0 340 180" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="background: #040812; border-radius: 4px; border: 1px solid #1e293b;">
+            <!-- Modular Synth Chassis -->
+            <rect x="8" y="15" width="105" height="150" rx="3" fill="#08140e" stroke="#166534" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <text x="60" y="30" fill="#4ade80" font-size="8" font-weight="700" text-anchor="middle">SYNTH CHASSIS A</text>
+            <!-- Signal Generator -->
+            <rect x="16" y="38" width="88" height="34" rx="2" fill="#0f172a" stroke="#4ade80" stroke-width="1.2"/>
+            <text x="60" y="52" fill="#4ade80" font-size="8.5" font-weight="900" text-anchor="middle">⚡ GEN: SYNTH OSC</text>
+            <text x="60" y="65" fill="#94a3b8" font-size="7.5" text-anchor="middle">10.0Vpp Modular Sine</text>
+
+            <!-- 3.5mm TS Output Jack -->
+            <circle cx="85" cy="85" r="5" fill="#facc15" data-probe-target="adp-ts35-tip" title="Probe 3.5mm TS Tip" style="cursor: crosshair;"/>
+            <text x="75" y="88" fill="#facc15" font-size="8" font-weight="700" text-anchor="end">Tip (+)</text>
+            <circle cx="85" cy="130" r="5" fill="#94a3b8" data-probe-target="adp-ts35-sleeve" title="Probe 3.5mm TS Sleeve" style="cursor: crosshair;"/>
+            <text x="75" y="133" fill="#94a3b8" font-size="8" font-weight="700" text-anchor="end">Sleeve</text>
+
+            <!-- Ground Symbol -->
+            <line x1="60" y1="165" x2="60" y2="175" stroke="#94a3b8" stroke-width="1.5"/>
+            <line x1="53" y1="175" x2="67" y2="175" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="56" y1="178" x2="64" y2="178" stroke="#94a3b8" stroke-width="1.5"/>
+
+            <!-- Receiver Chassis B -->
+            <rect x="225" y="15" width="105" height="150" rx="3" fill="#08140e" stroke="#166534" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <text x="277" y="30" fill="#4ade80" font-size="8" font-weight="700" text-anchor="middle">AUDIO INTERFACE B</text>
+
+            <!-- XLR-M Receiver -->
+            <rect x="235" y="45" width="85" height="100" rx="2" fill="#0f172a" stroke="#38bdf8" stroke-width="1.2"/>
+            <text x="277" y="60" fill="#38bdf8" font-size="8.5" font-weight="800" text-anchor="middle">XLR-3M INPUT</text>
+            
+            <circle cx="248" cy="85" r="5" fill="#facc15" data-probe-target="adp-ts35-p2" title="Probe XLR Pin 2 Hot" style="cursor: crosshair;"/>
+            <text x="256" y="88" fill="#facc15" font-size="8" font-weight="700">Pin 2 (Hot +)</text>
+
+            <circle cx="248" cy="108" r="5" fill="#f43f5e" data-probe-target="adp-ts35-p3" title="Probe XLR Pin 3 Cold (Impedance Matched)" style="cursor: crosshair;"/>
+            <text x="256" y="111" fill="#f43f5e" font-size="8" font-weight="700">Pin 3 (Z-Bal)</text>
+
+            <circle cx="248" cy="130" r="5" fill="#94a3b8"/>
+            <text x="256" y="133" fill="#94a3b8" font-size="8">Pin 1 (Chassis)</text>
+
+            <!-- Wiring Paths -->
+            <line x1="90" y1="85" x2="243" y2="85" stroke="#facc15" stroke-width="2"/>
+            <line x1="90" y1="130" x2="243" y2="130" stroke="#94a3b8" stroke-width="2"/>
+            <!-- Impedance matching resistor on Pin 3 to Gnd -->
+            <path d="M 248,108 L 200,108 L 200,130" fill="none" stroke="#f43f5e" stroke-width="1.8"/>
+            <rect x="194" y="112" width="12" height="14" fill="#0f172a" stroke="#f43f5e" stroke-width="1.2"/>
+            <text x="188" y="122" fill="#f43f5e" font-size="6.5" font-weight="800" text-anchor="end">R_match</text>
+          </svg>
+        </div>
+
+        <!-- Circuit 3: 1/8" (3.5mm) TRS to Balanced Mono: "THE CANCELLATION DISASTER" -->
+        <div class="detail-card" style="background: #140909; border: 1.5px solid #7f1d1d;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4 style="margin: 0; color: #ef4444; font-size: 1rem;">3. 3.5mm into Mono: CANCELLATION DISASTER!</h4>
+            <span class="badge badge-danger">L - R = 0V CANCELLATION</span>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+            Direct 3.5mm TRS-to-XLR cable into mono input: Tip goes to Pin 2, Ring goes to Pin 3. Balanced receiver computes (L - R) &rarr; center vocals and bass vanish!
+          </p>
+          <svg viewBox="0 0 340 180" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="background: #040812; border-radius: 4px; border: 1px solid #7f1d1d;">
+            <!-- Source Phone / Laptop -->
+            <rect x="8" y="15" width="105" height="150" rx="3" fill="#1c0e0e" stroke="#7f1d1d" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <text x="60" y="30" fill="#ef4444" font-size="8" font-weight="700" text-anchor="middle">PHONE / LAPTOP (3.5mm)</text>
+            
+            <rect x="16" y="38" width="88" height="34" rx="2" fill="#0f172a" stroke="#ef4444" stroke-width="1.2"/>
+            <text x="60" y="52" fill="#ef4444" font-size="8" font-weight="900" text-anchor="middle">⚡ GEN: STEREO TRACK</text>
+            <text x="60" y="65" fill="#94a3b8" font-size="7.5" text-anchor="middle">Center Vocal: L = R = 1.0V</text>
+
+            <circle cx="85" cy="85" r="5" fill="#38bdf8" data-probe-target="adp-cancel-tip" title="Probe Tip (Left Vocal = +1.0V)" style="cursor: crosshair;"/>
+            <text x="75" y="88" fill="#38bdf8" font-size="7.5" font-weight="700" text-anchor="end">Tip: L=1.0V</text>
+            <circle cx="85" cy="115" r="5" fill="#f43f5e" data-probe-target="adp-cancel-ring" title="Probe Ring (Right Vocal = +1.0V)" style="cursor: crosshair;"/>
+            <text x="75" y="118" fill="#f43f5e" font-size="7.5" font-weight="700" text-anchor="end">Ring: R=1.0V</text>
+            <circle cx="85" cy="145" r="4.5" fill="#94a3b8"/>
+            <text x="75" y="148" fill="#94a3b8" font-size="7.5" text-anchor="end">Sleeve</text>
+
+            <!-- Differential Receiver -->
+            <rect x="225" y="15" width="105" height="150" rx="3" fill="#1c0e0e" stroke="#7f1d1d" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <text x="277" y="30" fill="#ef4444" font-size="8" font-weight="700" text-anchor="middle">MIXER MONO CHANNEL</text>
+
+            <!-- Op-Amp Diff Subtractor -->
+            <path d="M 235,65 L 290,95 L 235,125 Z" fill="#0f172a" stroke="#ef4444" stroke-width="1.5"/>
+            <text x="242" y="82" fill="#38bdf8" font-size="9" font-weight="900">+</text>
+            <text x="242" y="112" fill="#f43f5e" font-size="10" font-weight="900">&minus;</text>
+
+            <!-- Output Node 0V -->
+            <line x1="290" y1="95" x2="320" y2="95" stroke="#ef4444" stroke-width="2"/>
+            <circle cx="320" cy="95" r="5" fill="#ef4444" data-probe-target="adp-cancel-diff" title="Differential Output: EXACT 0.00V CANCELLATION!" style="cursor: crosshair;"/>
+            <text x="305" y="85" fill="#ef4444" font-size="8" font-weight="900" text-anchor="middle">0.00 V</text>
+            <text x="305" y="115" fill="#ef4444" font-size="7" font-weight="800" text-anchor="middle">CANCELED!</text>
+
+            <!-- Wiring Leads Crossing -->
+            <line x1="90" y1="85" x2="235" y2="78" stroke="#38bdf8" stroke-width="2"/>
+            <line x1="90" y1="115" x2="235" y2="112" stroke="#f43f5e" stroke-width="2"/>
+            <line x1="90" y1="145" x2="260" y2="145" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="3,2"/>
+          </svg>
+        </div>
+
+      </div>
+
+      <!-- Vector SVG Wiring Diagrams for TS and RCA Adapters -->
+      <h4 style="color: var(--text-secondary); margin: 1.5rem 0 0.75rem; font-size: 0.95rem;">Additional Standard 1/4″ TS &amp; RCA Phono Cable Configurations:</h4>
       <div class="triad-grid">
         
         <!-- Wiring Diagram 1: XLR-M to 1/4" TS (Ground-Referenced Push-Pull Warning) -->
@@ -6737,6 +7289,7 @@
   <script src="js/signal-generator.js"></script>
   <script src="js/story-sidebar.js"></script>
   <script src="js/floating-meters.js"></script>
+  <script src="js/eight-channel-bench.js"></script>
   <script src="js/tree-data.js"></script>
   <script src="js/tree-viewer.js"></script>
   <script src="js/simulators.js"></script>
