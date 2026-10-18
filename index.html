@@ -19775,11 +19775,17 @@ class FloatingMeterDock {
     const totalMs = divs * this.scopeTimeDiv;
     const baseHalfV = 2 * this.scope8VoltsDiv; // each strip is 4 divisions tall
 
-    ctx.fillStyle = "#000000";
+    // Tektronix-style CRT: green phosphor ground with an orange graticule
+    const crt = ctx.createRadialGradient(LABEL_W + plotW / 2, h / 2, 10, LABEL_W + plotW / 2, h / 2, Math.max(w, h) * 0.75);
+    crt.addColorStop(0, "#0b2a17");
+    crt.addColorStop(1, "#03110a");
+    ctx.fillStyle = crt;
     ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+    ctx.fillRect(0, 0, LABEL_W, h);
 
     // Shared vertical time grid through every strip
-    ctx.strokeStyle = "#1c1c1c";
+    ctx.strokeStyle = "rgba(234, 120, 40, 0.38)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     for (let i = 0; i <= divs; i++) {
@@ -19794,12 +19800,22 @@ class FloatingMeterDock {
       const mid = top + stripH / 2;
       const data = this.getSignalForTarget(c.key);
 
-      ctx.strokeStyle = "#262626";
+      ctx.strokeStyle = "rgba(234, 120, 40, 0.55)";
       ctx.beginPath();
       ctx.moveTo(LABEL_W, Math.round(top) + 0.5);
       ctx.lineTo(w, Math.round(top) + 0.5);
       ctx.stroke();
-      ctx.strokeStyle = "#333333";
+      // Centre line with minor ticks (5 per division), Tek graticule style
+      ctx.strokeStyle = "rgba(234, 120, 40, 0.5)";
+      ctx.beginPath();
+      for (let k = 0; k <= divs * 5; k++) {
+        const x = Math.round(LABEL_W + (k / (divs * 5)) * plotW) + 0.5;
+        const len = k % 5 === 0 ? 4 : 2;
+        ctx.moveTo(x, mid - len);
+        ctx.lineTo(x, mid + len);
+      }
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(234, 120, 40, 0.28)";
       ctx.setLineDash([2, 3]);
       ctx.beginPath();
       ctx.moveTo(LABEL_W, Math.round(mid) + 0.5);
@@ -19894,6 +19910,46 @@ class FloatingMeterDock {
       }
       ctx.stroke();
       ctx.restore();
+
+      // Measurement readout per strip (when there is room, e.g. zoomed): f, phase, Vrms, Vpp, Vpk, dBu, DC
+      if (stripH >= 48) {
+        const refPhase = (this.getSignalForTarget(chans[0].key).phase || 0);
+        const ph = (((data.phase || 0) - refPhase) * 180 / Math.PI + 540) % 360 - 180;
+        const vr = data.vRms > 0.005 ? data.vRms : 0; // millivolt residue reads as flat
+        const dbuM = vr ? 20 * Math.log10(vr / 0.7746) : -Infinity;
+        const fmt = (v) => (v >= 1 ? v.toFixed(3) : (v * 1000).toFixed(1) + "m");
+        const items = vr ? [
+          `f ${data.freq >= 1000 ? (data.freq / 1000).toFixed(3) + " kHz" : Math.round(data.freq) + " Hz"}`,
+          `φ ${ph >= 0 ? "+" : ""}${ph.toFixed(0)}°`,
+          `${fmt(vr)} Vrms`,
+          `${fmt(data.vPk * 2)} Vpp`,
+          `${fmt(data.vPk)} Vpk`,
+          `${isFinite(dbuM) ? (dbuM >= 0 ? "+" : "") + dbuM.toFixed(1) : "−∞"} dBu`
+        ] : ["0 V (flat)"];
+        if (data.dc) items.push(`DC ${data.dc > 0 ? "+" : ""}${data.dc.toFixed(1)} V`);
+        if (data.humVpk) items.push(`hum ${(data.humVpk / Math.SQRT2).toFixed(2)} Vrms`);
+        ctx.font = "bold 10px 'JetBrains Mono', monospace";
+        const textW = items.reduce((m, t) => Math.max(m, ctx.measureText(t).width), 0);
+        const perRow = Math.max(1, Math.floor((plotW * 0.55) / (textW + 14)));
+        const rows = Math.ceil(items.length / perRow);
+        const boxW = Math.min(plotW - 8, perRow * (textW + 14) + 8);
+        const boxH = rows * 14 + 6;
+        const bx = LABEL_W + plotW - boxW - 4;
+        const by = top + 4;
+        if (boxH < stripH - 6) {
+          ctx.fillStyle = "rgba(3, 17, 10, 0.82)";
+          ctx.fillRect(bx, by, boxW, boxH);
+          ctx.strokeStyle = "rgba(234, 120, 40, 0.6)";
+          ctx.strokeRect(bx + 0.5, by + 0.5, boxW - 1, boxH - 1);
+          ctx.fillStyle = c.color;
+          ctx.textAlign = "left";
+          ctx.textBaseline = "middle";
+          items.forEach((t, k) => {
+            const col = k % perRow, row = Math.floor(k / perRow);
+            ctx.fillText(t, bx + 6 + col * (textW + 14), by + 10 + row * 14);
+          });
+        }
+      }
 
       // DC reading in big digits while a pin carries DC (e.g. +48 V phantom on pins 2 and 3)
       if (Math.abs(dcTarget) > 0.05 || Math.abs(dcShown) > 0.5) {
@@ -44604,7 +44660,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ===== BUNDLED: js/modules-data.js ===== */
 /**
  * Balanced Audio & AES-X152 100-Module Reference Curriculum Dataset
- * Compiled by build.py on 2026-10-18 02:25
+ * Compiled by build.py on 2026-10-18 02:28
  */
 
 const BALANCED_MODULES_DATA = [
