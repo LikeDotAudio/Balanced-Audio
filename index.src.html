@@ -44,12 +44,12 @@
       <nav class="site-nav">
         <!-- Demo sheets first (page order), then references, then credits last -->
         <a href="#how-to-use" class="nav-link" style="color: #facc15; font-weight: 700;">How to Use</a>
+        <a href="#triad" class="nav-link">Three Parts</a>
+        <a href="#pyramid-section" class="nav-link">Levels Pyramid</a>
         <a href="#enclosure-explorer" class="nav-link">Box &amp; Enclosure</a>
         <a href="#multichannel-hierarchy" class="nav-link">Multichannel Snake</a>
         <a href="#xlr-hub" class="nav-link">Universal XLR Hub</a>
         <a href="#top-level" class="nav-link">Top Level Rules</a>
-        <a href="#triad" class="nav-link">The Triad</a>
-        <a href="#pyramid-section" class="nav-link">Levels Pyramid</a>
         <a href="#topologies" class="nav-link">SVG Circuits</a>
         <a href="#transformer-simulator" class="nav-link">Transformer Lab</a>
         <a href="#deepest-dive" class="nav-link">The Deepest Dive</a>
@@ -72,12 +72,12 @@
     <div class="sub-nav-bar">
       <div class="sub-nav-container">
         <a href="#how-to-use" class="sub-nav-pill" style="border-color: #facc15; color: #facc15;">How to Use</a>
+        <a href="#triad" class="sub-nav-pill">Three Parts</a>
+        <a href="#pyramid-section" class="sub-nav-pill">Levels Pyramid</a>
         <a href="#enclosure-explorer" class="sub-nav-pill">Enclosure Box</a>
         <a href="#multichannel-hierarchy" class="sub-nav-pill" style="border-color: #c084fc; color: #c084fc;">DB25 &rarr; RJ45 &rarr; XLR/TRS</a>
         <a href="#xlr-hub" class="sub-nav-pill">Universal XLR Hub</a>
         <a href="#top-level" class="sub-nav-pill">Top-Level Rules</a>
-        <a href="#triad" class="sub-nav-pill">The Triad (1-2-3)</a>
-        <a href="#pyramid-section" class="sub-nav-pill">Levels Pyramid</a>
         <a href="#topologies" class="sub-nav-pill">SVG Circuits (6.1–6.8)</a>
         <a href="#transformer-simulator" class="sub-nav-pill" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">Transformer Lab</a>
         <a href="#deepest-dive" class="sub-nav-pill">Jim Meyer Thevenin</a>
@@ -199,11 +199,559 @@
 
       <div class="htu-start">
         <span class="htu-start-label">Start here &rarr;</span>
-        <a href="#top-level" class="htu-start-btn">01 The Golden Rule</a>
-        <a href="#pyramid-section" class="htu-start-btn">Levels Pyramid</a>
+        <a href="#triad" class="htu-start-btn">1 · Three Parts</a>
+        <a href="#pyramid-section" class="htu-start-btn">2 · Levels Pyramid</a>
+        <a href="#top-level" class="htu-start-btn">The Golden Rule</a>
         <a href="#multichannel-hierarchy" class="htu-start-btn">Multichannel Snake</a>
         <a href="#xlr-hub" class="htu-start-btn">XLR Pin Hub</a>
         <a href="#topologies" class="htu-start-btn">Circuits 6.1–6.8</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 0.0: The Three Parts of the Interconnection Chain -->
+  <section id="triad" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Structural Framework</span>
+        <h2 class="section-title">The Three Parts of the Interconnection Chain</h2>
+        <p class="section-lead">
+          AES-X152 formalizes analog audio transmission into three discrete architectural sections. 
+          Every parameter specified in product data sheets maps to one of these three domains.
+        </p>
+      </div>
+
+      <div class="triad-grid">
+        <!-- Part 1: The Transmitter -->
+        <div class="triad-card">
+          <div class="triad-badge">Part 1</div>
+          <h3 class="triad-title">The Transmitter (Output Component)</h3>
+          <p class="triad-desc">
+            The signal source driving the balanced transmission line. Specifies source impedance, balance matching, and maximum voltage drive capability.
+          </p>
+          <ul class="triad-list">
+            <li><strong>Differential Output Impedance (DMZ<sub>OUT</sub>):</strong> Series resistance driving the cable (Z<sub>PO</sub> + Z<sub>RO</sub>), ideally 50&ndash;100 &Omega;.</li>
+            <li><strong>Impedance Balance (&Delta;Z):</strong> Matching tolerance between Pin 2 and Pin 3 source impedances to ground (|Z<sub>PO</sub> &minus; Z<sub>RO</sub>|).</li>
+            <li><strong>Common-Mode Impedance (CMZ<sub>OUT</sub>):</strong> Total source impedance presented to common-mode currents flowing through the enclosure.</li>
+            <li><strong>Maximum Output Level (L<sub>MAX</sub>):</strong> Peak voltage capability before clipping occurs.</li>
+          </ul>
+        </div>
+
+        <!-- Part 2: The Medium -->
+        <div class="triad-card">
+          <div class="triad-badge">Part 2</div>
+          <h3 class="triad-title">The Transmission Medium (Cable)</h3>
+          <p class="triad-desc">
+            The shielded twisted-pair (STP), Star-Quad, or Category cable interconnecting transmitter and receiver over distance.
+          </p>
+          <ul class="triad-list">
+            <li><strong>Conductor Resistance (R<sub>C</sub>):</strong> Loop resistance of copper signal lines over distance.</li>
+            <li><strong>Mutual Capacitance (C<sub>DM</sub>):</strong> Core-to-core capacitance (typically 40&ndash;120 pF/m) causing high-frequency roll-off.</li>
+            <li><strong>Capacitance Unbalance to Shield (&Delta;C):</strong> Matching symmetry between core-to-shield capacitances.</li>
+            <li><strong>Shield Transfer Impedance (Z<sub>T</sub>):</strong> Effectiveness of braid, foil, or drain wire in containing RF interference.</li>
+          </ul>
+        </div>
+
+        <!-- Part 3: The Receiver -->
+        <div class="triad-card">
+          <div class="triad-badge">Part 3</div>
+          <h3 class="triad-title">The Receiver (Input Component)</h3>
+          <p class="triad-desc">
+            The destination differential instrumentation amplifier, op-amp receiver, or transformer converting the differential signal to internal audio.
+          </p>
+          <ul class="triad-list">
+            <li><strong>Differential Input Impedance (DMZ<sub>IN</sub>):</strong> Bridging load presented to incoming differential signal (&ge; 10 k&Omega;).</li>
+            <li><strong>Common-Mode Input Impedance (CMZ<sub>IN</sub>):</strong> Bridging impedance presented to common-mode noise, protecting against source imbalances.</li>
+            <li><strong>Common-Mode Rejection Ratio (CMRR):</strong> Attenuation of common-mode interference over the 20 Hz to 20 kHz spectrum.</li>
+            <li><strong>Maximum Input Level (L<sub>IN_MAX</sub>):</strong> Maximum common-mode and differential voltage tolerated before overload.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: The Interconnection Levels & Signal Headroom Pyramid -->
+  <section id="pyramid-section" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Dynamic Levels Architecture</span>
+        <h2 class="section-title">The Interconnection Levels &amp; Signal Headroom Pyramid</h2>
+        <p class="section-lead">
+          AES-X152 establishes standardized operational signal levels spanning from transducer microvolts 
+          to professional studio line levels (+24 dBu). Use the interactive calculator below to convert units in real-time.
+        </p>
+      </div>
+
+      <!-- Pyramid (left half) beside the laboratory instruments (right half) -->
+      <div class="pyr-split">
+      <div class="pyr-split-left">
+      <!-- Graphical SVG Headroom Pyramid -->
+      <div class="svg-diagram-wrapper" style="margin-bottom: 2rem;">
+        <svg viewBox="0 0 920 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+          <rect width="920" height="320" fill="#070b13" rx="8"/>
+          
+          <!-- Headroom Ceiling Tier (Top: +24 to +28 dBu) -->
+          <g id="pyramid-tier-headroom" class="pyramid-tier tier-zone-headroom" data-tier="headroom" tabindex="0" role="button" aria-label="Maximum System Headroom Tier">
+            <polygon class="pyramid-tier-poly" points="460,25 310,95 610,95" fill="rgba(239, 68, 68, 0.2)" stroke="#ef4444" stroke-width="2"/>
+            <text x="460" y="60" fill="#f87171" font-size="12" font-weight="800" text-anchor="middle">MAXIMUM SYSTEM HEADROOM CEILING (+24 to +28 dBu)</text>
+            <text x="460" y="78" fill="#fecdd3" font-size="10" text-anchor="middle">12.28 V to 19.46 V RMS &bull; Professional Analog Console Boundary</text>
+          </g>
+
+          <!-- Professional Line Level Tier (+4 dBu / 0 VU) -->
+          <g id="pyramid-tier-pro" class="pyramid-tier tier-zone-pro tier-active" data-tier="pro" tabindex="0" role="button" aria-label="Professional Line Level Tier">
+            <polygon class="pyramid-tier-poly" points="310,98 610,98 680,165 240,165" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="2.5"/>
+            <text x="460" y="125" fill="#34d399" font-size="13" font-weight="800" text-anchor="middle">PROFESSIONAL LINE LEVEL REFERENCE (+4 dBu / 0 VU)</text>
+            <text x="460" y="145" fill="#a7f3d0" font-size="10.5" text-anchor="middle">1.228 V RMS &bull; Standard Studio Interconnect (0.775 V Ref)</text>
+          </g>
+
+          <!-- Consumer Line Level Tier (-10 dBV / -7.78 dBu) -->
+          <g id="pyramid-tier-consumer" class="pyramid-tier tier-zone-consumer" data-tier="consumer" tabindex="0" role="button" aria-label="Consumer Line Level Tier">
+            <polygon class="pyramid-tier-poly" points="240,168 680,168 750,235 170,235" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+            <text x="460" y="195" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">CONSUMER LINE LEVEL REFERENCE (-10 dBV / -7.78 dBu)</text>
+            <text x="460" y="215" fill="#bae6fd" font-size="10.5" text-anchor="middle">0.316 V RMS (1.000 V Ref) &bull; RCA Hi-Fi &amp; Semi-Pro Gear</text>
+          </g>
+
+          <!-- Microphone Transducer Level Tier (Bottom: -60 to -40 dBu) -->
+          <g id="pyramid-tier-mic" class="pyramid-tier tier-zone-mic" data-tier="mic" tabindex="0" role="button" aria-label="Microphone Transducer Level Tier">
+            <polygon class="pyramid-tier-poly" points="170,238 750,238 820,305 100,305" fill="rgba(245, 158, 11, 0.18)" stroke="#f59e0b" stroke-width="2"/>
+            <text x="460" y="265" fill="#fbbf24" font-size="13" font-weight="800" text-anchor="middle">MICROPHONE TRANSDUCER LEVEL (-60 to -40 dBu)</text>
+            <text x="460" y="285" fill="#fde68a" font-size="10.5" text-anchor="middle">0.775 mV to 7.75 mV RMS &bull; Ultra-sensitive High-Gain Preamp Stage</text>
+          </g>
+
+          <!-- Dynamic Voltage Margin Brackets -->
+          <line x1="770" y1="98" x2="770" y2="165" stroke="#10b981" stroke-width="1.8"/>
+          <polyline points="765,98 770,98 770,165 765,165" fill="none" stroke="#10b981" stroke-width="1.8"/>
+          <text x="780" y="135" fill="#10b981" font-size="10" font-weight="700">20 dB Headroom</text>
+
+          <line x1="840" y1="168" x2="840" y2="305" stroke="#f59e0b" stroke-width="1.8"/>
+          <polyline points="835,168 840,168 840,305 835,305" fill="none" stroke="#f59e0b" stroke-width="1.8"/>
+          <text x="850" y="240" fill="#f59e0b" font-size="10" font-weight="700">44–64 dB Gain</text>
+        </svg>
+      </div>
+
+      <!-- Calibrated Voltmeter & Dynamic Range Pyramid Alignment HUD -->
+      <div id="pyramid-meter-alignment-hud" class="pyramid-meter-alignment-hud">
+        <div class="pyr-hud-left">
+          <span class="pyr-hud-badge">CALIBRATED COUPLING</span>
+          <span class="pyr-hud-label">METER RANGE &harr; PYRAMID TIER:</span>
+          <span id="pyramid-hud-range" class="pyr-hud-range-pill">3 V (+10 dB)</span>
+          <span class="pyr-hud-arrow">&bull;</span>
+          <span id="pyramid-hud-dot" class="pyr-hud-indicator-dot"></span>
+          <span id="pyramid-hud-domain" class="pyr-hud-domain-name">PROFESSIONAL LINE LEVEL REFERENCE (+4 dBu / 0 VU)</span>
+        </div>
+        <div class="pyr-hud-right">
+          <span class="pyr-hud-hint">Click any tier or rotary range switch to align curves &amp; domains</span>
+        </div>
+      </div>
+
+      </div>
+      <div class="pyr-split-right">
+      <!-- 1970s Laboratory Instrument Rack & Level Converter -->
+      <div class="interactive-calc-card" style="background: #0d131f; border: 1.5px solid #334155;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem;">
+          <h4 style="margin: 0; color: var(--accent-cyan); font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>1970s Laboratory Audio Level Converter &amp; Precision DMM</span>
+          </h4>
+          <span class="badge badge-accent">Interactive Metering</span>
+        </div>
+
+        <!-- Laboratory Test Bench: HP 400FL Precision AC Voltmeter + Fluke 8050A Benchtop DMM -->
+        <div class="vintage-test-bench">
+          <!-- Hewlett-Packard 400FL Precision AC Voltmeter -->
+          <div class="hp-voltmeter-card">
+  <svg class="hp-laboratory-voltmeter" viewBox="0 0 380 495" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <!-- Brushed Aluminum Side Rails Gradient -->
+  <linearGradient id="pyr-metal-rail" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#94a3b8"/>
+    <stop offset="20%" stop-color="#f8fafc"/>
+    <stop offset="45%" stop-color="#cbd5e1"/>
+    <stop offset="70%" stop-color="#e2e8f0"/>
+    <stop offset="100%" stop-color="#64748b"/>
+  </linearGradient>
+
+  <!-- Sage Grey Front Panel Texture -->
+  <linearGradient id="pyr-panel-face" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#e2e7e0"/>
+    <stop offset="3%" stop-color="#d6ddd4"/>
+    <stop offset="97%" stop-color="#cbd3c9"/>
+    <stop offset="100%" stop-color="#bcc5b9"/>
+  </linearGradient>
+
+  <!-- Bezel Depth Gradient -->
+  <linearGradient id="pyr-bezel-frame" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#334155"/>
+    <stop offset="15%" stop-color="#0f172a"/>
+    <stop offset="85%" stop-color="#020617"/>
+    <stop offset="100%" stop-color="#1e293b"/>
+  </linearGradient>
+
+  <!-- Aged Laboratory Cream/Ivory Dial Face -->
+  <linearGradient id="pyr-dial-cream" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#fffefb"/>
+    <stop offset="60%" stop-color="#fbf9f2"/>
+    <stop offset="100%" stop-color="#f2ede0"/>
+  </linearGradient>
+
+  <!-- Mirror Strip Specular Chrome Gradient -->
+  <linearGradient id="pyr-mirror-strip" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#94a3b8"/>
+    <stop offset="18%" stop-color="#e2e8f0"/>
+    <stop offset="35%" stop-color="#cbd5e1"/>
+    <stop offset="50%" stop-color="#ffffff"/>
+    <stop offset="68%" stop-color="#cbd5e1"/>
+    <stop offset="85%" stop-color="#e2e8f0"/>
+    <stop offset="100%" stop-color="#94a3b8"/>
+  </linearGradient>
+
+  <!-- Phenolic Knob Gradient -->
+  <radialGradient id="pyr-knob-base" cx="45%" cy="40%" r="55%">
+    <stop offset="0%" stop-color="#334155"/>
+    <stop offset="60%" stop-color="#0f172a"/>
+    <stop offset="100%" stop-color="#020617"/>
+  </radialGradient>
+
+  <!-- Red Center Filter Knob -->
+  <radialGradient id="pyr-red-knob" cx="40%" cy="35%" r="60%">
+    <stop offset="0%" stop-color="#ef4444"/>
+    <stop offset="70%" stop-color="#dc2626"/>
+    <stop offset="100%" stop-color="#991b1b"/>
+  </radialGradient>
+
+  <!-- Red Jewel Pilot Lamp Glow Filter -->
+  <radialGradient id="pyr-jewel-glow" cx="45%" cy="40%" r="55%">
+    <stop offset="0%" stop-color="#fecaca"/>
+    <stop offset="35%" stop-color="#ef4444"/>
+    <stop offset="75%" stop-color="#b91c1c"/>
+    <stop offset="100%" stop-color="#7f1d1d"/>
+  </radialGradient>
+
+  <!-- Needle Soft Drop Shadow -->
+  <filter id="pyr-needle-shadow" x="-20%" y="-20%" width="150%" height="150%">
+    <feDropShadow dx="1.5" dy="2" stdDeviation="1.5" flood-color="#0f172a" flood-opacity="0.38"/>
+  </filter>
+
+  <!-- Glass Highlight -->
+  <linearGradient id="pyr-glass-glare" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="rgba(255,255,255,0.28)"/>
+    <stop offset="35%" stop-color="rgba(255,255,255,0.06)"/>
+    <stop offset="55%" stop-color="rgba(255,255,255,0)"/>
+    <stop offset="100%" stop-color="rgba(255,255,255,0.04)"/>
+  </linearGradient>
+</defs><!-- Top Carrying Handle -->
+<rect x="135" y="4" width="110" height="12" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+<path d="M 135,10 Q 190,6 245,10" stroke="#475569" stroke-width="2" fill="none"/>
+<rect x="126" y="6" width="12" height="10" rx="2" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
+<rect x="242" y="6" width="12" height="10" rx="2" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
+
+<!-- Left & Right Die-Cast Brushed Aluminum Side Rails -->
+<rect x="0" y="14" width="22" height="476" rx="3" fill="url(#pyr-metal-rail)" stroke="#475569" stroke-width="0.75"/>
+<rect x="358" y="14" width="22" height="476" rx="3" fill="url(#pyr-metal-rail)" stroke="#475569" stroke-width="0.75"/>
+<!-- Rail Rack Screws -->
+<circle cx="11" cy="30" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
+<line x1="9" y1="30" x2="13" y2="30" stroke="#334155" stroke-width="0.75"/>
+<circle cx="11" cy="470" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
+<line x1="9" y1="470" x2="13" y2="470" stroke="#334155" stroke-width="0.75"/>
+<circle cx="369" cy="30" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
+<line x1="367" y1="30" x2="371" y2="30" stroke="#334155" stroke-width="0.75"/>
+<circle cx="369" cy="470" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
+<line x1="367" y1="470" x2="371" y2="470" stroke="#334155" stroke-width="0.75"/>
+
+<!-- Vintage Sage Grey Front Panel Faceplate -->
+<rect x="22" y="16" width="336" height="472" fill="url(#pyr-panel-face)"/>
+<rect x="24" y="18" width="332" height="468" fill="none" stroke="#b2bbb0" stroke-width="1"/>
+
+<!-- Molded Black Bezel -->
+<rect x="36" y="28" width="308" height="212" rx="6" fill="url(#pyr-bezel-frame)" stroke="#090d16" stroke-width="2"/>
+<rect x="39" y="31" width="302" height="206" rx="4" fill="none" stroke="#475569" stroke-width="0.75" opacity="0.6"/>
+
+<!-- Ivory Dial Plate -->
+<rect x="46" y="38" width="288" height="186" rx="3" fill="url(#pyr-dial-cream)"/>
+<rect x="46" y="38" width="288" height="186" rx="3" fill="none" stroke="#d5cebd" stroke-width="0.75"/><!-- Anti-Parallax Mirrored Strip -->
+<path d="M 97.13,122.18 A 158,158 0 0,1 290.71,128.26 L 283.70,136.73 A 147,147 0 0,0 103.60,131.07 Z" fill="url(#pyr-mirror-strip)" stroke="#64748b" stroke-width="0.5"/><!-- Aligned Dynamic Range Pyramid Color Zone Curves -->
+<path id="pyr-scale-zone-mic" class="meter-scale-zone zone-mic" d="M 100.50,94.98 A 179,179 0 0,1 137.59,78.85" fill="none" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round" title="Microphone Level (-60 to -40 dBu)"/>
+<path id="pyr-scale-zone-consumer" class="meter-scale-zone zone-consumer" d="M 137.59,78.85 A 179,179 0 0,1 210.19,72.14" fill="none" stroke="#06b6d4" stroke-width="3.5" title="Consumer Line Level (-10 dBV)"/>
+<path id="pyr-scale-zone-pro" class="meter-scale-zone zone-pro active" d="M 210.19,72.14 A 179,179 0 0,1 283.05,97.09" fill="none" stroke="#10b981" stroke-width="4.5" title="Professional Line Level (+4 dBu / 0 VU)"/>
+<path id="pyr-scale-zone-headroom" class="meter-scale-zone zone-headroom" d="M 283.05,97.09 A 179,179 0 0,1 304.10,112.08" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round" title="Maximum System Headroom Ceiling (+24 to +28 dBu)"/><path d="M 87.14,108.42 A 175,175 0 0,1 261.18,90.13" fill="none" stroke="#0f172a" stroke-width="1.2"/><path d="M 261.18,90.13 A 175,175 0 0,1 301.55,115.16" fill="none" stroke="#dc2626" stroke-width="2.5"/><text x="190" y="58" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.1em" text-anchor="middle">DECIBELS</text><text x="190" y="66" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle">1 mW 600 Ω</text><text x="190" y="152" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.08em" text-anchor="middle">R. M. S. VOLTS</text><text x="190" y="160" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5" font-weight="600" letter-spacing="0.05em" text-anchor="middle">AVERAGE RESPONDING</text><rect x="62" y="48" width="13" height="13" rx="2" fill="#006699"/>
+<text x="68.5" y="58" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="9" text-anchor="middle">hp</text><line x1="102.50" y1="98.45" x2="106.00" y2="104.51" stroke="#0f172a" stroke-width="1.3"/><text x="108.75" y="109.27" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-20</text><line x1="115.13" y1="91.83" x2="117.05" y2="95.89" stroke="#0f172a" stroke-width="0.75"/><line x1="138.76" y1="82.67" x2="140.81" y2="89.36" stroke="#0f172a" stroke-width="1.3"/><text x="142.42" y="94.62" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-10</text><line x1="145.56" y1="80.74" x2="146.70" y2="85.09" stroke="#0f172a" stroke-width="0.75"/><line x1="153.28" y1="78.90" x2="154.75" y2="85.74" stroke="#0f172a" stroke-width="1.3"/><text x="155.90" y="91.12" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-8</text><line x1="162.02" y1="77.25" x2="162.74" y2="81.69" stroke="#0f172a" stroke-width="0.75"/><line x1="171.92" y1="75.94" x2="172.65" y2="82.90" stroke="#0f172a" stroke-width="1.3"/><text x="173.22" y="88.37" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-6</text><line x1="183.10" y1="75.14" x2="183.28" y2="79.63" stroke="#0f172a" stroke-width="0.75"/><line x1="195.67" y1="75.09" x2="195.45" y2="82.09" stroke="#0f172a" stroke-width="1.3"/><text x="195.27" y="87.59" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-4</text><line x1="209.74" y1="76.12" x2="209.23" y2="80.59" stroke="#0f172a" stroke-width="0.75"/><line x1="225.37" y1="78.61" x2="223.95" y2="85.47" stroke="#0f172a" stroke-width="1.3"/><text x="222.84" y="90.85" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-2</text><line x1="242.55" y1="83.08" x2="241.20" y2="87.37" stroke="#0f172a" stroke-width="0.75"/><line x1="261.18" y1="90.13" x2="258.33" y2="96.52" stroke="#dc2626" stroke-width="1.3"/><text x="256.09" y="101.55" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="280.97" y1="100.50" x2="277.33" y2="106.48" stroke="#dc2626" stroke-width="1.3"/><text x="274.47" y="111.18" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+1</text><line x1="301.40" y1="115.03" x2="296.94" y2="120.43" stroke="#dc2626" stroke-width="1.3"/><text x="293.44" y="124.68" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+2</text><path d="M 105.36,133.50 A 144,144 0 0,1 248.57,118.45" fill="none" stroke="#0f172a" stroke-width="1.0"/><line x1="105.36" y1="133.50" x2="108.89" y2="138.36" stroke="#0f172a" stroke-width="1.0"/><text x="111.82" y="142.40" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="118.00" y1="125.29" x2="121.00" y2="130.49" stroke="#0f172a" stroke-width="1.0"/><line x1="131.43" y1="118.45" x2="133.87" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="135.90" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.2</text><line x1="145.50" y1="113.05" x2="147.36" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="160.06" y1="109.15" x2="161.31" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="162.35" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.4</text><line x1="174.95" y1="106.79" x2="175.58" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="190.00" y1="106.00" x2="190.00" y2="112.00" stroke="#0f172a" stroke-width="1.0"/><text x="190.00" y="117.00" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.6</text><line x1="205.05" y1="106.79" x2="204.42" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="219.94" y1="109.15" x2="218.69" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="217.65" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.8</text><line x1="234.50" y1="113.05" x2="232.64" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="248.57" y1="118.45" x2="246.13" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="244.10" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">1.0</text><line x1="107.82" y1="131.75" x2="109.81" y2="134.63" stroke="#475569" stroke-width="0.5"/><line x1="110.31" y1="130.06" x2="112.25" y2="132.97" stroke="#475569" stroke-width="0.5"/><line x1="112.84" y1="128.42" x2="114.72" y2="131.37" stroke="#475569" stroke-width="0.5"/><line x1="115.40" y1="126.83" x2="117.22" y2="129.82" stroke="#475569" stroke-width="0.5"/><line x1="120.63" y1="123.81" x2="122.31" y2="126.88" stroke="#475569" stroke-width="0.5"/><line x1="123.29" y1="122.39" x2="124.91" y2="125.49" stroke="#475569" stroke-width="0.5"/><line x1="125.97" y1="121.02" x2="127.53" y2="124.15" stroke="#475569" stroke-width="0.5"/><line x1="128.69" y1="119.70" x2="130.18" y2="122.87" stroke="#475569" stroke-width="0.5"/><line x1="134.20" y1="117.25" x2="135.55" y2="120.48" stroke="#475569" stroke-width="0.5"/><line x1="136.99" y1="116.11" x2="138.28" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="139.81" y1="115.03" x2="141.03" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="142.64" y1="114.01" x2="143.79" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="148.38" y1="112.15" x2="149.39" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="151.28" y1="111.30" x2="152.22" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="154.19" y1="110.52" x2="155.06" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="157.12" y1="109.80" x2="157.92" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="163.02" y1="108.55" x2="163.67" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="165.99" y1="108.02" x2="166.57" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="168.96" y1="107.54" x2="169.48" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="171.95" y1="107.14" x2="172.39" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="177.95" y1="106.51" x2="178.24" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="180.96" y1="106.28" x2="181.18" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="183.97" y1="106.13" x2="184.12" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="186.98" y1="106.03" x2="187.06" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="193.02" y1="106.03" x2="192.94" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="196.03" y1="106.13" x2="195.88" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="199.04" y1="106.28" x2="198.82" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="202.05" y1="106.51" x2="201.76" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="208.05" y1="107.14" x2="207.61" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="211.04" y1="107.54" x2="210.52" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="214.01" y1="108.02" x2="213.43" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="216.98" y1="108.55" x2="216.33" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="222.88" y1="109.80" x2="222.08" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="225.81" y1="110.52" x2="224.94" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="228.72" y1="111.30" x2="227.78" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="231.62" y1="112.15" x2="230.61" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="237.36" y1="114.01" x2="236.21" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="240.19" y1="115.03" x2="238.97" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="243.01" y1="116.11" x2="241.72" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="245.80" y1="117.25" x2="244.45" y2="120.48" stroke="#475569" stroke-width="0.5"/><path d="M 115.94,148.06 A 126,126 0 0,1 241.25,134.89" fill="none" stroke="#0f172a" stroke-width="0.8"/><line x1="115.94" y1="148.06" x2="118.88" y2="152.11" stroke="#0f172a" stroke-width="0.9"/><text x="121.52" y="155.75" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="134.77" y1="136.75" x2="136.96" y2="141.25" stroke="#0f172a" stroke-width="0.9"/><text x="138.93" y="145.29" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0.5</text><line x1="155.27" y1="128.88" x2="156.65" y2="133.69" stroke="#0f172a" stroke-width="0.9"/><text x="157.89" y="138.01" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><line x1="176.83" y1="124.69" x2="177.35" y2="129.66" stroke="#0f172a" stroke-width="0.9"/><text x="177.82" y="134.14" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1.5</text><line x1="198.79" y1="124.31" x2="198.44" y2="129.29" stroke="#0f172a" stroke-width="0.9"/><text x="198.13" y="133.78" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><line x1="220.48" y1="127.74" x2="219.27" y2="132.59" stroke="#0f172a" stroke-width="0.9"/><text x="218.18" y="136.96" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2.5</text><line x1="241.25" y1="134.89" x2="239.22" y2="139.46" stroke="#0f172a" stroke-width="0.9"/><text x="237.38" y="143.57" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><!-- Aligned Pyramid Domain Color Badges Ribbon -->
+<g class="meter-pyramid-legend" transform="translate(190, 185)">
+  <rect x="-132" y="0" width="62" height="11" rx="2" fill="rgba(245, 158, 11, 0.12)" stroke="#d97706" stroke-width="0.75"/>
+  <text x="-101" y="8" fill="#d97706" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">MIC (-60..-40)</text>
+
+  <rect x="-67" y="0" width="62" height="11" rx="2" fill="rgba(6, 182, 212, 0.12)" stroke="#0284c7" stroke-width="0.75"/>
+  <text x="-36" y="8" fill="#0284c7" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">CONSUMER (-10)</text>
+
+  <rect x="-2" y="0" width="65" height="11" rx="2" fill="rgba(16, 185, 129, 0.15)" stroke="#16a34a" stroke-width="0.85"/>
+  <text x="30.5" y="8" fill="#16a34a" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">PRO (+4 / 0VU)</text>
+
+  <rect x="66" y="0" width="66" height="11" rx="2" fill="rgba(239, 68, 68, 0.15)" stroke="#dc2626" stroke-width="0.85"/>
+  <text x="99" y="8" fill="#dc2626" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">HEADROOM (+24+)</text>
+</g><!-- Galvanometer Pointer Needle -->
+<g id="pyr-vu-needle" class="hp-galvo-needle" filter="url(#pyr-needle-shadow)" transform="rotate(-36 190 250)">
+  <!-- Counterweight Tail -->
+  <path d="M 188.5,250 L 187,268 A 3,3 0 0,0 193,268 L 191.5,250 Z" fill="#1e293b"/>
+  <!-- Razor Knife-Edge Needle -->
+  <polygon points="189,250 189.5,100 189.8,72 190.2,72 190.5,100 191,250" fill="#dc2626"/>
+  <circle cx="190" cy="250" r="4.5" fill="#0f172a" stroke="#dc2626" stroke-width="1"/>
+</g>
+
+<!-- Glass Reflection Glare -->
+<rect x="46" y="38" width="288" height="186" rx="3" fill="url(#pyr-glass-glare)" pointer-events="none"/>
+
+<!-- Bezel Lower Mask & Mechanical Zero-Adjust Screw -->
+<path d="M 36,220 L 344,220 L 344,240 L 36,240 Z" fill="#0f172a"/>
+<!-- Mechanical Zero Screw -->
+<circle cx="190" cy="230" r="7" fill="#cbd5e1" stroke="#334155" stroke-width="1"/>
+<circle cx="190" cy="230" r="5.5" fill="#94a3b8"/>
+<line x1="185" y1="230" x2="195" y2="230" stroke="#1e293b" stroke-width="1.2"/><!-- Lower Panel Silkscreen Header: APK Precision AC Voltmeter -->
+<g transform="translate(42, 252)">
+  <!-- APK Cyan Badge Logo -->
+  <rect x="0" y="0" width="24" height="18" rx="3" fill="#06b6d4"/>
+  <text x="12" y="13" fill="#040711" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="11" text-anchor="middle">APK</text>
+  <text x="32" y="13" fill="#0284c7" font-family="'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="800" letter-spacing="0.06em">PRECISION AC VOLTMETER</text>
+  <text x="96" y="25" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="0.05em">IN ~ 100kHz L.P. FILTER ~ OUT</text>
+</g>
+
+<!-- ================= Left: INPUT Section (Dual 5-Way Binding Posts) ================= -->
+<g transform="translate(44, 290)">
+  <text x="32" y="14" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">INPUT</text>
+  
+  <!-- Dual Insulating Base -->
+  <rect x="12" y="24" width="40" height="96" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+  
+  <!-- Red Binding Post (HOT / +) -->
+  <g transform="translate(32, 46)">
+    <circle cx="0" cy="0" r="14" fill="#dc2626" stroke="#991b1b" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="11" fill="#b91c1c"/>
+    <circle cx="0" cy="0" r="7" fill="#fbbf24" stroke="#d97706" stroke-width="0.75"/>
+    <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
+    <text x="22" y="4" fill="#dc2626" font-family="Arial, sans-serif" font-size="8" font-weight="800">+</text>
+  </g>
+
+  <!-- Black Binding Post (COLD / GND / -) -->
+  <g transform="translate(32, 94)">
+    <circle cx="0" cy="0" r="14" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="11" fill="#1e293b"/>
+    <circle cx="0" cy="0" r="7" fill="#cbd5e1" stroke="#64748b" stroke-width="0.75"/>
+    <circle cx="0" cy="0" r="3.5" fill="#020617"/>
+    <text x="22" y="4" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800">—</text>
+  </g>
+
+  <!-- Chassis Ground Post & Symbol -->
+  <g transform="translate(32, 134)">
+    <circle cx="0" cy="0" r="6" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
+    <line x1="-6" y1="10" x2="6" y2="10" stroke="#0f172a" stroke-width="1.2"/>
+    <line x1="-4" y1="13" x2="4" y2="13" stroke="#0f172a" stroke-width="1.2"/>
+    <line x1="-2" y1="16" x2="2" y2="16" stroke="#0f172a" stroke-width="1.2"/>
+  </g>
+</g>
+
+<!-- ================= Center: RANGE Rotary Selector with Pyramid Color Alignment ================= -->
+<g transform="translate(190, 365)">
+  <text x="0" y="-62" fill="#0f172a" font-family="Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.1em" text-anchor="middle">RANGE</text>
+  
+  <!-- Header Labels with Color Accents -->
+  <text x="-58" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">dB</text>
+  <text x="-36" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">mV</text>
+  <text x="36" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">V</text>
+  <text x="58" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">dB</text>
+
+  <!-- Left Bank: Amber (Mic Level: -80 to -40 dB) & Cyan (Consumer: -30, -20 dB) -->
+  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
+    <!-- Range 6: 100 mV / -20 dB (Consumer: Cyan) -->
+    <g class="range-dial-tick zone-consumer" data-range-idx="6" data-tier="consumer">
+      <text x="-58" y="-34" text-anchor="end" fill="#0284c7">-20</text><text x="-36" y="-34" text-anchor="end" fill="#0284c7">100</text>
+      <line x1="-32" y1="-34" x2="-22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+    </g>
+    <!-- Range 5: 30 mV / -30 dB (Consumer: Cyan) -->
+    <g class="range-dial-tick zone-consumer" data-range-idx="5" data-tier="consumer">
+      <text x="-58" y="-22" text-anchor="end" fill="#0284c7">-30</text><text x="-36" y="-22" text-anchor="end" fill="#0284c7">30</text>
+      <line x1="-32" y1="-22" x2="-26" y2="-16" stroke="#0284c7" stroke-width="1.2"/>
+    </g>
+    <!-- Range 4: 10 mV / -40 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="4" data-tier="mic">
+      <text x="-58" y="-10" text-anchor="end" fill="#d97706">-40</text><text x="-36" y="-10" text-anchor="end" fill="#d97706">10</text>
+      <line x1="-32" y1="-10" x2="-28" y2="-8" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <!-- Range 3: 3 mV / -50 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="3" data-tier="mic">
+      <text x="-58" y="2" text-anchor="end" fill="#d97706">-50</text><text x="-36" y="2" text-anchor="end" fill="#d97706">3</text>
+      <line x1="-32" y1="2" x2="-28" y2="2" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <!-- Range 2: 1 mV / -60 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="2" data-tier="mic">
+      <text x="-58" y="14" text-anchor="end" fill="#d97706">-60</text><text x="-36" y="14" text-anchor="end" fill="#d97706">1</text>
+      <line x1="-32" y1="14" x2="-28" y2="10" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <!-- Range 1: .3 mV / -70 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="1" data-tier="mic">
+      <text x="-58" y="26" text-anchor="end" fill="#d97706">-70</text><text x="-36" y="26" text-anchor="end" fill="#d97706">.3</text>
+      <line x1="-32" y1="26" x2="-26" y2="18" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <!-- Range 0: .1 mV / -80 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="0" data-tier="mic">
+      <text x="-58" y="38" text-anchor="end" fill="#d97706">-80</text><text x="-36" y="38" text-anchor="end" fill="#d97706">.1</text>
+      <line x1="-32" y1="38" x2="-22" y2="26" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+  </g>
+
+  <!-- Right Bank: Cyan (.3V / -10dB), Green (Pro Line: 1V, 3V), Red (Headroom: 10V to 300V) -->
+  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
+    <!-- Range 7: .3 V / -10 dB (Consumer: Cyan) -->
+    <g class="range-dial-tick zone-consumer" data-range-idx="7" data-tier="consumer">
+      <text x="36" y="-34" fill="#0284c7">.3</text><text x="58" y="-34" fill="#0284c7">-10</text>
+      <line x1="32" y1="-34" x2="22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+    </g>
+    <!-- Range 8: 1 V / 0 dB (Pro Line: Green) -->
+    <g class="range-dial-tick zone-pro" data-range-idx="8" data-tier="pro">
+      <text x="36" y="-22" fill="#16a34a">1</text><text x="58" y="-22" fill="#16a34a">0</text>
+      <line x1="32" y1="-22" x2="26" y2="-16" stroke="#16a34a" stroke-width="1.2"/>
+    </g>
+    <!-- Range 9: 3 V / +10 dB (Pro Line Nominal: Green - Active Default) -->
+    <g class="range-dial-tick zone-pro active" data-range-idx="9" data-tier="pro">
+      <text x="36" y="-10" fill="#16a34a" font-weight="900">3</text><text x="58" y="-10" fill="#16a34a" font-weight="900">+10</text>
+      <line x1="32" y1="-10" x2="28" y2="-8" stroke="#16a34a" stroke-width="2"/>
+    </g>
+    <!-- Range 10: 10 V / +20 dB (Headroom: Red) -->
+    <g class="range-dial-tick zone-headroom" data-range-idx="10" data-tier="headroom">
+      <text x="36" y="2" fill="#dc2626">10</text><text x="58" y="2" fill="#dc2626">+20</text>
+      <line x1="32" y1="2" x2="28" y2="2" stroke="#dc2626" stroke-width="1.2"/>
+    </g>
+    <!-- Range 11: 30 V / +30 dB (Headroom: Red) -->
+    <g class="range-dial-tick zone-headroom" data-range-idx="11" data-tier="headroom">
+      <text x="36" y="14" fill="#dc2626">30</text><text x="58" y="14" fill="#dc2626">+30</text>
+      <line x1="32" y1="14" x2="28" y2="10" stroke="#dc2626" stroke-width="1.2"/>
+    </g>
+    <!-- Range 12: 100 V / +40 dB (Headroom: Red) -->
+    <g class="range-dial-tick zone-headroom" data-range-idx="12" data-tier="headroom">
+      <text x="36" y="26" fill="#dc2626">100</text><text x="58" y="26" fill="#dc2626">+40</text>
+      <line x1="32" y1="26" x2="26" y2="18" stroke="#dc2626" stroke-width="1.2"/>
+    </g>
+    <!-- Range 13: 300 V / +50 dB (Headroom: Red) -->
+    <g class="range-dial-tick zone-headroom" data-range-idx="13" data-tier="headroom">
+      <text x="36" y="38" fill="#dc2626">300</text><text x="58" y="38" fill="#dc2626">+50</text>
+      <line x1="32" y1="38" x2="22" y2="26" stroke="#dc2626" stroke-width="1.2"/>
+    </g>
+  </g>
+
+  <!-- Interactive Rotary Knob Rotor -->
+  <g id="pyr-range-knob-rotor" class="range-knob-rotor" style="transform-origin: 0px 0px; cursor: grab; transform: rotate(-15.9deg);" data-range-idx="9">
+    <circle cx="0" cy="0" r="23" fill="url(#pyr-knob-base)" stroke="#090d16" stroke-width="2"/>
+    <circle cx="0" cy="0" r="21" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
+    <circle cx="0" cy="0" r="11" fill="url(#pyr-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
+    <!-- Range Pointer Indicator Line (pointing at angle along positive X) -->
+    <line x1="0" y1="0" x2="19" y2="0" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="3.5" fill="#f8fafc"/>
+  </g>
+</g>
+
+<!-- ================= Right: LINE Power Switch & Jewel Pilot Lamp ================= -->
+<g transform="translate(305, 305)">
+  <text x="18" y="0" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">LINE</text>
+  
+  <!-- Toggle Switch -->
+  <g transform="translate(18, 26)">
+    <polygon points="-7,-4 0,-8 7,-4 7,4 0,8 -7,4" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
+    <circle cx="0" cy="0" r="5" fill="#64748b"/>
+    <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+    <circle cx="0" cy="-13" r="3.5" fill="#e2e8f0" stroke="#64748b" stroke-width="0.75"/>
+  </g>
+
+  <!-- ON Label & Red Faceted Jewel Pilot Light -->
+  <text x="18" y="68" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800" text-anchor="middle">ON</text>
+  <g transform="translate(18, 92)">
+    <circle cx="0" cy="0" r="14" fill="#94a3b8" stroke="#475569" stroke-width="1.2"/>
+    <circle cx="0" cy="0" r="12" fill="#cbd5e1" stroke="#334155" stroke-width="0.5"/>
+    <circle cx="0" cy="0" r="11" fill="none" stroke="#64748b" stroke-dasharray="1.5,1.5" stroke-width="1"/>
+    <circle cx="0" cy="0" r="9" fill="url(#pyr-jewel-glow)" stroke="#7f1d1d" stroke-width="1" filter="drop-shadow(0 0 6px #ef4444)"/>
+    <polygon points="0,-7 6,-3 6,4 0,7 -6,4 -6,-3" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="0.75"/>
+    <circle cx="-2" cy="-2" r="2.5" fill="rgba(255,255,255,0.6)"/>
+  </g>
+</g>
+  </svg>
+</div>
+
+          <!-- Fluke 8050A Precision Benchtop DMM -->
+          <div class="dmm-display-card">
+            <div class="dmm-plate">
+              <span class="dmm-plate-title">DIGITAL MULTIMETER</span>
+              <span class="dmm-plate-sub">TRUE RMS &bull; 4&frac12; DIGIT AUDIO BENCH</span>
+            </div>
+            <div class="dmm-bezel">
+              <div class="dmm-header">
+                <span class="dmm-model">VACUUM FLUORESCENT DISPLAY</span>
+                <span class="dmm-badge">&#9679; AC RMS ACTIVE</span>
+              </div>
+              <div class="dmm-grid">
+                <div class="dmm-readout-item">
+                  <div class="dmm-readout-label">V_RMS (VOLTAGE)</div>
+                  <div id="dmm-vrms-val" class="dmm-readout-value cyan">1.228 V</div>
+                </div>
+                <div class="dmm-readout-item">
+                  <div class="dmm-readout-label">AUDIO LEVEL (dBu)</div>
+                  <div id="dmm-dbu-val" class="dmm-readout-value green">+4.0 dBu</div>
+                </div>
+                <div class="dmm-readout-item">
+                  <div class="dmm-readout-label">V_PEAK (CREST)</div>
+                  <div id="dmm-vpeak-val" class="dmm-readout-value amber">1.737 V</div>
+                </div>
+              </div>
+            </div>
+            <div class="dmm-keypad">
+              <div class="dmm-key active">AC V</div>
+              <div class="dmm-key">DC V</div>
+              <div class="dmm-key">AC mA</div>
+              <div class="dmm-key">DC mA</div>
+              <div class="dmm-key">k&Omega;</div>
+              <div class="dmm-key">200mV</div>
+              <div class="dmm-key active">2V</div>
+              <div class="dmm-key">20V</div>
+              <div class="dmm-key">200V</div>
+              <div class="dmm-key key-red">POWER</div>
+            </div>
+            <div class="dmm-terminals">
+              <div class="dmm-jack">
+                <div class="dmm-jack-socket red"></div>
+                <span class="dmm-jack-label">V &bull; &Omega;</span>
+              </div>
+              <div class="dmm-jack">
+                <div class="dmm-jack-socket black"></div>
+                <span class="dmm-jack-label">COMMON</span>
+              </div>
+              <div class="dmm-jack">
+                <div class="dmm-jack-socket white"></div>
+                <span class="dmm-jack-label">mA</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calibration panel: rotary step switch (pyramid-tier coloured) + VFD level readouts -->
+        <div class="cal-panel">
+          <div class="cal-rotary-wrap">
+            <div class="cal-panel-label">CALIBRATION STEP</div>
+            <div id="cal-rotary" class="cal-rotary" title="Click a step, click the knob to advance, or scroll"></div>
+          </div>
+          <div class="cal-readouts">
+            <label class="cal-readout"><span class="cal-readout-label">LEVEL &bull; dBu <em>(0.775 V)</em></span><input type="number" id="calc-dbu" class="calc-input" value="4.0" step="0.5" /></label>
+            <label class="cal-readout"><span class="cal-readout-label">LEVEL &bull; dBV <em>(1.000 V)</em></span><input type="number" id="calc-dbv" class="calc-input" value="1.78" step="0.5" /></label>
+            <label class="cal-readout"><span class="cal-readout-label">V<sub>RMS</sub></span><input type="number" id="calc-vrms" class="calc-input" value="1.228" step="0.05" /></label>
+            <label class="cal-readout"><span class="cal-readout-label">V<sub>PEAK</sub></span><input type="number" id="calc-vpeak" class="calc-input" value="1.737" step="0.05" readonly /></label>
+            <div id="cal-tier-name" class="cal-tier-name">PRO LINE &bull; +4 dBu / 0 VU</div>
+          </div>
+          <select id="pyr-preset-select" hidden aria-hidden="true">
+                <option value="4.0" selected>+4.0 dBu (1.228 VRMS) — Professional Studio (+4 dBu / 0 VU)</option>
+                <option value="0.0">0.0 dBu (0.775 VRMS) — European Broadcast Reference</option>
+                <option value="-7.78">-10.0 dBV (-7.78 dBu / 0.316 VRMS) — Consumer Line Level</option>
+                <option value="24.0">+24.0 dBu (12.28 VRMS) — High Headroom Clip Margin</option>
+                <option value="28.0">+28.0 dBu (19.46 VRMS) — Broadcast Master Bus Ceiling</option>
+                <option value="-50.0">-50.0 dBu (2.45 mVRMS) — Dynamic Microphone Level</option>
+                <option value="-60.0">-60.0 dBu (0.775 mVRMS) — Low-Output Ribbon Mic</option>
+                <option value="custom">Manual Numeric Entry (Custom)</option>
+              </select>
+        </div>
+      </div>
+      </div>
       </div>
     </div>
   </section>
@@ -2184,552 +2732,7 @@
     </div>
   </section>
 
-  <!-- Section 2: The Three Parts of the Interconnection Chain -->
-  <section id="triad" class="section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-badge">Structural Framework</span>
-        <h2 class="section-title">The Three Parts of the Interconnection Chain</h2>
-        <p class="section-lead">
-          AES-X152 formalizes analog audio transmission into three discrete architectural sections. 
-          Every parameter specified in product data sheets maps to one of these three domains.
-        </p>
-      </div>
 
-      <div class="triad-grid">
-        <!-- Part 1: The Transmitter -->
-        <div class="triad-card">
-          <div class="triad-badge">Part 1</div>
-          <h3 class="triad-title">The Transmitter (Output Component)</h3>
-          <p class="triad-desc">
-            The signal source driving the balanced transmission line. Specifies source impedance, balance matching, and maximum voltage drive capability.
-          </p>
-          <ul class="triad-list">
-            <li><strong>Differential Output Impedance (DMZ<sub>OUT</sub>):</strong> Series resistance driving the cable (Z<sub>PO</sub> + Z<sub>RO</sub>), ideally 50&ndash;100 &Omega;.</li>
-            <li><strong>Impedance Balance (&Delta;Z):</strong> Matching tolerance between Pin 2 and Pin 3 source impedances to ground (|Z<sub>PO</sub> &minus; Z<sub>RO</sub>|).</li>
-            <li><strong>Common-Mode Impedance (CMZ<sub>OUT</sub>):</strong> Total source impedance presented to common-mode currents flowing through the enclosure.</li>
-            <li><strong>Maximum Output Level (L<sub>MAX</sub>):</strong> Peak voltage capability before clipping occurs.</li>
-          </ul>
-        </div>
-
-        <!-- Part 2: The Medium -->
-        <div class="triad-card">
-          <div class="triad-badge">Part 2</div>
-          <h3 class="triad-title">The Transmission Medium (Cable)</h3>
-          <p class="triad-desc">
-            The shielded twisted-pair (STP), Star-Quad, or Category cable interconnecting transmitter and receiver over distance.
-          </p>
-          <ul class="triad-list">
-            <li><strong>Conductor Resistance (R<sub>C</sub>):</strong> Loop resistance of copper signal lines over distance.</li>
-            <li><strong>Mutual Capacitance (C<sub>DM</sub>):</strong> Core-to-core capacitance (typically 40&ndash;120 pF/m) causing high-frequency roll-off.</li>
-            <li><strong>Capacitance Unbalance to Shield (&Delta;C):</strong> Matching symmetry between core-to-shield capacitances.</li>
-            <li><strong>Shield Transfer Impedance (Z<sub>T</sub>):</strong> Effectiveness of braid, foil, or drain wire in containing RF interference.</li>
-          </ul>
-        </div>
-
-        <!-- Part 3: The Receiver -->
-        <div class="triad-card">
-          <div class="triad-badge">Part 3</div>
-          <h3 class="triad-title">The Receiver (Input Component)</h3>
-          <p class="triad-desc">
-            The destination differential instrumentation amplifier, op-amp receiver, or transformer converting the differential signal to internal audio.
-          </p>
-          <ul class="triad-list">
-            <li><strong>Differential Input Impedance (DMZ<sub>IN</sub>):</strong> Bridging load presented to incoming differential signal (&ge; 10 k&Omega;).</li>
-            <li><strong>Common-Mode Input Impedance (CMZ<sub>IN</sub>):</strong> Bridging impedance presented to common-mode noise, protecting against source imbalances.</li>
-            <li><strong>Common-Mode Rejection Ratio (CMRR):</strong> Attenuation of common-mode interference over the 20 Hz to 20 kHz spectrum.</li>
-            <li><strong>Maximum Input Level (L<sub>IN_MAX</sub>):</strong> Maximum common-mode and differential voltage tolerated before overload.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 3: The Interconnection Levels & Signal Headroom Pyramid -->
-  <section id="pyramid-section" class="section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-badge">Dynamic Levels Architecture</span>
-        <h2 class="section-title">The Interconnection Levels &amp; Signal Headroom Pyramid</h2>
-        <p class="section-lead">
-          AES-X152 establishes standardized operational signal levels spanning from transducer microvolts 
-          to professional studio line levels (+24 dBu). Use the interactive calculator below to convert units in real-time.
-        </p>
-      </div>
-
-      <!-- Pyramid (left half) beside the laboratory instruments (right half) -->
-      <div class="pyr-split">
-      <div class="pyr-split-left">
-      <!-- Graphical SVG Headroom Pyramid -->
-      <div class="svg-diagram-wrapper" style="margin-bottom: 2rem;">
-        <svg viewBox="0 0 920 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-          <rect width="920" height="320" fill="#070b13" rx="8"/>
-          
-          <!-- Headroom Ceiling Tier (Top: +24 to +28 dBu) -->
-          <g id="pyramid-tier-headroom" class="pyramid-tier tier-zone-headroom" data-tier="headroom" tabindex="0" role="button" aria-label="Maximum System Headroom Tier">
-            <polygon class="pyramid-tier-poly" points="460,25 310,95 610,95" fill="rgba(239, 68, 68, 0.2)" stroke="#ef4444" stroke-width="2"/>
-            <text x="460" y="60" fill="#f87171" font-size="12" font-weight="800" text-anchor="middle">MAXIMUM SYSTEM HEADROOM CEILING (+24 to +28 dBu)</text>
-            <text x="460" y="78" fill="#fecdd3" font-size="10" text-anchor="middle">12.28 V to 19.46 V RMS &bull; Professional Analog Console Boundary</text>
-          </g>
-
-          <!-- Professional Line Level Tier (+4 dBu / 0 VU) -->
-          <g id="pyramid-tier-pro" class="pyramid-tier tier-zone-pro tier-active" data-tier="pro" tabindex="0" role="button" aria-label="Professional Line Level Tier">
-            <polygon class="pyramid-tier-poly" points="310,98 610,98 680,165 240,165" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="2.5"/>
-            <text x="460" y="125" fill="#34d399" font-size="13" font-weight="800" text-anchor="middle">PROFESSIONAL LINE LEVEL REFERENCE (+4 dBu / 0 VU)</text>
-            <text x="460" y="145" fill="#a7f3d0" font-size="10.5" text-anchor="middle">1.228 V RMS &bull; Standard Studio Interconnect (0.775 V Ref)</text>
-          </g>
-
-          <!-- Consumer Line Level Tier (-10 dBV / -7.78 dBu) -->
-          <g id="pyramid-tier-consumer" class="pyramid-tier tier-zone-consumer" data-tier="consumer" tabindex="0" role="button" aria-label="Consumer Line Level Tier">
-            <polygon class="pyramid-tier-poly" points="240,168 680,168 750,235 170,235" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
-            <text x="460" y="195" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">CONSUMER LINE LEVEL REFERENCE (-10 dBV / -7.78 dBu)</text>
-            <text x="460" y="215" fill="#bae6fd" font-size="10.5" text-anchor="middle">0.316 V RMS (1.000 V Ref) &bull; RCA Hi-Fi &amp; Semi-Pro Gear</text>
-          </g>
-
-          <!-- Microphone Transducer Level Tier (Bottom: -60 to -40 dBu) -->
-          <g id="pyramid-tier-mic" class="pyramid-tier tier-zone-mic" data-tier="mic" tabindex="0" role="button" aria-label="Microphone Transducer Level Tier">
-            <polygon class="pyramid-tier-poly" points="170,238 750,238 820,305 100,305" fill="rgba(245, 158, 11, 0.18)" stroke="#f59e0b" stroke-width="2"/>
-            <text x="460" y="265" fill="#fbbf24" font-size="13" font-weight="800" text-anchor="middle">MICROPHONE TRANSDUCER LEVEL (-60 to -40 dBu)</text>
-            <text x="460" y="285" fill="#fde68a" font-size="10.5" text-anchor="middle">0.775 mV to 7.75 mV RMS &bull; Ultra-sensitive High-Gain Preamp Stage</text>
-          </g>
-
-          <!-- Dynamic Voltage Margin Brackets -->
-          <line x1="770" y1="98" x2="770" y2="165" stroke="#10b981" stroke-width="1.8"/>
-          <polyline points="765,98 770,98 770,165 765,165" fill="none" stroke="#10b981" stroke-width="1.8"/>
-          <text x="780" y="135" fill="#10b981" font-size="10" font-weight="700">20 dB Headroom</text>
-
-          <line x1="840" y1="168" x2="840" y2="305" stroke="#f59e0b" stroke-width="1.8"/>
-          <polyline points="835,168 840,168 840,305 835,305" fill="none" stroke="#f59e0b" stroke-width="1.8"/>
-          <text x="850" y="240" fill="#f59e0b" font-size="10" font-weight="700">44–64 dB Gain</text>
-        </svg>
-      </div>
-
-      <!-- Calibrated Voltmeter & Dynamic Range Pyramid Alignment HUD -->
-      <div id="pyramid-meter-alignment-hud" class="pyramid-meter-alignment-hud">
-        <div class="pyr-hud-left">
-          <span class="pyr-hud-badge">CALIBRATED COUPLING</span>
-          <span class="pyr-hud-label">METER RANGE &harr; PYRAMID TIER:</span>
-          <span id="pyramid-hud-range" class="pyr-hud-range-pill">3 V (+10 dB)</span>
-          <span class="pyr-hud-arrow">&bull;</span>
-          <span id="pyramid-hud-dot" class="pyr-hud-indicator-dot"></span>
-          <span id="pyramid-hud-domain" class="pyr-hud-domain-name">PROFESSIONAL LINE LEVEL REFERENCE (+4 dBu / 0 VU)</span>
-        </div>
-        <div class="pyr-hud-right">
-          <span class="pyr-hud-hint">Click any tier or rotary range switch to align curves &amp; domains</span>
-        </div>
-      </div>
-
-      </div>
-      <div class="pyr-split-right">
-      <!-- 1970s Laboratory Instrument Rack & Level Converter -->
-      <div class="interactive-calc-card" style="background: #0d131f; border: 1.5px solid #334155;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem;">
-          <h4 style="margin: 0; color: var(--accent-cyan); font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span>1970s Laboratory Audio Level Converter &amp; Precision DMM</span>
-          </h4>
-          <span class="badge badge-accent">Interactive Metering</span>
-        </div>
-
-        <!-- Laboratory Test Bench: HP 400FL Precision AC Voltmeter + Fluke 8050A Benchtop DMM -->
-        <div class="vintage-test-bench">
-          <!-- Hewlett-Packard 400FL Precision AC Voltmeter -->
-          <div class="hp-voltmeter-card">
-  <svg class="hp-laboratory-voltmeter" viewBox="0 0 380 495" xmlns="http://www.w3.org/2000/svg">
-<defs>
-  <!-- Brushed Aluminum Side Rails Gradient -->
-  <linearGradient id="pyr-metal-rail" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0%" stop-color="#94a3b8"/>
-    <stop offset="20%" stop-color="#f8fafc"/>
-    <stop offset="45%" stop-color="#cbd5e1"/>
-    <stop offset="70%" stop-color="#e2e8f0"/>
-    <stop offset="100%" stop-color="#64748b"/>
-  </linearGradient>
-
-  <!-- Sage Grey Front Panel Texture -->
-  <linearGradient id="pyr-panel-face" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stop-color="#e2e7e0"/>
-    <stop offset="3%" stop-color="#d6ddd4"/>
-    <stop offset="97%" stop-color="#cbd3c9"/>
-    <stop offset="100%" stop-color="#bcc5b9"/>
-  </linearGradient>
-
-  <!-- Bezel Depth Gradient -->
-  <linearGradient id="pyr-bezel-frame" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#334155"/>
-    <stop offset="15%" stop-color="#0f172a"/>
-    <stop offset="85%" stop-color="#020617"/>
-    <stop offset="100%" stop-color="#1e293b"/>
-  </linearGradient>
-
-  <!-- Aged Laboratory Cream/Ivory Dial Face -->
-  <linearGradient id="pyr-dial-cream" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stop-color="#fffefb"/>
-    <stop offset="60%" stop-color="#fbf9f2"/>
-    <stop offset="100%" stop-color="#f2ede0"/>
-  </linearGradient>
-
-  <!-- Mirror Strip Specular Chrome Gradient -->
-  <linearGradient id="pyr-mirror-strip" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0%" stop-color="#94a3b8"/>
-    <stop offset="18%" stop-color="#e2e8f0"/>
-    <stop offset="35%" stop-color="#cbd5e1"/>
-    <stop offset="50%" stop-color="#ffffff"/>
-    <stop offset="68%" stop-color="#cbd5e1"/>
-    <stop offset="85%" stop-color="#e2e8f0"/>
-    <stop offset="100%" stop-color="#94a3b8"/>
-  </linearGradient>
-
-  <!-- Phenolic Knob Gradient -->
-  <radialGradient id="pyr-knob-base" cx="45%" cy="40%" r="55%">
-    <stop offset="0%" stop-color="#334155"/>
-    <stop offset="60%" stop-color="#0f172a"/>
-    <stop offset="100%" stop-color="#020617"/>
-  </radialGradient>
-
-  <!-- Red Center Filter Knob -->
-  <radialGradient id="pyr-red-knob" cx="40%" cy="35%" r="60%">
-    <stop offset="0%" stop-color="#ef4444"/>
-    <stop offset="70%" stop-color="#dc2626"/>
-    <stop offset="100%" stop-color="#991b1b"/>
-  </radialGradient>
-
-  <!-- Red Jewel Pilot Lamp Glow Filter -->
-  <radialGradient id="pyr-jewel-glow" cx="45%" cy="40%" r="55%">
-    <stop offset="0%" stop-color="#fecaca"/>
-    <stop offset="35%" stop-color="#ef4444"/>
-    <stop offset="75%" stop-color="#b91c1c"/>
-    <stop offset="100%" stop-color="#7f1d1d"/>
-  </radialGradient>
-
-  <!-- Needle Soft Drop Shadow -->
-  <filter id="pyr-needle-shadow" x="-20%" y="-20%" width="150%" height="150%">
-    <feDropShadow dx="1.5" dy="2" stdDeviation="1.5" flood-color="#0f172a" flood-opacity="0.38"/>
-  </filter>
-
-  <!-- Glass Highlight -->
-  <linearGradient id="pyr-glass-glare" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="rgba(255,255,255,0.28)"/>
-    <stop offset="35%" stop-color="rgba(255,255,255,0.06)"/>
-    <stop offset="55%" stop-color="rgba(255,255,255,0)"/>
-    <stop offset="100%" stop-color="rgba(255,255,255,0.04)"/>
-  </linearGradient>
-</defs><!-- Top Carrying Handle -->
-<rect x="135" y="4" width="110" height="12" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
-<path d="M 135,10 Q 190,6 245,10" stroke="#475569" stroke-width="2" fill="none"/>
-<rect x="126" y="6" width="12" height="10" rx="2" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
-<rect x="242" y="6" width="12" height="10" rx="2" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
-
-<!-- Left & Right Die-Cast Brushed Aluminum Side Rails -->
-<rect x="0" y="14" width="22" height="476" rx="3" fill="url(#pyr-metal-rail)" stroke="#475569" stroke-width="0.75"/>
-<rect x="358" y="14" width="22" height="476" rx="3" fill="url(#pyr-metal-rail)" stroke="#475569" stroke-width="0.75"/>
-<!-- Rail Rack Screws -->
-<circle cx="11" cy="30" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
-<line x1="9" y1="30" x2="13" y2="30" stroke="#334155" stroke-width="0.75"/>
-<circle cx="11" cy="470" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
-<line x1="9" y1="470" x2="13" y2="470" stroke="#334155" stroke-width="0.75"/>
-<circle cx="369" cy="30" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
-<line x1="367" y1="30" x2="371" y2="30" stroke="#334155" stroke-width="0.75"/>
-<circle cx="369" cy="470" r="3" fill="#cbd5e1" stroke="#334155" stroke-width="0.75"/>
-<line x1="367" y1="470" x2="371" y2="470" stroke="#334155" stroke-width="0.75"/>
-
-<!-- Vintage Sage Grey Front Panel Faceplate -->
-<rect x="22" y="16" width="336" height="472" fill="url(#pyr-panel-face)"/>
-<rect x="24" y="18" width="332" height="468" fill="none" stroke="#b2bbb0" stroke-width="1"/>
-
-<!-- Molded Black Bezel -->
-<rect x="36" y="28" width="308" height="212" rx="6" fill="url(#pyr-bezel-frame)" stroke="#090d16" stroke-width="2"/>
-<rect x="39" y="31" width="302" height="206" rx="4" fill="none" stroke="#475569" stroke-width="0.75" opacity="0.6"/>
-
-<!-- Ivory Dial Plate -->
-<rect x="46" y="38" width="288" height="186" rx="3" fill="url(#pyr-dial-cream)"/>
-<rect x="46" y="38" width="288" height="186" rx="3" fill="none" stroke="#d5cebd" stroke-width="0.75"/><!-- Anti-Parallax Mirrored Strip -->
-<path d="M 97.13,122.18 A 158,158 0 0,1 290.71,128.26 L 283.70,136.73 A 147,147 0 0,0 103.60,131.07 Z" fill="url(#pyr-mirror-strip)" stroke="#64748b" stroke-width="0.5"/><!-- Aligned Dynamic Range Pyramid Color Zone Curves -->
-<path id="pyr-scale-zone-mic" class="meter-scale-zone zone-mic" d="M 100.50,94.98 A 179,179 0 0,1 137.59,78.85" fill="none" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round" title="Microphone Level (-60 to -40 dBu)"/>
-<path id="pyr-scale-zone-consumer" class="meter-scale-zone zone-consumer" d="M 137.59,78.85 A 179,179 0 0,1 210.19,72.14" fill="none" stroke="#06b6d4" stroke-width="3.5" title="Consumer Line Level (-10 dBV)"/>
-<path id="pyr-scale-zone-pro" class="meter-scale-zone zone-pro active" d="M 210.19,72.14 A 179,179 0 0,1 283.05,97.09" fill="none" stroke="#10b981" stroke-width="4.5" title="Professional Line Level (+4 dBu / 0 VU)"/>
-<path id="pyr-scale-zone-headroom" class="meter-scale-zone zone-headroom" d="M 283.05,97.09 A 179,179 0 0,1 304.10,112.08" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round" title="Maximum System Headroom Ceiling (+24 to +28 dBu)"/><path d="M 87.14,108.42 A 175,175 0 0,1 261.18,90.13" fill="none" stroke="#0f172a" stroke-width="1.2"/><path d="M 261.18,90.13 A 175,175 0 0,1 301.55,115.16" fill="none" stroke="#dc2626" stroke-width="2.5"/><text x="190" y="58" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.1em" text-anchor="middle">DECIBELS</text><text x="190" y="66" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle">1 mW 600 Ω</text><text x="190" y="152" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="7.5" font-weight="800" letter-spacing="0.08em" text-anchor="middle">R. M. S. VOLTS</text><text x="190" y="160" fill="#475569" font-family="'Helvetica Neue', Arial, sans-serif" font-size="5" font-weight="600" letter-spacing="0.05em" text-anchor="middle">AVERAGE RESPONDING</text><rect x="62" y="48" width="13" height="13" rx="2" fill="#006699"/>
-<text x="68.5" y="58" fill="#ffffff" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="9" text-anchor="middle">hp</text><line x1="102.50" y1="98.45" x2="106.00" y2="104.51" stroke="#0f172a" stroke-width="1.3"/><text x="108.75" y="109.27" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-20</text><line x1="115.13" y1="91.83" x2="117.05" y2="95.89" stroke="#0f172a" stroke-width="0.75"/><line x1="138.76" y1="82.67" x2="140.81" y2="89.36" stroke="#0f172a" stroke-width="1.3"/><text x="142.42" y="94.62" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-10</text><line x1="145.56" y1="80.74" x2="146.70" y2="85.09" stroke="#0f172a" stroke-width="0.75"/><line x1="153.28" y1="78.90" x2="154.75" y2="85.74" stroke="#0f172a" stroke-width="1.3"/><text x="155.90" y="91.12" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-8</text><line x1="162.02" y1="77.25" x2="162.74" y2="81.69" stroke="#0f172a" stroke-width="0.75"/><line x1="171.92" y1="75.94" x2="172.65" y2="82.90" stroke="#0f172a" stroke-width="1.3"/><text x="173.22" y="88.37" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-6</text><line x1="183.10" y1="75.14" x2="183.28" y2="79.63" stroke="#0f172a" stroke-width="0.75"/><line x1="195.67" y1="75.09" x2="195.45" y2="82.09" stroke="#0f172a" stroke-width="1.3"/><text x="195.27" y="87.59" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-4</text><line x1="209.74" y1="76.12" x2="209.23" y2="80.59" stroke="#0f172a" stroke-width="0.75"/><line x1="225.37" y1="78.61" x2="223.95" y2="85.47" stroke="#0f172a" stroke-width="1.3"/><text x="222.84" y="90.85" fill="#0f172a" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">-2</text><line x1="242.55" y1="83.08" x2="241.20" y2="87.37" stroke="#0f172a" stroke-width="0.75"/><line x1="261.18" y1="90.13" x2="258.33" y2="96.52" stroke="#dc2626" stroke-width="1.3"/><text x="256.09" y="101.55" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="280.97" y1="100.50" x2="277.33" y2="106.48" stroke="#dc2626" stroke-width="1.3"/><text x="274.47" y="111.18" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+1</text><line x1="301.40" y1="115.03" x2="296.94" y2="120.43" stroke="#dc2626" stroke-width="1.3"/><text x="293.44" y="124.68" fill="#dc2626" font-family="Arial, sans-serif" font-size="6.5" font-weight="700" text-anchor="middle" dominant-baseline="central">+2</text><path d="M 105.36,133.50 A 144,144 0 0,1 248.57,118.45" fill="none" stroke="#0f172a" stroke-width="1.0"/><line x1="105.36" y1="133.50" x2="108.89" y2="138.36" stroke="#0f172a" stroke-width="1.0"/><text x="111.82" y="142.40" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="118.00" y1="125.29" x2="121.00" y2="130.49" stroke="#0f172a" stroke-width="1.0"/><line x1="131.43" y1="118.45" x2="133.87" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="135.90" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.2</text><line x1="145.50" y1="113.05" x2="147.36" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="160.06" y1="109.15" x2="161.31" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="162.35" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.4</text><line x1="174.95" y1="106.79" x2="175.58" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="190.00" y1="106.00" x2="190.00" y2="112.00" stroke="#0f172a" stroke-width="1.0"/><text x="190.00" y="117.00" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.6</text><line x1="205.05" y1="106.79" x2="204.42" y2="112.76" stroke="#0f172a" stroke-width="1.0"/><line x1="219.94" y1="109.15" x2="218.69" y2="115.02" stroke="#0f172a" stroke-width="1.0"/><text x="217.65" y="119.91" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">.8</text><line x1="234.50" y1="113.05" x2="232.64" y2="118.75" stroke="#0f172a" stroke-width="1.0"/><line x1="248.57" y1="118.45" x2="246.13" y2="123.93" stroke="#0f172a" stroke-width="1.0"/><text x="244.10" y="128.50" fill="#0f172a" font-family="Arial, sans-serif" font-size="6" font-weight="700" text-anchor="middle" dominant-baseline="central">1.0</text><line x1="107.82" y1="131.75" x2="109.81" y2="134.63" stroke="#475569" stroke-width="0.5"/><line x1="110.31" y1="130.06" x2="112.25" y2="132.97" stroke="#475569" stroke-width="0.5"/><line x1="112.84" y1="128.42" x2="114.72" y2="131.37" stroke="#475569" stroke-width="0.5"/><line x1="115.40" y1="126.83" x2="117.22" y2="129.82" stroke="#475569" stroke-width="0.5"/><line x1="120.63" y1="123.81" x2="122.31" y2="126.88" stroke="#475569" stroke-width="0.5"/><line x1="123.29" y1="122.39" x2="124.91" y2="125.49" stroke="#475569" stroke-width="0.5"/><line x1="125.97" y1="121.02" x2="127.53" y2="124.15" stroke="#475569" stroke-width="0.5"/><line x1="128.69" y1="119.70" x2="130.18" y2="122.87" stroke="#475569" stroke-width="0.5"/><line x1="134.20" y1="117.25" x2="135.55" y2="120.48" stroke="#475569" stroke-width="0.5"/><line x1="136.99" y1="116.11" x2="138.28" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="139.81" y1="115.03" x2="141.03" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="142.64" y1="114.01" x2="143.79" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="148.38" y1="112.15" x2="149.39" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="151.28" y1="111.30" x2="152.22" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="154.19" y1="110.52" x2="155.06" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="157.12" y1="109.80" x2="157.92" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="163.02" y1="108.55" x2="163.67" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="165.99" y1="108.02" x2="166.57" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="168.96" y1="107.54" x2="169.48" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="171.95" y1="107.14" x2="172.39" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="177.95" y1="106.51" x2="178.24" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="180.96" y1="106.28" x2="181.18" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="183.97" y1="106.13" x2="184.12" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="186.98" y1="106.03" x2="187.06" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="193.02" y1="106.03" x2="192.94" y2="109.53" stroke="#475569" stroke-width="0.5"/><line x1="196.03" y1="106.13" x2="195.88" y2="109.62" stroke="#475569" stroke-width="0.5"/><line x1="199.04" y1="106.28" x2="198.82" y2="109.78" stroke="#475569" stroke-width="0.5"/><line x1="202.05" y1="106.51" x2="201.76" y2="109.99" stroke="#475569" stroke-width="0.5"/><line x1="208.05" y1="107.14" x2="207.61" y2="110.61" stroke="#475569" stroke-width="0.5"/><line x1="211.04" y1="107.54" x2="210.52" y2="111.01" stroke="#475569" stroke-width="0.5"/><line x1="214.01" y1="108.02" x2="213.43" y2="111.47" stroke="#475569" stroke-width="0.5"/><line x1="216.98" y1="108.55" x2="216.33" y2="111.99" stroke="#475569" stroke-width="0.5"/><line x1="222.88" y1="109.80" x2="222.08" y2="113.21" stroke="#475569" stroke-width="0.5"/><line x1="225.81" y1="110.52" x2="224.94" y2="113.91" stroke="#475569" stroke-width="0.5"/><line x1="228.72" y1="111.30" x2="227.78" y2="114.68" stroke="#475569" stroke-width="0.5"/><line x1="231.62" y1="112.15" x2="230.61" y2="115.50" stroke="#475569" stroke-width="0.5"/><line x1="237.36" y1="114.01" x2="236.21" y2="117.32" stroke="#475569" stroke-width="0.5"/><line x1="240.19" y1="115.03" x2="238.97" y2="118.31" stroke="#475569" stroke-width="0.5"/><line x1="243.01" y1="116.11" x2="241.72" y2="119.37" stroke="#475569" stroke-width="0.5"/><line x1="245.80" y1="117.25" x2="244.45" y2="120.48" stroke="#475569" stroke-width="0.5"/><path d="M 115.94,148.06 A 126,126 0 0,1 241.25,134.89" fill="none" stroke="#0f172a" stroke-width="0.8"/><line x1="115.94" y1="148.06" x2="118.88" y2="152.11" stroke="#0f172a" stroke-width="0.9"/><text x="121.52" y="155.75" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text><line x1="134.77" y1="136.75" x2="136.96" y2="141.25" stroke="#0f172a" stroke-width="0.9"/><text x="138.93" y="145.29" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">0.5</text><line x1="155.27" y1="128.88" x2="156.65" y2="133.69" stroke="#0f172a" stroke-width="0.9"/><text x="157.89" y="138.01" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text><line x1="176.83" y1="124.69" x2="177.35" y2="129.66" stroke="#0f172a" stroke-width="0.9"/><text x="177.82" y="134.14" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">1.5</text><line x1="198.79" y1="124.31" x2="198.44" y2="129.29" stroke="#0f172a" stroke-width="0.9"/><text x="198.13" y="133.78" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text><line x1="220.48" y1="127.74" x2="219.27" y2="132.59" stroke="#0f172a" stroke-width="0.9"/><text x="218.18" y="136.96" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">2.5</text><line x1="241.25" y1="134.89" x2="239.22" y2="139.46" stroke="#0f172a" stroke-width="0.9"/><text x="237.38" y="143.57" fill="#0f172a" font-family="Arial, sans-serif" font-size="5.5" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text><!-- Aligned Pyramid Domain Color Badges Ribbon -->
-<g class="meter-pyramid-legend" transform="translate(190, 185)">
-  <rect x="-132" y="0" width="62" height="11" rx="2" fill="rgba(245, 158, 11, 0.12)" stroke="#d97706" stroke-width="0.75"/>
-  <text x="-101" y="8" fill="#d97706" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">MIC (-60..-40)</text>
-
-  <rect x="-67" y="0" width="62" height="11" rx="2" fill="rgba(6, 182, 212, 0.12)" stroke="#0284c7" stroke-width="0.75"/>
-  <text x="-36" y="8" fill="#0284c7" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">CONSUMER (-10)</text>
-
-  <rect x="-2" y="0" width="65" height="11" rx="2" fill="rgba(16, 185, 129, 0.15)" stroke="#16a34a" stroke-width="0.85"/>
-  <text x="30.5" y="8" fill="#16a34a" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">PRO (+4 / 0VU)</text>
-
-  <rect x="66" y="0" width="66" height="11" rx="2" fill="rgba(239, 68, 68, 0.15)" stroke="#dc2626" stroke-width="0.85"/>
-  <text x="99" y="8" fill="#dc2626" font-family="Arial, sans-serif" font-size="5" font-weight="800" text-anchor="middle">HEADROOM (+24+)</text>
-</g><!-- Galvanometer Pointer Needle -->
-<g id="pyr-vu-needle" class="hp-galvo-needle" filter="url(#pyr-needle-shadow)" transform="rotate(-36 190 250)">
-  <!-- Counterweight Tail -->
-  <path d="M 188.5,250 L 187,268 A 3,3 0 0,0 193,268 L 191.5,250 Z" fill="#1e293b"/>
-  <!-- Razor Knife-Edge Needle -->
-  <polygon points="189,250 189.5,100 189.8,72 190.2,72 190.5,100 191,250" fill="#dc2626"/>
-  <circle cx="190" cy="250" r="4.5" fill="#0f172a" stroke="#dc2626" stroke-width="1"/>
-</g>
-
-<!-- Glass Reflection Glare -->
-<rect x="46" y="38" width="288" height="186" rx="3" fill="url(#pyr-glass-glare)" pointer-events="none"/>
-
-<!-- Bezel Lower Mask & Mechanical Zero-Adjust Screw -->
-<path d="M 36,220 L 344,220 L 344,240 L 36,240 Z" fill="#0f172a"/>
-<!-- Mechanical Zero Screw -->
-<circle cx="190" cy="230" r="7" fill="#cbd5e1" stroke="#334155" stroke-width="1"/>
-<circle cx="190" cy="230" r="5.5" fill="#94a3b8"/>
-<line x1="185" y1="230" x2="195" y2="230" stroke="#1e293b" stroke-width="1.2"/><!-- Lower Panel Silkscreen Header: APK Precision AC Voltmeter -->
-<g transform="translate(42, 252)">
-  <!-- APK Cyan Badge Logo -->
-  <rect x="0" y="0" width="24" height="18" rx="3" fill="#06b6d4"/>
-  <text x="12" y="13" fill="#040711" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="11" text-anchor="middle">APK</text>
-  <text x="32" y="13" fill="#0284c7" font-family="'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="800" letter-spacing="0.06em">PRECISION AC VOLTMETER</text>
-  <text x="96" y="25" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="0.05em">IN ~ 100kHz L.P. FILTER ~ OUT</text>
-</g>
-
-<!-- ================= Left: INPUT Section (Dual 5-Way Binding Posts) ================= -->
-<g transform="translate(44, 290)">
-  <text x="32" y="14" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">INPUT</text>
-  
-  <!-- Dual Insulating Base -->
-  <rect x="12" y="24" width="40" height="96" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
-  
-  <!-- Red Binding Post (HOT / +) -->
-  <g transform="translate(32, 46)">
-    <circle cx="0" cy="0" r="14" fill="#dc2626" stroke="#991b1b" stroke-width="1.5"/>
-    <circle cx="0" cy="0" r="11" fill="#b91c1c"/>
-    <circle cx="0" cy="0" r="7" fill="#fbbf24" stroke="#d97706" stroke-width="0.75"/>
-    <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
-    <text x="22" y="4" fill="#dc2626" font-family="Arial, sans-serif" font-size="8" font-weight="800">+</text>
-  </g>
-
-  <!-- Black Binding Post (COLD / GND / -) -->
-  <g transform="translate(32, 94)">
-    <circle cx="0" cy="0" r="14" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
-    <circle cx="0" cy="0" r="11" fill="#1e293b"/>
-    <circle cx="0" cy="0" r="7" fill="#cbd5e1" stroke="#64748b" stroke-width="0.75"/>
-    <circle cx="0" cy="0" r="3.5" fill="#020617"/>
-    <text x="22" y="4" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800">—</text>
-  </g>
-
-  <!-- Chassis Ground Post & Symbol -->
-  <g transform="translate(32, 134)">
-    <circle cx="0" cy="0" r="6" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
-    <line x1="-6" y1="10" x2="6" y2="10" stroke="#0f172a" stroke-width="1.2"/>
-    <line x1="-4" y1="13" x2="4" y2="13" stroke="#0f172a" stroke-width="1.2"/>
-    <line x1="-2" y1="16" x2="2" y2="16" stroke="#0f172a" stroke-width="1.2"/>
-  </g>
-</g>
-
-<!-- ================= Center: RANGE Rotary Selector with Pyramid Color Alignment ================= -->
-<g transform="translate(190, 365)">
-  <text x="0" y="-62" fill="#0f172a" font-family="Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.1em" text-anchor="middle">RANGE</text>
-  
-  <!-- Header Labels with Color Accents -->
-  <text x="-58" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">dB</text>
-  <text x="-36" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">mV</text>
-  <text x="36" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">V</text>
-  <text x="58" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">dB</text>
-
-  <!-- Left Bank: Amber (Mic Level: -80 to -40 dB) & Cyan (Consumer: -30, -20 dB) -->
-  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <!-- Range 6: 100 mV / -20 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="6" data-tier="consumer">
-      <text x="-58" y="-34" text-anchor="end" fill="#0284c7">-20</text><text x="-36" y="-34" text-anchor="end" fill="#0284c7">100</text>
-      <line x1="-32" y1="-34" x2="-22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
-    </g>
-    <!-- Range 5: 30 mV / -30 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="5" data-tier="consumer">
-      <text x="-58" y="-22" text-anchor="end" fill="#0284c7">-30</text><text x="-36" y="-22" text-anchor="end" fill="#0284c7">30</text>
-      <line x1="-32" y1="-22" x2="-26" y2="-16" stroke="#0284c7" stroke-width="1.2"/>
-    </g>
-    <!-- Range 4: 10 mV / -40 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="4" data-tier="mic">
-      <text x="-58" y="-10" text-anchor="end" fill="#d97706">-40</text><text x="-36" y="-10" text-anchor="end" fill="#d97706">10</text>
-      <line x1="-32" y1="-10" x2="-28" y2="-8" stroke="#d97706" stroke-width="1.2"/>
-    </g>
-    <!-- Range 3: 3 mV / -50 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="3" data-tier="mic">
-      <text x="-58" y="2" text-anchor="end" fill="#d97706">-50</text><text x="-36" y="2" text-anchor="end" fill="#d97706">3</text>
-      <line x1="-32" y1="2" x2="-28" y2="2" stroke="#d97706" stroke-width="1.2"/>
-    </g>
-    <!-- Range 2: 1 mV / -60 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="2" data-tier="mic">
-      <text x="-58" y="14" text-anchor="end" fill="#d97706">-60</text><text x="-36" y="14" text-anchor="end" fill="#d97706">1</text>
-      <line x1="-32" y1="14" x2="-28" y2="10" stroke="#d97706" stroke-width="1.2"/>
-    </g>
-    <!-- Range 1: .3 mV / -70 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="1" data-tier="mic">
-      <text x="-58" y="26" text-anchor="end" fill="#d97706">-70</text><text x="-36" y="26" text-anchor="end" fill="#d97706">.3</text>
-      <line x1="-32" y1="26" x2="-26" y2="18" stroke="#d97706" stroke-width="1.2"/>
-    </g>
-    <!-- Range 0: .1 mV / -80 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="0" data-tier="mic">
-      <text x="-58" y="38" text-anchor="end" fill="#d97706">-80</text><text x="-36" y="38" text-anchor="end" fill="#d97706">.1</text>
-      <line x1="-32" y1="38" x2="-22" y2="26" stroke="#d97706" stroke-width="1.2"/>
-    </g>
-  </g>
-
-  <!-- Right Bank: Cyan (.3V / -10dB), Green (Pro Line: 1V, 3V), Red (Headroom: 10V to 300V) -->
-  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <!-- Range 7: .3 V / -10 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="7" data-tier="consumer">
-      <text x="36" y="-34" fill="#0284c7">.3</text><text x="58" y="-34" fill="#0284c7">-10</text>
-      <line x1="32" y1="-34" x2="22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
-    </g>
-    <!-- Range 8: 1 V / 0 dB (Pro Line: Green) -->
-    <g class="range-dial-tick zone-pro" data-range-idx="8" data-tier="pro">
-      <text x="36" y="-22" fill="#16a34a">1</text><text x="58" y="-22" fill="#16a34a">0</text>
-      <line x1="32" y1="-22" x2="26" y2="-16" stroke="#16a34a" stroke-width="1.2"/>
-    </g>
-    <!-- Range 9: 3 V / +10 dB (Pro Line Nominal: Green - Active Default) -->
-    <g class="range-dial-tick zone-pro active" data-range-idx="9" data-tier="pro">
-      <text x="36" y="-10" fill="#16a34a" font-weight="900">3</text><text x="58" y="-10" fill="#16a34a" font-weight="900">+10</text>
-      <line x1="32" y1="-10" x2="28" y2="-8" stroke="#16a34a" stroke-width="2"/>
-    </g>
-    <!-- Range 10: 10 V / +20 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="10" data-tier="headroom">
-      <text x="36" y="2" fill="#dc2626">10</text><text x="58" y="2" fill="#dc2626">+20</text>
-      <line x1="32" y1="2" x2="28" y2="2" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 11: 30 V / +30 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="11" data-tier="headroom">
-      <text x="36" y="14" fill="#dc2626">30</text><text x="58" y="14" fill="#dc2626">+30</text>
-      <line x1="32" y1="14" x2="28" y2="10" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 12: 100 V / +40 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="12" data-tier="headroom">
-      <text x="36" y="26" fill="#dc2626">100</text><text x="58" y="26" fill="#dc2626">+40</text>
-      <line x1="32" y1="26" x2="26" y2="18" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 13: 300 V / +50 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="13" data-tier="headroom">
-      <text x="36" y="38" fill="#dc2626">300</text><text x="58" y="38" fill="#dc2626">+50</text>
-      <line x1="32" y1="38" x2="22" y2="26" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-  </g>
-
-  <!-- Interactive Rotary Knob Rotor -->
-  <g id="pyr-range-knob-rotor" class="range-knob-rotor" style="transform-origin: 0px 0px; cursor: grab; transform: rotate(-15.9deg);" data-range-idx="9">
-    <circle cx="0" cy="0" r="23" fill="url(#pyr-knob-base)" stroke="#090d16" stroke-width="2"/>
-    <circle cx="0" cy="0" r="21" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
-    <circle cx="0" cy="0" r="11" fill="url(#pyr-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
-    <!-- Range Pointer Indicator Line (pointing at angle along positive X) -->
-    <line x1="0" y1="0" x2="19" y2="0" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="0" cy="0" r="3.5" fill="#f8fafc"/>
-  </g>
-</g>
-
-<!-- ================= Right: LINE Power Switch & Jewel Pilot Lamp ================= -->
-<g transform="translate(305, 305)">
-  <text x="18" y="0" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">LINE</text>
-  
-  <!-- Toggle Switch -->
-  <g transform="translate(18, 26)">
-    <polygon points="-7,-4 0,-8 7,-4 7,4 0,8 -7,4" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
-    <circle cx="0" cy="0" r="5" fill="#64748b"/>
-    <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
-    <circle cx="0" cy="-13" r="3.5" fill="#e2e8f0" stroke="#64748b" stroke-width="0.75"/>
-  </g>
-
-  <!-- ON Label & Red Faceted Jewel Pilot Light -->
-  <text x="18" y="68" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800" text-anchor="middle">ON</text>
-  <g transform="translate(18, 92)">
-    <circle cx="0" cy="0" r="14" fill="#94a3b8" stroke="#475569" stroke-width="1.2"/>
-    <circle cx="0" cy="0" r="12" fill="#cbd5e1" stroke="#334155" stroke-width="0.5"/>
-    <circle cx="0" cy="0" r="11" fill="none" stroke="#64748b" stroke-dasharray="1.5,1.5" stroke-width="1"/>
-    <circle cx="0" cy="0" r="9" fill="url(#pyr-jewel-glow)" stroke="#7f1d1d" stroke-width="1" filter="drop-shadow(0 0 6px #ef4444)"/>
-    <polygon points="0,-7 6,-3 6,4 0,7 -6,4 -6,-3" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="0.75"/>
-    <circle cx="-2" cy="-2" r="2.5" fill="rgba(255,255,255,0.6)"/>
-  </g>
-</g>
-  </svg>
-</div>
-
-          <!-- Fluke 8050A Precision Benchtop DMM -->
-          <div class="dmm-display-card">
-            <div class="dmm-plate">
-              <span class="dmm-plate-title">DIGITAL MULTIMETER</span>
-              <span class="dmm-plate-sub">TRUE RMS &bull; 4&frac12; DIGIT AUDIO BENCH</span>
-            </div>
-            <div class="dmm-bezel">
-              <div class="dmm-header">
-                <span class="dmm-model">VACUUM FLUORESCENT DISPLAY</span>
-                <span class="dmm-badge">&#9679; AC RMS ACTIVE</span>
-              </div>
-              <div class="dmm-grid">
-                <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">V_RMS (VOLTAGE)</div>
-                  <div id="dmm-vrms-val" class="dmm-readout-value cyan">1.228 V</div>
-                </div>
-                <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">AUDIO LEVEL (dBu)</div>
-                  <div id="dmm-dbu-val" class="dmm-readout-value green">+4.0 dBu</div>
-                </div>
-                <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">V_PEAK (CREST)</div>
-                  <div id="dmm-vpeak-val" class="dmm-readout-value amber">1.737 V</div>
-                </div>
-              </div>
-            </div>
-            <div class="dmm-keypad">
-              <div class="dmm-key active">AC V</div>
-              <div class="dmm-key">DC V</div>
-              <div class="dmm-key">AC mA</div>
-              <div class="dmm-key">DC mA</div>
-              <div class="dmm-key">k&Omega;</div>
-              <div class="dmm-key">200mV</div>
-              <div class="dmm-key active">2V</div>
-              <div class="dmm-key">20V</div>
-              <div class="dmm-key">200V</div>
-              <div class="dmm-key key-red">POWER</div>
-            </div>
-            <div class="dmm-terminals">
-              <div class="dmm-jack">
-                <div class="dmm-jack-socket red"></div>
-                <span class="dmm-jack-label">V &bull; &Omega;</span>
-              </div>
-              <div class="dmm-jack">
-                <div class="dmm-jack-socket black"></div>
-                <span class="dmm-jack-label">COMMON</span>
-              </div>
-              <div class="dmm-jack">
-                <div class="dmm-jack-socket white"></div>
-                <span class="dmm-jack-label">mA</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Calibration panel: rotary step switch (pyramid-tier coloured) + VFD level readouts -->
-        <div class="cal-panel">
-          <div class="cal-rotary-wrap">
-            <div class="cal-panel-label">CALIBRATION STEP</div>
-            <div id="cal-rotary" class="cal-rotary" title="Click a step, click the knob to advance, or scroll"></div>
-          </div>
-          <div class="cal-readouts">
-            <label class="cal-readout"><span class="cal-readout-label">LEVEL &bull; dBu <em>(0.775 V)</em></span><input type="number" id="calc-dbu" class="calc-input" value="4.0" step="0.5" /></label>
-            <label class="cal-readout"><span class="cal-readout-label">LEVEL &bull; dBV <em>(1.000 V)</em></span><input type="number" id="calc-dbv" class="calc-input" value="1.78" step="0.5" /></label>
-            <label class="cal-readout"><span class="cal-readout-label">V<sub>RMS</sub></span><input type="number" id="calc-vrms" class="calc-input" value="1.228" step="0.05" /></label>
-            <label class="cal-readout"><span class="cal-readout-label">V<sub>PEAK</sub></span><input type="number" id="calc-vpeak" class="calc-input" value="1.737" step="0.05" readonly /></label>
-            <div id="cal-tier-name" class="cal-tier-name">PRO LINE &bull; +4 dBu / 0 VU</div>
-          </div>
-          <select id="pyr-preset-select" hidden aria-hidden="true">
-                <option value="4.0" selected>+4.0 dBu (1.228 VRMS) — Professional Studio (+4 dBu / 0 VU)</option>
-                <option value="0.0">0.0 dBu (0.775 VRMS) — European Broadcast Reference</option>
-                <option value="-7.78">-10.0 dBV (-7.78 dBu / 0.316 VRMS) — Consumer Line Level</option>
-                <option value="24.0">+24.0 dBu (12.28 VRMS) — High Headroom Clip Margin</option>
-                <option value="28.0">+28.0 dBu (19.46 VRMS) — Broadcast Master Bus Ceiling</option>
-                <option value="-50.0">-50.0 dBu (2.45 mVRMS) — Dynamic Microphone Level</option>
-                <option value="-60.0">-60.0 dBu (0.775 mVRMS) — Low-Output Ribbon Mic</option>
-                <option value="custom">Manual Numeric Entry (Custom)</option>
-              </select>
-        </div>
-      </div>
-      </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Section 4: Types of Balanced Audio Circuits (Interactive Selective Demonstrator) -->
   <section id="topologies" class="section">

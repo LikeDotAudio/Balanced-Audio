@@ -457,7 +457,7 @@ class EightChannelBench {
     if (!this.wiresSvg) return;
     const qtp = this.mode === "qtp";
     const ends = qtp
-      ? QTP_WIRES.map((w, i) => ({ n: i + 1, el: document.querySelector(`[data-qtp-wire="${w.key}"]`), color: w.color, dashed: w.leg === "cold" }))
+      ? QTP_WIRES.map((w, i) => ({ n: i + 1, el: document.querySelector(`.qtp-demo.active [data-qtp-wire="${w.key}"]`) || document.querySelector(`[data-qtp-wire="${w.key}"]`), color: w.color, dashed: w.leg === "cold" }))
       : [...document.querySelectorAll("[data-mc-out], [data-aes59-rx]")].map(el => {
           const n = Number(el.dataset.mcOut || el.dataset.aes59Rx);
           return { n, el, color: this.channels[n - 1].color, dashed: false };

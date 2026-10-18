@@ -1491,10 +1491,9 @@ class CircuitSimulator {
       const dmmVrms = document.getElementById("dmm-vrms-val");
       if (dmmVrms) dmmVrms.textContent = `${vrms >= 1.0 ? vrms.toFixed(3) : (vrms * 1000).toFixed(1) + ' m'}V`;
       const dmmDbu = document.getElementById("dmm-dbu-val");
-      if (dmmDbu) dmmDbu.textContent = `${dbm >= 0 ? '+' : ''}${dbm.toFixed(1)} dBm`;
+      if (dmmDbu) dmmDbu.textContent = `${dbu >= 0 ? '+' : ''}${dbu.toFixed(1)} dBu`;
       const dmmPeak = document.getElementById("dmm-vpeak-val");
-      const rTxt = refZ >= 1000 ? `${(refZ / 1000).toFixed(refZ % 1000 === 0 ? 0 : 1)} k` : `${refZ}`;
-      if (dmmPeak) dmmPeak.textContent = `${rTxt} Ω (REF Z)`;
+      if (dmmPeak) dmmPeak.textContent = `${vpeak >= 1.0 ? vpeak.toFixed(3) : (vpeak * 1000).toFixed(1) + ' m'}V`;
 
       // APK Precision AC Voltmeter needle deflection
       this.lastPyrVrms = vrms;

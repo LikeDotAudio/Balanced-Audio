@@ -27,6 +27,7 @@ class StorySidebar {
     this.setupScrollListener();
     this.setupIntersectionObserver();
     this.setupSubnodeSpy();
+    this.numberClauses();
     this.setupGlobalTreeLinks();
   }
 
@@ -77,50 +78,52 @@ class StorySidebar {
             <a href="#how-to-use" class="chapter-link">★ How to Use This Lab</a>
           </div>
 
+          <div class="story-chapter" data-target="triad">
+            <div class="chapter-dot"></div>
+            <a href="#triad" class="chapter-link">1.0 The Three Parts of the Chain</a>
+          </div>
+
+          <div class="story-chapter" data-target="pyramid-section">
+            <div class="chapter-dot"></div>
+            <a href="#pyramid-section" class="chapter-link">2.0 Dynamic Range &amp; Levels Pyramid</a>
+          </div>
+
           <div class="story-chapter" data-target="enclosure-explorer">
             <div class="chapter-dot"></div>
-            <a href="#enclosure-explorer" class="chapter-link">0.0 Enclosure &amp; Ground Physics</a>
+            <a href="#enclosure-explorer" class="chapter-link">3.0 Enclosure &amp; Ground Physics</a>
           </div>
 
           <div class="story-chapter" data-target="multichannel-hierarchy">
             <div class="chapter-dot"></div>
-            <a href="#multichannel-hierarchy" class="chapter-link">0.2 Multichannel Breakout (DB25 / RJ45)</a>
+            <a href="#multichannel-hierarchy" class="chapter-link">3.2 Multichannel Breakout (DB25 / RJ45)</a>
             <div class="chapter-subnodes fault-subnodes">
               <span class="subnode-heading">Snake / QTP faults</span>
-              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode active" data-sidebar-fault="normal">✓ Normal Balanced</a>
-              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="phase_flip">⚡ Phase Flip (180°)</a>
-              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_1">⚠️ 1 Pin Dropped (Pin 2)</a>
-              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_2">⚠️ 2 Pins Dropped (Pins 1 &amp; 3)</a>
-              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_3">❌ 3 Pins Dropped</a>
-              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_4">❌ 4 Pins Dropped (Trunk Open)</a>
-              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pair_dropped">🚫 1 Pair Dropped (Mute)</a>
-              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="shield_lifted">🛡️ Shield Lifted (P48 Fails)</a>
+              <a href="#qtp-demo-normal" class="subnode-link fault-subnode active" data-sidebar-fault="normal">✓ Normal Balanced</a>
+              <a href="#qtp-demo-phase_flip" class="subnode-link fault-subnode" data-sidebar-fault="phase_flip">⚡ Phase Flip (180°)</a>
+              <a href="#qtp-demo-pin_dropped_1" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_1">⚠️ 1 Pin Dropped (Pin 2)</a>
+              <a href="#qtp-demo-pin_dropped_2" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_2">⚠️ 2 Pins Dropped (Pins 1 &amp; 3)</a>
+              <a href="#qtp-demo-pin_dropped_3" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_3">❌ 3 Pins Dropped</a>
+              <a href="#qtp-demo-pin_dropped_4" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_4">❌ 4 Pins Dropped (Trunk Open)</a>
+              <a href="#qtp-demo-pair_dropped" class="subnode-link fault-subnode" data-sidebar-fault="pair_dropped">🚫 1 Pair Dropped (Mute)</a>
+              <a href="#qtp-demo-shield_lifted" class="subnode-link fault-subnode" data-sidebar-fault="shield_lifted">🛡️ Shield Lifted (P48 Fails)</a>
             </div>
           </div>
 
           <div class="story-chapter" data-target="xlr-hub">
             <div class="chapter-dot"></div>
-            <a href="#xlr-hub" class="chapter-link">0.5 Universal XLR Hub &amp; Polarity</a>
+            <a href="#xlr-hub" class="chapter-link">3.5 Universal XLR Hub &amp; Polarity</a>
           </div>
 
           <div class="story-chapter" data-target="top-level">
             <div class="chapter-dot"></div>
-            <a href="#top-level" class="chapter-link">1.0 Top-Level Normative Rules</a>
+            <a href="#top-level" class="chapter-link">4.0 Top-Level Normative Rules</a>
           </div>
 
-          <div class="story-chapter" data-target="triad">
-            <div class="chapter-dot"></div>
-            <a href="#triad" class="chapter-link">2.0 The Triad of Interconnection</a>
-          </div>
 
-          <div class="story-chapter" data-target="pyramid-section">
-            <div class="chapter-dot"></div>
-            <a href="#pyramid-section" class="chapter-link">3.0 Dynamic Range &amp; Levels Pyramid</a>
-          </div>
 
           <div class="story-chapter" data-target="topologies">
             <div class="chapter-dot"></div>
-            <a href="#topologies" class="chapter-link">4.0 Standardized Circuits (6.1–6.8)</a>
+            <a href="#topologies" class="chapter-link">5.0 Standardized Circuits (6.1–6.8)</a>
             <div class="chapter-subnodes">
               <a href="#circuit-6-1" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-1')">6.1 Dual Push-Pull</a>
               <a href="#circuit-6-2" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-2')">6.2 Active Impedance-Balanced</a>
@@ -135,59 +138,59 @@ class StorySidebar {
 
           <div class="story-chapter" data-target="transformer-simulator">
             <div class="chapter-dot"></div>
-            <a href="#transformer-simulator" class="chapter-link">4.5 Audio Transformer Lab &amp; Zobel</a>
+            <a href="#transformer-simulator" class="chapter-link">5.5 Audio Transformer Lab &amp; Zobel</a>
           </div>
 
           <div class="story-chapter" data-target="deepest-dive">
             <div class="chapter-dot"></div>
-            <a href="#deepest-dive" class="chapter-link">5.0 Jim Meyer Thevenin CMRR</a>
+            <a href="#deepest-dive" class="chapter-link">6.0 Jim Meyer Thevenin CMRR</a>
           </div>
 
           <div class="story-chapter" data-target="tutorials-section">
             <div class="chapter-dot"></div>
-            <a href="#tutorials-section" class="chapter-link">6.0 Richard Hess Unbalanced Matrix</a>
+            <a href="#tutorials-section" class="chapter-link">7.0 Richard Hess Unbalanced Matrix</a>
           </div>
 
           <div class="story-chapter" data-target="adapter-wiring-suite">
             <div class="chapter-dot"></div>
-            <a href="#adapter-wiring-suite" class="chapter-link">6.9 Vector Adapter Wiring Suite</a>
+            <a href="#adapter-wiring-suite" class="chapter-link">7.5 Vector Adapter Wiring Suite</a>
           </div>
 
           <div class="story-chapter" data-target="taxonomy-tree">
             <div class="chapter-dot" style="background: var(--accent-cyan); box-shadow: 0 0 6px var(--accent-cyan);"></div>
             <a href="javascript:void(0)" id="sidebar-chapter-tree-btn" class="chapter-link" style="color: var(--accent-cyan); font-weight: 700;">
-              7.0 Standards Taxonomy Tree ↗
+              8.0 Standards Taxonomy Tree ↗
             </a>
           </div>
 
           <div class="story-chapter" data-target="aes-vst">
             <div class="chapter-dot"></div>
-            <a href="#aes-vst" class="chapter-link">8.0 AES-VST Plugin &amp; Map</a>
+            <a href="#aes-vst" class="chapter-link">9.0 AES-VST Plugin &amp; Map</a>
           </div>
 
           <div class="story-chapter" data-target="datasheet-templates">
             <div class="chapter-dot"></div>
-            <a href="#datasheet-templates" class="chapter-link">9.0 Free Datasheet Templates</a>
+            <a href="#datasheet-templates" class="chapter-link">10.0 Free Datasheet Templates</a>
           </div>
 
           <div class="story-chapter" data-target="dennis-bohn-par">
             <div class="chapter-dot"></div>
-            <a href="#dennis-bohn-par" class="chapter-link">10.0 Dennis Bohn PAR Glossary</a>
+            <a href="#dennis-bohn-par" class="chapter-link">11.0 Dennis Bohn PAR Glossary</a>
           </div>
 
           <div class="story-chapter" data-target="landmark-papers">
             <div class="chapter-dot"></div>
-            <a href="#landmark-papers" class="chapter-link">10.5 Landmark Papers Dossier</a>
+            <a href="#landmark-papers" class="chapter-link">11.5 Landmark Papers Dossier</a>
           </div>
 
           <div class="story-chapter" data-target="timeline-section">
             <div class="chapter-dot"></div>
-            <a href="#timeline-section" class="chapter-link">11.0 Standards Timeline</a>
+            <a href="#timeline-section" class="chapter-link">12.0 Standards Timeline</a>
           </div>
 
           <div class="story-chapter" data-target="roster-section">
             <div class="chapter-dot"></div>
-            <a href="#roster-section" class="chapter-link">12.0 Contributor Roster</a>
+            <a href="#roster-section" class="chapter-link">13.0 Contributor Roster</a>
           </div>
         </div>
 
@@ -372,12 +375,12 @@ class StorySidebar {
     const sectionIds = [
       "hero",
       "how-to-use",
+      "triad",
+      "pyramid-section",
       "enclosure-explorer",
       "multichannel-hierarchy",
       "xlr-hub",
       "top-level",
-      "triad",
-      "pyramid-section",
       "topologies",
       "transformer-simulator",
       "deepest-dive",
@@ -409,6 +412,30 @@ class StorySidebar {
     });
   }
 
+  // Keep an item visible inside the sidebar's own list. (scrollIntoView would also scroll the page.)
+  revealInSidebar(el) {
+    const list = el.closest(".sidebar-scrollable-tree");
+    if (!list) return;
+    const lr = list.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    if (er.top < lr.top) list.scrollBy({ top: er.top - lr.top - 8, behavior: "smooth" });
+    else if (er.bottom > lr.bottom) list.scrollBy({ top: er.bottom - lr.bottom + 8, behavior: "smooth" });
+  }
+
+  // Standards-document clause numbers: each section title gets its chapter number
+  numberClauses() {
+    if (!this.sidebar) return;
+    this.sidebar.querySelectorAll(".story-chapter[data-target]").forEach(ch => {
+      const m = (ch.querySelector(".chapter-link")?.textContent || "").trim().match(/^(\d+(?:\.\d+)?)\s/);
+      const title = document.querySelector(`#${ch.dataset.target} .section-title`);
+      if (!m || !title || title.querySelector(".clause-no")) return;
+      const no = document.createElement("span");
+      no.className = "clause-no";
+      no.textContent = m[1];
+      title.prepend(no);
+    });
+  }
+
   // Highlight sub-items (e.g. 6.1–6.8) while their section is passing the upper part of the screen
   setupSubnodeSpy() {
     if (!this.sidebar) return;
@@ -427,17 +454,13 @@ class StorySidebar {
 
       let passing = null;
       links.forEach(link => {
-        const group = link.closest(".fault-subnodes");
         const on = inBand(document.querySelector(link.getAttribute("href")));
-        if (group) {
-          group.classList.toggle("passing", on);
-          return;
-        }
         link.classList.toggle("passing", on);
         if (on && !passing) passing = link;
       });
 
-      if (passing && passing !== lastPassing) passing.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      this.sidebar.querySelectorAll(".fault-subnodes").forEach(g => g.classList.toggle("passing", !!g.querySelector(".passing")));
+      if (passing && passing !== lastPassing) this.revealInSidebar(passing);
       lastPassing = passing;
     };
 
@@ -460,7 +483,7 @@ class StorySidebar {
       ch.classList.toggle("active", match);
       if (match) {
         // Ensure active item is smoothly scrolled into view inside sidebar
-        ch.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        this.revealInSidebar(ch);
       }
     });
   }

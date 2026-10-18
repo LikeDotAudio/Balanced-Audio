@@ -328,6 +328,91 @@ class FloatingMeterDock {
     return html;
   }
 
+  // Hover a rack instrument to blow it up (5× where it fits). Closes when the mouse travels far
+  // from where the zoom began, on a quick shake, or on Esc. Re-arms after the pointer leaves the card.
+  initHoverZoom() {
+    const MAX_ZOOM = 5;
+    const DWELL_MS = 350;
+    const FAR_PX = 420;
+    const dock = this.dock;
+    let timer = null;
+    let zoomed = null;
+    let origin = null;
+    let shake = { dir: 0, flips: 0, since: 0, lastX: 0 };
+    let armed = true;
+
+    const close = () => {
+      if (!zoomed) return;
+      zoomed.classList.remove("rack-zoomed");
+      zoomed.style.transform = "";
+      zoomed.querySelectorAll("canvas").forEach(c => delete c.dataset.zoom);
+      dock.classList.remove("rack-zooming");
+      zoomed = null;
+      armed = false;
+    };
+
+    const open = (card) => {
+      const r = card.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const k = Math.max(1.5, Math.min(MAX_ZOOM, (vw * 0.82) / r.width, (vh - 16) / r.height));
+      // Grow leftwards from the card's top-right corner, nudged to stay inside the window
+      let dy = 0;
+      if (r.top + r.height * k > vh - 8) dy = vh - 8 - (r.top + r.height * k);
+      if (r.top + dy < 8) dy = 8 - r.top;
+      dock.classList.add("rack-zooming");
+      card.classList.add("rack-zoomed");
+      card.style.transform = `translateY(${dy}px) scale(${k})`;
+      card.querySelectorAll("canvas").forEach(c => { c.dataset.zoom = String(k); });
+      zoomed = card;
+    };
+
+    dock.querySelectorAll(".rack-meter-card").forEach(card => {
+      card.addEventListener("mouseenter", (e) => {
+        if (zoomed || !armed) return;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          origin = null; // set by the first mouse move after opening
+          shake = { dir: 0, flips: 0, since: performance.now(), lastX: e.clientX };
+          open(card);
+        }, DWELL_MS);
+      });
+      card.addEventListener("mouseleave", () => {
+        clearTimeout(timer);
+        if (!zoomed) armed = true;
+      });
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!zoomed) return;
+      if (!origin) {
+        origin = { x: e.clientX, y: e.clientY };
+        shake.lastX = e.clientX;
+        return;
+      }
+      // Moved a lot: far from where the zoom began
+      if (Math.hypot(e.clientX - origin.x, e.clientY - origin.y) > FAR_PX) return close();
+      // Shake: four quick left/right reversals
+      const dx = e.clientX - shake.lastX;
+      if (Math.abs(dx) > 12) {
+        const dir = Math.sign(dx);
+        const now = performance.now();
+        if (now - shake.since > 700) { shake.flips = 0; shake.since = now; }
+        if (shake.dir && dir !== shake.dir) shake.flips++;
+        shake.dir = dir;
+        shake.lastX = e.clientX;
+        if (shake.flips >= 4) close();
+      }
+    });
+    document.addEventListener("mousemove", (e) => {
+      // Re-arm once the pointer is off every card after a close
+      if (!zoomed && !armed && !e.target.closest(".rack-meter-card")) armed = true;
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") close();
+    });
+  }
+
   voltmeterCardHtml(n) {
     const labels = { 1: "DRIVE", 2: "LOAD 2↔3", 3: "PIN 2 HOT", 4: "PIN 3 COLD" };
     return `
@@ -366,6 +451,7 @@ class FloatingMeterDock {
     this.setupGlobalProbeHooks();
     this.initAnchorEngine();
     this.initScrollTracker();
+    this.initHoverZoom();
     this.startMainInstrumentLoop();
     this.updateFromActiveCircuit();
   }
@@ -2110,10 +2196,16 @@ class FloatingMeterDock {
   renderScope8() {
     const canvas = this.scope8Canvas;
     if (!canvas) return;
-    this.fitCanvasToBox(canvas);
+    // Logical size = laid-out size; backing store is multiplied while the card is hover-zoomed (stays sharp)
+    const zk = (window.devicePixelRatio || 1) * (+canvas.dataset.zoom || 1);
+    const w = Math.max(1, Math.round(canvas.clientWidth));
+    const h = Math.max(1, Math.round(canvas.clientHeight));
+    if (canvas.width !== Math.round(w * zk) || canvas.height !== Math.round(h * zk)) {
+      canvas.width = Math.round(w * zk);
+      canvas.height = Math.round(h * zk);
+    }
     const ctx = canvas.getContext("2d");
-    const w = canvas.width;
-    const h = canvas.height;
+    ctx.setTransform(zk, 0, 0, zk, 0, 0);
     const RULER = 13;
     const LABEL_W = 92;
     const plotW = w - LABEL_W;
@@ -2418,7 +2510,7 @@ class FloatingMeterDock {
   renderHpVoltmeter(n) {
     const canvas = this[`vu${n}Canvas`];
     if (!canvas) return;
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = (window.devicePixelRatio || 1) * (+canvas.dataset.zoom || 1);
     const cw = Math.max(1, Math.round(canvas.clientWidth * dpr));
     const ch = Math.max(1, Math.round(canvas.clientHeight * dpr));
     if (canvas.width !== cw || canvas.height !== ch) {

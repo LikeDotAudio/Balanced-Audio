@@ -2,25 +2,31 @@
  * AES-X152 Main UI & Interactions
  */
 
-// Theme Management
+// Theme Management: "paper" (standards document, default) or "dark" (lab look)
 function initTheme() {
   const themeToggle = document.getElementById("theme-toggle");
-  const savedTheme = localStorage.getItem("x152-theme") || "dark";
+  let savedTheme = "paper";
+  try {
+    const stored = localStorage.getItem("x152-theme");
+    if (stored === "paper" || stored === "dark") savedTheme = stored;
+  } catch (e) { /* storage unavailable */ }
   document.documentElement.setAttribute("data-theme", savedTheme);
 
+  // Fixed-position pop-ups must live at the top level so the paper filter on sections can't trap them
+  ["module-reader-modal"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.parentElement !== document.body) document.body.appendChild(el);
+  });
+
+  const label = (t) => (t === "paper" ? "🌙 Lab View" : "📄 Paper View");
   if (themeToggle) {
-    themeToggle.textContent = savedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+    themeToggle.textContent = label(savedTheme);
     themeToggle.addEventListener("click", () => {
-      const current = document.documentElement.getAttribute("data-theme");
-      const next = current === "dark" ? "light" : "dark";
+      const next = document.documentElement.getAttribute("data-theme") === "paper" ? "dark" : "paper";
       document.documentElement.setAttribute("data-theme", next);
-      localStorage.setItem("x152-theme", next);
-      themeToggle.textContent = next === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
-      
-      // Re-render canvas in simulator with updated colors
-      if (typeof updateCMRRSimulator === "function") {
-        updateCMRRSimulator();
-      }
+      try { localStorage.setItem("x152-theme", next); } catch (e) { /* storage unavailable */ }
+      themeToggle.textContent = label(next);
+      if (typeof updateCMRRSimulator === "function") updateCMRRSimulator();
     });
   }
 }
@@ -557,7 +563,7 @@ function selectBoxType(typeKey) {
 }
 
 // Navigation & Selective Circuit Topology Display
-function switchCircuit(circuitKey) {
+function switchCircuit(circuitKey, scrollToIt = true) {
   // Update active tab buttons
   document.querySelectorAll('.circuit-tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.circuit === circuitKey || (circuitKey === 'all' && btn.id === 'btn-show-all-circuits'));
@@ -580,7 +586,7 @@ function switchCircuit(circuitKey) {
 
   const targetEl = document.getElementById(`circuit-${circuitKey}`);
   if (targetEl) {
-    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (scrollToIt) targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     // Update active title badge
     const headerTitle = targetEl.querySelector('h4');
@@ -959,7 +965,7 @@ document.addEventListener("DOMContentLoaded", () => {
   selectEnclosureBox("mic", false);
 
   // Default circuit topology (Only bring up 6.1 initially)
-  switchCircuit("6-1");
+  switchCircuit("6-1", false); // select the first circuit without scrolling the page on load
 
   initTheme();
   initImageModal();

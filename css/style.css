@@ -7711,3 +7711,223 @@ body.has-story-sidebar.sidebar-taxonomy-active {
 .rack-dmm-matrix[hidden] {
   display: none !important;
 }
+
+/* Pyramid-section DMM in the half-width column: readouts stay on one line */
+.pyr-split-right .dmm-readout-value {
+  font-size: 1.15rem;
+  white-space: nowrap;
+}
+
+.pyr-split-right .dmm-readout-label {
+  font-size: 0.62rem;
+}
+
+/* Hover-zoomed rack instrument (5× where it fits) */
+.floating-meter-dock.rack-zooming {
+  overflow: visible !important;
+}
+
+.rack-meter-card {
+  transform-origin: top right;
+  transition: transform 0.18s ease;
+}
+
+.rack-meter-card.rack-zoomed {
+  position: relative;
+  z-index: 10050;
+}
+
+.floating-meter-dock.rack-zooming {
+  z-index: 10040 !important;
+}
+
+/* =====================================================================
+   PAPER VIEW (default): the reading page as a printed standards document,
+   large and high-contrast for older readers. The dark design is inverted
+   with hues rotated back, so every diagram turns paper-white while its
+   colours keep their meaning. The instrument rack and probe wires stay
+   dark and colourful.
+   ===================================================================== */
+html[data-theme="paper"] body {
+  background: #f3efe4 !important;
+}
+
+html[data-theme="paper"] body > section,
+html[data-theme="paper"] body > footer,
+html[data-theme="paper"] .site-header,
+html[data-theme="paper"] #story-index-sidebar,
+html[data-theme="paper"] #module-reader-modal {
+  filter: invert(1) hue-rotate(180deg) contrast(1.08);
+}
+
+/* Section ground inverts to warm paper */
+html[data-theme="paper"] body > section,
+html[data-theme="paper"] body > footer,
+html[data-theme="paper"] .site-header {
+  background: #0c0f1b !important;
+}
+
+/* Things that are already light (meter dials, sage instrument panels) are flipped back */
+html[data-theme="paper"] .hp-voltmeter-card,
+html[data-theme="paper"] .dmm-display-card,
+html[data-theme="paper"] .cal-panel {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Full-screen circuits keep the lab look (a filter would trap their fixed positioning) */
+html[data-theme="paper"] body.has-circuit-fullscreen > section {
+  filter: none;
+}
+
+/* Typography: serif, large, generous spacing */
+html[data-theme="paper"] body > section,
+html[data-theme="paper"] body > footer {
+  font-family: Georgia, "Times New Roman", "Liberation Serif", serif;
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+html[data-theme="paper"] body > section p,
+html[data-theme="paper"] body > section li {
+  font-size: 1.08em;
+  line-height: 1.75;
+}
+
+html[data-theme="paper"] .section-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: 0;
+  border-bottom: 2px solid currentColor;
+  padding-bottom: 0.35rem;
+}
+
+html[data-theme="paper"] .clause-no {
+  display: inline-block;
+  min-width: 3.2ch;
+  margin-right: 0.6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+html[data-theme="paper"] .section-lead {
+  font-size: 1.2rem;
+  max-width: 62ch;
+}
+
+/* Section badges become plain small-caps clause labels */
+html[data-theme="paper"] .section-badge {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  font-family: Georgia, serif;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  font-size: 1rem;
+}
+
+/* Not a web site: no rounded cards, glows or shadows in the document */
+html[data-theme="paper"] body > section .rule-card,
+html[data-theme="paper"] body > section .triad-card,
+html[data-theme="paper"] body > section .detail-card,
+html[data-theme="paper"] body > section .svg-diagram-card,
+html[data-theme="paper"] body > section .svg-diagram-wrapper,
+html[data-theme="paper"] body > section .interactive-calc-card,
+html[data-theme="paper"] body > section .module-card,
+html[data-theme="paper"] body > section .xlr-table-card,
+html[data-theme="paper"] body > section .contributor-card,
+html[data-theme="paper"] body > section .page-credit-card,
+html[data-theme="paper"] body > section .htu-steps li,
+html[data-theme="paper"] body > section .htu-legend,
+html[data-theme="paper"] body > section .badge,
+html[data-theme="paper"] body > section .btn {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="paper"] body > section *:not(svg):not(svg *) {
+  text-shadow: none !important;
+}
+
+html[data-theme="paper"] .gradient-text {
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+  color: inherit !important;
+}
+
+/* Keep instruments and code monospace */
+html[data-theme="paper"] code,
+html[data-theme="paper"] pre,
+html[data-theme="paper"] .dmm-readout-value,
+html[data-theme="paper"] .calc-input,
+html[data-theme="paper"] .military-fader-readout {
+  font-family: var(--font-mono);
+}
+
+/* Snake / QTP faults: 8 worked examples, one after another */
+#qtp-sim-svg-container {
+  overflow: visible !important;
+}
+
+#qtp-sim-svg-container ~ .qtp-meter-grid,
+#qtp-sim-svg-container ~ div:has(#qtp-sim-diag-text) {
+  display: none !important;
+}
+
+.qtp-demo {
+  margin: 0 0 2.25rem;
+  padding-top: 0.5rem;
+  border-top: 2px solid #334155;
+}
+
+.qtp-demo-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: 1.45rem;
+  font-weight: 800;
+  margin: 0.4rem 0 0.75rem;
+  color: var(--text-primary);
+}
+
+.qtp-demo-no {
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  min-width: 6.5rem;
+}
+
+.qtp-demo-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+}
+
+.qtp-demo-metrics span {
+  border: 1px solid #334155;
+  padding: 0.4rem 0.6rem;
+}
+
+.qtp-demo-metrics b {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+}
+
+.qtp-demo-diag {
+  margin: 0.6rem 0 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 900px) {
+  .qtp-demo-metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+}

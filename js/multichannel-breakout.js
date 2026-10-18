@@ -114,6 +114,17 @@ const MULTICHANNEL_DATA = {
   ]
 };
 
+const QTP_DEMOS = [
+  { key: "normal", title: "Normal Balanced (Optimal)" },
+  { key: "phase_flip", title: "Phase Flip (180° Polarity Inverted)" },
+  { key: "pin_dropped_1", title: "1 Pin Dropped (Pin 2 Hot Open)" },
+  { key: "pin_dropped_2", title: "2 Pins Dropped (Pins 1 & 3 Cold Open)" },
+  { key: "pin_dropped_3", title: "3 Pins Dropped (Multi-Conductor Open)" },
+  { key: "pin_dropped_4", title: "4 Pins Dropped (Quad Trunk Open)" },
+  { key: "pair_dropped", title: "1 Pair Dropped (Channel Mute)" },
+  { key: "shield_lifted", title: "Shield Lifted (P48 Fails)" }
+];
+
 // ==========================================================================
 // Snake & QTP Shield & Cable Fault Simulator Engine
 // ==========================================================================
@@ -144,8 +155,7 @@ class QTPSimulatorEngine {
   }
 
   // Which conductors are intact for the current fault (also read by the 8-CH bench scopes)
-  getWireState() {
-    const f = this.currentFault;
+  getWireState(f = this.currentFault) {
     const isPin1Drop = f === "pin_dropped_1";
     const isPin2Drop = f === "pin_dropped_2";
     const isPin3Drop = f === "pin_dropped_3";
@@ -178,15 +188,57 @@ class QTPSimulatorEngine {
     this.updateDiagnostics();
   }
 
+  // The 8 faults as separate worked examples, one after another (nothing is overlaid or switched)
   renderSVG() {
     const container = document.getElementById("qtp-sim-svg-container");
     if (!container) return;
+    if (!container.dataset.built) {
+      container.innerHTML = QTP_DEMOS.map((d, i) => {
+        const dg = this.diagnosticsFor(d.key);
+        return `
+          <div class="qtp-demo" id="qtp-demo-${d.key}" data-fault="${d.key}">
+            <h4 class="qtp-demo-title"><span class="qtp-demo-no">Example ${i + 1}</span> ${d.title}</h4>
+            ${this.svgFor(d.key)}
+            <div class="qtp-demo-metrics">
+              <span><b>V<sub>DIFF</sub></b> ${dg.vdiff}</span>
+              <span style="color: ${dg.phaseColor};"><b>Phase</b> ${dg.phase}</span>
+              <span style="color: ${dg.cmrrColor};"><b>CMRR</b> ${dg.cmrr}</span>
+              <span style="color: ${dg.p48Color};"><b>P48</b> ${dg.p48}</span>
+            </div>
+            <p class="qtp-demo-diag">${dg.diag}</p>
+          </div>`;
+      }).join("");
+      container.dataset.built = "1";
+      this.followScroll(container);
+    }
+    container.querySelectorAll(".qtp-demo").forEach(d => d.classList.toggle("active", d.dataset.fault === this.currentFault));
+  }
 
-    const f = this.currentFault;
+  // The example in the middle of the screen drives the 8-CH conductor scopes and the chapter list
+  followScroll(container) {
+    let queued = false;
+    const pick = () => {
+      queued = false;
+      const mid = window.innerHeight / 2;
+      const demo = [...container.querySelectorAll(".qtp-demo")].find(d => {
+        const r = d.getBoundingClientRect();
+        return r.top <= mid && r.bottom >= mid;
+      });
+      if (demo && demo.dataset.fault !== this.currentFault) this.setFault(demo.dataset.fault);
+    };
+    window.addEventListener("scroll", () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(pick);
+      }
+    }, { passive: true });
+  }
+
+  svgFor(f) {
     const isPhaseFlip = f === "phase_flip";
-    const wireState = this.getWireState();
+    const wireState = this.getWireState(f);
 
-    container.innerHTML = `
+    return `
       <svg viewBox="0 0 920 340" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="background: #060910; border-radius: 8px;">
         <defs>
           <pattern id="shield-braid" width="8" height="8" patternUnits="userSpaceOnUse">
@@ -315,14 +367,8 @@ class QTPSimulatorEngine {
     `;
   }
 
-  updateDiagnostics() {
-    const f = this.currentFault;
-    const descEl = document.getElementById("qtp-sim-diag-text");
-    const vdiffEl = document.getElementById("qtp-sim-vdiff");
-    const phaseEl = document.getElementById("qtp-sim-phase");
-    const cmrrEl = document.getElementById("qtp-sim-cmrr");
-    const p48El = document.getElementById("qtp-sim-p48");
-
+  // Readings and explanation for one fault
+  diagnosticsFor(f) {
     let vdiff = "+4.0 dBu (1.228 V)";
     let phase = "0° In-Phase (✓ Matched)";
     let phaseColor = "#10b981";
@@ -390,6 +436,17 @@ class QTPSimulatorEngine {
       p48Color = "#ef4444";
       diag = "OVERALL SHIELD LIFTED: Pin 1 / etherCON shell ground disconnected! In condenser microphones, cable shield is the sole DC return for P48 phantom power — microphones immediately power off! High RFI and mobile phone buzz demodulates into audio path.";
     }
+
+    return { vdiff, phase, phaseColor, cmrr, cmrrColor, p48, p48Color, diag };
+  }
+
+  updateDiagnostics() {
+    const descEl = document.getElementById("qtp-sim-diag-text");
+    const vdiffEl = document.getElementById("qtp-sim-vdiff");
+    const phaseEl = document.getElementById("qtp-sim-phase");
+    const cmrrEl = document.getElementById("qtp-sim-cmrr");
+    const p48El = document.getElementById("qtp-sim-p48");
+    const { vdiff, phase, phaseColor, cmrr, cmrrColor, p48, p48Color, diag } = this.diagnosticsFor(this.currentFault);
 
     if (vdiffEl) vdiffEl.textContent = vdiff;
     if (phaseEl) {
