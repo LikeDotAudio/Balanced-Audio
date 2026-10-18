@@ -585,6 +585,14 @@
           <a href="#contributor-kenny" class="alignment-contributor-badge"><span>👤 AES72 QTP Research:</span> <strong>Richard Kenny</strong> &rarr;</a>
           <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Grounding:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
           <a href="#contributor-schmidt" class="alignment-contributor-badge"><span>👤 Multichannel Snakes:</span> <strong>John Schmidt (Whirlwind)</strong> &rarr;</a>
+          <a href="#contributor-celli" class="alignment-contributor-badge"><span>👤 Snake Shield Continuity:</span> <strong>John Celli</strong> &rarr;</a>
+          <a href="#contributor-brito" class="alignment-contributor-badge"><span>👤 Standards Implementation:</span> <strong>Joel Brito</strong> &rarr;</a>
+          <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 SCIN Physics:</span> <strong>Bill Whitlock</strong> &rarr;</a>
+        </div>
+        <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="#contributor-kenny" class="alignment-contributor-badge"><span>👤 AES72 QTP Research:</span> <strong>Richard Kenny</strong> &rarr;</a>
+          <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Grounding:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
+          <a href="#contributor-schmidt" class="alignment-contributor-badge"><span>👤 Multichannel Snakes:</span> <strong>John Schmidt (Whirlwind)</strong> &rarr;</a>
           <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 SCIN Physics:</span> <strong>Bill Whitlock</strong> &rarr;</a>
         </div>
         </p>
@@ -841,6 +849,7 @@
 
     </div>
   </section>
+
 
 
 
@@ -2244,36 +2253,29 @@
   </svg>
 </div>
 
-          <!-- LUCKY 8050A Precision Benchtop DMM (Yellow Font) -->
+          <!-- Fluke 8050A Precision Benchtop DMM -->
           <div class="dmm-display-card">
-            <div class="dmm-plate" style="border-bottom: 2px solid #ca8a04;">
-              <span class="dmm-plate-title" style="color: #facc15;">LUCKY 8050A DIGITAL MULTIMETER</span>
-              <span class="dmm-plate-sub">TRUE RMS &bull; 4&frac12; DIGIT AUDIO BENCH &bull; HIGH SENSITIVITY</span>
+            <div class="dmm-plate">
+              <span class="dmm-plate-title">FLUKE 8050A DIGITAL MULTIMETER</span>
+              <span class="dmm-plate-sub">TRUE RMS &bull; 4&frac12; DIGIT AUDIO BENCH</span>
             </div>
-            <!-- DMM Mode Switcher: +VE, -VE, THD/DIST, MULTI -->
-            <div class="dmm-mode-switcher" style="padding: 0.4rem 0.6rem; background: #0f172a; display: flex; gap: 0.35rem;">
-              <button class="dmm-mode-btn active yellow-mode" data-dmm-mode="hot">+VE HOT (PIN 2)</button>
-              <button class="dmm-mode-btn" data-dmm-mode="cold">-VE COLD (PIN 3)</button>
-              <button class="dmm-mode-btn" data-dmm-mode="thd">THD &amp; DISTORTION</button>
-              <button class="dmm-mode-btn" data-dmm-mode="multi">MULTI-READOUT</button>
-            </div>
-            <div class="dmm-bezel" style="border-color: #ca8a04;">
+            <div class="dmm-bezel">
               <div class="dmm-header">
-                <span class="dmm-model" style="color: #facc15;">VACUUM FLUORESCENT DISPLAY</span>
-                <span id="dmm-active-badge" class="dmm-badge" style="background: rgba(250, 204, 21, 0.2); color: #facc15; border: 1px solid #facc15;">&#9679; AC RMS ACTIVE</span>
+                <span class="dmm-model">VACUUM FLUORESCENT DISPLAY</span>
+                <span class="dmm-badge">&#9679; AC RMS ACTIVE</span>
               </div>
               <div class="dmm-grid">
                 <div class="dmm-readout-item">
-                  <div id="dmm-lbl-1" class="dmm-readout-label">V_+VE (VOLTAGE RMS)</div>
-                  <div id="dmm-vrms-val" class="dmm-readout-value lucky-yellow">1.228 V</div>
+                  <div class="dmm-readout-label">V_RMS (VOLTAGE)</div>
+                  <div id="dmm-vrms-val" class="dmm-readout-value cyan">1.228 V</div>
                 </div>
                 <div class="dmm-readout-item">
-                  <div id="dmm-lbl-2" class="dmm-readout-label">AUDIO LEVEL (dBu)</div>
-                  <div id="dmm-dbu-val" class="dmm-readout-value lucky-yellow">+4.0 dBu</div>
+                  <div class="dmm-readout-label">AUDIO LEVEL (dBu)</div>
+                  <div id="dmm-dbu-val" class="dmm-readout-value green">+4.0 dBu</div>
                 </div>
                 <div class="dmm-readout-item">
-                  <div id="dmm-lbl-3" class="dmm-readout-label">LINE STATUS / THD</div>
-                  <div id="dmm-vpeak-val" class="dmm-readout-value lucky-yellow">0.003% / 95dB</div>
+                  <div class="dmm-readout-label">V_PEAK (CREST)</div>
+                  <div id="dmm-vpeak-val" class="dmm-readout-value amber">1.737 V</div>
                 </div>
               </div>
             </div>
@@ -2283,11 +2285,10 @@
               <div class="dmm-key">AC mA</div>
               <div class="dmm-key">DC mA</div>
               <div class="dmm-key">k&Omega;</div>
-              <div class="dmm-key active key-range-auto" data-dmm-range="AUTO">AUTO</div>
-              <div class="dmm-key" data-dmm-range="0.2">200mV</div>
-              <div class="dmm-key" data-dmm-range="2">2V</div>
-              <div class="dmm-key" data-dmm-range="20">20V</div>
-              <div class="dmm-key" data-dmm-range="200">200V</div>
+              <div class="dmm-key">200mV</div>
+              <div class="dmm-key active">2V</div>
+              <div class="dmm-key">20V</div>
+              <div class="dmm-key">200V</div>
               <div class="dmm-key key-red">POWER</div>
             </div>
             <div class="dmm-terminals">
@@ -2304,72 +2305,6 @@
                 <span class="dmm-jack-label">mA</span>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Hewlett-Packard 353A Patch Panel & Strip-Chart Trend Recorder Row -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem; margin-bottom: 1.25rem;">
-          <!-- Hewlett-Packard 353A Patch Panel (Manual 00353-90003) -->
-          <div class="hp353a-panel-card" style="margin-top: 0;">
-            <div class="hp353a-header">
-              <div class="hp353a-badge">
-                <span class="hp353a-hp-logo">hp</span>
-                <span class="hp353a-title">353A PATCH PANEL</span>
-              </div>
-              <span style="font-size: 0.65rem; color: #94a3b8; font-family: monospace;">MANUAL 00353-90003</span>
-            </div>
-            <div class="hp353a-grid">
-              <div class="hp353a-ctrl-col">
-                <span class="hp353a-ctrl-title">OUTPUT Z</span>
-                <div class="hp353a-rotary-dial hp353a-outz-dial" title="Click to cycle Output Impedance (135, 600, 900 Ω)">
-                  <div class="hp353a-rotary-pointer"></div>
-                </div>
-                <span class="hp353a-value-readout hp353a-outz-val">600 Ω</span>
-              </div>
-              <div class="hp353a-ctrl-col">
-                <span class="hp353a-ctrl-title">INPUT TERM Z</span>
-                <div class="hp353a-rotary-dial hp353a-inz-dial" title="Click to cycle Input Termination (135, 600, 900, 10k Ω)">
-                  <div class="hp353a-rotary-pointer"></div>
-                </div>
-                <span class="hp353a-value-readout hp353a-inz-val">10 kΩ</span>
-              </div>
-              <div class="hp353a-ctrl-col">
-                <span class="hp353a-ctrl-title">ATTEN 10 dB</span>
-                <div class="hp353a-rotary-dial hp353a-atten10-dial" title="Click to step 10 dB Attenuation (0 - 100 dB)">
-                  <div class="hp353a-rotary-pointer"></div>
-                </div>
-                <span class="hp353a-value-readout hp353a-atten10-val">0 dB</span>
-              </div>
-              <div class="hp353a-ctrl-col">
-                <span class="hp353a-ctrl-title">ATTEN 1 dB</span>
-                <div class="hp353a-rotary-dial hp353a-atten1-dial" title="Click to step 1 dB Attenuation (0 - 10 dB)">
-                  <div class="hp353a-rotary-pointer"></div>
-                </div>
-                <span class="hp353a-value-readout hp353a-atten1-val">0 dB</span>
-              </div>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.65rem; padding-top: 0.5rem; border-top: 1px solid #334155;">
-              <button class="hp353a-switch-btn hp353a-toggle-meas active" title="Toggle MEAS (circuit under test) vs CAL (oscillator reference)">MODE: MEAS</button>
-              <span class="hp353a-atten-total" style="font-family: monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 800;">0 dB Loss</span>
-              <button class="hp353a-switch-btn hp353a-toggle-freq" title="Toggle FREQ (<5kHz audio vs >5kHz carrier)">FREQ: &lt;5kHz</button>
-            </div>
-          </div>
-
-          <!-- Time-Series Strip-Chart Trend Recorder -->
-          <div class="trend-recorder-card" style="margin-top: 0;">
-            <div class="trend-toolbar">
-              <span class="trend-title">📉 MULTI-CHANNEL TREND RECORDER</span>
-              <div class="trend-legend">
-                <span class="trend-legend-pill" style="color: #facc15;"><span class="trend-dot yellow"></span> +VE</span>
-                <span class="trend-legend-pill" style="color: #38bdf8;"><span class="trend-dot cyan"></span> -VE</span>
-                <span class="trend-legend-pill" style="color: #10b981;"><span class="trend-dot green"></span> DIFF</span>
-              </div>
-              <div class="trend-btn-group">
-                <button class="trend-btn trend-btn-run active">PAUSE</button>
-                <button class="trend-btn trend-btn-clear">CLEAR</button>
-              </div>
-            </div>
-            <canvas id="dmm-trend-canvas" width="400" height="150" class="trend-canvas"></canvas>
           </div>
         </div>
 
@@ -2953,36 +2888,29 @@
   </svg>
 </div>
 
-              <!-- LUCKY 8050A Precision Benchtop DMM (Yellow Font) -->
+              <!-- Fluke 8050A Precision Benchtop DMM -->
               <div class="dmm-display-card">
-                <div class="dmm-plate" style="border-bottom: 2px solid #ca8a04;">
-                  <span class="dmm-plate-title" style="color: #facc15;">LUCKY 8050A DIGITAL MULTIMETER</span>
-                  <span class="dmm-plate-sub">TRUE RMS &bull; SYSTEM DIFFERENTIAL LOAD MONITOR &bull; HIGH SENSITIVITY</span>
+                <div class="dmm-plate">
+                  <span class="dmm-plate-title">FLUKE 8050A DIGITAL MULTIMETER</span>
+                  <span class="dmm-plate-sub">TRUE RMS &bull; SYSTEM DIFFERENTIAL LOAD MONITOR</span>
                 </div>
-                <!-- DMM Mode Switcher: +VE, -VE, THD/DIST, MULTI -->
-                <div class="dmm-mode-switcher" style="padding: 0.4rem 0.6rem; background: #0f172a; display: flex; gap: 0.35rem;">
-                  <button class="dmm-mode-btn active yellow-mode" data-dmm-mode="hot">+VE HOT</button>
-                  <button class="dmm-mode-btn" data-dmm-mode="cold">-VE COLD</button>
-                  <button class="dmm-mode-btn" data-dmm-mode="thd">THD &amp; CMRR</button>
-                  <button class="dmm-mode-btn" data-dmm-mode="multi">MULTI</button>
-                </div>
-                <div class="dmm-bezel" style="border-color: #ca8a04;">
+                <div class="dmm-bezel">
                   <div class="dmm-header">
-                    <span class="dmm-model" style="color: #facc15;">VACUUM FLUORESCENT DISPLAY</span>
-                    <span class="dmm-badge" style="background: rgba(250, 204, 21, 0.2); color: #facc15; border: 1px solid #facc15;">&#9679; DIFFERENTIAL LOAD ACTIVE</span>
+                    <span class="dmm-model">VACUUM FLUORESCENT DISPLAY</span>
+                    <span class="dmm-badge">&#9679; DIFFERENTIAL LOAD ACTIVE</span>
                   </div>
                   <div class="dmm-grid">
                     <div class="dmm-readout-item">
-                      <div id="pp-dmm-lbl-1" class="dmm-readout-label">V_DIFF (AC RMS)</div>
-                      <div id="pp-dmm-vdiff" class="dmm-readout-value lucky-yellow">2.06 V</div>
+                      <div class="dmm-readout-label">V_DIFF (AC RMS)</div>
+                      <div id="pp-dmm-vdiff" class="dmm-readout-value cyan">2.06 V</div>
                     </div>
                     <div class="dmm-readout-item">
-                      <div id="pp-dmm-lbl-2" class="dmm-readout-label">I_LOAD (CURRENT)</div>
-                      <div id="pp-dmm-iload" class="dmm-readout-value lucky-yellow">3.4 mA</div>
+                      <div class="dmm-readout-label">I_LOAD (CURRENT)</div>
+                      <div id="pp-dmm-iload" class="dmm-readout-value green">3.4 mA</div>
                     </div>
                     <div class="dmm-readout-item">
-                      <div id="pp-dmm-lbl-3" class="dmm-readout-label">LINE BALANCE</div>
-                      <div id="pp-dmm-status" class="dmm-readout-value lucky-yellow">SYMMETRIC</div>
+                      <div class="dmm-readout-label">LINE BALANCE</div>
+                      <div id="pp-dmm-status" class="dmm-readout-value">SYMMETRIC</div>
                     </div>
                   </div>
                 </div>
@@ -2992,11 +2920,10 @@
                   <div class="dmm-key active">AC mA</div>
                   <div class="dmm-key">DC mA</div>
                   <div class="dmm-key">k&Omega;</div>
-                  <div class="dmm-key active key-range-auto" data-dmm-range="AUTO">AUTO</div>
-                  <div class="dmm-key" data-dmm-range="0.2">200mV</div>
-                  <div class="dmm-key" data-dmm-range="2">2V</div>
-                  <div class="dmm-key" data-dmm-range="20">20V</div>
-                  <div class="dmm-key" data-dmm-range="200">200V</div>
+                  <div class="dmm-key">200mV</div>
+                  <div class="dmm-key active">2V</div>
+                  <div class="dmm-key">20V</div>
+                  <div class="dmm-key">200V</div>
                   <div class="dmm-key key-red">POWER</div>
                 </div>
                 <div class="dmm-terminals">
@@ -3016,72 +2943,6 @@
               </div>
             </div>
 
-            <!-- Hewlett-Packard 353A Patch Panel & Strip-Chart Trend Recorder Row for Circuit 6.1 -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem;">
-              <!-- Hewlett-Packard 353A Patch Panel -->
-              <div class="hp353a-panel-card" style="margin-top: 0;">
-                <div class="hp353a-header">
-                  <div class="hp353a-badge">
-                    <span class="hp353a-hp-logo">hp</span>
-                    <span class="hp353a-title">353A PATCH PANEL</span>
-                  </div>
-                  <span style="font-size: 0.65rem; color: #94a3b8; font-family: monospace;">MANUAL 00353-90003</span>
-                </div>
-                <div class="hp353a-grid">
-                  <div class="hp353a-ctrl-col">
-                    <span class="hp353a-ctrl-title">OUTPUT Z</span>
-                    <div class="hp353a-rotary-dial hp353a-outz-dial" title="Click to cycle Output Impedance (135, 600, 900 Ω)">
-                      <div class="hp353a-rotary-pointer"></div>
-                    </div>
-                    <span class="hp353a-value-readout hp353a-outz-val">600 Ω</span>
-                  </div>
-                  <div class="hp353a-ctrl-col">
-                    <span class="hp353a-ctrl-title">INPUT TERM Z</span>
-                    <div class="hp353a-rotary-dial hp353a-inz-dial" title="Click to cycle Input Termination (135, 600, 900, 10k Ω)">
-                      <div class="hp353a-rotary-pointer"></div>
-                    </div>
-                    <span class="hp353a-value-readout hp353a-inz-val">10 kΩ</span>
-                  </div>
-                  <div class="hp353a-ctrl-col">
-                    <span class="hp353a-ctrl-title">ATTEN 10 dB</span>
-                    <div class="hp353a-rotary-dial hp353a-atten10-dial" title="Click to step 10 dB Attenuation (0 - 100 dB)">
-                      <div class="hp353a-rotary-pointer"></div>
-                    </div>
-                    <span class="hp353a-value-readout hp353a-atten10-val">0 dB</span>
-                  </div>
-                  <div class="hp353a-ctrl-col">
-                    <span class="hp353a-ctrl-title">ATTEN 1 dB</span>
-                    <div class="hp353a-rotary-dial hp353a-atten1-dial" title="Click to step 1 dB Attenuation (0 - 10 dB)">
-                      <div class="hp353a-rotary-pointer"></div>
-                    </div>
-                    <span class="hp353a-value-readout hp353a-atten1-val">0 dB</span>
-                  </div>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.65rem; padding-top: 0.5rem; border-top: 1px solid #334155;">
-                  <button class="hp353a-switch-btn hp353a-toggle-meas active" title="Toggle MEAS (circuit under test) vs CAL (oscillator reference)">MODE: MEAS</button>
-                  <span class="hp353a-atten-total" style="font-family: monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 800;">0 dB Loss</span>
-                  <button class="hp353a-switch-btn hp353a-toggle-freq" title="Toggle FREQ (<5kHz audio vs >5kHz carrier)">FREQ: &lt;5kHz</button>
-                </div>
-              </div>
-
-              <!-- Time-Series Strip-Chart Trend Recorder -->
-              <div class="trend-recorder-card" style="margin-top: 0;">
-                <div class="trend-toolbar">
-                  <span class="trend-title">📉 MULTI-CHANNEL TREND RECORDER</span>
-                  <div class="trend-legend">
-                    <span class="trend-legend-pill" style="color: #facc15;"><span class="trend-dot yellow"></span> +VE</span>
-                    <span class="trend-legend-pill" style="color: #38bdf8;"><span class="trend-dot cyan"></span> -VE</span>
-                    <span class="trend-legend-pill" style="color: #10b981;"><span class="trend-dot green"></span> DIFF</span>
-                  </div>
-                  <div class="trend-btn-group">
-                    <button class="trend-btn trend-btn-run active">PAUSE</button>
-                    <button class="trend-btn trend-btn-clear">CLEAR</button>
-                  </div>
-                </div>
-                <canvas id="pp-trend-canvas" width="400" height="150" class="trend-canvas"></canvas>
-              </div>
-            </div>
-
             <!-- Live Falstad-Style Probes -->
             <div class="probe-badge-panel" style="margin-top: 1rem;">
               <span class="probe-pill">Generator In: <strong id="pp-probe-gen">0.85 VRMS / 0.1 mA</strong></span>
@@ -3094,21 +2955,6 @@
           <!-- Vector Schematic SVG with Dynamic Wires and Overlaid Values -->
           <div class="svg-diagram-wrapper">
             <svg viewBox="0 0 850 300" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <marker id="mdp-arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
-                </marker>
-                <marker id="mdp-arrow-rose" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e"/>
-                </marker>
-                <marker id="mdp-arrow-cyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
-                </marker>
-                <marker id="mdp-arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7"/>
-                </marker>
-              </defs>
-
               <rect width="850" height="300" fill="var(--bg-secondary)" rx="8"/>
               
               <!-- Input Signal Wire with Dynamic Stroke -->
@@ -3148,7 +2994,7 @@
               <line x1="385" y1="90" x2="630" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
               <circle cx="630" cy="90" r="7" fill="#10b981"/>
               <circle cx="630" cy="90" r="3" class="solder-lug"/>
-              <text x="645" y="80" fill="#10b981" font-size="12" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
+              <text x="655" y="95" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <text id="pp-svg-probe-p2" x="490" y="80" fill="#10b981" font-size="10" font-weight="600">3.4 mA / 1.03 V</text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 260,90 L 630,90" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
@@ -3162,7 +3008,7 @@
               <line x1="385" y1="210" x2="630" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
               <circle cx="630" cy="210" r="7" fill="#ef4444"/>
               <circle cx="630" cy="210" r="3" class="solder-lug"/>
-              <text x="645" y="228" fill="#ef4444" font-size="12" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
+              <text x="655" y="215" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
               <text id="pp-svg-probe-p3" x="490" y="228" fill="#ef4444" font-size="10" font-weight="600">3.4 mA / -1.03 V</text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 630,210 L 260,210" fill="none" stroke="#ef4444" stroke-width="2.5"/>
 
@@ -3170,8 +3016,8 @@
               <line x1="630" y1="90" x2="630" y2="120" stroke="#f59e0b" stroke-width="2"/>
               <circle cx="630" cy="120" r="3" class="solder-lug"/>
               <rect id="pp-svg-rload-rect" x="622" y="120" width="16" height="60" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
-              <text x="645" y="145" fill="#f59e0b" font-size="10" font-weight="600">R_Load</text>
-              <text id="pp-svg-rload" x="645" y="160" fill="#f59e0b" font-size="11" font-weight="700">600 &Omega;</text>
+              <text x="655" y="152" fill="#f59e0b" font-size="10" font-weight="600">R_Load</text>
+              <text id="pp-svg-rload" x="655" y="172" fill="#f59e0b" font-size="11" font-weight="700">600 &Omega;</text>
               <circle cx="630" cy="180" r="3" class="solder-lug"/>
               <line x1="630" y1="180" x2="630" y2="210" stroke="#f59e0b" stroke-width="2"/>
 
@@ -3182,41 +3028,8 @@
                 <circle cx="630" cy="260" r="3" class="solder-lug"/>
                 <line x1="420" y1="260" x2="630" y2="260" stroke="#94a3b8" stroke-width="2"/>
                 <path d="M 410,260 L 430,260 M 415,265 L 425,265 M 418,270 L 422,270" stroke="#94a3b8" stroke-width="2"/>
-                <text id="pp-svg-ts-text" x="540" y="252" fill="#94a3b8" font-size="9" font-weight="600">TS Ground Short Link</text>
-                <text x="645" y="270" fill="#94a3b8" font-size="11" font-weight="700">Pin 1 (CHASSIS)</text>
-              </g>
-
-              <!-- ================= Measurement Data Points (MDP) Leader Pointers ================= -->
-              <!-- MDP 0: Audio In Drive -->
-              <g class="circuit-mdp-badge" data-probe-target="6-1-vin" style="cursor: pointer;">
-                <path class="circuit-mdp-pointer" d="M 20,40 L 60,40 L 88,140" stroke="#a855f7" stroke-width="1.8" fill="none" marker-end="url(#mdp-arrow-purple)"/>
-                <rect x="15" y="15" width="120" height="28" rx="4" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
-                <text x="24" y="27" fill="#a855f7" font-size="8.5" font-weight="800">MDP-0: AUDIO DRIVE</text>
-                <text id="mdp-val-6-1-vin" x="24" y="38" fill="#facc15" font-size="8.5" font-weight="700">1.20 V RMS</text>
-              </g>
-
-              <!-- MDP 1: Pin 2 Hot Leader Pointer -->
-              <g class="circuit-mdp-badge" data-probe-target="6-1-p2" style="cursor: pointer;">
-                <path class="circuit-mdp-pointer" d="M 720,45 L 675,45 L 636,84" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#mdp-arrow-green)"/>
-                <rect x="715" y="30" width="125" height="30" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
-                <text x="725" y="44" fill="#10b981" font-size="8.5" font-weight="800">MDP-1: PIN 2 (+VE HOT)</text>
-                <text id="mdp-val-6-1-p2" x="725" y="55" fill="#facc15" font-size="8.5" font-weight="700">1.03 V RMS (+2.5 dBu)</text>
-              </g>
-
-              <!-- MDP 3: Differential Load Leader Pointer -->
-              <g class="circuit-mdp-badge" data-probe-target="6-1-load" style="cursor: pointer;">
-                <path class="circuit-mdp-pointer" d="M 720,130 L 675,130 L 640,148" stroke="#38bdf8" stroke-width="1.8" fill="none" marker-end="url(#mdp-arrow-cyan)"/>
-                <rect x="715" y="115" width="125" height="30" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
-                <text x="725" y="129" fill="#38bdf8" font-size="8.5" font-weight="800">MDP-3: DIFF LOAD</text>
-                <text id="mdp-val-6-1-load" x="725" y="140" fill="#facc15" font-size="8.5" font-weight="700">2.06 V / 3.4 mA</text>
-              </g>
-
-              <!-- MDP 2: Pin 3 Cold Leader Pointer -->
-              <g class="circuit-mdp-badge" data-probe-target="6-1-p3" style="cursor: pointer;">
-                <path class="circuit-mdp-pointer" d="M 720,210 L 638,210" stroke="#f43f5e" stroke-width="1.8" fill="none" marker-end="url(#mdp-arrow-rose)"/>
-                <rect x="715" y="195" width="125" height="30" rx="4" fill="#0f172a" stroke="#f43f5e" stroke-width="1.5"/>
-                <text x="725" y="209" fill="#f43f5e" font-size="8.5" font-weight="800">MDP-2: PIN 3 (-VE COLD)</text>
-                <text id="mdp-val-6-1-p3" x="725" y="220" fill="#facc15" font-size="8.5" font-weight="700">-1.03 V RMS (180°)</text>
+                <text id="pp-svg-ts-text" x="580" y="248" fill="#94a3b8" font-size="10" font-weight="600">TS Ground Short Link (Open)</text>
+                <text x="655" y="265" fill="#94a3b8" font-size="13" font-weight="700">Pin 1 (CHASSIS)</text>
               </g>
             </svg>
           </div>
@@ -3316,21 +3129,6 @@
           </div>
           <div class="svg-diagram-wrapper">
             <svg viewBox="0 0 850 280" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <marker id="mdp2-arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
-                </marker>
-                <marker id="mdp2-arrow-rose" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e"/>
-                </marker>
-                <marker id="mdp2-arrow-cyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
-                </marker>
-                <marker id="mdp2-arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7"/>
-                </marker>
-              </defs>
-
               <rect width="850" height="280" fill="var(--bg-secondary)" rx="8"/>
 
               <text x="30" y="85" fill="#38bdf8" font-size="13" font-weight="700">Audio In</text>
@@ -3344,7 +3142,7 @@
               <text x="360" y="84" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">R_PO (50&Omega;)</text>
               <line x1="390" y1="80" x2="640" y2="80" stroke="#10b981" stroke-width="2.5"/>
               <circle cx="640" cy="80" r="7" fill="#10b981"/>
-              <text x="655" y="75" fill="#10b981" font-size="12" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
+              <text x="665" y="85" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 250,80 L 640,80" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
               <!-- Passive Resistor Termination to Ground (Pin 3) -->
@@ -3354,7 +3152,7 @@
               <text x="360" y="184" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">R_RO (50&Omega;)</text>
               <line x1="390" y1="180" x2="640" y2="180" stroke="#94a3b8" stroke-width="2.5"/>
               <circle cx="640" cy="180" r="7" fill="#ef4444"/>
-              <text x="655" y="195" fill="#ef4444" font-size="12" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
+              <text x="665" y="185" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
               <text x="440" y="165" fill="#94a3b8" font-size="10" font-weight="600">Zero Audio Signal Voltage (Passive Balance)</text>
 
               <!-- Bridging Load Resistor -->
@@ -3366,40 +3164,7 @@
               <!-- Pin 1 Shield -->
               <line x1="210" y1="230" x2="640" y2="230" stroke="#94a3b8" stroke-width="2"/>
               <circle cx="640" cy="230" r="7" fill="#94a3b8"/>
-              <text x="655" y="240" fill="#94a3b8" font-size="12" font-weight="700">Pin 1 (CHASSIS)</text>
-
-              <!-- ================= Measurement Data Points (MDP) Leader Pointers ================= -->
-              <!-- MDP 0: Audio In Drive -->
-              <g class="circuit-mdp-badge" data-probe-target="6-2-vin" style="cursor: pointer;">
-                <path class="circuit-mdp-pointer" d="M 20,35 L 60,35 L 88,75" stroke="#a855f7" stroke-width="1.8" fill="none" marker-end="url(#mdp2-arrow-purple)"/>
-                <rect x="15" y="15" width="120" height="28" rx="4" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
-                <text x="24" y="27" fill="#a855f7" font-size="8.5" font-weight="800">MDP-0: AUDIO DRIVE</text>
-                <text id="mdp-val-6-2-vin" x="24" y="38" fill="#facc15" font-size="8.5" font-weight="700">1.20 V RMS</text>
-              </g>
-
-              <!-- MDP 1: Pin 2 Hot Leader Pointer -->
-              <g class="circuit-mdp-badge" data-probe-target="6-2-p2" style="cursor: pointer;">
-                <path class="circuit-mdp-pointer" d="M 720,40 L 675,40 L 646,74" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#mdp2-arrow-green)"/>
-                <rect x="715" y="25" width="125" height="30" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
-                <text x="725" y="39" fill="#10b981" font-size="8.5" font-weight="800">MDP-1: PIN 2 (+VE HOT)</text>
-                <text id="mdp-val-6-2-p2" x="725" y="50" fill="#facc15" font-size="8.5" font-weight="700">1.19 V RMS (ACTIVE)</text>
-              </g>
-
-              <!-- MDP 3: Differential Load Leader Pointer -->
-              <g class="circuit-mdp-badge" data-probe-target="6-2-load" style="cursor: pointer;">
-                <path class="circuit-mdp-pointer" d="M 720,115 L 675,115 L 646,128" stroke="#38bdf8" stroke-width="1.8" fill="none" marker-end="url(#mdp2-arrow-cyan)"/>
-                <rect x="715" y="100" width="125" height="30" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
-                <text x="725" y="114" fill="#38bdf8" font-size="8.5" font-weight="800">MDP-3: DIFF LOAD</text>
-                <text id="mdp-val-6-2-load" x="725" y="125" fill="#facc15" font-size="8.5" font-weight="700">1.19 V / 100% CMRR</text>
-              </g>
-
-              <!-- MDP 2: Pin 3 Cold Leader Pointer -->
-              <g class="circuit-mdp-badge" data-probe-target="6-2-p3" style="cursor: pointer;">
-                <path class="circuit-mdp-pointer" d="M 720,185 L 648,180" stroke="#f43f5e" stroke-width="1.8" fill="none" marker-end="url(#mdp2-arrow-rose)"/>
-                <rect x="715" y="170" width="125" height="30" rx="4" fill="#0f172a" stroke="#f43f5e" stroke-width="1.5"/>
-                <text x="725" y="184" fill="#f43f5e" font-size="8.5" font-weight="800">MDP-2: PIN 3 (-VE COLD)</text>
-                <text id="mdp-val-6-2-p3" x="725" y="195" fill="#facc15" font-size="8.5" font-weight="700">0.00 V (50&Omega; PASSIVE)</text>
-              </g>
+              <text x="665" y="235" fill="#94a3b8" font-size="14" font-weight="700">Pin 1 (CHASSIS)</text>
             </svg>
           </div>
         </div>
@@ -3770,209 +3535,206 @@
           Design custom audio transformers with physical turn counts (N<sub>1</sub>, N<sub>2</sub>), wire gauges (34 to 44 AWG), 
           and magnetic core alloys. Connect them to a live virtual test bench with selectable signal generator sources, 
           observe core saturation, and calculate the <strong>best termination network (Zobel RC)</strong> to damp parasitic ringing!
+          <div style="margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+            <a href="#contributor-chinn" class="alignment-contributor-badge"><span>👤 Transformer Splitters &amp; Direct Boxes:</span> <strong>Rick Chinn (Uneeda Audio)</strong> &rarr;</a>
+            <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 Jensen Audio Transformers &amp; Faraday Shielding:</span> <strong>Bill Whitlock</strong> &rarr;</a>
+          </div>
         </p>
       </div>
 
-      <div class="xfmr-lab-grid">
-        <!-- Left Column: Winding Simulator Controls & Physical Metrics -->
-        <div class="xfmr-controls-panel">
-          <h3 style="margin-top: 0; color: var(--accent-cyan); font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span>1. Transformer Winding Parameters</span>
-          </h3>
-
-          <!-- Preset Selector -->
-          <div class="control-group">
-            <label class="control-label" for="xfmr-preset">Transformer Type Preset:</label>
-            <select id="xfmr-preset" class="form-select">
-              <option value="1to1" selected>1:1 Line Isolation (600 &Omega; : 600 &Omega;)</option>
-              <option value="1to2">1:2 Step-Up (150 &Omega; : 600 &Omega; / 600 &Omega; : 2.4 k&Omega;)</option>
-              <option value="1to3">1:3 Step-Up (150 &Omega; : 1,350 &Omega;)</option>
-              <option value="1to2to3">1:2:3 Multi-Tap Audio Transformer (600 &Omega; Pri)</option>
-            </select>
+      <!-- Main Full-Width Laboratory Card (All Text Above / Below, Full Width Diagram Center) -->
+      <div class="svg-diagram-card xfmr-main-card">
+        <!-- Card Header with Telemetry & Fullscreen Button -->
+        <div class="d-flex justify-content-between align-items-center mb-2" style="flex-wrap: wrap; gap: 0.75rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+            <h4 style="margin: 0; color: var(--accent-cyan); font-size: 1.15rem;">
+              Comprehensive Audio Transformer Vector Schematic &amp; Dual-Domain Test Bench
+            </h4>
+            <span id="xfmr-sat-badge" class="badge badge-success">LINEAR REGION: Zero Magnetic Distortion</span>
           </div>
-
-          <!-- Multi-Tap Control (Only shown for 1:2:3) -->
-          <div class="control-group" id="multi-tap-control-group" style="display: none; background: rgba(6, 182, 212, 0.08); padding: 0.75rem; border-radius: 6px; border: 1px solid rgba(6, 182, 212, 0.2);">
-            <label class="control-label" for="xfmr-tap-select">Secondary Tap Selection:</label>
-            <select id="xfmr-tap-select" class="form-select">
-              <option value="tap1">Tap 1 (1:1 Ratio &bull; 600 &Omega; Nominal)</option>
-              <option value="tap2" selected>Tap 2 (1:2 Ratio &bull; 2,400 &Omega; Nominal)</option>
-              <option value="tap3">Tap 3 (1:3 Ratio &bull; 5,400 &Omega; Nominal)</option>
-            </select>
-          </div>
-
-          <!-- Core Material Selection -->
-          <div class="control-group">
-            <label class="control-label" for="xfmr-core">Magnetic Core Material:</label>
-            <select id="xfmr-core" class="form-select">
-              <option value="mumetal" selected>Mu-Metal (80% Nickel-Iron, B_sat = 0.8 T, &mu;_r = 80,000)</option>
-              <option value="silicon_steel">M6 Silicon Steel (B_sat = 1.6 T, &mu;_r = 7,500)</option>
-              <option value="amorphous">Cobalt Amorphous Alloy (B_sat = 1.2 T, &mu;_r = 32,000)</option>
-            </select>
-            <span id="xfmr-core-desc" style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 0.35rem;">
-              Lowest harmonic distortion, supreme shielding, ideal for microphone and low-level line isolation.
-            </span>
-          </div>
-
-          <!-- Primary Winding Controls -->
-          <div class="control-group">
-            <div class="d-flex justify-content-between">
-              <label class="control-label">Primary Turns (N<sub>1</sub>):</label>
-              <span id="xfmr-n1-val" class="control-value">1500 turns</span>
-            </div>
-            <input type="range" id="xfmr-n1" class="range-slider" min="200" max="4000" step="50" value="1500" />
-            
-            <div class="d-flex justify-content-between align-items-center mt-1">
-              <span style="font-size: 0.82rem; color: var(--text-secondary);">Wire Gauge:</span>
-              <select id="xfmr-awg1" class="form-select" style="width: 140px; padding: 0.25rem 0.5rem; font-size: 0.8rem;">
-                <option value="36">36 AWG (0.127 mm)</option>
-                <option value="38">38 AWG (0.101 mm)</option>
-                <option value="40" selected>40 AWG (0.080 mm)</option>
-                <option value="42">42 AWG (0.063 mm)</option>
-                <option value="44">44 AWG (0.050 mm)</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Secondary Winding Controls -->
-          <div class="control-group">
-            <div class="d-flex justify-content-between">
-              <label class="control-label">Secondary Turns (N<sub>2</sub>):</label>
-              <span id="xfmr-n2-val" class="control-value">1500 turns</span>
-            </div>
-            <input type="range" id="xfmr-n2" class="range-slider" min="200" max="4000" step="50" value="1500" />
-            
-            <div class="d-flex justify-content-between align-items-center mt-1">
-              <span style="font-size: 0.82rem; color: var(--text-secondary);">Wire Gauge:</span>
-              <select id="xfmr-awg2" class="form-select" style="width: 140px; padding: 0.25rem 0.5rem; font-size: 0.8rem;">
-                <option value="36">36 AWG (0.127 mm)</option>
-                <option value="38">38 AWG (0.101 mm)</option>
-                <option value="40" selected>40 AWG (0.080 mm)</option>
-                <option value="41">41 AWG (0.071 mm)</option>
-                <option value="42">42 AWG (0.063 mm)</option>
-                <option value="44">44 AWG (0.050 mm)</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Calculated Physical Dashboard -->
-          <div style="background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
-            <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; margin-bottom: 0.5rem;">
-              Physical &amp; Electrical Calculations
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
-              <div>
-                <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">Turns Ratio (N):</span>
-                <strong id="metric-turns-ratio" style="color: #f8fafc;">1 : 1.00 (1:1 Z)</strong>
-              </div>
-              <div>
-                <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">Reflected Load Z:</span>
-                <strong id="metric-reflected-z" style="color: #10b981;">600 &Omega;</strong>
-              </div>
-              <div>
-                <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">DC Resistance (DCR):</span>
-                <strong id="metric-dcr" style="color: #f8fafc;">Pri: 42.1 &Omega; | Sec: 45.3 &Omega;</strong>
-              </div>
-              <div>
-                <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">Leakage / Capacitance:</span>
-                <strong id="metric-parasitics" style="color: #f8fafc;">L_leak: 0.8 mH | C_w: 120 pF</strong>
-              </div>
-              <div style="grid-column: 1 / -1;">
-                <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">Resonant Frequency:</span>
-                <strong id="metric-fres" style="color: #f59e0b;">51.3 kHz (Parasitic Tank)</strong>
-              </div>
-              <div style="grid-column: 1 / -1;">
-                <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">Core Flux Density (B_peak):</span>
-                <strong id="metric-flux" style="color: #38bdf8;">0.12 T / 0.8 T (15%)</strong>
-              </div>
-            </div>
-
-            <div style="margin-top: 0.75rem;">
-              <span id="xfmr-sat-badge" class="badge badge-success" style="width: 100%; justify-content: center; text-align: center;">
-                LINEAR REGION: Zero Magnetic Distortion
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Column: Virtual Test Bench & Scope / Bode Screens -->
-        <div class="xfmr-bench-panel">
-          <div class="d-flex justify-content-between align-items-center">
-            <h3 style="margin: 0; color: var(--text-primary); font-size: 1.15rem;">
-              2. Virtual Test Bench &amp; Termination Simulator
-            </h3>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
             <button class="btn-circuit-fullscreen" title="Toggle Fullscreen View" onclick="toggleCircuitFullscreen(this)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
               <span>⛶ Full Screen</span>
             </button>
             <span class="badge badge-accent">Live Falstad-Engine</span>
           </div>
+        </div>
 
-          <!-- Signal Generator Controls -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-            <div>
-              <span class="control-label" style="display: block; margin-bottom: 0.4rem;">Signal Generator Source:</span>
-              <div class="sig-btn-group">
-                <button class="sig-type-btn active" data-sig="square10k">10 kHz Square</button>
-                <button class="sig-type-btn" data-sig="sine1k">1 kHz Sine</button>
-                <button class="sig-type-btn" data-sig="sine20hz">20 Hz Saturation</button>
-              </div>
-            </div>
+        <p class="circuit-desc">
+          Live audio transformer physics simulation: Audio signals enter the primary winding (N<sub>1</sub>) and transfer via mutual magnetic flux (&Phi;) through the laminated mu-metal core. An internal copper electrostatic Faraday shield bonded to Pin 1 Chassis prevents RF interference. Observe leakage inductance ringing on the dual-trace oscilloscope and frequency response Bode plot, and engage the calibrated Zobel RC termination network below to achieve critical Butterworth damping (&zeta; = 0.707).
+        </p>
 
-            <div>
-              <div class="d-flex justify-content-between">
-                <span class="control-label">Signal Level (V<sub>IN</sub>):</span>
-                <span id="xfmr-vin-val" class="control-value" style="font-size: 0.85rem;">1.23 V RMS (+4 dBu)</span>
-              </div>
-              <input type="range" id="xfmr-vin" class="range-slider" min="0.1" max="15.0" step="0.1" value="1.23" />
-            </div>
-          </div>
+        <!-- Live Transformer Telemetry Badges Strip -->
+        <div class="probe-badge-panel" style="margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+          <span class="probe-pill">Turns Ratio (N): <strong id="metric-turns-ratio" style="color: #38bdf8;">1 : 1.00 (1:1 Z)</strong></span>
+          <span class="probe-pill">Reflected Load Z: <strong id="metric-reflected-z" style="color: #10b981;">600 &Omega;</strong></span>
+          <span class="probe-pill">DC Resistance (DCR): <strong id="metric-dcr">Pri: 42.1 &Omega; | Sec: 45.3 &Omega;</strong></span>
+          <span class="probe-pill">Parasitics: <strong id="metric-parasitics">L_leak: 0.8 mH | C_w: 120 pF</strong></span>
+          <span class="probe-pill">Resonant Tank: <strong id="metric-fres" style="color: #f59e0b;">51.3 kHz</strong></span>
+          <span class="probe-pill">Core Flux (B_peak): <strong id="metric-flux" style="color: #38bdf8;">0.12 T / 0.8 T (15%)</strong></span>
+          <span class="probe-pill">Zobel Snubber: <strong id="xfmr-telemetry-rz" style="color: #34d399;">8,165 &Omega;</strong> + <strong id="xfmr-telemetry-cz" style="color: #34d399;">240 pF</strong></span>
+        </div>
 
-          <!-- Termination Controls -->
-          <div>
-            <span class="control-label" style="display: block; margin-bottom: 0.4rem;">Secondary Termination Network:</span>
-            <div class="term-btn-group">
-              <button class="term-type-btn active" data-term="open">1. Open Circuit (&infin; Load)</button>
-              <button class="term-type-btn" data-term="load600">2. 600 &Omega; Standard Load</button>
-              <button class="term-type-btn" data-term="bridging10k">3. 10 k&Omega; Modern Bridging</button>
-              <button class="term-type-btn" data-term="zobel">4. Optimal Zobel RC Network</button>
-            </div>
-          </div>
+        <!-- 1. The Full-Width Vector SVG Audio Transformer Schematic -->
+        <div class="svg-diagram-wrapper" style="margin-bottom: 1.5rem;">
+          <svg viewBox="0 0 960 340" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" id="xfmr-schematic-svg">
+  <defs>
+    <!-- Core Saturation Linear Gradient -->
+    <linearGradient id="xfmr-core-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="50%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
 
-          <!-- Dynamic Best Termination Recommendation Banner -->
-          <div class="zobel-banner" id="zobel-recommendation-card">
-            <div class="d-flex justify-content-between align-items-center">
-              <strong style="color: #34d399; font-size: 0.95rem;">Recommended Best Termination for this Transformer:</strong>
-              <button id="btn-apply-best-term" class="btn btn-secondary" style="padding: 0.3rem 0.8rem; font-size: 0.78rem;">Engage Zobel Network</button>
-            </div>
-            
-            <div class="zobel-values-grid">
-              <div style="background: rgba(0, 0, 0, 0.3); padding: 0.5rem 0.75rem; border-radius: 6px;">
-                <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">Zobel Resistor (R_Z):</span>
-                <strong id="best-term-rz" style="color: #38bdf8; font-size: 1.1rem;">8,165 &Omega;</strong>
-              </div>
-              <div style="background: rgba(0, 0, 0, 0.3); padding: 0.5rem 0.75rem; border-radius: 6px;">
-                <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">Zobel Capacitor (C_Z):</span>
-                <strong id="best-term-cz" style="color: #38bdf8; font-size: 1.1rem;">240 pF</strong>
-              </div>
-              <div style="background: rgba(0, 0, 0, 0.3); padding: 0.5rem 0.75rem; border-radius: 6px; grid-column: span 2;">
-                <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">Damping Factor &amp; Alignment:</span>
-                <strong id="best-term-zeta" style="color: #10b981; font-size: 0.95rem;">Damping Factor &zeta; = 0.05 (Underdamped Ringing!)</strong>
-              </div>
-            </div>
+    <!-- Copper Faraday Shield Pattern -->
+    <pattern id="xfmr-faraday-foil" width="6" height="6" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="6" y2="6" stroke="#b45309" stroke-width="1.2"/>
+    </pattern>
 
-            <p id="best-term-status" style="margin: 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
-              <span style="color:#ef4444;">⚠ Severe Parasitic Ringing:</span> Secondary leakage inductance and capacitance are undamped (&zeta; = 0.05). High ultrasonic peaking!
-            </p>
-          </div>
+    <!-- Glow Filter for Active Current & Magnetic Flux -->
+    <filter id="flux-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
 
+  <rect width="960" height="340" fill="#060b14" rx="8"/>
+  <rect width="958" height="338" x="1" y="1" fill="none" stroke="#1e293b" stroke-width="1.5" rx="7"/>
+
+  <!-- ================= 1. PRIMARY DRIVER STAGE (LEFT) ================= -->
+  <!-- Audio Signal Generator -->
+  <g id="xfmr-probe-pri-gen" class="circuit-probe-point" data-probe-label="Signal Generator In" style="cursor: pointer;">
+    <circle cx="70" cy="140" r="28" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+    <path d="M 52,140 Q 61,126 70,140 T 88,140" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+    <text x="70" y="118" fill="#38bdf8" font-size="10.5" font-family="'JetBrains Mono', monospace" font-weight="800" text-anchor="middle">GEN (V_IN)</text>
+    <text id="xfmr-svg-vin-lbl" x="70" y="180" fill="#93c5fd" font-size="9.5" font-family="'JetBrains Mono', monospace" font-weight="700" text-anchor="middle">1.23 V RMS (+4 dBu)</text>
+  </g>
+
+  <!-- Generator Output Leads to Primary -->
+  <line x1="98" y1="140" x2="135" y2="140" stroke="#38bdf8" stroke-width="2.5"/>
+  <line x1="135" y1="140" x2="135" y2="80" stroke="#38bdf8" stroke-width="2.5"/>
+  <line x1="135" y1="80" x2="160" y2="80" stroke="#38bdf8" stroke-width="2.5"/>
+
+  <!-- Source Impedance Z_GEN -->
+  <rect x="160" y="72" width="55" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8" rx="2"/>
+  <text x="187" y="84" fill="#38bdf8" font-size="8.5" font-family="'JetBrains Mono', monospace" font-weight="800" text-anchor="middle">Z_GEN (600Ω)</text>
+
+  <line x1="215" y1="80" x2="280" y2="80" stroke="#38bdf8" stroke-width="2.5"/>
+
+  <!-- Primary Return Wire (Horizontal at y=200) -->
+  <line x1="98" y1="140" x2="135" y2="140" stroke="#38bdf8" stroke-width="2.5"/>
+  <line x1="135" y1="140" x2="135" y2="200" stroke="#38bdf8" stroke-width="2.5"/>
+  <line x1="135" y1="200" x2="280" y2="200" stroke="#38bdf8" stroke-width="2.5"/>
+
+  <!-- Animated Primary Current Flow -->
+  <path class="animated-current-flow" data-flow-speed="2.0" d="M 135,80 L 280,80 L 280,200 L 135,200 Z" fill="none" stroke="#38bdf8" stroke-width="2.5" opacity="0.8"/>
+
+  <!-- Primary Winding Coils (4 smooth arcs from y=80 down to y=200) -->
+  <path id="xfmr-svg-pri-coil" d="M 280,80 A 15,15 0 0,1 280,110 A 15,15 0 0,1 280,140 A 15,15 0 0,1 280,170 A 15,15 0 0,1 280,200" fill="none" stroke="#10b981" stroke-width="3.8"/>
+
+  <!-- Primary Labels -->
+  <text x="245" y="65" fill="#10b981" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="800" text-anchor="middle">PRIMARY (N₁)</text>
+  <text id="xfmr-svg-n1-lbl" x="245" y="98" fill="#6ee7b7" font-size="9.5" font-family="'JetBrains Mono', monospace" font-weight="700" text-anchor="middle">1500 T (40 AWG)</text>
+
+  <!-- ================= 2. CORE & FARADAY SHIELD (CENTER) ================= -->
+  <!-- Electrostatic Faraday Shield (Internal copper foil between windings) -->
+  <rect x="303" y="55" width="8" height="170" fill="url(#xfmr-faraday-foil)" stroke="#d97706" stroke-width="1" rx="1"/>
+  <text x="295" y="48" fill="#f59e0b" font-size="8" font-family="'JetBrains Mono', monospace" font-weight="800" text-anchor="middle">FARADAY SHIELD</text>
+  
+  <!-- Faraday Shield Bond Line to Pin 1 Chassis Earth (AES48) -->
+  <line x1="307" y1="225" x2="307" y2="295" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,3"/>
+  <line x1="307" y1="295" x2="490" y2="295" stroke="#94a3b8" stroke-width="2"/>
+  <circle cx="307" cy="225" r="3" fill="#f59e0b"/>
+
+  <!-- Laminated High-Permeability Magnetic Core Bars -->
+  <line class="xfmr-svg-core-bar" x1="324" y1="50" x2="324" y2="235" stroke="#64748b" stroke-width="3.5"/>
+  <line class="xfmr-svg-core-bar" x1="334" y1="50" x2="334" y2="235" stroke="#94a3b8" stroke-width="3.5"/>
+  <line class="xfmr-svg-core-bar" x1="344" y1="50" x2="344" y2="235" stroke="#64748b" stroke-width="3.5"/>
+
+  <!-- Core Silkscreen Badges -->
+  <rect x="295" y="244" width="78" height="18" rx="3" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+  <text id="xfmr-svg-core-lbl" x="334" y="256" fill="#f8fafc" font-size="7.5" font-family="'JetBrains Mono', monospace" font-weight="800" text-anchor="middle">MU-METAL CORE</text>
+
+  <!-- Dynamic Magnetic Flux Density Lines & Glowing Arrow -->
+  <g id="xfmr-svg-flux-group" filter="url(#flux-glow)">
+    <path class="xfmr-svg-flux-line" d="M 320,110 Q 334,102 348,110" fill="none" stroke="#38bdf8" stroke-width="1.8"/>
+    <path class="xfmr-svg-flux-line" d="M 320,140 Q 334,132 348,140" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    <path class="xfmr-svg-flux-line" d="M 320,170 Q 334,162 348,170" fill="none" stroke="#38bdf8" stroke-width="1.8"/>
+  </g>
+  <text id="xfmr-svg-flux-lbl" x="334" y="276" fill="#38bdf8" font-size="8.5" font-family="'JetBrains Mono', monospace" font-weight="700" text-anchor="middle">B_peak: 0.12 T (15%)</text>
+
+  <!-- ================= 3. SECONDARY WINDING & TERMINATION (RIGHT) ================= -->
+  <!-- Secondary Winding Coils (4 smooth arcs from y=80 down to y=200) -->
+  <path id="xfmr-svg-sec-coil" d="M 370,80 A 15,15 0 0,1 370,110 A 15,15 0 0,1 370,140 A 15,15 0 0,1 370,170 A 15,15 0 0,1 370,200" fill="none" stroke="#ef4444" stroke-width="3.8"/>
+
+  <!-- Secondary Labels -->
+  <text x="405" y="65" fill="#ef4444" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="800" text-anchor="middle">SECONDARY (N₂)</text>
+  <text id="xfmr-svg-n2-lbl" x="405" y="98" fill="#fca5a5" font-size="9.5" font-family="'JetBrains Mono', monospace" font-weight="700" text-anchor="middle">1500 T (40 AWG)</text>
+
+  <!-- Top Output Line (Pin 2 Hot) -->
+  <line x1="370" y1="80" x2="810" y2="80" stroke="#10b981" stroke-width="2.5"/>
+  <circle cx="810" cy="80" r="7" fill="#10b981"/>
+  <text x="830" y="85" fill="#10b981" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="800"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
+
+  <!-- Bottom Output Line (Pin 3 Cold) -->
+  <line x1="370" y1="200" x2="810" y2="200" stroke="#ef4444" stroke-width="2.5"/>
+  <circle cx="810" cy="200" r="7" fill="#ef4444"/>
+  <text x="830" y="205" fill="#ef4444" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="800"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
+
+  <!-- Animated Secondary Current Flow -->
+  <path class="animated-current-flow" data-flow-speed="1.8" d="M 370,80 L 810,80 L 810,200 L 370,200 Z" fill="none" stroke="#10b981" stroke-width="2.5" opacity="0.8"/>
+
+  <!-- AES48 Pin 1 Chassis Earth Ground Bus (Horizontal at y=295) -->
+  <line x1="490" y1="295" x2="810" y2="295" stroke="#94a3b8" stroke-width="2.5"/>
+  <circle cx="810" cy="295" r="7" fill="#94a3b8"/>
+  <text x="830" y="300" fill="#94a3b8" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="800">Pin 1 (CHASSIS)</text>
+
+  <!-- Standard Earth Ground Symbol at y=295 -->
+  <path d="M 540,295 L 540,315 M 530,315 L 550,315 M 534,320 L 546,320 M 538,325 L 542,325" stroke="#94a3b8" stroke-width="2"/>
+  <text x="560" y="320" fill="#64748b" font-size="8.5" font-family="'JetBrains Mono', monospace" font-weight="700">AES48 Chassis Ground</text>
+
+  <!-- ================= 4. SECONDARY TERMINATION & ZOBEL RC BAY ================= -->
+  <!-- Termination 1: Secondary Load Resistor R_LOAD (at x=580) -->
+  <line x1="580" y1="80" x2="580" y2="115" stroke="#f59e0b" stroke-width="2"/>
+  <rect x="571" y="115" width="18" height="50" fill="#0f172a" stroke="#f59e0b" stroke-width="2" rx="2"/>
+  <text x="580" y="138" fill="#f59e0b" font-size="8" font-family="'JetBrains Mono', monospace" font-weight="800" text-anchor="middle">R_LOAD</text>
+  <text id="xfmr-svg-rload-lbl" x="580" y="152" fill="#fbbf24" font-size="8.5" font-family="'JetBrains Mono', monospace" font-weight="700" text-anchor="middle">600 &Omega;</text>
+  <line x1="580" y1="165" x2="580" y2="200" stroke="#f59e0b" stroke-width="2"/>
+
+  <!-- Termination 2: Calibrated Zobel RC Snubber Network (at x=690) -->
+  <g id="xfmr-svg-zobel-branch" style="transition: opacity 0.25s ease;">
+    <!-- R_Z Resistor -->
+    <line x1="690" y1="80" x2="690" y2="105" stroke="#38bdf8" stroke-width="2"/>
+    <rect x="681" y="105" width="18" height="34" fill="#0f172a" stroke="#38bdf8" stroke-width="2" rx="2"/>
+    <text x="690" y="122" fill="#38bdf8" font-size="7.5" font-family="'JetBrains Mono', monospace" font-weight="800" text-anchor="middle">R_Z</text>
+    <text id="xfmr-svg-rz-lbl" x="690" y="132" fill="#bae6fd" font-size="8" font-family="'JetBrains Mono', monospace" font-weight="700" text-anchor="middle">8,165 &Omega;</text>
+
+    <!-- C_Z Capacitor (Two parallel plates) -->
+    <line x1="690" y1="139" x2="690" y2="152" stroke="#38bdf8" stroke-width="2"/>
+    <line x1="678" y1="152" x2="702" y2="152" stroke="#38bdf8" stroke-width="2.5"/>
+    <line x1="678" y1="158" x2="702" y2="158" stroke="#38bdf8" stroke-width="2.5"/>
+    <text x="715" y="158" fill="#38bdf8" font-size="7.5" font-family="'JetBrains Mono', monospace" font-weight="800">C_Z</text>
+    <text id="xfmr-svg-cz-lbl" x="715" y="168" fill="#bae6fd" font-size="8" font-family="'JetBrains Mono', monospace" font-weight="700">240 pF</text>
+    <line x1="690" y1="158" x2="690" y2="200" stroke="#38bdf8" stroke-width="2"/>
+  </g>
+
+  <!-- Damping Alignment Status Plaque -->
+  <rect x="550" y="220" width="180" height="26" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+  <circle cx="562" cy="233" r="4" fill="#10b981"/>
+  <text id="xfmr-svg-zeta-lbl" x="645" y="237" fill="#34d399" font-size="9" font-family="'JetBrains Mono', monospace" font-weight="800" text-anchor="middle">&zeta; = 0.707 (Critically Damped)</text>
+</svg>
+        </div>
+
+        <!-- 2. Dual-Domain Instrument Bay: CRT Oscilloscope & Frequency Bode Plot -->
+        <div class="xfmr-instruments-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
           <!-- Dual-Trace Oscilloscope Viewport (Vector SVG) -->
           <div class="scope-screen-wrapper">
             <div class="scope-header">
               <span>OSCILLOSCOPE DUAL TRACE &bull; TIME DOMAIN</span>
               <div class="scope-legend">
-                <span style="color: #38bdf8;">&mdash; CH1: Input Generator Drive</span>
-                <span style="color: #34d399;">&mdash; CH2: Secondary Output (Damped / Ringing)</span>
+                <span style="color: #38bdf8;">&mdash; CH1: Input Drive</span>
+                <span style="color: #34d399;">&mdash; CH2: Output (Damped/Ringing)</span>
               </div>
             </div>
 
@@ -4001,46 +3763,203 @@
           <div class="scope-screen-wrapper" style="border-color: #1e3a5f;">
             <div class="scope-header">
               <span style="color: #60a5fa;">FREQUENCY RESPONSE (BODE PLOT) &bull; 10 Hz &ndash; 100 kHz</span>
-              <span style="color: #94a3b8; font-size: 0.75rem;">Scale: 10 dB/div &bull; Resonant Peak vs Zobel Flattening</span>
+              <span style="color: #94a3b8; font-size: 0.75rem;">Scale: 10 dB/div &bull; Resonant Peak vs Zobel</span>
             </div>
 
-            <svg viewBox="0 0 640 180" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" id="xfmr-bode-svg">
-              <rect width="640" height="180" fill="#040d18"/>
+            <svg viewBox="0 0 640 240" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" id="xfmr-bode-svg">
+              <rect width="640" height="240" fill="#040d18"/>
               
               <!-- Decades Grid: 10 Hz, 100 Hz, 1 kHz, 10 kHz, 100 kHz -->
-              <line x1="0" y1="0" x2="0" y2="180" stroke="#172554" stroke-width="1"/>
-              <line x1="160" y1="0" x2="160" y2="180" stroke="#172554" stroke-width="1"/>
-              <line x1="320" y1="0" x2="320" y2="180" stroke="#172554" stroke-width="1"/>
-              <line x1="480" y1="0" x2="480" y2="180" stroke="#172554" stroke-width="1"/>
-              <line x1="640" y1="0" x2="640" y2="180" stroke="#172554" stroke-width="1"/>
+              <line x1="0" y1="0" x2="0" y2="240" stroke="#172554" stroke-width="1"/>
+              <line x1="160" y1="0" x2="160" y2="240" stroke="#172554" stroke-width="1"/>
+              <line x1="320" y1="0" x2="320" y2="240" stroke="#172554" stroke-width="1"/>
+              <line x1="480" y1="0" x2="480" y2="240" stroke="#172554" stroke-width="1"/>
+              <line x1="640" y1="0" x2="640" y2="240" stroke="#172554" stroke-width="1"/>
 
-              <!-- Horizontal dB Lines: +10 dB, 0 dB (y=80), -10 dB, -20 dB -->
-              <line x1="0" y1="45" x2="640" y2="45" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
-              <line x1="0" y1="80" x2="640" y2="80" stroke="#3b82f6" stroke-width="1.2"/>
-              <line x1="0" y1="115" x2="640" y2="115" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
-              <line x1="0" y1="150" x2="640" y2="150" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+              <!-- Horizontal dB Lines: +10 dB, 0 dB (y=110), -10 dB, -20 dB -->
+              <line x1="0" y1="65" x2="640" y2="65" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+              <line x1="0" y1="110" x2="640" y2="110" stroke="#3b82f6" stroke-width="1.2"/>
+              <line x1="0" y1="155" x2="640" y2="155" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+              <line x1="0" y1="200" x2="640" y2="200" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
 
-              <text x="10" y="75" fill="#3b82f6" font-size="9" font-family="monospace">0 dB (Ref)</text>
-              <text x="10" y="40" fill="#64748b" font-size="9" font-family="monospace">+10 dB</text>
-              <text x="10" y="145" fill="#64748b" font-size="9" font-family="monospace">-20 dB</text>
+              <text x="10" y="105" fill="#3b82f6" font-size="9" font-family="monospace">0 dB (Ref)</text>
+              <text x="10" y="60" fill="#64748b" font-size="9" font-family="monospace">+10 dB</text>
+              <text x="10" y="195" fill="#64748b" font-size="9" font-family="monospace">-20 dB</text>
 
               <!-- Decade Freq Labels -->
-              <text x="160" y="172" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">100 Hz</text>
-              <text x="320" y="172" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">1 kHz</text>
-              <text x="480" y="172" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">10 kHz</text>
-              <text x="620" y="172" fill="#64748b" font-size="9" font-family="monospace" text-anchor="end">100 kHz</text>
+              <text x="160" y="230" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">100 Hz</text>
+              <text x="320" y="230" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">1 kHz</text>
+              <text x="480" y="230" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">10 kHz</text>
+              <text x="620" y="230" fill="#64748b" font-size="9" font-family="monospace" text-anchor="end">100 kHz</text>
 
               <!-- Resonant Frequency Vertical Marker -->
-              <line id="xfmr-bode-fres-line" x1="450" y1="0" x2="450" y2="180" stroke="#f59e0b" stroke-width="1" stroke-dasharray="2,2"/>
+              <line id="xfmr-bode-fres-line" x1="450" y1="0" x2="450" y2="240" stroke="#f59e0b" stroke-width="1" stroke-dasharray="2,2"/>
 
               <!-- Bode Gain Curve -->
-              <path id="xfmr-bode-path" d="M 0,80 L 640,80" fill="none" stroke="#60a5fa" stroke-width="2.5"/>
+              <path id="xfmr-bode-path" d="M 0,110 L 640,110" fill="none" stroke="#60a5fa" stroke-width="2.5"/>
             </svg>
           </div>
         </div>
+
+        <!-- 3. All Controls & Parameters Panel (Below Diagrams) -->
+        <div class="vintage-military-panel" style="margin-top: 1rem;">
+          <div class="panel-screw top-left"></div>
+          <div class="panel-screw top-right"></div>
+          <div class="panel-screw bottom-left"></div>
+          <div class="panel-screw bottom-right"></div>
+
+          <div class="military-panel-header" style="flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <span class="military-panel-title">AN/URM-1964 AUDIO TRANSFORMER WINDING &amp; IMPEDANCE ANALYZER</span>
+              <span class="military-spec-badge">MIL-T-28800B &bull; JENSEN PHYSICS &amp; ZOBEL SNUBBER</span>
+            </div>
+            <!-- Quick Meter Alignment Buttons -->
+            <div class="xfmr-meter-sync-group" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <span style="font-size: 0.68rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Set Meters R_REF:</span>
+              <div class="xfmr-sync-btn-bar" id="xfmr-sync-btn-bar" style="display: flex; gap: 0.35rem;">
+                <button type="button" class="xfmr-sync-r-btn" data-xfmr-sync-r="150" title="Set HP Voltmeter &amp; Fluke 8050A to 150 Ω Primary">150 Ω (Pri)</button>
+                <button type="button" class="xfmr-sync-r-btn active" data-xfmr-sync-r="600" title="Set HP Voltmeter &amp; Fluke 8050A to 600 Ω Standard">600 Ω (Sec/Std)</button>
+                <button type="button" class="xfmr-sync-r-btn" data-xfmr-sync-r="2400" title="Set HP Voltmeter &amp; Fluke 8050A to 2.4 kΩ Step-Up">2.4 kΩ (Step-Up)</button>
+              </div>
+              <span style="font-size: 0.68rem; color: #facc15; font-family: monospace; font-weight: 800;" id="xfmr-sync-active-r">Active: 600 Ω</span>
+            </div>
+          </div>
+
+          <!-- Parameter Bays Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
+            
+            <!-- Column 1: Core Alloy & Presets -->
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 6px; border: 1px solid #334155;">
+              <span class="control-label" style="display: block; margin-bottom: 0.4rem; color: #38bdf8; font-weight: 800;">1. Transformer Type Preset:</span>
+              <select id="xfmr-preset" class="form-select" style="margin-bottom: 0.75rem;">
+                <option value="1to1" selected>1:1 Line Isolation (600 &Omega; : 600 &Omega;)</option>
+                <option value="1to2">1:2 Step-Up (150 &Omega; : 600 &Omega; / 600 &Omega; : 2.4 k&Omega;)</option>
+                <option value="1to3">1:3 Step-Up (150 &Omega; : 1,350 &Omega;)</option>
+                <option value="1to2to3">1:2:3 Multi-Tap Audio Transformer (600 &Omega; Pri)</option>
+              </select>
+
+              <!-- Multi-Tap Control (Only shown for 1:2:3) -->
+              <div id="multi-tap-control-group" style="display: none; background: rgba(6, 182, 212, 0.08); padding: 0.5rem; border-radius: 5px; border: 1px solid rgba(6, 182, 212, 0.2); margin-bottom: 0.75rem;">
+                <label class="control-label" for="xfmr-tap-select" style="font-size: 0.75rem;">Secondary Tap Selection:</label>
+                <select id="xfmr-tap-select" class="form-select" style="font-size: 0.78rem;">
+                  <option value="tap1">Tap 1 (1:1 Ratio &bull; 600 &Omega; Nominal)</option>
+                  <option value="tap2" selected>Tap 2 (1:2 Ratio &bull; 2,400 &Omega; Nominal)</option>
+                  <option value="tap3">Tap 3 (1:3 Ratio &bull; 5,400 &Omega; Nominal)</option>
+                </select>
+              </div>
+
+              <span class="control-label" style="display: block; margin-bottom: 0.4rem; color: #38bdf8; font-weight: 800;">2. Magnetic Core Alloy:</span>
+              <select id="xfmr-core" class="form-select">
+                <option value="mumetal" selected>Mu-Metal (80% Nickel-Iron, B_sat = 0.8 T, &mu;_r = 80,000)</option>
+                <option value="silicon_steel">M6 Silicon Steel (B_sat = 1.6 T, &mu;_r = 7,500)</option>
+                <option value="amorphous">Cobalt Amorphous Alloy (B_sat = 1.2 T, &mu;_r = 32,000)</option>
+              </select>
+              <span id="xfmr-core-desc" style="font-size: 0.75rem; color: #94a3b8; display: block; margin-top: 0.4rem; line-height: 1.4;">
+                Lowest harmonic distortion, supreme shielding, ideal for microphone and low-level line isolation.
+              </span>
+            </div>
+
+            <!-- Column 2: Winding Parameters (N1 & N2) -->
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 6px; border: 1px solid #334155;">
+              <!-- Primary Turns N1 -->
+              <div style="margin-bottom: 0.85rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                  <span style="font-size: 0.82rem; font-weight: 800; color: #10b981; white-space: nowrap;">Primary Turns (N₁):</span>
+                  <span id="xfmr-n1-val" style="font-family: monospace; font-size: 0.85rem; font-weight: 800; color: #6ee7b7;">1500 turns</span>
+                </div>
+                <input type="range" id="xfmr-n1" class="range-slider" min="200" max="4000" step="50" value="1500" />
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                  <span style="font-size: 0.75rem; color: #94a3b8;">Wire Gauge:</span>
+                  <select id="xfmr-awg1" class="form-select" style="width: 140px; padding: 0.2rem 0.4rem; font-size: 0.75rem;">
+                    <option value="36">36 AWG (0.127 mm)</option>
+                    <option value="38">38 AWG (0.101 mm)</option>
+                    <option value="40" selected>40 AWG (0.080 mm)</option>
+                    <option value="42">42 AWG (0.063 mm)</option>
+                    <option value="44">44 AWG (0.050 mm)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Secondary Turns N2 -->
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                  <span style="font-size: 0.82rem; font-weight: 800; color: #ef4444; white-space: nowrap;">Secondary Turns (N₂):</span>
+                  <span id="xfmr-n2-val" style="font-family: monospace; font-size: 0.85rem; font-weight: 800; color: #fca5a5;">1500 turns</span>
+                </div>
+                <input type="range" id="xfmr-n2" class="range-slider" min="200" max="4000" step="50" value="1500" />
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                  <span style="font-size: 0.75rem; color: #94a3b8;">Wire Gauge:</span>
+                  <select id="xfmr-awg2" class="form-select" style="width: 140px; padding: 0.2rem 0.4rem; font-size: 0.75rem;">
+                    <option value="36">36 AWG (0.127 mm)</option>
+                    <option value="38">38 AWG (0.101 mm)</option>
+                    <option value="40" selected>40 AWG (0.080 mm)</option>
+                    <option value="41">41 AWG (0.071 mm)</option>
+                    <option value="42">42 AWG (0.063 mm)</option>
+                    <option value="44">44 AWG (0.050 mm)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 3: Generator Source & Termination Selection -->
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 6px; border: 1px solid #334155;">
+              <span class="control-label" style="display: block; margin-bottom: 0.35rem; color: #38bdf8; font-weight: 800;">Signal Generator Source:</span>
+              <div class="sig-btn-group" style="margin-bottom: 0.75rem;">
+                <button class="sig-type-btn active" data-sig="square10k">10 kHz Square</button>
+                <button class="sig-type-btn" data-sig="sine1k">1 kHz Sine</button>
+                <button class="sig-type-btn" data-sig="sine20hz">20 Hz Saturation</button>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                <span style="font-size: 0.78rem; color: #94a3b8; font-weight: 700;">Drive Level (V_IN):</span>
+                <span id="xfmr-vin-val" style="font-family: monospace; font-size: 0.82rem; color: #38bdf8; font-weight: 800;">1.23 V RMS (+4 dBu)</span>
+              </div>
+              <input type="range" id="xfmr-vin" class="range-slider" min="0.1" max="15.0" step="0.1" value="1.23" style="margin-bottom: 0.75rem;" />
+
+              <span class="control-label" style="display: block; margin-bottom: 0.35rem; color: #38bdf8; font-weight: 800;">Secondary Termination:</span>
+              <div class="term-btn-group">
+                <button class="term-type-btn active" data-term="open">1. Open (&infin; Load)</button>
+                <button class="term-type-btn" data-term="load600">2. 600 &Omega; Std</button>
+                <button class="term-type-btn" data-term="bridging10k">3. 10 k&Omega; Bridge</button>
+                <button class="term-type-btn" data-term="zobel">4. Zobel RC</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Dynamic Best Termination Recommendation Banner -->
+          <div class="zobel-banner" id="zobel-recommendation-card" style="margin-top: 0;">
+            <div class="d-flex justify-content-between align-items-center" style="flex-wrap: wrap; gap: 0.5rem;">
+              <strong style="color: #34d399; font-size: 0.95rem;">Recommended Best Termination for this Audio Transformer:</strong>
+              <button id="btn-apply-best-term" class="btn btn-secondary" style="padding: 0.35rem 0.9rem; font-size: 0.8rem; background: #065f46; border-color: #10b981; color: #ecfdf5; font-weight: 800;">Engage Zobel Network</button>
+            </div>
+            
+            <div class="zobel-values-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-top: 0.75rem;">
+              <div style="background: rgba(0, 0, 0, 0.4); padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid #1e293b;">
+                <span style="font-size: 0.72rem; color: #94a3b8; display: block;">Optimal Snubber Resistor (R_Z):</span>
+                <strong id="best-term-rz" style="color: #38bdf8; font-size: 1.15rem;">8,165 &Omega;</strong>
+              </div>
+              <div style="background: rgba(0, 0, 0, 0.4); padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid #1e293b;">
+                <span style="font-size: 0.72rem; color: #94a3b8; display: block;">Optimal Snubber Capacitor (C_Z):</span>
+                <strong id="best-term-cz" style="color: #38bdf8; font-size: 1.15rem;">240 pF</strong>
+              </div>
+              <div style="background: rgba(0, 0, 0, 0.4); padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid #1e293b;">
+                <span style="font-size: 0.72rem; color: #94a3b8; display: block;">Damping Factor &amp; Alignment:</span>
+                <strong id="best-term-zeta" style="color: #10b981; font-size: 0.95rem;">Damping Factor &zeta; = 0.05</strong>
+              </div>
+            </div>
+
+            <p id="best-term-status" style="margin: 0.5rem 0 0 0; font-size: 0.82rem; color: #cbd5e1; line-height: 1.5;">
+              <span style="color:#ef4444;">⚠ Severe Parasitic Ringing:</span> Secondary leakage inductance and capacitance are undamped (&zeta; = 0.05). High ultrasonic peaking!
+            </p>
+          </div>
+
+        </div>
+
       </div>
     </div>
   </section>
+
 
   <!-- Section 5: The Deepest Dive — Jim Meyer's Thevenin 3-Impedance Model -->
   <section id="deepest-dive" class="section">
@@ -5315,6 +5234,14 @@
         <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 0.4rem 0.8rem; margin-top: 0.5rem; font-size: 0.82rem; color: #fbbf24;">
           <span>📁</span>
           <strong>Posted to SC-05-05 Repository:</strong> October 3, 2025 &bull; by Richard Cabot, Chair &bull; for AES SC-05-05 Group Members
+        </div>
+        <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="#contributor-cabot" class="alignment-contributor-badge"><span>👤 Archive Compiler:</span> <strong>Richard Cabot, Chair</strong> &rarr;</a>
+          <a href="#contributor-olson" class="alignment-contributor-badge"><span>👤 Standards Governance:</span> <strong>Bruce Olson (AESSC Chair)</strong> &rarr;</a>
+          <a href="#contributor-fause" class="alignment-contributor-badge"><span>👤 AES-X249 Co-Author:</span> <strong>Kenneth Fause (AES Fellow)</strong> &rarr;</a>
+          <a href="#contributor-whitlock" class="alignment-contributor-badge"><span>👤 Seminal Papers:</span> <strong>Bill Whitlock</strong> &rarr;</a>
+          <a href="#contributor-hess" class="alignment-contributor-badge"><span>👤 Working Group Drafts:</span> <strong>Richard L. Hess</strong> &rarr;</a>
+        </div>
         </div>
         <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
           <a href="#contributor-cabot" class="alignment-contributor-badge"><span>👤 Archive Compiler:</span> <strong>Richard Cabot, Chair</strong> &rarr;</a>

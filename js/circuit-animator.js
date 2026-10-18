@@ -10,6 +10,69 @@ class CircuitSimulator {
     this.animationFrame = null;
     this.time = 0;
     this.circuits = {};
+    this.refZ = 600;
+    this.refZList = [50, 75, 93, 110, 125, 135, 150, 250, 300, 500, 600, 800, 900, 1000, 1200, 2400, 8000, 10000];
+  }
+
+  setRefZ(r) {
+    if (!r || isNaN(r)) return;
+    this.refZ = Number(r);
+
+    const rTxt = this.refZ >= 1000 ? `${(this.refZ / 1000).toFixed(this.refZ % 1000 === 0 ? 0 : 1)} k` : `${this.refZ}`;
+    const fullText = `1 mW ${rTxt} Ω`;
+
+    // 1. Update left meter dial plates
+    ["pyr-meter-ref-z", "pp-meter-ref-z"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = fullText;
+    });
+
+    // 2. Update HP meter Ref Z buttons
+    document.querySelectorAll(".hp-refz-btn[data-refz-val]").forEach(btn => {
+      const val = parseFloat(btn.getAttribute("data-refz-val"));
+      btn.classList.toggle("active", val === this.refZ);
+    });
+
+    // 3. Update transformer section sync buttons and badge
+    document.querySelectorAll(".xfmr-sync-r-btn[data-xfmr-sync-r]").forEach(btn => {
+      const val = parseFloat(btn.getAttribute("data-xfmr-sync-r"));
+      btn.classList.toggle("active", val === this.refZ);
+    });
+    const xfmrSyncBadge = document.getElementById("xfmr-sync-active-r");
+    if (xfmrSyncBadge) xfmrSyncBadge.textContent = `Active: ${rTxt} Ω`;
+
+    // 4. Update Level Converter select
+    const calcRefz = document.getElementById("calc-refz");
+    if (calcRefz && document.activeElement !== calcRefz) {
+      calcRefz.value = String(this.refZ);
+    }
+
+    // 5. Update Fluke VFD display & controls
+    this.updateLuckyDmmDisplay();
+
+    // 6. Update Section 3 level converter values
+    if (typeof this.syncFromDbu === "function" && this.lastDbu !== undefined) {
+      this.syncFromDbu(this.lastDbu);
+    }
+
+    // 7. Update needle ballistics on active meters
+    if (this.lastPyrVrms !== undefined) {
+      this.updateVuMeter("pyr-vu-needle", null, this.lastPyrVrms);
+    }
+    if (this.lastPpVdiff !== undefined) {
+      this.updateVuMeter("pp-vu-needle", null, this.lastPpVdiff);
+    }
+
+    // 8. Synchronize Floating Meter Dock
+    if (window.floatingMeterDock && typeof window.floatingMeterDock.setRefZ === "function") {
+      window.floatingMeterDock.setRefZ(this.refZ);
+    }
+  }
+
+  cycleRefZ() {
+    const idx = this.refZList.indexOf(this.refZ);
+    const nextIdx = (idx + 1) % this.refZList.length;
+    this.setRefZ(this.refZList[nextIdx]);
   }
 
   init() {
@@ -76,10 +139,256 @@ class CircuitSimulator {
     knob.style.transform = `rotate(${angle.toFixed(1)}deg)`;
   }
 
+  // Helper: Play violent mechanical overload snap sound (Web Audio API)
+  playNeedleSnapSound() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!this._audioCtx) {
+        this._audioCtx = new AudioCtx();
+      }
+      const ctx = this._audioCtx;
+      if (ctx.state === "suspended") ctx.resume();
+
+      const now = ctx.currentTime;
+
+      // 1. Heavy moving-coil stop impact (thud/clack)
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = "triangle";
+      osc1.frequency.setValueAtTime(340, now);
+      osc1.frequency.exponentialRampToValueAtTime(75, now + 0.05);
+      gain1.gain.setValueAtTime(0.75, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.06);
+
+      // 2. High-frequency needle shaft fracture SNAP!
+      const snapBuffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.07), ctx.sampleRate);
+      const data = snapBuffer.getChannelData(0);
+      for (let i = 0; i < data.length; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.01));
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = snapBuffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.value = 3600;
+      filter.Q.value = 3.8;
+      const snapGain = ctx.createGain();
+      snapGain.gain.setValueAtTime(0.95, now + 0.012);
+      snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+      noise.connect(filter);
+      filter.connect(snapGain);
+      snapGain.connect(ctx.destination);
+      noise.start(now + 0.012);
+
+      // 3. Metallic bounce clinks as severed fragment settles on glass
+      [0.10, 0.18, 0.25].forEach((del, i) => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(1700 + i * 350, now + del);
+        g.gain.setValueAtTime(0.18 / (i + 1), now + del);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + del + 0.035);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start(now + del);
+        osc.stop(now + del + 0.035);
+      });
+    } catch (e) {
+      console.warn("Snap audio synthesis error:", e);
+    }
+  }
+
+  // Helper: Play screwdriver ratchet sound when replacing needle
+  playScrewRatchetSound() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!this._audioCtx) {
+        this._audioCtx = new AudioCtx();
+      }
+      const ctx = this._audioCtx;
+      if (ctx.state === "suspended") ctx.resume();
+
+      const now = ctx.currentTime;
+      [0, 0.04, 0.08, 0.12].forEach((t, i) => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = "square";
+        osc.frequency.setValueAtTime(1200 + i * 150, now + t);
+        g.gain.setValueAtTime(0.12, now + t);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + t + 0.02);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start(now + t);
+        osc.stop(now + t + 0.02);
+      });
+    } catch (e) {}
+  }
+
+  // Trigger Needle Break Mechanism
+  breakNeedle(targetMeterId) {
+    if (this.isNeedleBroken) return;
+    this.isNeedleBroken = true;
+    window.isVoltmeterNeedleBroken = true;
+
+    this.playNeedleSnapSound();
+
+    const meters = [
+      { needleId: "pyr-vu-needle", bladeId: "pyr-needle-blade", severedId: "pyr-severed-needle", alertId: "pyr-needle-alert", screwId: "pyr-zero-screw" },
+      { needleId: "pp-vu-needle",  bladeId: "pp-needle-blade",  severedId: "pp-severed-needle",  alertId: "pp-needle-alert",  screwId: "pp-zero-screw" }
+    ];
+
+    meters.forEach(m => {
+      const needle = document.getElementById(m.needleId);
+      const blade = document.getElementById(m.bladeId);
+      const severed = document.getElementById(m.severedId);
+      const alertEl = document.getElementById(m.alertId);
+      const screw = document.getElementById(m.screwId);
+
+      if (needle) {
+        // Slam hard past stop peg with transient shake
+        needle.style.transition = "transform 0.05s ease-out";
+        needle.setAttribute("transform", "rotate(44 190 250)");
+        needle.style.transform = "rotate(44deg)";
+      }
+
+      setTimeout(() => {
+        if (blade) {
+          // Replace blade with jagged stub
+          blade.setAttribute("points", "189,250 189.4,200 188.5,195 190.5,193 191.2,198 191,250");
+        }
+
+        if (needle) {
+          // Stub drops back limply to mechanical rest stop
+          needle.style.transition = "transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)";
+          needle.setAttribute("transform", "rotate(-36 190 250)");
+          needle.style.transform = "rotate(-36deg)";
+        }
+
+        if (severed) {
+          severed.style.display = "block";
+          severed.style.transformOrigin = "190px 140px";
+          severed.style.transition = "none";
+          severed.setAttribute("transform", "rotate(43 190 250)");
+
+          requestAnimationFrame(() => {
+            severed.style.transition = "transform 0.55s cubic-bezier(0.25, 1, 0.5, 1)";
+            severed.setAttribute("transform", "translate(25, 82) rotate(82 190 140)");
+          });
+        }
+
+        if (alertEl) {
+          alertEl.style.display = "block";
+        }
+
+        if (screw) {
+          screw.classList.add("screw-pulse");
+        }
+      }, 70);
+    });
+
+    if (window.floatingMeterDock && typeof window.floatingMeterDock.setNeedleBroken === "function") {
+      window.floatingMeterDock.setNeedleBroken(true);
+    }
+  }
+
+  // Repair / Replace Galvanometer Needle
+  repairNeedle() {
+    if (!this.isNeedleBroken) return;
+
+    if (this.activeRangeIndex === 0 || this.activeRangeVolts === 0) {
+      if (typeof this.showToast === "function") {
+        this.showToast("⚠️ Cannot replace needle on ∞ range! Turn selector back to a calibrated range first.", 3500);
+      }
+      this.playNeedleSnapSound();
+      return;
+    }
+
+    this.isNeedleBroken = false;
+    window.isVoltmeterNeedleBroken = false;
+
+    this.playScrewRatchetSound();
+
+    const meters = [
+      { needleId: "pyr-vu-needle", bladeId: "pyr-needle-blade", severedId: "pyr-severed-needle", alertId: "pyr-needle-alert", screwId: "pyr-zero-screw", slotId: "pyr-zero-screw-slot" },
+      { needleId: "pp-vu-needle",  bladeId: "pp-needle-blade",  severedId: "pp-severed-needle",  alertId: "pp-needle-alert",  screwId: "pp-zero-screw",  slotId: "pp-zero-screw-slot" }
+    ];
+
+    meters.forEach(m => {
+      const needle = document.getElementById(m.needleId);
+      const blade = document.getElementById(m.bladeId);
+      const severed = document.getElementById(m.severedId);
+      const alertEl = document.getElementById(m.alertId);
+      const screw = document.getElementById(m.screwId);
+      const slot = document.getElementById(m.slotId);
+
+      if (slot) {
+        const cur = slot.getAttribute("data-rot") ? parseInt(slot.getAttribute("data-rot"), 10) + 90 : 90;
+        slot.setAttribute("data-rot", cur);
+        slot.setAttribute("transform", `rotate(${cur} 190 230)`);
+      }
+
+      if (severed) severed.style.display = "none";
+      if (alertEl) alertEl.style.display = "none";
+      if (screw) screw.classList.remove("screw-pulse");
+
+      if (blade) {
+        blade.setAttribute("points", "189,250 189.5,100 189.8,72 190.2,72 190.5,100 191,250");
+      }
+
+      if (needle) {
+        needle.style.transition = "transform 0.22s cubic-bezier(0.12, 0.9, 0.25, 1)";
+      }
+    });
+
+    if (window.floatingMeterDock && typeof window.floatingMeterDock.setNeedleBroken === "function") {
+      window.floatingMeterDock.setNeedleBroken(false);
+    }
+
+    if (typeof this.showToast === "function") {
+      this.showToast("🔧 Galvanometer needle replaced & mechanical zero calibrated!", 2800);
+    }
+
+    if (this.lastPyrVrms !== undefined) {
+      this.updateVuMeter("pyr-vu-needle", null, this.lastPyrVrms);
+    }
+    if (this.lastPpVdiff !== undefined) {
+      this.updateVuMeter("pp-vu-needle", null, this.lastPpVdiff);
+    }
+  }
+
+  showToast(msg, dur = 2500) {
+    let toast = document.getElementById("probe-hud-toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "probe-hud-toast";
+      toast.className = "probe-hud-toast";
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add("visible");
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => {
+      toast.classList.remove("visible");
+    }, dur);
+  }
+
   // Helper: Deflect APK Precision AC Voltmeter needle (-20 to +2 dB / 0 to 1.0 & 0 to 3.0 scales)
   updateVuMeter(needleId, dBu, vRms) {
     const needle = document.getElementById(needleId);
     if (!needle) return;
+
+    if (this.isNeedleBroken) {
+      needle.setAttribute("transform", "rotate(-36 190 250)");
+      needle.style.transformOrigin = "190px 250px";
+      needle.style.transform = "rotate(-36deg)";
+      return;
+    }
 
     let v = vRms;
     if (v === undefined || v === null) {
@@ -90,8 +399,21 @@ class CircuitSimulator {
       }
     }
 
-    const range = this.activeRangeVolts || 3.0;
-    const vFrac = Math.max(0.0, v / range);
+    const range = this.activeRangeVolts;
+    // Check if on infinity: immediately breaks needle!
+    if (this.activeRangeIndex === 0 || range === 0 || range === undefined) {
+      this.breakNeedle(needleId);
+      return;
+    }
+
+    const safeRange = range > 0 ? range : 0.0000001;
+    const vFrac = Math.max(0.0, v / safeRange);
+
+    // If excessive overload (vFrac >= 15.0 on ultra-sensitive ranges like -140 or -120 dB):
+    if (vFrac >= 15.0) {
+      this.breakNeedle(needleId);
+      return;
+    }
 
     // APK Precision AC Voltmeter movement calibration:
     // Moving-coil galvanometer pivot is at cx=190, cy=250.
@@ -112,31 +434,44 @@ class CircuitSimulator {
     needle.style.transform = `rotate(${angle.toFixed(2)}deg)`;
   }
 
-  // APK Precision AC Voltmeter: 14 Calibrated Ranges & Sensitivity Physics
+  // APK Precision AC Voltmeter: 18 Calibrated Ranges (from Infinity down to 300V)
   initVoltmeterControls() {
-    this.activeRangeIndex = 9; // Default nominal 3V (+10 dB)
+    this.activeRangeIndex = 13; // Default nominal 3V (+10 dB)
     this.activeRangeVolts = 3.0;
 
     const ranges = [
-      { idx: 0, label: ".1 mV", db: "-80 dB", v: 0.0001, angle: 130.2, tier: "mic", tierName: "MICROPHONE TRANSDUCER LEVEL (-80 dB)", color: "#f59e0b" },
-      { idx: 1, label: ".3 mV", db: "-70 dB", v: 0.0003, angle: 145.3, tier: "mic", tierName: "MICROPHONE TRANSDUCER LEVEL (-70 dB)", color: "#f59e0b" },
-      { idx: 2, label: "1 mV",  db: "-60 dB", v: 0.001,  angle: 160.3, tier: "mic", tierName: "MICROPHONE TRANSDUCER LEVEL (-60 dB)", color: "#f59e0b" },
-      { idx: 3, label: "3 mV",  db: "-50 dB", v: 0.003,  angle: 175.9, tier: "mic", tierName: "MICROPHONE TRANSDUCER LEVEL (-60 to -40 dBu)", color: "#f59e0b" },
-      { idx: 4, label: "10 mV", db: "-40 dB", v: 0.010,  angle: -164.1, tier: "mic", tierName: "MICROPHONE TRANSDUCER LEVEL (-40 dBu)", color: "#f59e0b" },
-      { idx: 5, label: "30 mV", db: "-30 dB", v: 0.030,  angle: -148.4, tier: "consumer", tierName: "CONSUMER LOW LINE (-30 dB)", color: "#06b6d4" },
-      { idx: 6, label: "100 mV",db: "-20 dB", v: 0.100,  angle: -132.5, tier: "consumer", tierName: "CONSUMER AUX LINE (-20 dB)", color: "#06b6d4" },
-      { idx: 7, label: ".3 V",  db: "-10 dB", v: 0.3,    angle: -47.5, tier: "consumer", tierName: "CONSUMER LINE LEVEL REFERENCE (-10 dBV / -7.78 dBu)", color: "#06b6d4" },
-      { idx: 8, label: "1 V",   db: "0 dB",   v: 1.0,    angle: -31.6, tier: "pro", tierName: "PROFESSIONAL 0 dB REFERENCE (0.775 V)", color: "#10b981" },
-      { idx: 9, label: "3 V",   db: "+10 dB", v: 3.0,    angle: -15.9, tier: "pro", tierName: "PROFESSIONAL LINE LEVEL REFERENCE (+4 dBu / 0 VU)", color: "#10b981" },
-      { idx: 10, label: "10 V",  db: "+20 dB", v: 10.0,   angle: 4.1, tier: "headroom", tierName: "MAXIMUM SYSTEM HEADROOM (+20 dBu)", color: "#ef4444" },
-      { idx: 11, label: "30 V",  db: "+30 dB", v: 30.0,   angle: 19.7, tier: "headroom", tierName: "MAXIMUM SYSTEM HEADROOM CEILING (+24 to +28 dBu)", color: "#ef4444" },
-      { idx: 12, label: "100 V", db: "+40 dB", v: 100.0,  angle: 34.7, tier: "headroom", tierName: "HIGH-VOLTAGE BUS / HEADROOM OVERLOAD (+40 dB)", color: "#ef4444" },
-      { idx: 13, label: "300 V", db: "+50 dB", v: 300.0,  angle: 49.8, tier: "headroom", tierName: "TRANSMISSION LINE / OVERLOAD MAXIMUM (+50 dB)", color: "#ef4444" }
+      { idx: 0,  label: "∞",       db: "-∞ dB",  v: 0.0,         angle: 68.0,  tier: "singularity", tierName: "INFINITE SENSITIVITY SINGULARITY (OVERLOAD)", color: "#ec4899" },
+      { idx: 1,  label: ".1 µV",   db: "-140 dB", v: 0.0000001,   angle: 83.0,  tier: "quantum",     tierName: "QUANTUM / JOHNSON-NYQUIST NOISE FLOOR (-140 dB)", color: "#a855f7" },
+      { idx: 2,  label: "1 µV",    db: "-120 dB", v: 0.000001,    angle: 98.0,  tier: "quantum",     tierName: "ULTRA-LOW NOISE PREAMP EIN FLOOR (-120 dB)", color: "#8b5cf6" },
+      { idx: 3,  label: "10 µV",   db: "-100 dB", v: 0.00001,     angle: 114.0, tier: "quantum",     tierName: "SYSTEM RESIDUAL NOISE / DYNAMIC CEILING (-100 dB)", color: "#6366f1" },
+      { idx: 4,  label: ".1 mV",   db: "-80 dB",  v: 0.0001,      angle: 130.2, tier: "mic",         tierName: "MICROPHONE TRANSDUCER LEVEL (-80 dB)", color: "#f59e0b" },
+      { idx: 5,  label: ".3 mV",   db: "-70 dB",  v: 0.0003,      angle: 145.3, tier: "mic",         tierName: "MICROPHONE TRANSDUCER LEVEL (-70 dB)", color: "#f59e0b" },
+      { idx: 6,  label: "1 mV",    db: "-60 dB",  v: 0.001,       angle: 160.3, tier: "mic",         tierName: "MICROPHONE TRANSDUCER LEVEL (-60 dB)", color: "#f59e0b" },
+      { idx: 7,  label: "3 mV",    db: "-50 dB",  v: 0.003,       angle: 175.9, tier: "mic",         tierName: "MICROPHONE TRANSDUCER LEVEL (-60 to -40 dBu)", color: "#f59e0b" },
+      { idx: 8,  label: "10 mV",   db: "-40 dB",  v: 0.010,       angle: -164.1,tier: "mic",         tierName: "MICROPHONE TRANSDUCER LEVEL (-40 dBu)", color: "#f59e0b" },
+      { idx: 9,  label: "30 mV",   db: "-30 dB",  v: 0.030,       angle: -148.4,tier: "consumer",    tierName: "CONSUMER LOW LINE (-30 dB)", color: "#06b6d4" },
+      { idx: 10, label: "100 mV",  db: "-20 dB",  v: 0.100,       angle: -132.5,tier: "consumer",    tierName: "CONSUMER AUX LINE (-20 dB)", color: "#06b6d4" },
+      { idx: 11, label: ".3 V",    db: "-10 dB",  v: 0.3,         angle: -47.5, tier: "consumer",    tierName: "CONSUMER LINE LEVEL REFERENCE (-10 dBV / -7.78 dBu)", color: "#06b6d4" },
+      { idx: 12, label: "1 V",     db: "0 dB",    v: 1.0,         angle: -31.6, tier: "pro",         tierName: "PROFESSIONAL 0 dB REFERENCE (0.775 V)", color: "#10b981" },
+      { idx: 13, label: "3 V",     db: "+10 dB",  v: 3.0,         angle: -15.9, tier: "pro",         tierName: "PROFESSIONAL LINE LEVEL REFERENCE (+4 dBu / 0 VU)", color: "#10b981" },
+      { idx: 14, label: "10 V",    db: "+20 dB",  v: 10.0,        angle: 4.1,   tier: "headroom",    tierName: "MAXIMUM SYSTEM HEADROOM (+20 dBu)", color: "#ef4444" },
+      { idx: 15, label: "30 V",    db: "+30 dB",  v: 30.0,        angle: 19.7,  tier: "headroom",    tierName: "MAXIMUM SYSTEM HEADROOM CEILING (+24 to +28 dBu)", color: "#ef4444" },
+      { idx: 16, label: "100 V",   db: "+40 dB",  v: 100.0,       angle: 34.7,  tier: "headroom",    tierName: "HIGH-VOLTAGE BUS / HEADROOM OVERLOAD (+40 dB)", color: "#ef4444" },
+      { idx: 17, label: "300 V",   db: "+50 dB",  v: 300.0,       angle: 49.8,  tier: "headroom",    tierName: "TRANSMISSION LINE / OVERLOAD MAXIMUM (+50 dB)", color: "#ef4444" }
     ];
     this.voltmeterRanges = ranges;
     window.APK_VOLTMETER_RANGES = ranges;
+    window.repairVoltmeterNeedle = () => this.repairNeedle();
+    window.breakVoltmeterNeedle = () => this.breakNeedle();
 
-    const setRange = (idx) => {
+    const setRange = (target) => {
+      let idx = 13;
+      if (typeof target === "number") {
+        idx = target;
+      } else if (typeof target === "string") {
+        const found = ranges.findIndex(rg => rg.db.toLowerCase().includes(target.toLowerCase()) || rg.label.toLowerCase().includes(target.toLowerCase()));
+        if (found !== -1) idx = found;
+      }
       idx = Math.max(0, Math.min(ranges.length - 1, idx));
       this.activeRangeIndex = idx;
       this.activeRangeVolts = ranges[idx].v;
@@ -156,12 +491,12 @@ class CircuitSimulator {
         tick.classList.toggle("active", tIdx === idx);
       });
 
-      // Synchronize Dynamic Range Pyramid Tiers
+      // Synchronize Dynamic Range Pyramid Tiers (Both Main Diagram and Meter Scale)
       const activeTier = r.tier;
       const allTiers = ["mic", "consumer", "pro", "headroom"];
       allTiers.forEach(t => {
-        const el = document.getElementById(`pyramid-tier-${t}`);
-        if (el) {
+        const els = document.querySelectorAll(`.pyramid-tier[data-tier="${t}"], .meter-scale-pyramid-tier[data-tier="${t}"]`);
+        els.forEach(el => {
           if (t === activeTier) {
             el.classList.add("tier-active");
             el.classList.remove("tier-dimmed");
@@ -169,6 +504,18 @@ class CircuitSimulator {
             el.classList.remove("tier-active");
             el.classList.add("tier-dimmed");
           }
+        });
+      });
+
+      // Synchronize Calibrated Detent Dots Around Rotary Knob
+      document.querySelectorAll(".range-detent-dot").forEach(dot => {
+        const dIdx = parseInt(dot.getAttribute("data-range-idx"), 10);
+        if (dIdx === idx) {
+          dot.classList.add("active");
+          dot.setAttribute("fill", r.color);
+        } else {
+          dot.classList.remove("active");
+          dot.setAttribute("fill", "#475569");
         }
       });
 
@@ -202,9 +549,32 @@ class CircuitSimulator {
         hudDomain.style.color = r.color;
       }
 
+      // Update Fluke 8050A Dynamic Headroom Pyramid Annunciator
+      const dmmAnnunciator = document.getElementById("dmm-pyramid-annunciator");
+      const ppDmmAnnunciator = document.getElementById("pp-dmm-pyramid-annunciator");
+      const tierAnnounce = {
+        headroom: "TIER: HEADROOM CEILING (+24 to +28 dBu) • ±0 dB CEIL",
+        pro: "TIER: PRO LINE LEVEL (+4 dBu / 0 VU) • 20 dB HD",
+        consumer: "TIER: CONSUMER LINE (-10 dBV / -7.8 dBu) • -14 dB REL",
+        mic: "TIER: MIC TRANSDUCER (-60 to -40 dBu) • 44–64 dB GAIN"
+      };
+      if (dmmAnnunciator) {
+        dmmAnnunciator.textContent = tierAnnounce[activeTier] || activeTier.toUpperCase();
+        dmmAnnunciator.style.color = r.color;
+      }
+      if (ppDmmAnnunciator) {
+        ppDmmAnnunciator.textContent = tierAnnounce[activeTier] || activeTier.toUpperCase();
+        ppDmmAnnunciator.style.color = r.color;
+      }
+
       // Synchronize floating meter dock
       if (window.floatingMeterDock && typeof window.floatingMeterDock.setHpRange === "function") {
         window.floatingMeterDock.setHpRange(r.v, r.db);
+      }
+
+      // If switched to infinity range: immediately snaps needle off!
+      if (idx === 0) {
+        this.breakNeedle();
       }
 
       // Re-render active meter needles with new sensitivity immediately
@@ -225,6 +595,26 @@ class CircuitSimulator {
         const idx = parseInt(tick.getAttribute("data-range-idx"), 10);
         if (!isNaN(idx)) setRange(idx);
       });
+    });
+
+    // Direct clicks on calibrated detent pips around knob
+    document.querySelectorAll(".range-detent-dot").forEach(dot => {
+      dot.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const idx = parseInt(dot.getAttribute("data-range-idx"), 10);
+        if (!isNaN(idx)) setRange(idx);
+      });
+    });
+
+    // Direct clicks on mechanical zero screws and overload alerts (to repair broken needle)
+    ["pyr-zero-screw", "pp-zero-screw", "pyr-needle-alert", "pp-needle-alert"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+          this.repairNeedle();
+        });
+      }
     });
 
     // Rotor clicks, dragging, and wheel events
@@ -301,10 +691,10 @@ class CircuitSimulator {
 
     // Dynamic Range Pyramid bidirectional interaction
     const tierNominalRanges = {
-      mic: 3,        // 3 mV (-50 dB)
-      consumer: 7,   // .3 V (-10 dB)
-      pro: 9,        // 3 V (+10 dB)
-      headroom: 11   // 30 V (+30 dB)
+      mic: 7,        // 3 mV (-50 dB)
+      consumer: 11,  // .3 V (-10 dB)
+      pro: 13,       // 3 V (+10 dB)
+      headroom: 15   // 30 V (+30 dB)
     };
 
     const tierPresets = {
@@ -314,7 +704,7 @@ class CircuitSimulator {
       headroom: "24.0"
     };
 
-    document.querySelectorAll(".pyramid-tier").forEach(tierEl => {
+    document.querySelectorAll(".pyramid-tier, .meter-scale-pyramid-tier").forEach(tierEl => {
       tierEl.addEventListener("click", () => {
         const tierName = tierEl.getAttribute("data-tier");
         if (tierName && tierNominalRanges[tierName] !== undefined) {
@@ -334,8 +724,50 @@ class CircuitSimulator {
       });
     });
 
+    // Left meter dial click target (pyr and pp)
+    [document.getElementById("pyr-meter-ref-z-btn"), document.getElementById("pp-meter-ref-z-btn")].forEach(btn => {
+      if (btn) btn.addEventListener("click", () => this.cycleRefZ());
+    });
+
+    // Left meter quick pills
+    document.querySelectorAll(".hp-refz-btn[data-refz-val]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const val = parseFloat(btn.getAttribute("data-refz-val"));
+        if (!isNaN(val)) this.setRefZ(val);
+      });
+    });
+
+    // Left meter cycle buttons
+    ["pyr-cycle-refz-btn", "pp-cycle-refz-btn"].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.addEventListener("click", () => this.cycleRefZ());
+    });
+
+    // Fluke REF Z buttons
+    document.querySelectorAll(".dmm-key[data-dmm-func='refz']").forEach(btn => {
+      btn.addEventListener("click", () => this.cycleRefZ());
+    });
+
+    // Fluke dB mode buttons
+    document.querySelectorAll(".dmm-key[data-dmm-func='db']").forEach(btn => {
+      btn.addEventListener("click", () => {
+        this.dmmMode = "hot";
+        this.updateLuckyDmmDisplay();
+      });
+    });
+
+    // Transformer section sync buttons
+    document.querySelectorAll(".xfmr-sync-r-btn[data-xfmr-sync-r]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const val = parseFloat(btn.getAttribute("data-xfmr-sync-r"));
+        if (!isNaN(val)) this.setRefZ(val);
+      });
+    });
+
     // Set initial range (3V / +10 dB)
     setRange(9);
+    // Set initial Reference Impedance (600 Ω)
+    this.setRefZ(600);
   }
 
 
@@ -791,6 +1223,7 @@ class CircuitSimulator {
 
       if (isFs) {
         card.classList.remove("circuit-fullscreen-active");
+        document.body.classList.remove("has-circuit-fullscreen");
         const exitBtn = card.querySelector(".circuit-fullscreen-exit-btn");
         if (exitBtn) exitBtn.remove();
         document.body.style.overflow = "";
@@ -799,6 +1232,7 @@ class CircuitSimulator {
         }
       } else {
         card.classList.add("circuit-fullscreen-active");
+        document.body.classList.add("has-circuit-fullscreen");
         document.body.style.overflow = "hidden";
 
         // Add prominent Exit button
@@ -823,6 +1257,7 @@ class CircuitSimulator {
     // Global Esc key listener
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
+        document.body.classList.remove("has-circuit-fullscreen");
         const fsEl = document.querySelector(".circuit-fullscreen-active");
         if (fsEl) {
           const btn = fsEl.querySelector(".btn-circuit-fullscreen");
@@ -844,30 +1279,40 @@ class CircuitSimulator {
     const dbvEl = document.getElementById("calc-dbv");
     const vrmsEl = document.getElementById("calc-vrms");
     const vpeakEl = document.getElementById("calc-vpeak");
+    const refzEl = document.getElementById("calc-refz");
+    const dbmEl = document.getElementById("calc-dbm");
     const presetSelect = document.getElementById("pyr-preset-select");
 
     const syncFromDbu = (dbu) => {
+      this.lastDbu = dbu;
       const vrms = 0.775 * Math.pow(10, dbu / 20);
       const dbv = 20 * Math.log10(Math.max(0.0001, vrms / 1.0));
       const vpeak = vrms * Math.SQRT2;
+      const refZ = this.refZ || 600;
+      const vRefZ = Math.sqrt(0.001 * refZ);
+      const dbm = 20 * Math.log10(Math.max(0.00001, vrms / vRefZ));
 
       if (dbuEl && document.activeElement !== dbuEl) dbuEl.value = dbu.toFixed(2);
       if (dbvEl && document.activeElement !== dbvEl) dbvEl.value = dbv.toFixed(2);
       if (vrmsEl && document.activeElement !== vrmsEl) vrmsEl.value = vrms >= 1.0 ? vrms.toFixed(3) : vrms.toFixed(4);
       if (vpeakEl) vpeakEl.value = vpeak >= 1.0 ? vpeak.toFixed(3) : vpeak.toFixed(4);
+      if (refzEl && document.activeElement !== refzEl) refzEl.value = String(refZ);
+      if (dbmEl && document.activeElement !== dbmEl) dbmEl.value = dbm.toFixed(2);
 
       // 1970s DMM Fluorescent LCD readout
       const dmmVrms = document.getElementById("dmm-vrms-val");
       if (dmmVrms) dmmVrms.textContent = `${vrms >= 1.0 ? vrms.toFixed(3) : (vrms * 1000).toFixed(1) + ' m'}V`;
       const dmmDbu = document.getElementById("dmm-dbu-val");
-      if (dmmDbu) dmmDbu.textContent = `${dbu >= 0 ? '+' : ''}${dbu.toFixed(1)} dBu`;
+      if (dmmDbu) dmmDbu.textContent = `${dbm >= 0 ? '+' : ''}${dbm.toFixed(1)} dBm`;
       const dmmPeak = document.getElementById("dmm-vpeak-val");
-      if (dmmPeak) dmmPeak.textContent = `${vpeak >= 1.0 ? vpeak.toFixed(3) : (vpeak * 1000).toFixed(1) + ' m'}V`;
+      const rTxt = refZ >= 1000 ? `${(refZ / 1000).toFixed(refZ % 1000 === 0 ? 0 : 1)} k` : `${refZ}`;
+      if (dmmPeak) dmmPeak.textContent = `${rTxt} Ω (REF Z)`;
 
       // APK Precision AC Voltmeter needle deflection
       this.lastPyrVrms = vrms;
       this.updateVuMeter("pyr-vu-needle", dbu, vrms);
     };
+    this.syncFromDbu = syncFromDbu;
 
     if (dbuEl) {
       dbuEl.addEventListener("input", () => {
@@ -898,6 +1343,29 @@ class CircuitSimulator {
           const dbu = 20 * Math.log10(vrms / 0.775);
           if (presetSelect) presetSelect.value = "custom";
           syncFromDbu(dbu);
+        }
+      });
+    }
+
+    if (dbmEl) {
+      dbmEl.addEventListener("input", () => {
+        const dbm = parseFloat(dbmEl.value);
+        if (!isNaN(dbm)) {
+          const refZ = this.refZ || 600;
+          const vRefZ = Math.sqrt(0.001 * refZ);
+          const vrms = vRefZ * Math.pow(10, dbm / 20);
+          const dbu = 20 * Math.log10(vrms / 0.775);
+          if (presetSelect) presetSelect.value = "custom";
+          syncFromDbu(dbu);
+        }
+      });
+    }
+
+    if (refzEl) {
+      refzEl.addEventListener("change", (e) => {
+        const val = parseFloat(e.target.value);
+        if (!isNaN(val)) {
+          this.setRefZ(val);
         }
       });
     }
@@ -1448,6 +1916,12 @@ class CircuitSimulator {
     if (vDiff === undefined) vDiff = this.lastPpVdiff || (vHot - vCold);
     if (iLoad === undefined) iLoad = vDiff / 600;
 
+    const refZ = this.refZ || 600;
+    const vRefZ = Math.sqrt(0.001 * refZ);
+    const dbmHot = 20 * Math.log10(Math.max(0.0001, vHot / vRefZ));
+    const dbmDiff = 20 * Math.log10(Math.max(0.0001, vDiff / vRefZ));
+    const rTxt = refZ >= 1000 ? `${(refZ / 1000).toFixed(refZ % 1000 === 0 ? 0 : 1)} k` : `${refZ}`;
+
     const dbuHot = 20 * Math.log10(Math.max(0.0001, vHot / 0.775));
     const dbuCold = vCold !== 0 ? 20 * Math.log10(Math.max(0.0001, Math.abs(vCold) / 0.775)) : -Infinity;
     const thdVal = isClipped ? 8.450 : (shortPin3 ? 4.250 : 0.0018);
@@ -1472,63 +1946,63 @@ class CircuitSimulator {
 
     if (this.dmmMode === "hot") {
       if (lbl1) lbl1.textContent = "V_HOT (+VE RMS)";
-      if (lbl2) lbl2.textContent = "AUDIO LEVEL (dBu)";
-      if (lbl3) lbl3.textContent = "V_PEAK (+VE CREST)";
+      if (lbl2) lbl2.textContent = `AUDIO LEVEL (${refZ === 600 ? "dBm / dBu" : "dBm @" + rTxt + "Ω"})`;
+      if (lbl3) lbl3.textContent = "REF IMPEDANCE (R)";
       if (vrmsEl) vrmsEl.textContent = this.formatLuckyValue(vHot);
-      if (dbuEl) dbuEl.textContent = `${dbuHot >= 0 ? '+' : ''}${dbuHot.toFixed(1)} dBu`;
-      if (vpeakEl) vpeakEl.textContent = this.formatLuckyValue(vHot * 1.414);
+      if (dbuEl) dbuEl.textContent = `${dbmHot >= 0 ? "+" : ""}${dbmHot.toFixed(1)} dBm`;
+      if (vpeakEl) vpeakEl.textContent = `${rTxt} Ω (REF Z)`;
 
-      if (ppLbl1) ppLbl1.textContent = "V_HOT (+VE RMS)";
-      if (ppLbl2) ppLbl2.textContent = "AUDIO LEVEL (dBu)";
-      if (ppLbl3) ppLbl3.textContent = "V_PEAK (+VE CREST)";
-      if (ppVdiffEl) ppVdiffEl.textContent = this.formatLuckyValue(vHot);
-      if (ppIloadEl) ppIloadEl.textContent = `${dbuHot >= 0 ? '+' : ''}${dbuHot.toFixed(1)} dBu`;
-      if (ppStatusEl) ppStatusEl.textContent = this.formatLuckyValue(vHot * 1.414);
+      if (ppLbl1) ppLbl1.textContent = "V_DIFF (AC RMS)";
+      if (ppLbl2) ppLbl2.textContent = `AUDIO LEVEL (${refZ === 600 ? "dBm / dBu" : "dBm @" + rTxt + "Ω"})`;
+      if (ppLbl3) ppLbl3.textContent = "REF IMPEDANCE (R)";
+      if (ppVdiffEl) ppVdiffEl.textContent = this.formatLuckyValue(vDiff);
+      if (ppIloadEl) ppIloadEl.textContent = `${dbmDiff >= 0 ? "+" : ""}${dbmDiff.toFixed(1)} dBm`;
+      if (ppStatusEl) ppStatusEl.textContent = `${rTxt} Ω (REF Z)`;
 
     } else if (this.dmmMode === "cold") {
       if (lbl1) lbl1.textContent = "V_COLD (-VE RMS)";
       if (lbl2) lbl2.textContent = "PHASE / RETURN";
-      if (lbl3) lbl3.textContent = "COMMON-MODE (V_CM)";
+      if (lbl3) lbl3.textContent = "REF IMPEDANCE (R)";
       if (vrmsEl) vrmsEl.textContent = this.formatLuckyValue(Math.abs(vCold));
       if (dbuEl) dbuEl.textContent = vCold !== 0 ? "180.0° INVERTED" : "0.0° (GND RETURN)";
-      if (vpeakEl) vpeakEl.textContent = this.formatLuckyValue(0.0001);
+      if (vpeakEl) vpeakEl.textContent = `${rTxt} Ω (REF Z)`;
 
       if (ppLbl1) ppLbl1.textContent = "V_COLD (-VE RMS)";
       if (ppLbl2) ppLbl2.textContent = "PHASE / RETURN";
-      if (ppLbl3) ppLbl3.textContent = "COMMON-MODE (V_CM)";
+      if (ppLbl3) ppLbl3.textContent = "REF IMPEDANCE (R)";
       if (ppVdiffEl) ppVdiffEl.textContent = this.formatLuckyValue(Math.abs(vCold));
       if (ppIloadEl) ppIloadEl.textContent = vCold !== 0 ? "180.0° INVERTED" : "0.0° (GND RETURN)";
-      if (ppStatusEl) ppStatusEl.textContent = this.formatLuckyValue(0.0001);
+      if (ppStatusEl) ppStatusEl.textContent = `${rTxt} Ω (REF Z)`;
 
     } else if (this.dmmMode === "thd") {
       if (lbl1) lbl1.textContent = "THD+N DISTORTION";
       if (lbl2) lbl2.textContent = "DISTORTION LEVEL (dB)";
-      if (lbl3) lbl3.textContent = "LINE CMRR REJECTION";
+      if (lbl3) lbl3.textContent = "REF Z / CMRR";
       if (vrmsEl) vrmsEl.textContent = `${thdVal.toFixed(4)} %`;
       if (dbuEl) dbuEl.textContent = `${thdDb.toFixed(1)} dB`;
-      if (vpeakEl) vpeakEl.textContent = `${cmrrVal.toFixed(1)} dB`;
+      if (vpeakEl) vpeakEl.textContent = `${rTxt}Ω | ${cmrrVal.toFixed(0)} dB`;
 
       if (ppLbl1) ppLbl1.textContent = "THD+N DISTORTION";
       if (ppLbl2) ppLbl2.textContent = "DISTORTION LEVEL (dB)";
-      if (ppLbl3) ppLbl3.textContent = "LINE CMRR REJECTION";
+      if (ppLbl3) ppLbl3.textContent = "REF Z / CMRR";
       if (ppVdiffEl) ppVdiffEl.textContent = `${thdVal.toFixed(4)} %`;
       if (ppIloadEl) ppIloadEl.textContent = `${thdDb.toFixed(1)} dB`;
-      if (ppStatusEl) ppStatusEl.textContent = `${cmrrVal.toFixed(1)} dB`;
+      if (ppStatusEl) ppStatusEl.textContent = `${rTxt}Ω | ${cmrrVal.toFixed(0)} dB`;
 
     } else { // 'multi'
       if (lbl1) lbl1.textContent = "+VE HOT / -VE COLD";
       if (lbl2) lbl2.textContent = "V_DIFF LOAD VOLTS";
-      if (lbl3) lbl3.textContent = "THD+N / STATUS";
+      if (lbl3) lbl3.textContent = `REF Z (${rTxt} Ω) / STATUS`;
       if (vrmsEl) vrmsEl.textContent = `${this.formatLuckyValue(vHot)} / ${this.formatLuckyValue(Math.abs(vCold))}`;
-      if (dbuEl) dbuEl.textContent = this.formatLuckyValue(vDiff);
-      if (vpeakEl) vpeakEl.textContent = `${thdVal.toFixed(3)}% | ${isClipped ? 'CLIP' : (shortPin3 ? 'SHORT' : 'SYM')}`;
+      if (dbuEl) dbuEl.textContent = `${dbmDiff >= 0 ? "+" : ""}${dbmDiff.toFixed(1)} dBm`;
+      if (vpeakEl) vpeakEl.textContent = `${rTxt}Ω | ${thdVal.toFixed(3)}%`;
 
       if (ppLbl1) ppLbl1.textContent = "+VE HOT / -VE COLD";
       if (ppLbl2) ppLbl2.textContent = "V_DIFF LOAD VOLTS";
-      if (ppLbl3) ppLbl3.textContent = "THD+N / STATUS";
+      if (ppLbl3) ppLbl3.textContent = `REF Z (${rTxt} Ω) / STATUS`;
       if (ppVdiffEl) ppVdiffEl.textContent = `${this.formatLuckyValue(vHot)} / ${this.formatLuckyValue(Math.abs(vCold))}`;
-      if (ppIloadEl) ppIloadEl.textContent = this.formatLuckyValue(vDiff);
-      if (ppStatusEl) ppStatusEl.textContent = `${thdVal.toFixed(3)}% | ${isClipped ? 'CLIP' : (shortPin3 ? 'SHORT' : 'SYM')}`;
+      if (ppIloadEl) ppIloadEl.textContent = `${dbmDiff >= 0 ? "+" : ""}${dbmDiff.toFixed(1)} dBm`;
+      if (ppStatusEl) ppStatusEl.textContent = `${rTxt}Ω | ${thdVal.toFixed(3)}%`;
     }
 
     // Ensure yellow font
@@ -1881,6 +2355,7 @@ class CircuitSimulator {
 
 // Global instance
 window.circuitSim = new CircuitSimulator();
+window.animator = window.circuitSim;
 document.addEventListener("DOMContentLoaded", () => {
   window.circuitSim.init();
 });

@@ -68,6 +68,7 @@ class AudioTransformerSimulator {
 
   init() {
     this.bindDOM();
+    this.syncMeterSyncButtons(this.state.preset);
     this.update();
   }
 
@@ -199,6 +200,64 @@ class AudioTransformerSimulator {
     setVal("xfmr-awg1", this.state.awg1);
     setVal("xfmr-awg2", this.state.awg2);
     setVal("xfmr-core", this.state.coreKey);
+    this.syncMeterSyncButtons(presetKey);
+  }
+
+  syncMeterSyncButtons(presetKey) {
+    const bar = document.getElementById("xfmr-sync-btn-bar");
+    if (!bar) return;
+
+    let buttons = [];
+    if (presetKey === "1to1") {
+      buttons = [
+        { r: 600, label: "600 Ω (1:1 Std)", title: "Set Lab Meters to 600 Ω Standard" },
+        { r: 150, label: "150 Ω (Low Z)", title: "Set Lab Meters to 150 Ω Low-Z" }
+      ];
+    } else if (presetKey === "1to2") {
+      buttons = [
+        { r: 150, label: "150 Ω (Pri)", title: "Set Lab Meters to 150 Ω Primary" },
+        { r: 600, label: "600 Ω (Sec/Std)", title: "Set Lab Meters to 600 Ω Secondary / Pro Audio" },
+        { r: 2400, label: "2.4 kΩ (Step-Up)", title: "Set Lab Meters to 2.4 kΩ High-Z" }
+      ];
+    } else if (presetKey === "1to3") {
+      buttons = [
+        { r: 150, label: "150 Ω (Pri)", title: "Set Lab Meters to 150 Ω Primary" },
+        { r: 600, label: "600 Ω (Std Ref)", title: "Set Lab Meters to 600 Ω Standard Reference" },
+        { r: 1350, label: "1.35 kΩ (Sec)", title: "Set Lab Meters to 1,350 Ω Secondary" }
+      ];
+    } else if (presetKey === "1to2to3") {
+      buttons = [
+        { r: 150, label: "150 Ω (Pri)", title: "Set Lab Meters to 150 Ω Primary" },
+        { r: 600, label: "600 Ω (Tap 1)", title: "Set Lab Meters to 600 Ω (1:1)" },
+        { r: 2400, label: "2.4 kΩ (Tap 2)", title: "Set Lab Meters to 2.4 kΩ (1:2)" }
+      ];
+    } else {
+      buttons = [
+        { r: 150, label: "150 Ω (Pri)", title: "Set Lab Meters to 150 Ω Primary" },
+        { r: 600, label: "600 Ω (Sec/Std)", title: "Set Lab Meters to 600 Ω Standard" },
+        { r: 2400, label: "2.4 kΩ (Step-Up)", title: "Set Lab Meters to 2.4 kΩ Step-Up" }
+      ];
+    }
+
+    const currentRefZ = window.circuitSim ? window.circuitSim.refZ : 600;
+    bar.innerHTML = buttons.map(b => `
+      <button type="button" class="xfmr-sync-r-btn ${b.r === currentRefZ ? 'active' : ''}" data-xfmr-sync-r="${b.r}" title="${b.title}">${b.label}</button>
+    `).join("");
+
+    bar.querySelectorAll(".xfmr-sync-r-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const val = parseFloat(btn.getAttribute("data-xfmr-sync-r"));
+        if (!isNaN(val) && window.circuitSim && typeof window.circuitSim.setRefZ === "function") {
+          window.circuitSim.setRefZ(val);
+        }
+      });
+    });
+
+    const activeBadge = document.getElementById("xfmr-sync-active-r");
+    if (activeBadge) {
+      const rTxt = currentRefZ >= 1000 ? `${(currentRefZ / 1000).toFixed(currentRefZ % 1000 === 0 ? 0 : 1)} k` : `${currentRefZ}`;
+      activeBadge.textContent = `Active: ${rTxt} Ω`;
+    }
   }
 
   applyMultiTap() {
@@ -343,10 +402,12 @@ class AudioTransformerSimulator {
       }
     }
 
-    // Recommendation card
+    // Recommendation card & telemetry strip
     setTxt("best-term-rz", `${physics.rZobel} Ω`);
     setTxt("best-term-cz", `${physics.cZobelPf} pF (${physics.cZobelNf} nF)`);
     setTxt("best-term-zeta", `Damping Factor ζ = ${physics.zeta} (Target: 0.707 Butterworth)`);
+    setTxt("xfmr-telemetry-rz", `${physics.rZobel} Ω`);
+    setTxt("xfmr-telemetry-cz", `${physics.cZobelPf} pF`);
 
     const statusMsg = document.getElementById("best-term-status");
     if (statusMsg) {
@@ -361,9 +422,10 @@ class AudioTransformerSimulator {
       }
     }
 
-    // Render Live Waveform and Bode Curve
+    // Render Live Waveform, Bode Curve, and Vector SVG Schematic
     this.renderWaveform(physics);
     this.renderBodePlot(physics);
+    this.updateSchematic(physics);
   }
 
   renderWaveform(physics) {
@@ -503,9 +565,44 @@ class AudioTransformerSimulator {
       fResLine.setAttribute("x2", xFres);
     }
   }
+
+  updateSchematic(physics) {
+    const setTxt = (id, txt) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = txt;
+    };
+    setTxt("xfmr-svg-n1-lbl", `${this.state.n1} T (${this.state.awg1} AWG)`);
+    setTxt("xfmr-svg-n2-lbl", `${this.state.n2} T (${this.state.awg2} AWG)`);
+    setTxt("xfmr-svg-vin-lbl", `${this.state.vin.toFixed(2)} V RMS (${(20 * Math.log10(this.state.vin / 0.775)).toFixed(1)} dBu)`);
+    if (this.coreTable[this.state.coreKey]) {
+      setTxt("xfmr-svg-core-lbl", this.coreTable[this.state.coreKey].name.toUpperCase());
+    }
+    setTxt("xfmr-svg-flux-lbl", `B_peak: ${physics.bPeak} T (${physics.bSatRatio}%)`);
+    setTxt("xfmr-svg-rload-lbl", physics.rLoad >= 1e5 ? "∞ (Open)" : `${physics.rLoad} Ω`);
+    setTxt("xfmr-svg-rz-lbl", `${physics.rZobel} Ω`);
+    setTxt("xfmr-svg-cz-lbl", `${physics.cZobelPf} pF`);
+    setTxt("xfmr-svg-zeta-lbl", `ζ = ${physics.zeta} (${this.state.termination === "zobel" ? "Critically Damped" : (physics.zeta < 0.2 ? "Ringing!" : "Loaded")})`);
+
+    // Dynamic flux color on core laminations & flux lines
+    const fluxLines = document.querySelectorAll(".xfmr-svg-flux-line");
+    const coreBars = document.querySelectorAll(".xfmr-svg-core-bar");
+    let fluxColor = "#38bdf8";
+    if (physics.isSaturated) fluxColor = "#ef4444";
+    else if (physics.bSatRatio > 75) fluxColor = "#f59e0b";
+    
+    fluxLines.forEach(l => l.setAttribute("stroke", fluxColor));
+    coreBars.forEach(b => b.setAttribute("stroke", physics.isSaturated ? "#dc2626" : (physics.bSatRatio > 75 ? "#ca8a04" : "#64748b")));
+
+    // Active Zobel branch highlighting
+    const zobelBranch = document.getElementById("xfmr-svg-zobel-branch");
+    if (zobelBranch) {
+      zobelBranch.style.opacity = (this.state.termination === "zobel") ? "1" : "0.35";
+    }
+  }
 }
 
 // Instantiate on window load
 document.addEventListener("DOMContentLoaded", () => {
   window.audioTransformerSim = new AudioTransformerSimulator();
+  window.xfmrSim = window.audioTransformerSim;
 });

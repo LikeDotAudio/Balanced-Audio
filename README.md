@@ -99,18 +99,61 @@ Faithfully implemented from the official Hewlett-Packard Operating and Service M
 
 ---
 
-## 4-Channel CRT Oscilloscope
+## Permanent Left-Side Laboratory Instrument Rack
 
-The vintage CRT oscilloscope engine supports simultaneous 4-channel acquisition with individual channel toggles:
-- **Channel Allocation**:
-  - **CH1 (Ref)**: Audio Generator Input Reference ($V_{in}$) — Yellow (`#facc15`)
-  - **CH2 (+VE)**: Pin 2 Hot Output Conductor ($V_{hot}$) — Cyan (`#38bdf8`)
-  - **CH3 (-VE)**: Pin 3 Cold Output Conductor ($V_{cold}$) — Pink (`#f43f5e`)
-  - **CH4 (Diff)**: Differential Signal across Load ($V_{diff}$) — Green (`#4ade80`)
-- **Features**:
-  - Individual channel pushbuttons to view 1, 2, 3, or all 4 traces simultaneously.
-  - Dual timebase (.2ms, .5ms, 1ms, 2ms) and voltage scaling (.1V, .2V, .5V, 1V, 2V, 5V per division).
-  - Realistic green phosphor persistence decay and graticule crosshair ticks.
+All laboratory test equipment is permanently docked in a **350px fixed left rack** that joins the navigation sidebar and **never scrolls** with the page:
+- **Strict Square & Solid Black Aesthetic**:
+  - `border-radius: 0` (strictly 90-degree square bezels and cards).
+  - Pure solid black (`#000000`) with subtle grey borders (`#333333`) and zero background blur or radial gradient fades.
+  - Padding optimized to eliminate all wasted space.
+- **"No Text Until Someone Clicks the Meter"**:
+  - Each instrument presents only its authentic hardware face at rest (CRT screen, glowing yellow vacuum-fluorescent digits, or analog needle dial).
+  - Clicking any meter card toggles open a collapsible controls and telemetry drawer with sensitivity rotary ranges, Volts/Div and Time/Div buttons, and circuit probe dropdowns.
+
+---
+
+## Exactly Six Laboratory Instruments
+
+1. **Oscilloscope 1 (Audio In & Pin 2 Hot)**:
+   - **CH1 (Yellow `#facc15`)**: Generator Audio Input Drive ($V_{in}$).
+   - **CH2 (Cyan `#38bdf8`)**: Pin 2 Hot Non-Inverting Line ($V_{hot}$).
+   - Independent Volts/Div (`.2V`, `.5V`, `1V`, `2V`, `5V`) and shared Time/Div (`.2ms` to `2ms`).
+2. **Oscilloscope 2 (Pin 3 Cold & Differential Load)**:
+   - **CH3 (Pink `#f43f5e`)**: Pin 3 Cold Inverting Line ($V_{cold}$).
+   - **CH4 (Green `#4ade80`)**: Differential Signal across terminating load ($V_{diff}$).
+   - Visualizes inverted phase and reveals zero signal on impedance-balanced topologies.
+3. **LUCKY 8050A True RMS DMM #1 (Input & Hot)**:
+   - Model 8050A in high-contrast **Yellow Phosphor font** (`#facc15`).
+   - Live True RMS AC Volts and calibrated Audio Level in $\text{dBu}$.
+   - Selectable modes: `TRUE RMS`, `dBu LEVEL`, `PEAK`, `CREST FACTOR`.
+4. **LUCKY 8050A True RMS DMM #2 (Differential / THD+N / CMRR)**:
+   - High-contrast **Yellow Phosphor font** (`#facc15`).
+   - Differential Load RMS voltage, THD+N percentage, and common-mode rejection ratio ($>95\text{ dB}$).
+   - Selectable modes: `DIFF RMS`, `THD+N %`, `CMRR dB`, `ERROR Verr`.
+5. **APK Precision AC Voltmeter #1 (Channel A: Drive In)**:
+   - Modeled after laboratory needle voltmeters with aged ivory scale, red overload arc, and 300 ms mechanical needle ballistics.
+   - Stepped sensitivity ranges: `0.1V (-20dB)` to `30V (+30dB)`.
+6. **APK Precision AC Voltmeter #2 (Channel B: Load Out)**:
+   - Precision analog needle voltmeter monitoring output level across balanced receiver load.
+
+---
+
+## Dynamic SVG Wires & User-Created Circuit Anchors
+
+- **Live Dynamic Bézier Wires**:
+  - Fullscreen fixed SVG overlay (`#live-probe-wires-svg`) renders physical colored leads extending from instrument terminal dots on the left rack across the screen directly to the probed schematic nodes or user anchors.
+  - Automatically recalculates curved splines during scrolling, resizing, or circuit interaction.
+- **Circuit Test Anchors (`[⚓ ANCHOR]`)**:
+  - Click the `[⚓ ANCHOR]` toolbar button and click anywhere on any schematic or document text to drop a persistent circuit test anchor badge.
+  - Probes and dynamic wires snap directly to user-placed anchors.
+- **Universal Circuit Probing (`[🎯 POKE]`)**:
+  - Click any pin, conductor, resistor, or ground loop node across all schematics to immediately attach scopes and multimeters.
+
+---
+
+## In-Page Vector SVGs Streamlined
+
+To eliminate wasted vertical space and prevent redundant scrolling, bulky in-page duplicate vector SVG test benches in Section 3 and Section 4 have been retired from the document body. All live instrumentation is permanently anchored on the left rack.
 
 ---
 

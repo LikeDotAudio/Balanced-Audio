@@ -1,645 +1,707 @@
 /**
- * floating-meters.js — Breakaway Floating Instrument Dock, Oscilloscope CRT & Universal Circuit Probing
+ * floating-meters.js — Permanent Left-Side Laboratory Instrument Rack & Universal Wires Engine
  *
- * Features:
- * 1. Dual Probe Modes: Pick between a DMM Probe (Red/Black Leads) and an Oscilloscope Probe (10X BNC with Ground Clip).
- * 2. 1970s Laboratory CRT Oscilloscope: Live animated green phosphor CRT trace with 8x10 division graticule,
- *    trigger stabilization, volts/div, time/div, on-screen CRT readouts, and true circuit physics waveforms.
- * 3. Universal "Poke Any Circuit": Click any terminal, conductor, resistor, shield bond, or ground loop node
- *    across ALL schematics on the page to snap test probes and view real-time signals.
- * 4. APK Precision AC Voltmeter & Fluke 8050A True RMS DMM fully synchronized to probed nodes.
+ * Specifications:
+ * 1. Permanent Left-Side Dock: Fixed 350px width, joined with sidebar, strictly non-scrolling.
+ * 2. Exactly 6 Laboratory Instruments:
+ *    - Scope 1: Audio In / Pin 2 Hot (CH1 Yellow #facc15, CH2 Cyan #38bdf8)
+ *    - Scope 2: Pin 3 Cold / Differential Load (CH3 Pink #f43f5e, CH4 Green #4ade80)
+ *    - DMM 1: LUCKY 8050A #1 (Input & Pin 2 Hot RMS & Audio Level dBu in yellow phosphor #facc15)
+ *    - DMM 2: LUCKY 8050A #2 (Differential Load RMS & THD+N / CMRR in yellow phosphor #facc15)
+ *    - VU Meter 1: APK Precision AC Voltmeter #1 (Channel A: Audio Drive In)
+ *    - VU Meter 2: APK Precision AC Voltmeter #2 (Channel B: Differential Load Out)
+ * 3. "No text until someone clicks the meter":
+ *    - Clean hardware face at rest (CRT screen, yellow VFD digits, analog needle dial).
+ *    - Clicking any meter card toggles open its controls, range keys, and telemetry drawer.
+ * 4. Dynamic SVG Wires:
+ *    - Real-time colored Bézier spline wires extending from left rack terminals across the screen to probed circuit nodes.
+ * 5. Create Anchors:
+ *    - Click [⚓ CREATE ANCHOR] and click anywhere on the page to drop persistent test anchors.
+ * 6. HP 353A Patch Panel & Trend Recorder bays accessible via rack navigation tabs.
+ * 7. Strict Aesthetics: Squares (border-radius: 0), pure black (#000000), grey borders (#333333), zero wasted padding.
  */
 
 class FloatingMeterDock {
   constructor() {
     this.dock = null;
-    this.isFloating = false;
-    this.toolMode = "scope"; // 'dmm' | 'scope'
-    this.displayMode = "dual"; // 'dmm' | 'scope' | 'dual'
-    this.isArmed = false; // "Poke Circuit" crosshair mode
+    this.currentTab = "rack"; // 'rack' | 'hp353a' | 'chart'
+    this.isArmed = false; // "Poke Circuit" mode
+    this.isCreatingAnchor = false; // "Create Anchor" mode
+    this.anchors = []; // User-created test anchors
+    this.anchorCounter = 1;
 
-    // Probe state
-    this.activeProbeTarget = "6-1-p2"; // Default Pin 2 Hot (Circuit 6.1)
-    this.activeReferenceTarget = "chassis"; // Default Pin 1 Chassis Ground
-    this.probeLabel = "Pin 2 Hot (Circuit 6.1 Dual Push-Pull)";
+    // Active Probe Targets for instruments
+    this.scope1Target = "6-1-p2";
+    this.scope2Target = "6-1-load";
+    this.dmm1Target = "6-1-p2";
+    this.dmm2Target = "6-1-load";
+    this.dmm1Mode = "rms"; // 'rms' | 'dbu' | 'peak' | 'crest'
+    this.dmm2Mode = "diff"; // 'diff' | 'thd' | 'cmrr' | 'error'
 
-    // Oscilloscope settings
-    this.scopeVoltsDiv = 1.0; // Volts per division
-    this.scopeTimeDiv = 0.5; // Milliseconds per division
-    this.scopeCoupling = "AC"; // AC | DC | GND
-    this.scopeTriggerMode = "AUTO"; // AUTO | NORM
-    this.scopeCanvas = null;
-    this.scopeCtx = null;
+    // Oscilloscope settings (Shared timebase, independent V/div)
+    this.scope1VoltsDiv = 1.0;
+    this.scope2VoltsDiv = 1.0;
+    this.scopeTimeDiv = 0.5; // ms/div
     this.scopeTime = 0;
 
-    // HP Voltmeter needle physics ballistics
-    this.currentNeedleDbu = 4.0;
-    this.targetNeedleDbu = 4.0;
+    // VU Meters Ballistics & Sensitivity
+    this.vu1Range = 3.0; // 3V (+10 dB)
+    this.vu2Range = 3.0;
+    this.vu1NeedleDbu = 4.0;
+    this.vu2NeedleDbu = 4.0;
+    this.vu1TargetDbu = 4.0;
+    this.vu2TargetDbu = 4.0;
     this.attackRate = 0.28;
     this.releaseRate = 0.08;
-    this.hpRangeVolts = 3.0;
 
-    // Settings drawer states
-    this.settingsOpen = null; // 'hp' | 'scope' | 'fluke' | null
+    // HP 353A Patch Panel State
+    this.hp353aOutZ = 600;
+    this.hp353aInZ = 10000;
+    this.hp353aAtten10 = 0;
+    this.hp353aAtten1 = 0;
+    this.hp353aMode = "MEAS";
+    this.hp353aFreq = "<5kHz";
+
+    // Trend Recorder State
+    this.trendRunning = true;
+    this.trendBuffer = [];
+    this.maxTrendSamples = 140;
+
     this.animFrame = null;
-
     this.init();
   }
 
   init() {
-    this.createDockDOM();
-    this.setupScrollTrigger();
+    this.createPermanentRackDOM();
+    this.initCanvases();
+    this.attachEventListeners();
     this.setupGlobalProbeHooks();
+    this.initAnchorEngine();
     this.startMainInstrumentLoop();
+    this.updateFromActiveCircuit();
   }
 
-  createDockDOM() {
+  createPermanentRackDOM() {
     if (document.getElementById("floating-meter-dock")) {
-      this.dock = document.getElementById("floating-meter-dock");
-      return;
+      document.getElementById("floating-meter-dock").remove();
     }
 
-    const dock = document.createElement("div");
-    dock.id = "floating-meter-dock";
-    dock.className = "floating-meter-dock";
-    dock.setAttribute("aria-label", "Laboratory Bench Probes & Oscilloscope Dock");
+    const rack = document.createElement("aside");
+    rack.id = "floating-meter-dock";
+    rack.className = "floating-meter-dock permanent-left-rack";
+    rack.setAttribute("aria-label", "Laboratory Master Test Bench & 6-Instrument Left Rack");
 
-    dock.innerHTML = `
-      <!-- Dock Control Header -->
-      <div class="dock-header">
-        <div class="dock-title-group">
-          <span class="dock-icon">⚡</span>
-          <div>
-            <div class="dock-title">LAB BENCH PROBES &amp; OSCILLOSCOPE</div>
-            <div id="dock-probe-status" class="dock-probe-status">Probing: Pin 2 Hot (+4.0 dBu)</div>
-          </div>
+    rack.innerHTML = `
+      <!-- Rack Master Header & Navigation -->
+      <div class="rack-header">
+        <div class="rack-nav-tabs">
+          <button id="rack-tab-rack" class="rack-nav-tab active" title="6 Laboratory Instruments">🎛️ LAB RACK</button>
+          <button id="rack-tab-hp353a" class="rack-nav-tab" title="HP 353A Patch Panel">🎛️ HP 353A</button>
+          <button id="rack-tab-chart" class="rack-nav-tab" title="Multi-Channel Trend Graph">📉 TREND</button>
         </div>
-        <div class="dock-action-btns">
-          <button id="dock-expand-btn" class="dock-mini-btn" title="Expand Settings">⚙️</button>
-          <button id="dock-minimize-btn" class="dock-mini-btn" title="Minimize Dock">_</button>
-          <button id="dock-close-btn" class="dock-mini-btn" title="Dock back to bench">✕</button>
+        <div class="rack-quick-actions">
+          <button id="rack-btn-anchor" class="rack-action-btn anchor-btn" title="Click to drop a persistent circuit test anchor anywhere!">⚓ ANCHOR</button>
+          <button id="rack-btn-poke" class="rack-action-btn poke-btn" title="Click any wire or component on schematics to poke it!">🎯 POKE</button>
         </div>
       </div>
 
-      <!-- Interactive Probe Mode & Tool Picker -->
-      <div class="dock-tool-picker">
-        <button id="dock-pick-scope-btn" class="tool-pick-btn active" title="Select Oscilloscope 10X Probe">
-          <span class="tool-dot green"></span> O-Scope Probe
-        </button>
-        <button id="dock-pick-dmm-btn" class="tool-pick-btn" title="Select DMM Red (+) Lead">
-          <span class="tool-dot red"></span> DMM Probe
-        </button>
-        <button id="dock-arm-probe-btn" class="tool-arm-btn" title="Click anywhere on any circuit to poke it!">
-          🎯 Poke Circuit
-        </button>
-      </div>
+      <!-- ================= 1. Six Permanent Instruments Bay ================= -->
+      <div id="rack-instruments-bay" class="rack-instruments-bay">
 
-      <!-- Test Probe Leads Telemetry Bar -->
-      <div class="dock-probes-bar">
-        <div id="dock-lead-signal" class="probe-lead green active">
-          <span id="dock-lead-dot" class="probe-tip-led green-led"></span>
-          <span>Probe: <strong id="dock-probe-signal-target">Pin 2 Hot (10X)</strong></span>
-        </div>
-        <div id="dock-lead-ref" class="probe-lead black active">
-          <span class="probe-tip-led black-led"></span>
-          <span>Ref: <strong id="dock-probe-ref-target">Chassis / Pin 1</strong></span>
-        </div>
-      </div>
-
-      <!-- Instrument View Switcher Tabs -->
-      <div class="dock-view-tabs">
-        <button id="dock-tab-scope" class="dock-tab-btn active">📈 4-CH Scope</button>
-        <button id="dock-tab-dmm" class="dock-tab-btn">📊 Lucky DMM</button>
-        <button id="dock-tab-hp353a" class="dock-tab-btn">🎛️ HP 353A</button>
-        <button id="dock-tab-chart" class="dock-tab-btn">📉 Trend Graph</button>
-        <button id="dock-tab-dual" class="dock-tab-btn">🔲 Dual View</button>
-      </div>
-
-      <!-- ================= 1. CRT Oscilloscope Bay (4-Channel) ================= -->
-      <div id="dock-panel-scope" class="dock-instrument-panel">
-        <div class="dock-scope-card">
-          <div class="dock-meter-label">
-            <span style="color: #4ade80; display: flex; align-items: center; gap: 5px;">
-              <span class="crt-glow-dot"></span>
-              TEKTRONIX / HP 4-CH CRT SCOPE
-            </span>
-            <span id="dock-scope-telemetry-badge" class="badge-mini green">1.0V/div &bull; 0.5ms</span>
+        <!-- Meter 1: SCOPE 1 (Audio In & Pin 2 Hot) -->
+        <div id="rack-card-scope1" class="rack-meter-card" title="Click to open Scope 1 controls and range">
+          <div class="rack-meter-bar">
+            <div class="rack-meter-title">
+              <span id="dot-scope1-ch1" class="rack-terminal-dot yellow" title="CH1: Signal Generator Vin"></span>
+              <span id="dot-scope1-ch2" class="rack-terminal-dot cyan" title="CH2: Pin 2 Hot Out"></span>
+              <span>SCOPE 1 &bull; VIN / +VE HOT</span>
+            </div>
+            <span id="scope1-vdiv-badge" class="rack-status-pill yellow">1V &bull; .5ms</span>
           </div>
-          <div class="dock-scope-bezel">
-            <canvas id="dock-scope-canvas" width="300" height="150" class="dock-scope-canvas"></canvas>
+          <div class="rack-scope-bezel">
+            <canvas id="rack-scope1-canvas" width="338" height="110" class="rack-canvas"></canvas>
           </div>
-
-          <!-- 4-Channel Trace Toggles -->
-          <div class="scope-ch-toggles">
-            <button class="scope-ch-btn ch1 active" data-ch="1" title="CH1: Generator Audio Drive Reference (Yellow)">CH1: Ref</button>
-            <button class="scope-ch-btn ch2 active" data-ch="2" title="CH2: Pin 2 Hot Output (Cyan)">CH2: +VE</button>
-            <button class="scope-ch-btn ch3 active" data-ch="3" title="CH3: Pin 3 Cold Output (Pink)">CH3: -VE</button>
-            <button class="scope-ch-btn ch4 active" data-ch="4" title="CH4: Differential Load Summation (Green)">CH4: Diff</button>
-          </div>
-
-          <!-- Oscilloscope Front-Panel Controls -->
-          <div class="dock-scope-controls" style="margin-top: 0.35rem;">
-            <div class="scope-ctrl-group">
-              <span class="scope-ctrl-label">VOLTS/DIV:</span>
-              <div class="scope-btn-group">
-                <button class="scope-btn" data-vdiv="0.2">.2V</button>
-                <button class="scope-btn" data-vdiv="0.5">.5V</button>
-                <button class="scope-btn active" data-vdiv="1.0">1V</button>
-                <button class="scope-btn" data-vdiv="2.0">2V</button>
-                <button class="scope-btn" data-vdiv="5.0">5V</button>
+          <!-- Collapsible Drawer: No text until clicked -->
+          <div class="meter-collapsible-drawer">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span>VOLTS/DIV:</span>
+              <div class="scope-btn-row">
+                <button class="scope-btn" data-scope1-vdiv="0.2">.2V</button>
+                <button class="scope-btn" data-scope1-vdiv="0.5">.5V</button>
+                <button class="scope-btn active" data-scope1-vdiv="1.0">1V</button>
+                <button class="scope-btn" data-scope1-vdiv="2.0">2V</button>
+                <button class="scope-btn" data-scope1-vdiv="5.0">5V</button>
               </div>
             </div>
-            <div class="scope-ctrl-group">
-              <span class="scope-ctrl-label">TIME/DIV:</span>
-              <div class="scope-btn-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 3px;">
+              <span>TIME/DIV:</span>
+              <div class="scope-btn-row">
                 <button class="scope-btn" data-tdiv="0.2">.2ms</button>
                 <button class="scope-btn active" data-tdiv="0.5">.5ms</button>
                 <button class="scope-btn" data-tdiv="1.0">1ms</button>
                 <button class="scope-btn" data-tdiv="2.0">2ms</button>
               </div>
             </div>
+            <div class="rack-telemetry-text" id="scope1-telemetry">
+              CH1 (Yellow Vin): 1.23V RMS &bull; CH2 (Cyan Hot): 1.23V RMS &bull; Phase: 0.0°
+            </div>
+            <select class="rack-probe-dropdown" data-probe-select="scope1">
+              <option value="6-1-p2" selected>Pin 2 Hot (Circuit 6.1)</option>
+              <option value="6-1-vin">Audio Input Drive (Vin)</option>
+              <option value="6-1-op1">Op-Amp A1 Output (+Buffer)</option>
+              <option value="6-2-p2">Pin 2 Hot (Circuit 6.2 Active)</option>
+              <option value="6-3-p2">Secondary Pin 2 (Circuit 6.3)</option>
+              <option value="meyer-p2">Cable Pin 2 Hot Line (Section 5)</option>
+            </select>
           </div>
         </div>
+
+        <!-- Meter 2: SCOPE 2 (Pin 3 Cold & Differential Load) -->
+        <div id="rack-card-scope2" class="rack-meter-card" title="Click to open Scope 2 controls and range">
+          <div class="rack-meter-bar">
+            <div class="rack-meter-title">
+              <span id="dot-scope2-ch3" class="rack-terminal-dot pink" title="CH3: Pin 3 Cold Inverted"></span>
+              <span id="dot-scope2-ch4" class="rack-terminal-dot green" title="CH4: Differential Load Across Pins 2-3"></span>
+              <span>SCOPE 2 &bull; -VE COLD / DIFF LOAD</span>
+            </div>
+            <span id="scope2-vdiv-badge" class="rack-status-pill green">1V &bull; .5ms</span>
+          </div>
+          <div class="rack-scope-bezel">
+            <canvas id="rack-scope2-canvas" width="338" height="110" class="rack-canvas"></canvas>
+          </div>
+          <!-- Collapsible Drawer: No text until clicked -->
+          <div class="meter-collapsible-drawer">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span>VOLTS/DIV:</span>
+              <div class="scope-btn-row">
+                <button class="scope-btn" data-scope2-vdiv="0.2">.2V</button>
+                <button class="scope-btn" data-scope2-vdiv="0.5">.5V</button>
+                <button class="scope-btn active" data-scope2-vdiv="1.0">1V</button>
+                <button class="scope-btn" data-scope2-vdiv="2.0">2V</button>
+                <button class="scope-btn" data-scope2-vdiv="5.0">5V</button>
+              </div>
+            </div>
+            <div class="rack-telemetry-text" id="scope2-telemetry">
+              CH3 (Pink Cold): 1.23V RMS &bull; CH4 (Green Diff): 2.46V RMS &bull; CMRR: 95.0 dB
+            </div>
+            <select class="rack-probe-dropdown" data-probe-select="scope2">
+              <option value="6-1-load" selected>Differential Across Load (Circuit 6.1)</option>
+              <option value="6-1-p3">Pin 3 Cold Output (Circuit 6.1)</option>
+              <option value="6-2-load">Differential Load (Circuit 6.2)</option>
+              <option value="6-2-p3">Pin 3 Cold 0V Passive (Circuit 6.2)</option>
+              <option value="6-3-sec">Transformer Secondary 2-3 (Circuit 6.3)</option>
+              <option value="meyer-diff">Receiver Differential Audio (Section 5)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Meter 3: LUCKY 8050A DMM #1 (Input & Hot +VE Line) -->
+        <div id="rack-card-dmm1" class="rack-meter-card" title="Click to open Lucky 8050A #1 settings">
+          <div class="rack-meter-bar">
+            <div class="rack-meter-title">
+              <span id="dot-dmm1" class="rack-terminal-dot yellow"></span>
+              <span style="color: #facc15; font-weight: 800;">LUCKY 8050A #1</span>
+              <span style="color: #888888;">(INPUT / +VE)</span>
+            </div>
+            <span id="rack-dmm1-status" class="rack-status-pill yellow">+VE HOT</span>
+          </div>
+          <!-- Clean Digital Face (Yellow Phosphor) -->
+          <div class="rack-dmm-face">
+            <span id="rack-dmm1-val1" class="rack-dmm-digits" style="color: #facc15;">1.228 V</span>
+            <span id="rack-dmm1-val2" class="rack-dmm-sub-digits" style="color: #facc15;">+4.0 dBu</span>
+          </div>
+          <!-- Collapsible Drawer: No text until clicked -->
+          <div class="meter-collapsible-drawer">
+            <div class="dmm-keypad-mini">
+              <button class="dmm-key active" data-dmm1-mode="rms">TRUE RMS</button>
+              <button class="dmm-key" data-dmm1-mode="dbu">dBu LEVEL</button>
+              <button class="dmm-key" data-dmm1-mode="peak">PEAK</button>
+              <button class="dmm-key" data-dmm1-mode="crest">CREST</button>
+            </div>
+            <div class="rack-telemetry-text" id="dmm1-detail-text">
+              Probed Signal: Pin 2 Hot Output (+4.0 dBu Ref 0.775V)
+            </div>
+            <select class="rack-probe-dropdown" data-probe-select="dmm1">
+              <option value="6-1-p2" selected>Pin 2 Hot (+VE Driver Out)</option>
+              <option value="6-1-vin">Audio Input Drive (Vin)</option>
+              <option value="6-2-p2">Circuit 6.2 Active Hot Out</option>
+              <option value="6-3-p2">Circuit 6.3 Transformer Hot</option>
+              <option value="meyer-vpo">Jim Meyer V_PO Generator</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Meter 4: LUCKY 8050A DMM #2 (Differential / Cold / THD) -->
+        <div id="rack-card-dmm2" class="rack-meter-card" title="Click to open Lucky 8050A #2 settings">
+          <div class="rack-meter-bar">
+            <div class="rack-meter-title">
+              <span id="dot-dmm2" class="rack-terminal-dot green"></span>
+              <span style="color: #facc15; font-weight: 800;">LUCKY 8050A #2</span>
+              <span style="color: #888888;">(DIFF / THD)</span>
+            </div>
+            <span id="rack-dmm2-status" class="rack-status-pill green">BALANCED</span>
+          </div>
+          <!-- Clean Digital Face (Yellow Phosphor) -->
+          <div class="rack-dmm-face">
+            <span id="rack-dmm2-val1" class="rack-dmm-digits" style="color: #facc15;">2.456 V</span>
+            <span id="rack-dmm2-val2" class="rack-dmm-sub-digits" style="color: #facc15;">0.003% THD</span>
+          </div>
+          <!-- Collapsible Drawer: No text until clicked -->
+          <div class="meter-collapsible-drawer">
+            <div class="dmm-keypad-mini">
+              <button class="dmm-key active" data-dmm2-mode="diff">DIFF RMS</button>
+              <button class="dmm-key" data-dmm2-mode="thd">THD+N %</button>
+              <button class="dmm-key" data-dmm2-mode="cmrr">CMRR dB</button>
+              <button class="dmm-key" data-dmm2-mode="error">ERROR Verr</button>
+            </div>
+            <div class="rack-telemetry-text" id="dmm2-detail-text">
+              Differential Load: 2.456V RMS &bull; CMRR: >95.0 dB &bull; THD: 0.003%
+            </div>
+            <select class="rack-probe-dropdown" data-probe-select="dmm2">
+              <option value="6-1-load" selected>Circuit 6.1 Differential Across Load</option>
+              <option value="6-1-p3">Circuit 6.1 Pin 3 Cold Out</option>
+              <option value="6-2-load">Circuit 6.2 Differential Across Load</option>
+              <option value="6-2-p3">Circuit 6.2 Pin 3 Cold Passive (0V)</option>
+              <option value="6-3-sec">Circuit 6.3 Transformer Floating Secondary</option>
+              <option value="meyer-verr">Section 5 Meyer CM-to-DM Error (V_err)</option>
+              <option value="meyer-diff">Section 5 Receiver Differential Out</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Meter 5: APK Precision AC Voltmeter #1 (Channel A: Audio In) -->
+        <div id="rack-card-vu1" class="rack-meter-card" title="Click to open APK Voltmeter #1 calibration settings">
+          <div class="rack-meter-bar">
+            <div class="rack-meter-title">
+              <span id="dot-vu1" class="rack-terminal-dot yellow"></span>
+              <span>APK AC VOLTMETER #1 &bull; CH A DRIVE</span>
+            </div>
+            <span id="rack-vu1-range-badge" class="rack-status-pill yellow">3V &bull; +10dB</span>
+          </div>
+          <div class="rack-vu-bezel">
+            <canvas id="rack-vu1-canvas" width="338" height="85" class="rack-canvas"></canvas>
+          </div>
+          <!-- Collapsible Drawer: No text until clicked -->
+          <div class="meter-collapsible-drawer">
+            <span>SENSITIVITY RANGE:</span>
+            <div class="vu-range-btn-row">
+              <button class="drawer-btn" data-vu1-range="0.1">.1V (-20dB)</button>
+              <button class="drawer-btn" data-vu1-range="0.3">.3V (-10dB)</button>
+              <button class="drawer-btn" data-vu1-range="1.0">1V (0dB)</button>
+              <button class="drawer-btn active" data-vu1-range="3.0">3V (+10dB)</button>
+              <button class="drawer-btn" data-vu1-range="10.0">10V (+20dB)</button>
+              <button class="drawer-btn" data-vu1-range="30.0">30V (+30dB)</button>
+            </div>
+            <div class="rack-telemetry-text">
+              Tracks audio generator input drive level with 300ms mechanical needle ballistics.
+            </div>
+          </div>
+        </div>
+
+        <!-- Meter 6: APK Precision AC Voltmeter #2 (Channel B: Differential Load) -->
+        <div id="rack-card-vu2" class="rack-meter-card" title="Click to open APK Voltmeter #2 calibration settings">
+          <div class="rack-meter-bar">
+            <div class="rack-meter-title">
+              <span id="dot-vu2" class="rack-terminal-dot green"></span>
+              <span>APK AC VOLTMETER #2 &bull; CH B LOAD</span>
+            </div>
+            <span id="rack-vu2-range-badge" class="rack-status-pill green">3V &bull; +10dB</span>
+          </div>
+          <div class="rack-vu-bezel">
+            <canvas id="rack-vu2-canvas" width="338" height="85" class="rack-canvas"></canvas>
+          </div>
+          <!-- Collapsible Drawer: No text until clicked -->
+          <div class="meter-collapsible-drawer">
+            <span>SENSITIVITY RANGE:</span>
+            <div class="vu-range-btn-row">
+              <button class="drawer-btn" data-vu2-range="0.1">.1V (-20dB)</button>
+              <button class="drawer-btn" data-vu2-range="0.3">.3V (-10dB)</button>
+              <button class="drawer-btn" data-vu2-range="1.0">1V (0dB)</button>
+              <button class="drawer-btn active" data-vu2-range="3.0">3V (+10dB)</button>
+              <button class="drawer-btn" data-vu2-range="10.0">10V (+20dB)</button>
+              <button class="drawer-btn" data-vu2-range="30.0">30V (+30dB)</button>
+            </div>
+            <div class="rack-telemetry-text">
+              Tracks differential output level across balanced receiver terminating load.
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <!-- ================= 2. DMM & APK Voltmeter Bay ================= -->
-      <div id="dock-panel-dmm" class="dock-instrument-panel">
-        <!-- Meter 1: APK Precision AC Voltmeter -->
-        <div id="dock-meter-hp" class="dock-meter-card" title="Click to open APK Voltmeter calibration settings">
-          <div class="dock-meter-label">
-            <span>APK PRECISION AC VOLTMETER</span>
-            <span id="dock-hp-range-badge" class="badge-mini">3V / +10 dB</span>
-          </div>
-          <div class="dock-meter-face-wrapper">
-            <canvas id="dock-hp-canvas" width="300" height="135" class="dock-canvas"></canvas>
-          </div>
-        </div>
-
-        <!-- Meter 2: LUCKY 8050A True RMS DMM (Yellow Font) -->
-        <div id="dock-meter-fluke" class="dock-meter-card" style="margin-top: 0.5rem;" title="Click to open Lucky 8050A settings">
-          <div class="dock-meter-label">
-            <span style="color: #facc15; font-weight: 800;">LUCKY 8050A TRUE RMS DMM</span>
-            <span id="dock-dmm-mode-badge" class="badge-mini" style="background: rgba(250, 204, 21, 0.2); color: #facc15; border: 1px solid #facc15;">+VE HOT</span>
-          </div>
-          <div class="dmm-mode-switcher" style="margin-top: 0.35rem;">
-            <button class="dmm-mode-btn active yellow-mode" data-dock-dmm-mode="hot">+VE HOT</button>
-            <button class="dmm-mode-btn" data-dock-dmm-mode="cold">-VE COLD</button>
-            <button class="dmm-mode-btn" data-dock-dmm-mode="thd">THD / DIST</button>
-            <button class="dmm-mode-btn" data-dock-dmm-mode="multi">MULTI</button>
-          </div>
-          <div class="dock-dmm-vfd-display" style="border: 2px solid #ca8a04;">
-            <div class="dmm-vfd-row">
-              <span id="dock-dmm-lbl-1" class="dmm-vfd-label">V_HOT (RMS):</span>
-              <span id="dock-dmm-vdiff" class="dmm-vfd-number lucky-yellow">1.228 V</span>
-            </div>
-            <div class="dmm-vfd-row">
-              <span id="dock-dmm-lbl-2" class="dmm-vfd-label">AUDIO LEVEL:</span>
-              <span id="dock-dmm-iload" class="dmm-vfd-number lucky-yellow">+4.0 dBu</span>
-            </div>
-            <div class="dmm-vfd-row">
-              <span id="dock-dmm-lbl-3" class="dmm-vfd-label">LINE STATUS:</span>
-              <span id="dock-dmm-status" class="dmm-vfd-status lucky-yellow">SYMMETRIC</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ================= 3. HP 353A Patch Panel Bay ================= -->
-      <div id="dock-panel-hp353a" class="dock-instrument-panel" style="display: none;">
-        <div class="hp353a-panel-card" style="margin-top: 0;">
-          <div class="hp353a-header">
+      <!-- ================= 2. HP 353A Patch Panel Bay ================= -->
+      <div id="rack-panel-hp353a" class="rack-instrument-panel" style="display: none; padding: 6px;">
+        <div class="hp353a-panel-card" style="margin-top: 0; background: #000000; border: 1px solid #333333; border-radius: 0;">
+          <div class="hp353a-header" style="background: #0a0a0a; border-bottom: 1px solid #222222; padding: 6px 8px;">
             <div class="hp353a-badge">
-              <span class="hp353a-hp-logo">hp</span>
-              <span class="hp353a-title">353A PATCH PANEL</span>
+              <span class="hp353a-hp-logo" style="background: #333333; color: #ffffff; border-radius: 0;">hp</span>
+              <span class="hp353a-title" style="font-family: var(--font-mono); font-weight: 800;">353A PATCH PANEL</span>
             </div>
-            <span style="font-size: 0.65rem; color: #94a3b8; font-family: monospace;">MANUAL 00353-90003</span>
+            <span style="font-size: 0.65rem; color: #888888; font-family: var(--font-mono);">MANUAL 00353-90003</span>
           </div>
-          <div class="hp353a-grid">
-            <div class="hp353a-ctrl-col">
-              <span class="hp353a-ctrl-title">OUTPUT Z</span>
-              <div class="hp353a-rotary-dial hp353a-outz-dial" title="Click to cycle Output Impedance (135, 600, 900 Ω)">
+          <div class="hp353a-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 8px;">
+            <div class="hp353a-ctrl-col" style="background: #050505; border: 1px solid #222222; padding: 6px; text-align: center;">
+              <span class="hp353a-ctrl-title" style="font-size: 0.65rem; color: #888888; font-family: var(--font-mono);">OUTPUT Z</span>
+              <div id="hp353a-outz-dial" class="hp353a-rotary-dial" style="margin: 6px auto; cursor: pointer;" title="Click to cycle Output Impedance (135, 600, 900 Ω)">
                 <div class="hp353a-rotary-pointer"></div>
               </div>
-              <span class="hp353a-value-readout hp353a-outz-val">600 Ω</span>
+              <span id="hp353a-outz-val" class="hp353a-value-readout" style="color: #38bdf8; font-family: var(--font-mono); font-weight: 800;">600 Ω</span>
             </div>
-            <div class="hp353a-ctrl-col">
-              <span class="hp353a-ctrl-title">INPUT TERM Z</span>
-              <div class="hp353a-rotary-dial hp353a-inz-dial" title="Click to cycle Input Termination (135, 600, 900, 10k Ω)">
+            <div class="hp353a-ctrl-col" style="background: #050505; border: 1px solid #222222; padding: 6px; text-align: center;">
+              <span class="hp353a-ctrl-title" style="font-size: 0.65rem; color: #888888; font-family: var(--font-mono);">INPUT TERM Z</span>
+              <div id="hp353a-inz-dial" class="hp353a-rotary-dial" style="margin: 6px auto; cursor: pointer;" title="Click to cycle Input Termination (135, 600, 900, 10k Ω)">
                 <div class="hp353a-rotary-pointer"></div>
               </div>
-              <span class="hp353a-value-readout hp353a-inz-val">10 kΩ</span>
+              <span id="hp353a-inz-val" class="hp353a-value-readout" style="color: #38bdf8; font-family: var(--font-mono); font-weight: 800;">10 kΩ</span>
             </div>
-            <div class="hp353a-ctrl-col">
-              <span class="hp353a-ctrl-title">ATTEN 10 dB</span>
-              <div class="hp353a-rotary-dial hp353a-atten10-dial" title="Click to step 10 dB Attenuation (0 - 100 dB)">
+            <div class="hp353a-ctrl-col" style="background: #050505; border: 1px solid #222222; padding: 6px; text-align: center;">
+              <span class="hp353a-ctrl-title" style="font-size: 0.65rem; color: #888888; font-family: var(--font-mono);">ATTEN 10 dB</span>
+              <div id="hp353a-atten10-dial" class="hp353a-rotary-dial" style="margin: 6px auto; cursor: pointer;" title="Click to step 10 dB Attenuation (0 - 100 dB)">
                 <div class="hp353a-rotary-pointer"></div>
               </div>
-              <span class="hp353a-value-readout hp353a-atten10-val">0 dB</span>
+              <span id="hp353a-atten10-val" class="hp353a-value-readout" style="color: #f59e0b; font-family: var(--font-mono); font-weight: 800;">0 dB</span>
             </div>
-            <div class="hp353a-ctrl-col">
-              <span class="hp353a-ctrl-title">ATTEN 1 dB</span>
-              <div class="hp353a-rotary-dial hp353a-atten1-dial" title="Click to step 1 dB Attenuation (0 - 10 dB)">
+            <div class="hp353a-ctrl-col" style="background: #050505; border: 1px solid #222222; padding: 6px; text-align: center;">
+              <span class="hp353a-ctrl-title" style="font-size: 0.65rem; color: #888888; font-family: var(--font-mono);">ATTEN 1 dB</span>
+              <div id="hp353a-atten1-dial" class="hp353a-rotary-dial" style="margin: 6px auto; cursor: pointer;" title="Click to step 1 dB Attenuation (0 - 10 dB)">
                 <div class="hp353a-rotary-pointer"></div>
               </div>
-              <span class="hp353a-value-readout hp353a-atten1-val">0 dB</span>
+              <span id="hp353a-atten1-val" class="hp353a-value-readout" style="color: #f59e0b; font-family: var(--font-mono); font-weight: 800;">0 dB</span>
             </div>
           </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.65rem; padding-top: 0.5rem; border-top: 1px solid #334155;">
-            <button class="hp353a-switch-btn hp353a-toggle-meas active" title="Toggle MEAS (circuit under test) vs CAL (oscillator reference)">MODE: MEAS</button>
-            <span class="hp353a-atten-total" style="font-family: monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 800;">0 dB Loss</span>
-            <button class="hp353a-switch-btn hp353a-toggle-freq" title="Toggle FREQ (<5kHz audio vs >5kHz carrier)">FREQ: &lt;5kHz</button>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-top: 1px solid #222222;">
+            <button id="hp353a-toggle-meas" class="rack-action-btn" title="Toggle MEAS vs CAL">MODE: MEAS</button>
+            <span id="hp353a-atten-total" style="font-family: var(--font-mono); font-size: 0.72rem; color: #f59e0b; font-weight: 800;">0 dB Loss</span>
+            <button id="hp353a-toggle-freq" class="rack-action-btn" title="Toggle FREQ (<5kHz vs >5kHz)">FREQ: &lt;5kHz</button>
           </div>
         </div>
       </div>
 
-      <!-- ================= 4. Trend Recorder Bay ================= -->
-      <div id="dock-panel-chart" class="dock-instrument-panel" style="display: none;">
-        <div class="trend-recorder-card" style="margin-top: 0;">
-          <div class="trend-toolbar">
-            <span class="trend-title">📉 TREND RECORDER</span>
-            <div class="trend-legend">
-              <span class="trend-legend-pill" style="color: #facc15;"><span class="trend-dot yellow"></span> +VE</span>
-              <span class="trend-legend-pill" style="color: #38bdf8;"><span class="trend-dot cyan"></span> -VE</span>
-              <span class="trend-legend-pill" style="color: #10b981;"><span class="trend-dot green"></span> DIFF</span>
-            </div>
-            <div class="trend-btn-group">
-              <button class="trend-btn trend-btn-run active">PAUSE</button>
-              <button class="trend-btn trend-btn-clear">CLEAR</button>
+      <!-- ================= 3. Multi-Channel Trend Recorder Bay ================= -->
+      <div id="rack-panel-chart" class="rack-instrument-panel" style="display: none; padding: 6px;">
+        <div class="trend-recorder-card" style="margin-top: 0; background: #000000; border: 1px solid #333333; border-radius: 0;">
+          <div class="trend-toolbar" style="display: flex; justify-content: space-between; align-items: center; padding: 6px; background: #0a0a0a; border-bottom: 1px solid #222222;">
+            <span class="trend-title" style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 800; color: #4ade80;">📉 LIVE STRIP CHART</span>
+            <div class="trend-btn-group" style="display: flex; gap: 3px;">
+              <button id="trend-btn-pause" class="rack-action-btn">PAUSE</button>
+              <button id="trend-btn-clear" class="rack-action-btn">CLEAR</button>
             </div>
           </div>
-          <canvas id="dock-trend-canvas" width="300" height="150" class="trend-canvas"></canvas>
-        </div>
-      </div>
-
-      <!-- Quick Probe Target Dropdown -->
-      <div class="dock-target-selector">
-        <label style="font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">
-          Move Probes To Test Point (Or Click Schematic Directly):
-        </label>
-        <select id="dock-probe-select" class="dock-probe-dropdown">
-          <optgroup label="Circuit 6.1 (Dual Push-Pull)">
-            <option value="6-1-p2" selected>Pin 2 Hot (Output +)</option>
-            <option value="6-1-p3">Pin 3 Cold (Output &minus;)</option>
-            <option value="6-1-load">Differential Across Load</option>
-            <option value="6-1-vin">Audio Input Drive</option>
-            <option value="6-1-op1">Op-Amp A1 Output (Hot)</option>
-            <option value="6-1-op2">Op-Amp A2 Output (Inverting)</option>
-            <option value="6-1-p1">Pin 1 Chassis Ground</option>
-          </optgroup>
-          <optgroup label="Circuit 6.2 (Active Impedance-Balanced)">
-            <option value="6-2-p2">Pin 2 Hot (Active Driven Out)</option>
-            <option value="6-2-p3">Pin 3 Cold (Passive 0V Match)</option>
-            <option value="6-2-load">Differential Across Load</option>
-            <option value="6-2-vin">Audio Input Drive</option>
-          </optgroup>
-          <optgroup label="Circuit 6.3 (Transformer Floating)">
-            <option value="6-3-sec">Secondary Across Pins 2 &amp; 3</option>
-            <option value="6-3-p2">Secondary Pin 2 (Hot)</option>
-            <option value="6-3-p3">Secondary Pin 3 (Cold)</option>
-            <option value="6-3-pri">Primary Audio Drive</option>
-          </optgroup>
-          <optgroup label="Section 5.0 (Jim Meyer Thevenin Ground Loop)">
-            <option value="meyer-vgvd">Ground Loop Voltage (V_GVD 60Hz)</option>
-            <option value="meyer-vpo">Generator V_PO (Hot Leg)</option>
-            <option value="meyer-vro">Generator V_RO (Cold Leg)</option>
-            <option value="meyer-p2">Cable Pin 2 Hot Line</option>
-            <option value="meyer-p3">Cable Pin 3 Cold Line</option>
-            <option value="meyer-shield">Cable Shield (Pin 1 to Pin 1)</option>
-            <option value="meyer-verr">CM-to-DM Noise Error (V_err)</option>
-            <option value="meyer-diff">Receiver Differential Audio Out</option>
-          </optgroup>
-          <optgroup label="Section 0 (Enclosure &amp; AES48 Grounding)">
-            <option value="enc-chassisa">Equipment A Chassis Ground</option>
-            <option value="enc-pin1bond">AES48 Direct Chassis Bond (0V Clean)</option>
-            <option value="enc-pin1fault">Pin 1 Routed to Audio Board Ground (120Hz Buzz)</option>
-            <option value="enc-shield">Cable Shield Outside Shell</option>
-          </optgroup>
-        </select>
-      </div>
-
-      <!-- Settings / Calibration Drawer -->
-      <div id="dock-settings-drawer" class="dock-settings-drawer">
-        <div class="drawer-header">
-          <span id="drawer-title" style="font-weight: 700; color: var(--accent-cyan);">APK Voltmeter Calibration &amp; Sensitivity</span>
-          <button id="drawer-close-btn" class="drawer-close-btn">&times;</button>
-        </div>
-        <div id="drawer-content" class="drawer-content">
-          <div style="font-size: 0.75rem; color: #94a3b8; line-height: 1.4;">
-            <strong>APK Voltmeter Range &amp; Sensitivity:</strong>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35rem; margin: 0.4rem 0;">
-              <button class="drawer-btn active" onclick="if(window.setVoltmeterRange) window.setVoltmeterRange(9); else window.floatingMeterDock.setHpRange(3, '+10 dB');">3V (+10dB)</button>
-              <button class="drawer-btn" onclick="if(window.setVoltmeterRange) window.setVoltmeterRange(8); else window.floatingMeterDock.setHpRange(1, '0 dB');">1V (0dB)</button>
-              <button class="drawer-btn" onclick="if(window.setVoltmeterRange) window.setVoltmeterRange(10); else window.floatingMeterDock.setHpRange(10, '+20 dB');">10V (+20dB)</button>
-              <button class="drawer-btn" onclick="if(window.setVoltmeterRange) window.setVoltmeterRange(7); else window.floatingMeterDock.setHpRange(0.3, '-10 dB');">.3V (-10dB)</button>
-              <button class="drawer-btn" onclick="if(window.setVoltmeterRange) window.setVoltmeterRange(11); else window.floatingMeterDock.setHpRange(30, '+30 dB');">30V (+30dB)</button>
-              <button class="drawer-btn" onclick="if(window.setVoltmeterRange) window.setVoltmeterRange(6); else window.floatingMeterDock.setHpRange(0.1, '-20 dB');">100mV (-20dB)</button>
-            </div>
-            <strong>Needle Ballistics Damping:</strong>
-            <div style="display: flex; gap: 0.35rem; margin: 0.4rem 0;">
-              <button class="drawer-btn active" onclick="window.floatingMeterDock.setBallistics('vu')">VU (300ms)</button>
-              <button class="drawer-btn" onclick="window.floatingMeterDock.setBallistics('peak')">Fast Peak</button>
-              <button class="drawer-btn" onclick="window.floatingMeterDock.setBallistics('damped')">Average</button>
-            </div>
+          <canvas id="rack-trend-canvas" width="338" height="180" class="rack-canvas" style="background: #020b05;"></canvas>
+          <div style="display: flex; justify-content: space-around; padding: 4px; font-family: var(--font-mono); font-size: 0.65rem; border-top: 1px solid #222222;">
+            <span style="color: #facc15;">&bull; +VE Hot</span>
+            <span style="color: #38bdf8;">&bull; -VE Cold</span>
+            <span style="color: #4ade80;">&bull; Diff Load</span>
           </div>
         </div>
       </div>
     `;
 
-    document.body.appendChild(dock);
-    this.dock = dock;
+    document.body.appendChild(rack);
+    this.dock = rack;
 
-    this.attachEventListeners();
-    this.initHpCanvas();
-    this.initScopeCanvas();
-    this.updateDisplayMode("dual");
+    // Fullscreen SVG Overlay for Dynamic Bézier Wires
+    if (!document.getElementById("live-probe-wires-svg")) {
+      const wiresSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      wiresSvg.id = "live-probe-wires-svg";
+      wiresSvg.setAttribute("class", "live-probe-wires-svg");
+      document.body.appendChild(wiresSvg);
+    }
+  }
+
+  initCanvases() {
+    this.scope1Canvas = document.getElementById("rack-scope1-canvas");
+    if (this.scope1Canvas) this.scope1Ctx = this.scope1Canvas.getContext("2d");
+
+    this.scope2Canvas = document.getElementById("rack-scope2-canvas");
+    if (this.scope2Canvas) this.scope2Ctx = this.scope2Canvas.getContext("2d");
+
+    this.vu1Canvas = document.getElementById("rack-vu1-canvas");
+    if (this.vu1Canvas) this.vu1Ctx = this.vu1Canvas.getContext("2d");
+
+    this.vu2Canvas = document.getElementById("rack-vu2-canvas");
+    if (this.vu2Canvas) this.vu2Ctx = this.vu2Canvas.getContext("2d");
+
+    this.trendCanvas = document.getElementById("rack-trend-canvas");
+    if (this.trendCanvas) this.trendCtx = this.trendCanvas.getContext("2d");
   }
 
   attachEventListeners() {
     const dock = this.dock;
 
-    // Window controls
-    dock.querySelector("#dock-close-btn")?.addEventListener("click", () => this.dockBack());
-    const minBtn = dock.querySelector("#dock-minimize-btn");
-    if (minBtn) {
-      minBtn.addEventListener("click", () => {
-        dock.classList.toggle("minimized");
-        minBtn.textContent = dock.classList.contains("minimized") ? "□" : "_";
-      });
-    }
-    dock.querySelector("#dock-expand-btn")?.addEventListener("click", () => this.toggleSettings("hp"));
-    dock.querySelector("#dock-meter-hp")?.addEventListener("click", () => this.toggleSettings("hp"));
-    dock.querySelector("#dock-meter-fluke")?.addEventListener("click", () => this.toggleSettings("fluke"));
-    dock.querySelector("#drawer-close-btn")?.addEventListener("click", () => this.closeSettings());
-
-    // Probe Mode Pickers
-    const scopePickBtn = dock.querySelector("#dock-pick-scope-btn");
-    const dmmPickBtn = dock.querySelector("#dock-pick-dmm-btn");
-    const armBtn = dock.querySelector("#dock-arm-probe-btn");
-
-    if (scopePickBtn) {
-      scopePickBtn.addEventListener("click", () => {
-        this.setToolMode("scope");
-      });
-    }
-    if (dmmPickBtn) {
-      dmmPickBtn.addEventListener("click", () => {
-        this.setToolMode("dmm");
-      });
-    }
-    if (armBtn) {
-      armBtn.addEventListener("click", () => {
-        this.toggleArmProbe();
-      });
-    }
-
-    // 4-Channel Trace Toggles
-    this.scopeChannels = { ch1: true, ch2: true, ch3: true, ch4: true };
-    dock.querySelectorAll(".scope-ch-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const ch = "ch" + btn.getAttribute("data-ch");
-        this.scopeChannels[ch] = !this.scopeChannels[ch];
-        btn.classList.toggle("active", this.scopeChannels[ch]);
+    // "No text until someone clicks the meter": Click-to-expand drawer
+    dock.querySelectorAll(".rack-meter-card").forEach(card => {
+      card.addEventListener("click", (e) => {
+        // Prevent toggling if user clicked directly on button or select
+        if (e.target.closest("button") || e.target.closest("select") || e.target.closest("input")) {
+          return;
+        }
+        card.classList.toggle("open");
       });
     });
 
-    // View tabs
-    dock.querySelector("#dock-tab-scope")?.addEventListener("click", () => this.updateDisplayMode("scope"));
-    dock.querySelector("#dock-tab-dmm")?.addEventListener("click", () => this.updateDisplayMode("dmm"));
-    dock.querySelector("#dock-tab-hp353a")?.addEventListener("click", () => this.updateDisplayMode("hp353a"));
-    dock.querySelector("#dock-tab-chart")?.addEventListener("click", () => this.updateDisplayMode("chart"));
-    dock.querySelector("#dock-tab-dual")?.addEventListener("click", () => this.updateDisplayMode("dual"));
+    // Navigation Tabs
+    const tabRack = dock.querySelector("#rack-tab-rack");
+    const tabHp = dock.querySelector("#rack-tab-hp353a");
+    const tabChart = dock.querySelector("#rack-tab-chart");
 
-    // Dock DMM Mode Switcher
-    this.dockDmmMode = "hot";
-    dock.querySelectorAll("[data-dock-dmm-mode]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const mode = btn.getAttribute("data-dock-dmm-mode");
-        this.dockDmmMode = mode;
-        dock.querySelectorAll("[data-dock-dmm-mode]").forEach(b => {
-          const match = b.getAttribute("data-dock-dmm-mode") === mode;
-          b.classList.toggle("active", match);
-          b.classList.toggle("yellow-mode", match);
-        });
-        const badge = dock.querySelector("#dock-dmm-mode-badge");
-        if (badge) {
-          badge.textContent = mode === "hot" ? "+VE HOT" : (mode === "cold" ? "-VE COLD" : (mode === "thd" ? "THD / DIST" : "MULTI"));
-        }
+    const bayInstruments = dock.querySelector("#rack-instruments-bay");
+    const bayHp = dock.querySelector("#rack-panel-hp353a");
+    const bayChart = dock.querySelector("#rack-panel-chart");
+
+    const switchTab = (tab) => {
+      this.currentTab = tab;
+      tabRack?.classList.toggle("active", tab === "rack");
+      tabHp?.classList.toggle("active", tab === "hp353a");
+      tabChart?.classList.toggle("active", tab === "chart");
+
+      if (bayInstruments) bayInstruments.style.display = tab === "rack" ? "flex" : "none";
+      if (bayHp) bayHp.style.display = tab === "hp353a" ? "block" : "none";
+      if (bayChart) bayChart.style.display = tab === "chart" ? "block" : "none";
+    };
+
+    tabRack?.addEventListener("click", () => switchTab("rack"));
+    tabHp?.addEventListener("click", () => switchTab("hp353a"));
+    tabChart?.addEventListener("click", () => switchTab("chart"));
+
+    // Quick Actions
+    const anchorBtn = dock.querySelector("#rack-btn-anchor");
+    const pokeBtn = dock.querySelector("#rack-btn-poke");
+
+    anchorBtn?.addEventListener("click", () => {
+      this.isCreatingAnchor = !this.isCreatingAnchor;
+      anchorBtn.classList.toggle("active", this.isCreatingAnchor);
+      if (this.isCreatingAnchor) {
+        document.body.classList.add("probe-cursor-active");
+        this.showToast("⚓ Anchor Mode: Click ANYWHERE on the page to drop a circuit test anchor!");
+      } else {
+        document.body.classList.remove("probe-cursor-active");
+      }
+    });
+
+    pokeBtn?.addEventListener("click", () => {
+      this.isArmed = !this.isArmed;
+      pokeBtn.classList.toggle("active", this.isArmed);
+      if (this.isArmed) {
+        document.body.classList.add("probe-cursor-active");
+        this.showToast("🎯 Poke Mode: Click any wire or pin across schematics to attach scopes!");
+      } else {
+        document.body.classList.remove("probe-cursor-active");
+      }
+    });
+
+    // Scope 1 Volts/Div Controls
+    dock.querySelectorAll("[data-scope1-vdiv]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        dock.querySelectorAll("[data-scope1-vdiv]").forEach(b => b.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+        this.scope1VoltsDiv = parseFloat(e.currentTarget.getAttribute("data-scope1-vdiv"));
+        const badge = dock.querySelector("#scope1-vdiv-badge");
+        if (badge) badge.textContent = `${this.scope1VoltsDiv}V • ${this.scopeTimeDiv}ms`;
+      });
+    });
+
+    // Scope 2 Volts/Div Controls
+    dock.querySelectorAll("[data-scope2-vdiv]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        dock.querySelectorAll("[data-scope2-vdiv]").forEach(b => b.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+        this.scope2VoltsDiv = parseFloat(e.currentTarget.getAttribute("data-scope2-vdiv"));
+        const badge = dock.querySelector("#scope2-vdiv-badge");
+        if (badge) badge.textContent = `${this.scope2VoltsDiv}V • ${this.scopeTimeDiv}ms`;
+      });
+    });
+
+    // Shared Time/Div Controls
+    dock.querySelectorAll("[data-tdiv]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        dock.querySelectorAll("[data-tdiv]").forEach(b => b.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+        this.scopeTimeDiv = parseFloat(e.currentTarget.getAttribute("data-tdiv"));
+        const b1 = dock.querySelector("#scope1-vdiv-badge");
+        const b2 = dock.querySelector("#scope2-vdiv-badge");
+        if (b1) b1.textContent = `${this.scope1VoltsDiv}V • ${this.scopeTimeDiv}ms`;
+        if (b2) b2.textContent = `${this.scope2VoltsDiv}V • ${this.scopeTimeDiv}ms`;
+      });
+    });
+
+    // DMM 1 Modes
+    dock.querySelectorAll("[data-dmm1-mode]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        dock.querySelectorAll("[data-dmm1-mode]").forEach(b => b.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+        this.dmm1Mode = e.currentTarget.getAttribute("data-dmm1-mode");
         this.updateFromActiveCircuit();
       });
     });
 
-    // Quick target selector
-    dock.querySelector("#dock-probe-select")?.addEventListener("change", (e) => {
-      this.selectProbeTarget(e.target.value);
-    });
-
-    // Scope controls (Volts/Div & Time/Div)
-    dock.querySelectorAll(".scope-btn[data-vdiv]").forEach(btn => {
+    // DMM 2 Modes
+    dock.querySelectorAll("[data-dmm2-mode]").forEach(btn => {
       btn.addEventListener("click", (e) => {
-        dock.querySelectorAll(".scope-btn[data-vdiv]").forEach(b => b.classList.remove("active"));
+        dock.querySelectorAll("[data-dmm2-mode]").forEach(b => b.classList.remove("active"));
         e.currentTarget.classList.add("active");
-        this.scopeVoltsDiv = parseFloat(e.currentTarget.getAttribute("data-vdiv"));
-        this.updateScopeBadge();
+        this.dmm2Mode = e.currentTarget.getAttribute("data-dmm2-mode");
+        this.updateFromActiveCircuit();
       });
     });
 
-    dock.querySelectorAll(".scope-btn[data-tdiv]").forEach(btn => {
+    // VU Meter 1 Range
+    dock.querySelectorAll("[data-vu1-range]").forEach(btn => {
       btn.addEventListener("click", (e) => {
-        dock.querySelectorAll(".scope-btn[data-tdiv]").forEach(b => b.classList.remove("active"));
+        dock.querySelectorAll("[data-vu1-range]").forEach(b => b.classList.remove("active"));
         e.currentTarget.classList.add("active");
-        this.scopeTimeDiv = parseFloat(e.currentTarget.getAttribute("data-tdiv"));
-        this.updateScopeBadge();
+        this.vu1Range = parseFloat(e.currentTarget.getAttribute("data-vu1-range"));
+        const b = dock.querySelector("#rack-vu1-range-badge");
+        if (b) b.textContent = `${this.vu1Range}V Range`;
+        this.updateFromActiveCircuit();
       });
+    });
+
+    // VU Meter 2 Range
+    dock.querySelectorAll("[data-vu2-range]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        dock.querySelectorAll("[data-vu2-range]").forEach(b => b.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+        this.vu2Range = parseFloat(e.currentTarget.getAttribute("data-vu2-range"));
+        const b = dock.querySelector("#rack-vu2-range-badge");
+        if (b) b.textContent = `${this.vu2Range}V Range`;
+        this.updateFromActiveCircuit();
+      });
+    });
+
+    // Dropdown Node Selectors
+    dock.querySelectorAll("[data-probe-select]").forEach(select => {
+      select.addEventListener("change", (e) => {
+        const type = select.getAttribute("data-probe-select");
+        const val = e.target.value;
+        if (type === "scope1") this.scope1Target = val;
+        if (type === "scope2") this.scope2Target = val;
+        if (type === "dmm1") this.dmm1Target = val;
+        if (type === "dmm2") this.dmm2Target = val;
+        this.updateFromActiveCircuit();
+      });
+    });
+
+    // HP 353A Patch Panel Controls
+    this.setupHp353aPanel();
+
+    // Trend Graph Controls
+    dock.querySelector("#trend-btn-pause")?.addEventListener("click", (e) => {
+      this.trendRunning = !this.trendRunning;
+      e.target.textContent = this.trendRunning ? "PAUSE" : "RESUME";
+    });
+    dock.querySelector("#trend-btn-clear")?.addEventListener("click", () => {
+      this.trendBuffer = [];
     });
   }
 
-  setToolMode(mode) {
-    this.toolMode = mode;
-    const scopeBtn = this.dock.querySelector("#dock-pick-scope-btn");
-    const dmmBtn = this.dock.querySelector("#dock-pick-dmm-btn");
-    const leadSignal = this.dock.querySelector("#dock-lead-signal");
-    const leadDot = this.dock.querySelector("#dock-lead-dot");
-    const signalTarget = this.dock.querySelector("#dock-probe-signal-target");
+  setupHp353aPanel() {
+    const dock = this.dock;
 
-    if (mode === "scope") {
-      scopeBtn?.classList.add("active");
-      dmmBtn?.classList.remove("active");
-      if (leadSignal) {
-        leadSignal.className = "probe-lead green active";
-      }
-      if (leadDot) {
-        leadDot.className = "probe-tip-led green-led";
-      }
-      if (signalTarget) {
-        signalTarget.textContent = `${this.activeProbeTarget.toUpperCase()} (10X Scope)`;
-      }
-      if (this.displayMode === "dmm") {
-        this.updateDisplayMode("scope");
-      }
-    } else {
-      dmmBtn?.classList.add("active");
-      scopeBtn?.classList.remove("active");
-      if (leadSignal) {
-        leadSignal.className = "probe-lead red active";
-      }
-      if (leadDot) {
-        leadDot.className = "probe-tip-led";
-      }
-      if (signalTarget) {
-        signalTarget.textContent = `${this.activeProbeTarget.toUpperCase()} (DMM +)`;
-      }
-      if (this.displayMode === "scope") {
-        this.updateDisplayMode("dmm");
-      }
-    }
-    this.updateFromActiveCircuit();
+    const outZVal = dock.querySelector("#hp353a-outz-val");
+    const outZDial = dock.querySelector("#hp353a-outz-dial");
+    outZDial?.addEventListener("click", () => {
+      const zSteps = [135, 600, 900];
+      const nextIdx = (zSteps.indexOf(this.hp353aOutZ) + 1) % zSteps.length;
+      this.hp353aOutZ = zSteps[nextIdx];
+      if (outZVal) outZVal.textContent = `${this.hp353aOutZ} Ω`;
+      outZDial.style.transform = `rotate(${nextIdx * 60 - 30}deg)`;
+      this.showToast(`HP 353A: Output Impedance set to ${this.hp353aOutZ} Ω`);
+    });
+
+    const inZVal = dock.querySelector("#hp353a-inz-val");
+    const inZDial = dock.querySelector("#hp353a-inz-dial");
+    inZDial?.addEventListener("click", () => {
+      const zSteps = [135, 600, 900, 10000];
+      const nextIdx = (zSteps.indexOf(this.hp353aInZ) + 1) % zSteps.length;
+      this.hp353aInZ = zSteps[nextIdx];
+      if (inZVal) inZVal.textContent = this.hp353aInZ >= 1000 ? `${this.hp353aInZ / 1000} kΩ` : `${this.hp353aInZ} Ω`;
+      inZDial.style.transform = `rotate(${nextIdx * 50 - 45}deg)`;
+      this.showToast(`HP 353A: Termination set to ${inZVal.textContent}`);
+    });
+
+    const atten10Val = dock.querySelector("#hp353a-atten10-val");
+    const atten10Dial = dock.querySelector("#hp353a-atten10-dial");
+    const attenTotal = dock.querySelector("#hp353a-atten-total");
+
+    atten10Dial?.addEventListener("click", () => {
+      this.hp353aAtten10 = (this.hp353aAtten10 + 10) % 110;
+      if (atten10Val) atten10Val.textContent = `${this.hp353aAtten10} dB`;
+      atten10Dial.style.transform = `rotate(${(this.hp353aAtten10 / 10) * 32 - 140}deg)`;
+      if (attenTotal) attenTotal.textContent = `${this.hp353aAtten10 + this.hp353aAtten1} dB Loss`;
+    });
+
+    const atten1Val = dock.querySelector("#hp353a-atten1-val");
+    const atten1Dial = dock.querySelector("#hp353a-atten1-dial");
+    atten1Dial?.addEventListener("click", () => {
+      this.hp353aAtten1 = (this.hp353aAtten1 + 1) % 11;
+      if (atten1Val) atten1Val.textContent = `${this.hp353aAtten1} dB`;
+      atten1Dial.style.transform = `rotate(${this.hp353aAtten1 * 32 - 140}deg)`;
+      if (attenTotal) attenTotal.textContent = `${this.hp353aAtten10 + this.hp353aAtten1} dB Loss`;
+    });
+
+    const measBtn = dock.querySelector("#hp353a-toggle-meas");
+    measBtn?.addEventListener("click", () => {
+      this.hp353aMode = this.hp353aMode === "MEAS" ? "CAL" : "MEAS";
+      measBtn.textContent = `MODE: ${this.hp353aMode}`;
+      measBtn.classList.toggle("active", this.hp353aMode === "MEAS");
+    });
+
+    const freqBtn = dock.querySelector("#hp353a-toggle-freq");
+    freqBtn?.addEventListener("click", () => {
+      this.hp353aFreq = this.hp353aFreq === "<5kHz" ? ">5kHz" : "<5kHz";
+      freqBtn.textContent = `FREQ: ${this.hp353aFreq}`;
+    });
   }
 
-  toggleArmProbe() {
-    this.isArmed = !this.isArmed;
-    const armBtn = this.dock.querySelector("#dock-arm-probe-btn");
-    if (this.isArmed) {
-      document.body.classList.add("probe-cursor-active");
-      armBtn?.classList.add("active");
-      this.showToast(`🎯 Probing Armed: Click ANY circuit wire, pin, or component to poke it!`);
-    } else {
+  initAnchorEngine() {
+    document.addEventListener("click", (e) => {
+      if (!this.isCreatingAnchor) return;
+      if (e.target.closest("#floating-meter-dock")) return;
+
+      const pageX = e.pageX;
+      const pageY = e.pageY;
+      const id = `anchor-${this.anchorCounter++}`;
+
+      const anchor = document.createElement("div");
+      anchor.id = id;
+      anchor.className = "circuit-test-anchor";
+      anchor.setAttribute("data-probe-target", id);
+      anchor.setAttribute("data-probe-label", `Anchor Node ${this.anchorCounter - 1}`);
+      anchor.style.left = `${pageX - 20}px`;
+      anchor.style.top = `${pageY - 12}px`;
+      anchor.innerHTML = `<span>⚓ Node ${this.anchorCounter - 1}</span><span style="font-size: 0.6rem; margin-left: 3px; cursor: pointer;" title="Remove Anchor">&times;</span>`;
+
+      anchor.querySelector("span:last-child")?.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        anchor.remove();
+        this.anchors = this.anchors.filter(a => a.id !== id);
+      });
+
+      anchor.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        this.selectProbeTarget(id, `Anchor Node ${this.anchorCounter - 1}`, anchor);
+      });
+
+      document.body.appendChild(anchor);
+      this.anchors.push({ id, el: anchor, x: pageX, y: pageY });
+
+      // Add to select dropdowns
+      this.dock.querySelectorAll(".rack-probe-dropdown").forEach(sel => {
+        const opt = document.createElement("option");
+        opt.value = id;
+        opt.textContent = `⚓ Test Anchor ${this.anchorCounter - 1}`;
+        sel.appendChild(opt);
+      });
+
+      this.isCreatingAnchor = false;
+      const anchorBtn = this.dock.querySelector("#rack-btn-anchor");
+      if (anchorBtn) anchorBtn.classList.remove("active");
       document.body.classList.remove("probe-cursor-active");
-      armBtn?.classList.remove("active");
-    }
+      this.showToast(`⚓ Anchor ${this.anchorCounter - 1} dropped at (${pageX}, ${pageY})`);
+    });
   }
 
-  updateDisplayMode(mode) {
-    this.displayMode = mode;
-    const tabScope = this.dock.querySelector("#dock-tab-scope");
-    const tabDmm = this.dock.querySelector("#dock-tab-dmm");
-    const tabHp = this.dock.querySelector("#dock-tab-hp353a");
-    const tabChart = this.dock.querySelector("#dock-tab-chart");
-    const tabDual = this.dock.querySelector("#dock-tab-dual");
-
-    const panelScope = this.dock.querySelector("#dock-panel-scope");
-    const panelDmm = this.dock.querySelector("#dock-panel-dmm");
-    const panelHp = this.dock.querySelector("#dock-panel-hp353a");
-    const panelChart = this.dock.querySelector("#dock-panel-chart");
-
-    tabScope?.classList.toggle("active", mode === "scope");
-    tabDmm?.classList.toggle("active", mode === "dmm");
-    tabHp?.classList.toggle("active", mode === "hp353a");
-    tabChart?.classList.toggle("active", mode === "chart");
-    tabDual?.classList.toggle("active", mode === "dual");
-
-    [panelScope, panelDmm, panelHp, panelChart].forEach(p => { if (p) p.style.display = "none"; });
-
-    if (mode === "scope") {
-      if (panelScope) panelScope.style.display = "block";
-    } else if (mode === "dmm") {
-      if (panelDmm) panelDmm.style.display = "block";
-    } else if (mode === "hp353a") {
-      if (panelHp) panelHp.style.display = "block";
-    } else if (mode === "chart") {
-      if (panelChart) panelChart.style.display = "block";
-    } else {
-      // dual view
-      if (panelScope) panelScope.style.display = "block";
-      if (panelDmm) panelDmm.style.display = "block";
-    }
-  }
-
-  updateScopeBadge() {
-    const badge = this.dock.querySelector("#dock-scope-telemetry-badge");
-    if (badge) {
-      badge.textContent = `${this.scopeVoltsDiv}V/div • ${this.scopeTimeDiv}ms`;
-    }
-  }
-
-  initHpCanvas() {
-    this.hpCanvas = document.getElementById("dock-hp-canvas");
-    if (this.hpCanvas) {
-      this.hpCtx = this.hpCanvas.getContext("2d");
-      this.renderHpMeter(this.currentNeedleDbu);
-    }
-  }
-
-  initScopeCanvas() {
-    this.scopeCanvas = document.getElementById("dock-scope-canvas");
-    if (this.scopeCanvas) {
-      this.scopeCtx = this.scopeCanvas.getContext("2d");
-    }
-  }
-
-  setupScrollTrigger() {
-    const labBench = document.getElementById("topologies") || document.querySelector(".vintage-test-bench");
-    window.addEventListener("scroll", () => {
-      if (!labBench) return;
-      const rect = labBench.getBoundingClientRect();
-      if (rect.bottom < 120) {
-        this.setFloating(true);
-      } else if (rect.top > 250) {
-        this.setFloating(false);
-      }
-    }, { passive: true });
-  }
-
-  setFloating(enable) {
-    this.isFloating = enable;
-    if (this.dock) {
-      this.dock.classList.toggle("active", enable);
-    }
-  }
-
-  dockBack() {
-    this.setFloating(false);
-    const labBench = document.querySelector(".vintage-test-bench") || document.getElementById("topologies");
-    if (labBench) {
-      labBench.scrollIntoView({ behavior: "smooth" });
-    }
-  }
-
-  toggleSettings(type) {
-    const drawer = document.getElementById("dock-settings-drawer");
-    const title = document.getElementById("drawer-title");
-    if (!drawer) return;
-
-    if (this.settingsOpen === type) {
-      this.closeSettings();
-      return;
-    }
-
-    this.settingsOpen = type;
-    drawer.classList.add("open");
-    if (title) {
-      title.textContent = type === "hp" ? "APK Voltmeter Calibration & Sensitivity" : "Fluke 8050A DMM Configuration";
-    }
-  }
-
-  closeSettings() {
-    const drawer = document.getElementById("dock-settings-drawer");
-    if (drawer) drawer.classList.remove("open");
-    this.settingsOpen = null;
-  }
-
-  setHpRange(v, dbTxt) {
-    this.hpRangeVolts = v;
-    const badge = document.getElementById("dock-hp-range-badge");
-    if (badge) badge.textContent = `${v}V / ${dbTxt}`;
-    this.updateFromActiveCircuit();
-  }
-
-  setBallistics(mode) {
-    if (mode === "peak") {
-      this.attackRate = 0.55;
-      this.releaseRate = 0.04;
-    } else if (mode === "damped") {
-      this.attackRate = 0.15;
-      this.releaseRate = 0.12;
-    } else {
-      this.attackRate = 0.28;
-      this.releaseRate = 0.08;
-    }
-  }
-
-  /**
-   * Universal Probe Hooks: Binds click handlers to EVERY interactive node across ALL schematics
-   */
   setupGlobalProbeHooks() {
     const bindTarget = (el) => {
       el.style.cursor = "crosshair";
@@ -651,10 +713,8 @@ class FloatingMeterDock {
       });
     };
 
-    // Auto-discover any element with data-probe-target
     document.querySelectorAll("[data-probe-target]").forEach(bindTarget);
 
-    // Also listen for clicks when armed mode is active
     document.addEventListener("click", (e) => {
       if (!this.isArmed) return;
       const probeTargetEl = e.target.closest("[data-probe-target]");
@@ -667,89 +727,15 @@ class FloatingMeterDock {
   }
 
   selectProbeTarget(targetKey, customLabel = null, clickedEl = null) {
-    this.activeProbeTarget = targetKey;
-    const select = document.getElementById("dock-probe-select");
-    if (select) select.value = targetKey;
+    this.scope1Target = targetKey;
+    this.dmm1Target = targetKey;
 
-    const signalLabel = document.getElementById("dock-probe-signal-target");
-    const statusLabel = document.getElementById("dock-probe-status");
+    this.dock.querySelectorAll("[data-probe-select='scope1'], [data-probe-select='dmm1']").forEach(sel => {
+      sel.value = targetKey;
+    });
 
-    const targets = {
-      // Circuit 6.1
-      "6-1-p2": { name: "Pin 2 Hot", desc: "Circuit 6.1 Pin 2 Hot Output (0° Sine)" },
-      "6-1-p3": { name: "Pin 3 Cold", desc: "Circuit 6.1 Pin 3 Cold Output (180° Inverted Sine)" },
-      "6-1-load": { name: "Differential Load", desc: "Circuit 6.1 Differential Across R_LOAD" },
-      "6-1-vin": { name: "Audio In (Drive)", desc: "Circuit 6.1 Audio Input Generator" },
-      "6-1-op1": { name: "Op-Amp A1 Out", desc: "Circuit 6.1 Non-inverting Driver Output (+1 Buffer)" },
-      "6-1-op2": { name: "Op-Amp A2 Out", desc: "Circuit 6.1 Inverting Driver Output (-1 Inverter)" },
-      "6-1-p1": { name: "Pin 1 Chassis", desc: "Circuit 6.1 AES48 Chassis Ground Shell" },
-
-      // Circuit 6.2
-      "6-2-p2": { name: "Pin 2 Hot (Active)", desc: "Circuit 6.2 Active Impedance Pin 2 Hot (+1.2V)" },
-      "6-2-p3": { name: "Pin 3 Cold (Passive)", desc: "Circuit 6.2 Passive 0V Match (Flatline 0V, 50Ω Z)" },
-      "6-2-load": { name: "Differential Load", desc: "Circuit 6.2 Differential Across Load" },
-      "6-2-vin": { name: "Audio In", desc: "Circuit 6.2 Audio Input Drive" },
-
-      // Circuit 6.3
-      "6-3-sec": { name: "Sec Across 2-3", desc: "Circuit 6.3 Transformer Secondary Output" },
-      "6-3-p2": { name: "Secondary Pin 2", desc: "Circuit 6.3 Transformer Secondary Hot (+)" },
-      "6-3-p3": { name: "Secondary Pin 3", desc: "Circuit 6.3 Transformer Secondary Cold (-)" },
-      "6-3-pri": { name: "Primary Drive", desc: "Circuit 6.3 Transformer Primary Audio In" },
-
-      // Section 5 Meyer Thevenin Ground Loop
-      "meyer-vgvd": { name: "Ground V_GVD", desc: "Ground Potential Difference (60Hz + 120Hz Mains Buzz)" },
-      "meyer-vpo": { name: "Generator V_PO", desc: "Equipment A Source Hot Generator" },
-      "meyer-vro": { name: "Generator V_RO", desc: "Equipment A Source Cold Generator" },
-      "meyer-p2": { name: "Cable Pin 2", desc: "Twisted Pair Hot Conductor" },
-      "meyer-p3": { name: "Cable Pin 3", desc: "Twisted Pair Cold Conductor" },
-      "meyer-shield": { name: "Cable Shield Pin 1", desc: "Shield Continuity (Pin 1 to Pin 1 Chassis Bond)" },
-      "meyer-verr": { name: "Error V_err", desc: "Common-Mode to Differential Error Voltage" },
-      "meyer-diff": { name: "Audio Out (Diff)", desc: "Equipment B Receiver Differential Audio Output" },
-
-      // Section 0 Enclosure
-      "enc-chassisa": { name: "Equipment A Chassis", desc: "Equipment A Exterior Metal Enclosure" },
-      "enc-pin1bond": { name: "AES48 Direct Bond", desc: "Pin 1 Directly Bonded to Chassis (Quiet 0V)" },
-      "enc-pin1fault": { name: "Pin 1 PCB Ground", desc: "Pin 1 Problem: Shield Noise in Audio Circuit (120Hz Buzz)" },
-      "enc-shield": { name: "Cable Shield Shell", desc: "Cable Overall Braided Shield" }
-    };
-
-    const info = targets[targetKey] || { name: targetKey, desc: customLabel || targetKey };
-    if (signalLabel) {
-      const modeSuffix = this.toolMode === "scope" ? "(10X Scope)" : "(DMM +)";
-      signalLabel.textContent = `${info.name} ${modeSuffix}`;
-    }
-    if (statusLabel) {
-      statusLabel.textContent = `Probing: ${info.desc}`;
-    }
-
-    // Attach physical visual probe indicator to clicked element if available
-    this.renderProbePinMarker(clickedEl);
-
-    // Expand floating dock if not visible
-    this.setFloating(true);
     this.updateFromActiveCircuit();
-
-    this.showToast(`⚡ Probing: ${info.desc}`);
-  }
-
-  renderProbePinMarker(targetEl) {
-    // Remove previous probe marker
-    document.querySelectorAll(".live-probe-marker-pin").forEach(el => el.remove());
-
-    if (!targetEl) return;
-    const rect = targetEl.getBoundingClientRect();
-    const marker = document.createElement("div");
-    marker.className = `live-probe-marker-pin ${this.toolMode === "scope" ? "green" : "red"}`;
-    marker.innerHTML = `
-      <div class="probe-needle-tip"></div>
-      <div class="probe-body-collar">
-        <span>${this.toolMode === "scope" ? "OSCOPE 10X" : "DMM (+)"}</span>
-      </div>
-    `;
-    marker.style.left = `${window.scrollX + rect.left + rect.width / 2 - 12}px`;
-    marker.style.top = `${window.scrollY + rect.top - 38}px`;
-
-    document.body.appendChild(marker);
+    this.showToast(`⚡ Probing: ${customLabel || targetKey}`);
   }
 
   showToast(msg) {
@@ -768,355 +754,28 @@ class FloatingMeterDock {
     }, 2500);
   }
 
-  updateLiveReadings(vDiffOrData, iLoad = 0.002, dBu = 0, status = "SYMMETRIC") {
-    let data;
-    if (typeof vDiffOrData === "object" && vDiffOrData !== null) {
-      data = vDiffOrData;
-    } else {
-      const v = typeof vDiffOrData === "number" ? vDiffOrData : 1.2;
-      data = {
-        vHot: v,
-        vCold: status.includes("PASSIVE") || status.includes("SHORT") ? 0.0 : v,
-        vDiff: v,
-        iLoad: iLoad,
-        dBu: dBu,
-        status: status,
-        thd: 0.003,
-        cmrr: 90.0
-      };
-    }
-
-    const range = this.hpRangeVolts || 3.0;
-    const vDiff = data.vDiff || 1.2;
-    const relativeDb = 20 * Math.log10(Math.max(0.00005, vDiff / range));
-    this.targetNeedleDbu = relativeDb;
-
-    const lbl1 = document.getElementById("dock-dmm-lbl-1");
-    const val1 = document.getElementById("dock-dmm-vdiff");
-    const lbl2 = document.getElementById("dock-dmm-lbl-2");
-    const val2 = document.getElementById("dock-dmm-iload");
-    const lbl3 = document.getElementById("dock-dmm-lbl-3");
-    const val3 = document.getElementById("dock-dmm-status");
-
-    const mode = this.dockDmmMode || "hot";
-
-    if (mode === "hot") {
-      if (lbl1) lbl1.textContent = "V_+VE (HOT RMS):";
-      if (val1) val1.textContent = `${data.vHot.toFixed(3)} V`;
-      if (lbl2) lbl2.textContent = "AUDIO LEVEL:";
-      const dbuHot = 20 * Math.log10(Math.max(0.0001, data.vHot / 0.775));
-      if (val2) val2.textContent = `${dbuHot >= 0 ? "+" : ""}${dbuHot.toFixed(1)} dBu`;
-      if (lbl3) lbl3.textContent = "LINE STATUS:";
-      if (val3) {
-        val3.textContent = data.status;
-        val3.className = data.status.includes("CLIP") || data.status.includes("ERROR") || data.status.includes("SHORT")
-          ? "dmm-vfd-status amber"
-          : "dmm-vfd-status lucky-yellow";
-      }
-    } else if (mode === "cold") {
-      if (lbl1) lbl1.textContent = "V_-VE (COLD RMS):";
-      if (val1) val1.textContent = `${data.vCold.toFixed(3)} V`;
-      if (lbl2) lbl2.textContent = "PHASE RELATION:";
-      const phaseTxt = data.vCold < 0.005 ? "0.0° (PASSIVE 0V)" : "180.0° (INVERTED)";
-      if (val2) val2.textContent = phaseTxt;
-      if (lbl3) lbl3.textContent = "IMPEDANCE Z:";
-      if (val3) {
-        val3.textContent = "50.0 Ω BALANCED";
-        val3.className = "dmm-vfd-status lucky-yellow";
-      }
-    } else if (mode === "thd") {
-      if (lbl1) lbl1.textContent = "THD+N HARMONICS:";
-      if (val1) val1.textContent = `${(data.thd || 0.003).toFixed(3)} %`;
-      if (lbl2) lbl2.textContent = "DISTORTION RATIO:";
-      const distDb = -20 * Math.log10(Math.max(0.00001, ((data.thd || 0.003) / 100)));
-      if (val2) val2.textContent = `-${distDb.toFixed(1)} dB`;
-      if (lbl3) lbl3.textContent = "CMRR REJECTION:";
-      if (val3) {
-        val3.textContent = `>${(data.cmrr || 90).toFixed(1)} dB`;
-        val3.className = "dmm-vfd-status lucky-yellow";
-      }
-    } else { // "multi"
-      if (lbl1) lbl1.textContent = "+VE / -VE RMS:";
-      if (val1) val1.textContent = `${data.vHot.toFixed(2)}V / ${data.vCold.toFixed(2)}V`;
-      if (lbl2) lbl2.textContent = "V_DIFF / I_LOAD:";
-      if (val2) val2.textContent = `${data.vDiff.toFixed(2)}V / ${(data.iLoad * 1000).toFixed(1)}mA`;
-      if (lbl3) lbl3.textContent = "CMRR / THD:";
-      if (val3) {
-        val3.textContent = `${(data.cmrr || 90).toFixed(0)}dB / ${(data.thd || 0.003).toFixed(3)}%`;
-        val3.className = "dmm-vfd-status lucky-yellow";
-      }
-    }
-  }
-
-  /**
-   * Reads simulator parameters and computes the exact physical waveform + measurements
-   */
-  getProbedSignalData() {
-    const key = this.activeProbeTarget;
-
-    // Default 1kHz parameters
-    let freq = 1000.0;
-    let vRms = 1.23;
-    let vPk = vRms * Math.SQRT2;
-    let phase = 0; // radians
-    let shape = "sine"; // 'sine' | 'clipped' | 'flatline' | 'hum' | 'noise'
-    let status = "SYMMETRIC";
-    let iLoad = 0.002;
-
-    if (key.startsWith("6-1")) {
-      const vin = parseFloat(document.getElementById("pp-vin")?.value || 1.2);
-      const rout = parseFloat(document.getElementById("pp-rout")?.value || 50);
-      const rload = parseFloat(document.getElementById("pp-rload")?.value || 600);
-      const shortPin3 = document.getElementById("pp-short-pin3")?.checked || false;
-
-      let vPin2, vPin3, vDiff;
-      if (!shortPin3) {
-        iLoad = (2 * vin) / (2 * rout + rload);
-        vPin2 = vin - iLoad * rout;
-        vPin3 = -(vin - iLoad * rout);
-        vDiff = 2 * (vin - iLoad * rout);
-        status = "NORMAL SYMMETRICAL";
-      } else {
-        iLoad = vin / (rout + rload);
-        vPin2 = vin - iLoad * rout;
-        vPin3 = 0;
-        vDiff = vPin2;
-        status = iLoad > 0.05 ? "CURRENT LIMIT CLIP" : "TS SHORTED";
-      }
-
-      if (key === "6-1-p2") {
-        vRms = vPin2;
-        vPk = vRms * Math.SQRT2;
-        phase = 0;
-        shape = "sine";
-      } else if (key === "6-1-p3") {
-        if (shortPin3) {
-          vRms = 0;
-          vPk = 0;
-          shape = "flatline";
-        } else {
-          vRms = Math.abs(vPin3);
-          vPk = vRms * Math.SQRT2;
-          phase = Math.PI; // Inverted 180°
-          shape = "sine";
-        }
-      } else if (key === "6-1-load") {
-        vRms = vDiff;
-        vPk = vRms * Math.SQRT2;
-        phase = 0;
-        shape = "sine";
-      } else if (key === "6-1-vin") {
-        vRms = vin;
-        vPk = vin * Math.SQRT2;
-        phase = 0;
-        shape = "sine";
-      } else if (key === "6-1-op2") {
-        if (shortPin3) {
-          vRms = vin;
-          vPk = 14.0; // Saturated rail
-          shape = "clipped";
-        } else {
-          vRms = vin;
-          vPk = vin * Math.SQRT2;
-          phase = Math.PI;
-          shape = "sine";
-        }
-      } else if (key === "6-1-p1") {
-        vRms = 0.001;
-        vPk = 0.001;
-        shape = "flatline";
-      }
-    } else if (key.startsWith("6-2")) {
-      const vin = parseFloat(document.getElementById("ib-vin")?.value || 1.2);
-      const rout = parseFloat(document.getElementById("ib-rout")?.value || 50);
-      const rload = parseFloat(document.getElementById("ib-rload")?.value || 10000);
-      const shortPin3 = document.getElementById("ib-short-pin3")?.checked || false;
-
-      iLoad = vin / (rout + rload);
-      const vPin2 = iLoad * rload;
-
-      if (key === "6-2-p2") {
-        vRms = vPin2;
-        vPk = vRms * Math.SQRT2;
-        phase = 0;
-        shape = "sine";
-        status = "ACTIVE DRIVEN (+)";
-      } else if (key === "6-2-p3") {
-        vRms = 0.0;
-        vPk = 0.0;
-        shape = "flatline"; // Zero signal voltage!
-        status = "PASSIVE MATCH (0V SIGNAL, 50Ω Z)";
-      } else if (key === "6-2-load") {
-        vRms = vPin2;
-        vPk = vRms * Math.SQRT2;
-        shape = "sine";
-        status = "DIFFERENTIAL LOAD OK";
-      } else {
-        vRms = vin;
-        vPk = vin * Math.SQRT2;
-        shape = "sine";
-      }
-    } else if (key.startsWith("6-3")) {
-      const vin = parseFloat(document.getElementById("tx-vin")?.value || 15.0);
-      const ratio = parseFloat(document.getElementById("tx-ratio")?.value || 1.0);
-      const rload = parseFloat(document.getElementById("tx-rload")?.value || 600);
-      const groundPin3 = document.getElementById("tx-ground-pin3")?.checked || false;
-
-      const vSec = vin * ratio;
-      iLoad = vSec / (40 + rload);
-      const vLoad = iLoad * rload;
-
-      if (key === "6-3-pri") {
-        vRms = vin;
-        vPk = vin * Math.SQRT2;
-        shape = "sine";
-        status = "PRIMARY GENERATOR";
-      } else if (key === "6-3-sec" || key === "6-3-p2") {
-        vRms = vLoad;
-        vPk = vLoad * Math.SQRT2;
-        shape = "sine";
-        status = groundPin3 ? "EARTHED REFERENCE" : "GALVANIC FLOATING";
-      } else if (key === "6-3-p3") {
-        if (groundPin3) {
-          vRms = 0.0;
-          vPk = 0.0;
-          shape = "flatline";
-          status = "PIN 3 EARTHED (0V)";
-        } else {
-          vRms = vLoad / 2;
-          vPk = vRms * Math.SQRT2;
-          phase = Math.PI;
-          shape = "sine";
-          status = "FLOATING BALANCED";
-        }
-      }
-    } else if (key.startsWith("meyer")) {
-      const vpo = parseFloat(document.getElementById("meyer-vpo")?.value || 1.23);
-      const vgvd = parseFloat(document.getElementById("meyer-vgvd")?.value || 10.0);
-      const zpo = parseFloat(document.getElementById("meyer-zpo")?.value || 50);
-      const zro = parseFloat(document.getElementById("meyer-zro")?.value || 50);
-      const deltaZ = Math.abs(zpo - zro);
-      const vErr = vgvd * (deltaZ / 20000);
-
-      if (key === "meyer-vgvd") {
-        freq = 60.0;
-        vRms = vgvd;
-        vPk = vgvd * Math.SQRT2;
-        shape = "hum"; // 60Hz hum + 120Hz harmonics
-        status = "GROUND LOOP MAINS HUM";
-      } else if (key === "meyer-verr") {
-        freq = 60.0;
-        vRms = vErr;
-        vPk = vErr * Math.SQRT2;
-        shape = deltaZ === 0 ? "flatline" : "hum";
-        status = deltaZ === 0 ? "INFINITE CMRR REJECTION" : "COMMON-MODE LEAKAGE";
-      } else if (key === "meyer-diff") {
-        freq = 1000.0;
-        vRms = vpo + vErr;
-        vPk = vRms * Math.SQRT2;
-        shape = deltaZ === 0 ? "sine" : "hum-riding";
-        status = deltaZ === 0 ? "PURE AUDIO (NOISE CANCELLED)" : "HUM CORRUPTED OUTPUT";
-      } else {
-        freq = 1000.0;
-        vRms = vpo;
-        vPk = vpo * Math.SQRT2;
-        shape = "sine";
-        status = "EQUIPMENT A DRIVE";
-      }
-    } else if (key.startsWith("enc")) {
-      if (key === "enc-pin1fault") {
-        freq = 120.0;
-        vRms = 0.85;
-        vPk = 1.2;
-        shape = "hum";
-        status = "PIN 1 PROBLEM (120Hz BUZZ ON PCB)";
-      } else if (key === "enc-pin1bond") {
-        vRms = 0.0001;
-        vPk = 0.0001;
-        shape = "flatline";
-        status = "AES48 CHASSIS BOND (CLEAN 0V)";
-      } else {
-        vRms = 0.05;
-        vPk = 0.08;
-        shape = "flatline";
-        status = "SHIELD CHASSIS POTENTIAL";
-      }
-    }
-
-    return { freq, vRms, vPk, phase, shape, status, iLoad };
-  }
-
   getCircuitChannelData() {
-    const key = this.activeProbeTarget || "6-1-p2";
     let freq = 1000.0;
-    let ch1 = { name: "CH1 Ref (Vin)", vPk: 1.2 * Math.SQRT2, phase: 0, shape: "sine" };
-    let ch2 = { name: "CH2 +VE (Hot)", vPk: 1.2 * Math.SQRT2, phase: 0, shape: "sine" };
-    let ch3 = { name: "CH3 -VE (Cold)", vPk: 1.2 * Math.SQRT2, phase: Math.PI, shape: "sine" };
-    let ch4 = { name: "CH4 Diff", vPk: 2.4 * Math.SQRT2, phase: 0, shape: "sine" };
-    let vHot = 1.2, vCold = 1.2, vDiff = 2.4, iLoad = 0.002, thd = 0.003, cmrr = 90.0, status = "NORMAL SYMMETRICAL";
+    let vin = 1.2;
+    let vHot = 1.2;
+    let vCold = 1.2;
+    let vDiff = 2.4;
+    let iLoad = 0.002;
+    let thd = 0.003;
+    let cmrr = 95.0;
+    let status = "NORMAL SYMMETRICAL";
 
-    if (key.startsWith("6-2") || (!key.startsWith("6-1") && !key.startsWith("6-3") && !key.startsWith("meyer") && document.getElementById("ib-vin"))) {
-      const vin = parseFloat(document.getElementById("ib-vin")?.value || 1.2);
-      const rout = parseFloat(document.getElementById("ib-rout")?.value || 50);
-      const rload = parseFloat(document.getElementById("ib-rload")?.value || 10000);
-      const shortPin3 = document.getElementById("ib-short-pin3")?.checked || false;
-      iLoad = vin / (rout + rload);
-      vHot = iLoad * rload;
-      vCold = 0.0;
-      vDiff = vHot;
-      cmrr = 110.0;
-      thd = 0.0018;
-      status = "ACTIVE IMPEDANCE-BALANCED";
+    // Detect circuit parameter inputs from active page
+    const ppVin = document.getElementById("pp-vin");
+    const ibVin = document.getElementById("ib-vin");
+    const meyerVpo = document.getElementById("meyer-vpo");
 
-      ch1.vPk = vin * Math.SQRT2;
-      ch2.vPk = vHot * Math.SQRT2;
-      ch3.vPk = 0;
-      ch3.shape = "flatline";
-      ch4.vPk = vDiff * Math.SQRT2;
-    } else if (key.startsWith("6-3")) {
-      const vin = parseFloat(document.getElementById("tx-vin")?.value || 15.0);
-      const ratio = parseFloat(document.getElementById("tx-ratio")?.value || 1.0);
-      const rload = parseFloat(document.getElementById("tx-rload")?.value || 600);
-      const groundPin3 = document.getElementById("tx-ground-pin3")?.checked || false;
-      const vSec = vin * ratio;
-      iLoad = vSec / (40 + rload);
-      vDiff = iLoad * rload;
-      vHot = groundPin3 ? vDiff : vDiff / 2;
-      vCold = groundPin3 ? 0 : vDiff / 2;
-      cmrr = 120.0;
-      thd = 0.045;
-      status = groundPin3 ? "PIN 3 GROUNDED" : "GALVANIC FLOATING";
-
-      ch1.vPk = vin * Math.SQRT2;
-      ch2.vPk = vHot * Math.SQRT2;
-      ch3.vPk = groundPin3 ? 0 : vCold * Math.SQRT2;
-      ch3.shape = groundPin3 ? "flatline" : "sine";
-      ch3.phase = Math.PI;
-      ch4.vPk = vDiff * Math.SQRT2;
-    } else if (key.startsWith("meyer")) {
-      const vpo = parseFloat(document.getElementById("meyer-vpo")?.value || 1.23);
-      const vgvd = parseFloat(document.getElementById("meyer-vgvd")?.value || 10.0);
-      const zpo = parseFloat(document.getElementById("meyer-zpo")?.value || 50);
-      const zro = parseFloat(document.getElementById("meyer-zro")?.value || 50);
-      const deltaZ = Math.abs(zpo - zro);
-      const vErr = vgvd * (deltaZ / 20000);
-      vHot = vpo;
-      vCold = vpo;
-      vDiff = vpo + vErr;
-      cmrr = deltaZ === 0 ? 120 : 20 * Math.log10(20000 / Math.max(0.01, deltaZ));
-      thd = Math.min(100, (vErr / (vpo + 0.001)) * 100);
-      status = deltaZ === 0 ? "INFINITE REJECTION" : "GROUND LOOP ERROR";
-      ch1.vPk = vpo * Math.SQRT2;
-      ch2.vPk = (vpo + vgvd * 0.1) * Math.SQRT2;
-      ch2.shape = "hum-riding";
-      ch3.vPk = (vpo + vgvd * 0.1) * Math.SQRT2;
-      ch3.shape = "hum-riding";
-      ch4.vPk = vDiff * Math.SQRT2;
-    } else {
-      const vin = parseFloat(document.getElementById("pp-vin")?.value || 1.2);
+    if (ppVin) {
+      vin = parseFloat(ppVin.value || 1.2);
       const rout = parseFloat(document.getElementById("pp-rout")?.value || 50);
       const rload = parseFloat(document.getElementById("pp-rload")?.value || 600);
       const shortPin3 = document.getElementById("pp-short-pin3")?.checked || false;
+
       if (!shortPin3) {
         iLoad = (2 * vin) / (2 * rout + rload);
         vHot = vin - iLoad * rout;
@@ -1125,8 +784,6 @@ class FloatingMeterDock {
         cmrr = 95.0;
         thd = 0.0025;
         status = "NORMAL SYMMETRICAL";
-        ch3.vPk = vCold * Math.SQRT2;
-        ch3.shape = "sine";
       } else {
         iLoad = vin / (rout + rload);
         vHot = vin - iLoad * rout;
@@ -1135,61 +792,293 @@ class FloatingMeterDock {
         cmrr = 48.0;
         thd = iLoad > 0.05 ? 12.5 : 0.085;
         status = iLoad > 0.05 ? "CURRENT LIMIT CLIP" : "TS SHORTED";
-        ch3.vPk = 0;
-        ch3.shape = "flatline";
       }
-      ch1.vPk = vin * Math.SQRT2;
-      ch2.vPk = vHot * Math.SQRT2;
-      ch4.vPk = vDiff * Math.SQRT2;
+    } else if (ibVin) {
+      vin = parseFloat(ibVin.value || 1.2);
+      const rout = parseFloat(document.getElementById("ib-rout")?.value || 50);
+      const rload = parseFloat(document.getElementById("ib-rload")?.value || 10000);
+      iLoad = vin / (rout + rload);
+      vHot = iLoad * rload;
+      vCold = 0.0;
+      vDiff = vHot;
+      cmrr = 110.0;
+      thd = 0.0018;
+      status = "ACTIVE IMPEDANCE-BALANCED";
     }
 
-    return { freq, ch1, ch2, ch3, ch4, vHot, vCold, vDiff, iLoad, thd, cmrr, status };
+    return {
+      freq,
+      vin,
+      vHot,
+      vCold,
+      vDiff,
+      iLoad,
+      thd,
+      cmrr,
+      status
+    };
   }
 
   updateFromActiveCircuit() {
-    const channelData = this.getCircuitChannelData();
-    this.updateLiveReadings(channelData);
+    const data = this.getCircuitChannelData();
+
+    // 1. Update DMM 1 (Lucky 8050A #1)
+    const dmm1Val1 = document.getElementById("rack-dmm1-val1");
+    const dmm1Val2 = document.getElementById("rack-dmm1-val2");
+    const dmm1Status = document.getElementById("rack-dmm1-status");
+    const dmm1Detail = document.getElementById("dmm1-detail-text");
+
+    if (dmm1Val1 && dmm1Val2) {
+      if (this.dmm1Mode === "rms") {
+        dmm1Val1.textContent = `${data.vHot.toFixed(3)} V`;
+        const dbu = 20 * Math.log10(Math.max(0.0001, data.vHot / 0.775));
+        dmm1Val2.textContent = `${dbu >= 0 ? "+" : ""}${dbu.toFixed(1)} dBu`;
+      } else if (this.dmm1Mode === "dbu") {
+        const dbu = 20 * Math.log10(Math.max(0.0001, data.vHot / 0.775));
+        dmm1Val1.textContent = `${dbu >= 0 ? "+" : ""}${dbu.toFixed(2)} dBu`;
+        dmm1Val2.textContent = `${data.vHot.toFixed(3)} V RMS`;
+      } else if (this.dmm1Mode === "peak") {
+        dmm1Val1.textContent = `${(data.vHot * Math.SQRT2).toFixed(3)} Vpk`;
+        dmm1Val2.textContent = `${(data.vHot * 2 * Math.SQRT2).toFixed(3)} Vpp`;
+      } else {
+        dmm1Val1.textContent = `1.414 CF`;
+        dmm1Val2.textContent = `PURE SINE`;
+      }
+    }
+    if (dmm1Status) {
+      dmm1Status.textContent = data.status.includes("CLIP") ? "CLIPPING" : "+VE HOT";
+      dmm1Status.className = data.status.includes("CLIP") ? "rack-status-pill amber" : "rack-status-pill yellow";
+    }
+    if (dmm1Detail) {
+      dmm1Detail.textContent = `Target: ${this.dmm1Target} • ${data.vHot.toFixed(3)}V RMS • ${data.status}`;
+    }
+
+    // 2. Update DMM 2 (Lucky 8050A #2)
+    const dmm2Val1 = document.getElementById("rack-dmm2-val1");
+    const dmm2Val2 = document.getElementById("rack-dmm2-val2");
+    const dmm2Status = document.getElementById("rack-dmm2-status");
+    const dmm2Detail = document.getElementById("dmm2-detail-text");
+
+    if (dmm2Val1 && dmm2Val2) {
+      if (this.dmm2Mode === "diff") {
+        dmm2Val1.textContent = `${data.vDiff.toFixed(3)} V`;
+        dmm2Val2.textContent = `${(data.thd).toFixed(3)}% THD`;
+      } else if (this.dmm2Mode === "thd") {
+        dmm2Val1.textContent = `${(data.thd).toFixed(3)} %`;
+        const distDb = -20 * Math.log10(Math.max(0.00001, data.thd / 100));
+        dmm2Val2.textContent = `-${distDb.toFixed(1)} dB`;
+      } else if (this.dmm2Mode === "cmrr") {
+        dmm2Val1.textContent = `${data.cmrr.toFixed(1)} dB`;
+        dmm2Val2.textContent = `CMRR REJECT`;
+      } else {
+        const vErr = data.vDiff - 2 * data.vHot;
+        dmm2Val1.textContent = `${Math.abs(vErr * 1000).toFixed(2)} mV`;
+        dmm2Val2.textContent = `V_ERR LEAK`;
+      }
+    }
+    if (dmm2Status) {
+      dmm2Status.textContent = data.cmrr >= 80 ? "BALANCED" : "DEGRADED";
+      dmm2Status.className = data.cmrr >= 80 ? "rack-status-pill green" : "rack-status-pill amber";
+    }
+    if (dmm2Detail) {
+      dmm2Detail.textContent = `Diff Load: ${data.vDiff.toFixed(3)}V RMS • CMRR: ${data.cmrr.toFixed(1)} dB • THD: ${data.thd.toFixed(3)}%`;
+    }
+
+    // 3. Update Target VU Meter dB levels
+    this.vu1TargetDbu = 20 * Math.log10(Math.max(0.00005, data.vin / (this.vu1Range || 3.0)));
+    this.vu2TargetDbu = 20 * Math.log10(Math.max(0.00005, data.vDiff / (this.vu2Range || 3.0)));
+
+    // 4. Update Scope Telemetry Text
+    const sc1Tel = document.getElementById("scope1-telemetry");
+    if (sc1Tel) {
+      sc1Tel.textContent = `CH1 (Yellow Vin): ${data.vin.toFixed(2)}V • CH2 (Cyan Hot): ${data.vHot.toFixed(2)}V • Phase: 0°`;
+    }
+    const sc2Tel = document.getElementById("scope2-telemetry");
+    if (sc2Tel) {
+      sc2Tel.textContent = `CH3 (Pink Cold): ${data.vCold.toFixed(2)}V • CH4 (Green Diff): ${data.vDiff.toFixed(2)}V • CMRR: ${data.cmrr.toFixed(0)}dB`;
+    }
+
+    // 5. Append sample to Trend Recorder
+    if (this.trendRunning) {
+      this.trendBuffer.push({
+        vHot: data.vHot,
+        vCold: data.vCold,
+        vDiff: data.vDiff,
+        time: Date.now()
+      });
+      if (this.trendBuffer.length > this.maxTrendSamples) {
+        this.trendBuffer.shift();
+      }
+    }
   }
 
   startMainInstrumentLoop() {
-    const loop = (timestamp) => {
-      // 1. Update needle physics
-      const eps = 0.02;
-      if (this.currentNeedleDbu < this.targetNeedleDbu - eps) {
-        this.currentNeedleDbu += (this.targetNeedleDbu - this.currentNeedleDbu) * this.attackRate;
-      } else {
-        this.currentNeedleDbu -= (this.currentNeedleDbu - this.targetNeedleDbu) * this.releaseRate;
-      }
-      this.renderHpMeter(this.currentNeedleDbu);
+    const loop = () => {
+      // 1. Advance VU Meter Ballistics
+      this.updateNeedleBallistics();
 
-      // 2. Update Oscilloscope CRT
-      this.renderOscilloscope();
+      // 2. Render Both Oscilloscopes
+      this.renderScope1();
+      this.renderScope2();
+
+      // 3. Render Both APK VU Meters
+      this.renderVuMeter(this.vu1Ctx, this.vu1Canvas, this.vu1NeedleDbu, "APK #1: DRIVE IN");
+      this.renderVuMeter(this.vu2Ctx, this.vu2Canvas, this.vu2NeedleDbu, "APK #2: LOAD OUT");
+
+      // 4. Render Trend Graph if tab active
+      if (this.currentTab === "chart") {
+        this.renderTrendGraph();
+      }
+
+      // 5. Render Dynamic SVG Wires
+      this.renderWires();
 
       this.animFrame = requestAnimationFrame(loop);
     };
     this.animFrame = requestAnimationFrame(loop);
   }
 
-  /**
-   * 1970s Tektronix / HP CRT Oscilloscope Rendering Engine (4-Channel)
-   */
-  renderOscilloscope() {
-    if (!this.scopeCtx) return;
-    const ctx = this.scopeCtx;
-    const w = this.scopeCanvas.width;
-    const h = this.scopeCanvas.height;
+  updateNeedleBallistics() {
+    const eps = 0.02;
 
-    // Advance timebase
-    this.scopeTime += 0.0005;
+    // Meter 1
+    if (this.vu1NeedleDbu < this.vu1TargetDbu - eps) {
+      this.vu1NeedleDbu += (this.vu1TargetDbu - this.vu1NeedleDbu) * this.attackRate;
+    } else {
+      this.vu1NeedleDbu -= (this.vu1NeedleDbu - this.vu1TargetDbu) * this.releaseRate;
+    }
+
+    // Meter 2
+    if (this.vu2NeedleDbu < this.vu2TargetDbu - eps) {
+      this.vu2NeedleDbu += (this.vu2TargetDbu - this.vu2NeedleDbu) * this.attackRate;
+    } else {
+      this.vu2NeedleDbu -= (this.vu2NeedleDbu - this.vu2TargetDbu) * this.releaseRate;
+    }
+  }
+
+  renderScope1() {
+    if (!this.scope1Ctx || !this.scope1Canvas) return;
+    const ctx = this.scope1Ctx;
+    const w = this.scope1Canvas.width;
+    const h = this.scope1Canvas.height;
 
     // Phosphor decay persistence
-    ctx.fillStyle = "rgba(2, 20, 8, 0.28)";
+    ctx.fillStyle = "rgba(0, 0, 0, 0.32)";
     ctx.fillRect(0, 0, w, h);
 
-    // Draw Graticule Grid (8 vertical divisions, 10 horizontal divisions)
-    ctx.strokeStyle = "rgba(34, 197, 94, 0.18)";
-    ctx.lineWidth = 1;
+    // Graticule Grid
+    this.drawGraticule(ctx, w, h);
 
+    const cData = this.getCircuitChannelData();
+    const voltsPerDiv = this.scope1VoltsDiv;
+    const timePerDiv = this.scopeTimeDiv * 0.001;
+    const totalTimeSpan = 10 * timePerDiv;
+    const numSamples = 200;
+    const midY = h / 2;
+
+    // Waveform 1: Vin Drive (Yellow #facc15)
+    ctx.strokeStyle = "#facc15";
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    for (let s = 0; s < numSamples; s++) {
+      const px = (s / (numSamples - 1)) * w;
+      const t = (s / (numSamples - 1)) * totalTimeSpan;
+      const v = cData.vin * Math.SQRT2 * Math.sin(2 * Math.PI * cData.freq * t);
+      const py = midY - (v / (4 * voltsPerDiv)) * midY;
+      if (s === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Waveform 2: Vhot Pin 2 (Cyan #38bdf8)
+    ctx.strokeStyle = "#38bdf8";
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    for (let s = 0; s < numSamples; s++) {
+      const px = (s / (numSamples - 1)) * w;
+      const t = (s / (numSamples - 1)) * totalTimeSpan;
+      let v = cData.vHot * Math.SQRT2 * Math.sin(2 * Math.PI * cData.freq * t);
+      if (cData.status.includes("CLIP")) {
+        v = Math.max(-1.5, Math.min(1.5, v * 1.8));
+      }
+      const py = midY - (v / (4 * voltsPerDiv)) * midY;
+      if (s === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Minimal CRT Readout (top right)
+    ctx.font = "bold 8.5px 'JetBrains Mono', monospace";
+    ctx.fillStyle = "#facc15";
+    ctx.textAlign = "left";
+    ctx.fillText("VIN", 6, 11);
+    ctx.fillStyle = "#38bdf8";
+    ctx.fillText("+VE HOT", 36, 11);
+    ctx.fillStyle = "#888888";
+    ctx.textAlign = "right";
+    ctx.fillText(`${voltsPerDiv}V/DIV`, w - 6, 11);
+  }
+
+  renderScope2() {
+    if (!this.scope2Ctx || !this.scope2Canvas) return;
+    const ctx = this.scope2Ctx;
+    const w = this.scope2Canvas.width;
+    const h = this.scope2Canvas.height;
+
+    ctx.fillStyle = "rgba(0, 0, 0, 0.32)";
+    ctx.fillRect(0, 0, w, h);
+
+    this.drawGraticule(ctx, w, h);
+
+    const cData = this.getCircuitChannelData();
+    const voltsPerDiv = this.scope2VoltsDiv;
+    const timePerDiv = this.scopeTimeDiv * 0.001;
+    const totalTimeSpan = 10 * timePerDiv;
+    const numSamples = 200;
+    const midY = h / 2;
+
+    // Waveform 3: Vcold Pin 3 (Pink #f43f5e)
+    ctx.strokeStyle = "#f43f5e";
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    for (let s = 0; s < numSamples; s++) {
+      const px = (s / (numSamples - 1)) * w;
+      const t = (s / (numSamples - 1)) * totalTimeSpan;
+      let v = 0;
+      if (cData.vCold > 0.01) {
+        v = cData.vCold * Math.SQRT2 * Math.sin(2 * Math.PI * cData.freq * t + Math.PI);
+      }
+      const py = midY - (v / (4 * voltsPerDiv)) * midY;
+      if (s === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Waveform 4: Differential Across Load (Green #4ade80)
+    ctx.strokeStyle = "#4ade80";
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    for (let s = 0; s < numSamples; s++) {
+      const px = (s / (numSamples - 1)) * w;
+      const t = (s / (numSamples - 1)) * totalTimeSpan;
+      const v = cData.vDiff * Math.SQRT2 * Math.sin(2 * Math.PI * cData.freq * t);
+      const py = midY - (v / (4 * voltsPerDiv)) * midY;
+      if (s === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Minimal CRT Readout (top right)
+    ctx.font = "bold 8.5px 'JetBrains Mono', monospace";
+    ctx.fillStyle = "#f43f5e";
+    ctx.textAlign = "left";
+    ctx.fillText("-VE COLD", 6, 11);
+    ctx.fillStyle = "#4ade80";
+    ctx.fillText("DIFF LOAD", 58, 11);
+    ctx.fillStyle = "#888888";
+    ctx.textAlign = "right";
+    ctx.fillText(`${voltsPerDiv}V/DIV`, w - 6, 11);
+  }
+
+  drawGraticule(ctx, w, h) {
+    ctx.strokeStyle = "rgba(40, 40, 40, 0.65)";
+    ctx.lineWidth = 1;
     const dx = w / 10;
     const dy = h / 8;
 
@@ -1204,179 +1093,76 @@ class FloatingMeterDock {
     }
     ctx.stroke();
 
-    // Central crosshair ticks (0.2 div sub-divisions)
-    ctx.strokeStyle = "rgba(74, 222, 128, 0.35)";
+    // Central crosshair ticks
+    ctx.strokeStyle = "rgba(80, 80, 80, 0.65)";
     ctx.beginPath();
     const midX = w / 2;
     const midY = h / 2;
     for (let j = 0; j <= 8; j += 0.2) {
       const y = j * dy;
-      ctx.moveTo(midX - 3, y);
-      ctx.lineTo(midX + 3, y);
+      ctx.moveTo(midX - 2, y);
+      ctx.lineTo(midX + 2, y);
     }
     for (let i = 0; i <= 10; i += 0.2) {
       const x = i * dx;
-      ctx.moveTo(x, midY - 3);
-      ctx.lineTo(x, midY + 3);
+      ctx.moveTo(x, midY - 2);
+      ctx.lineTo(x, midY + 2);
     }
     ctx.stroke();
-
-    // Compute waveform channel data
-    const cData = this.getCircuitChannelData();
-    const voltsPerDiv = this.scopeVoltsDiv;
-    const timePerDiv = this.scopeTimeDiv * 0.001;
-    const totalTimeSpan = 10 * timePerDiv;
-    const numSamples = 240;
-
-    const channelsToRender = [
-      { id: "ch1", label: "CH1 Ref", color: "#facc15", glow: "#eab308", data: cData.ch1 },
-      { id: "ch2", label: "CH2 +VE", color: "#38bdf8", glow: "#0284c7", data: cData.ch2 },
-      { id: "ch3", label: "CH3 -VE", color: "#f43f5e", glow: "#e11d48", data: cData.ch3 },
-      { id: "ch4", label: "CH4 Diff", color: "#4ade80", glow: "#22c55e", data: cData.ch4 }
-    ];
-
-    channelsToRender.forEach(ch => {
-      if (!this.scopeChannels[ch.id]) return;
-
-      ctx.save();
-      ctx.strokeStyle = ch.color;
-      ctx.shadowColor = ch.glow;
-      ctx.shadowBlur = 6;
-      ctx.lineWidth = 1.9;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      ctx.beginPath();
-
-      for (let s = 0; s < numSamples; s++) {
-        const px = (s / (numSamples - 1)) * w;
-        const tPoint = (s / (numSamples - 1)) * totalTimeSpan;
-        const t = this.scopeTriggerMode === "AUTO" ? tPoint : this.scopeTime + tPoint;
-
-        let v = 0;
-        const omega = 2 * Math.PI * cData.freq;
-        const shape = ch.data.shape;
-
-        if (shape === "sine") {
-          v = ch.data.vPk * Math.sin(omega * t + ch.data.phase);
-        } else if (shape === "flatline") {
-          v = 0;
-        } else if (shape === "hum-riding") {
-          const w60 = 2 * Math.PI * 60;
-          v = ch.data.vPk * Math.sin(omega * t) + 0.35 * Math.sin(w60 * t);
-        } else if (shape === "clipped") {
-          const raw = 14.0 * Math.sin(omega * t + ch.data.phase);
-          v = Math.max(-5.0, Math.min(5.0, raw));
-        } else {
-          v = ch.data.vPk * Math.sin(omega * t + ch.data.phase);
-        }
-
-        const py = midY - (v / (4 * voltsPerDiv)) * midY;
-        const clampedY = Math.max(4, Math.min(h - 4, py));
-
-        if (s === 0) {
-          ctx.moveTo(px, clampedY);
-        } else {
-          ctx.lineTo(px, clampedY);
-        }
-      }
-      ctx.stroke();
-      ctx.restore();
-    });
-
-    // On-Screen CRT Display (OSD) Telemetry
-    ctx.font = "bold 9px 'Courier New', monospace";
-    ctx.fillStyle = "#4ade80";
-    ctx.shadowColor = "#22c55e";
-    ctx.shadowBlur = 4;
-
-    // Top Header: Channel Indicators & Timebase
-    ctx.textAlign = "left";
-    let activeTags = [];
-    if (this.scopeChannels.ch1) activeTags.push("CH1:REF");
-    if (this.scopeChannels.ch2) activeTags.push("CH2:+VE");
-    if (this.scopeChannels.ch3) activeTags.push("CH3:-VE");
-    if (this.scopeChannels.ch4) activeTags.push("CH4:DIFF");
-    const tagStr = activeTags.join(" ") || "ALL OFF";
-    ctx.fillText(`${tagStr} | ${voltsPerDiv.toFixed(1)}V/DIV`, 8, 14);
-
-    ctx.textAlign = "right";
-    ctx.fillText(`TIME: ${this.scopeTimeDiv.toFixed(1)}ms/DIV`, w - 24, 14);
-    // Green Trigger LED
-    ctx.fillStyle = "#22c55e";
-    ctx.beginPath();
-    ctx.arc(w - 12, 11, 3.5, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Bottom Footer: +VE, -VE, Diff telemetry
-    ctx.textAlign = "left";
-    ctx.fillText(`+VE: ${cData.vHot.toFixed(2)}V  -VE: ${cData.vCold.toFixed(2)}V`, 8, h - 8);
-
-    ctx.textAlign = "right";
-    ctx.fillText(`DIFF: ${cData.vDiff.toFixed(2)}V  1.0kHz`, w - 8, h - 8);
   }
 
-  /**
-   * APK Precision AC Voltmeter Dial Face Renderer
-   */
-  renderHpMeter(dBuVal) {
-    if (!this.hpCtx) return;
-    const ctx = this.hpCtx;
-    const w = this.hpCanvas.width;
-    const h = this.hpCanvas.height;
+  renderVuMeter(ctx, canvas, dBuVal, label) {
+    if (!ctx || !canvas) return;
+    const w = canvas.width;
+    const h = canvas.height;
 
     ctx.clearRect(0, 0, w, h);
-
-    // Bezel & aged ivory dial face
     ctx.fillStyle = "#fbf9f2";
     ctx.fillRect(0, 0, w, h);
 
     const cx = w / 2;
-    const cy = h + 22;
-    const radius = h * 0.92;
+    const cy = h + 18;
+    const radius = h * 0.95;
 
-    // Specular mirror strip to eliminate parallax
+    // Specular mirror strip
     ctx.strokeStyle = "#cbd5e1";
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.arc(cx, cy, radius - 15, -Math.PI * 0.78, -Math.PI * 0.22);
+    ctx.arc(cx, cy, radius - 12, -Math.PI * 0.78, -Math.PI * 0.22);
     ctx.stroke();
 
     // Red zone (> 0 dB)
     ctx.strokeStyle = "#ef4444";
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2.5;
     ctx.beginPath();
     ctx.arc(cx, cy, radius, -Math.PI * 0.44, -Math.PI * 0.24);
     ctx.stroke();
 
     // Black scale arc (< 0 dB)
     ctx.strokeStyle = "#0f172a";
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1.2;
     ctx.beginPath();
     ctx.arc(cx, cy, radius, -Math.PI * 0.76, -Math.PI * 0.44);
     ctx.stroke();
 
-    // Scale ticks: -20 to +3 dB
+    // Scale ticks
     const dbTicks = [
       { db: -20, ang: -0.76 },
       { db: -10, ang: -0.66 },
-      { db: -7,  ang: -0.60 },
       { db: -5,  ang: -0.55 },
-      { db: -3,  ang: -0.50 },
-      { db: -1,  ang: -0.46 },
       { db: 0,   ang: -0.44 },
-      { db: 1,   ang: -0.38 },
       { db: 2,   ang: -0.31 },
       { db: 3,   ang: -0.24 }
     ];
 
-    ctx.font = "bold 8.5px 'Inter', sans-serif";
+    ctx.font = "bold 7.5px 'JetBrains Mono', sans-serif";
     ctx.textAlign = "center";
     dbTicks.forEach(t => {
       const a = t.ang * Math.PI;
       const x1 = cx + (radius - 1) * Math.cos(a);
       const y1 = cy + (radius - 1) * Math.sin(a);
-      const x2 = cx + (radius - 7) * Math.cos(a);
-      const y2 = cy + (radius - 7) * Math.sin(a);
+      const x2 = cx + (radius - 6) * Math.cos(a);
+      const y2 = cy + (radius - 6) * Math.sin(a);
 
       ctx.strokeStyle = t.db > 0 ? "#ef4444" : "#0f172a";
       ctx.beginPath();
@@ -1384,29 +1170,25 @@ class FloatingMeterDock {
       ctx.lineTo(x2, y2);
       ctx.stroke();
 
-      const tx = cx + (radius - 15) * Math.cos(a);
-      const ty = cy + (radius - 15) * Math.sin(a);
+      const tx = cx + (radius - 12) * Math.cos(a);
+      const ty = cy + (radius - 12) * Math.sin(a);
       ctx.fillStyle = t.db > 0 ? "#ef4444" : "#0f172a";
       ctx.fillText(t.db > 0 ? `+${t.db}` : `${t.db}`, tx, ty);
     });
 
-    // Map dBuVal (-20 to +3 dBu) to angle
+    // Map dBuVal to angle
     const clampedDbu = Math.max(-20, Math.min(3, dBuVal));
     const norm = (clampedDbu - (-20)) / 23;
     const needleAngle = (-0.76 + norm * 0.52) * Math.PI;
 
-    // Draw Knife-Edge Needle with counter-balance tail
+    // Needle
     ctx.save();
-    ctx.shadowColor = "rgba(0, 0, 0, 0.35)";
-    ctx.shadowBlur = 4;
-    ctx.shadowOffsetY = 2;
-
-    const tipLen = radius - 3;
+    const tipLen = radius - 2;
     const tipX = cx + tipLen * Math.cos(needleAngle);
     const tipY = cy + tipLen * Math.sin(needleAngle);
 
     ctx.strokeStyle = "#dc2626";
-    ctx.lineWidth = 1.8;
+    ctx.lineWidth = 1.6;
     ctx.lineCap = "round";
     ctx.beginPath();
     ctx.moveTo(cx, cy);
@@ -1416,18 +1198,155 @@ class FloatingMeterDock {
     // Pivot cap
     ctx.fillStyle = "#1e293b";
     ctx.beginPath();
-    ctx.arc(cx, cy, 9, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 7, 0, Math.PI * 2);
     ctx.fill();
-
-    ctx.fillStyle = "#dc2626";
-    ctx.beginPath();
-    ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
-    ctx.fill();
-
     ctx.restore();
+  }
+
+  renderTrendGraph() {
+    if (!this.trendCtx || !this.trendCanvas) return;
+    const ctx = this.trendCtx;
+    const w = this.trendCanvas.width;
+    const h = this.trendCanvas.height;
+
+    ctx.fillStyle = "#020b05";
+    ctx.fillRect(0, 0, w, h);
+
+    // Grid lines
+    ctx.strokeStyle = "rgba(34, 197, 94, 0.15)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let y = 20; y < h; y += 30) {
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+    }
+    for (let x = 30; x < w; x += 40) {
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, h);
+    }
+    ctx.stroke();
+
+    if (this.trendBuffer.length < 2) return;
+
+    const maxV = 4.0;
+    const len = this.trendBuffer.length;
+    const dx = w / (this.maxTrendSamples - 1);
+
+    // Plot +VE Hot (Yellow)
+    ctx.strokeStyle = "#facc15";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let i = 0; i < len; i++) {
+      const px = i * dx;
+      const py = h - (this.trendBuffer[i].vHot / maxV) * (h - 20) - 10;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Plot -VE Cold (Cyan)
+    ctx.strokeStyle = "#38bdf8";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let i = 0; i < len; i++) {
+      const px = i * dx;
+      const py = h - (this.trendBuffer[i].vCold / maxV) * (h - 20) - 10;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Plot Diff Load (Green)
+    ctx.strokeStyle = "#4ade80";
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    for (let i = 0; i < len; i++) {
+      const px = i * dx;
+      const py = h - (this.trendBuffer[i].vDiff / maxV) * (h - 20) - 10;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+  }
+
+  /**
+   * Dynamic SVG Wires Engine: Renders physical colored leads from rack terminal dots to circuit nodes/anchors
+   */
+  renderWires() {
+    const svg = document.getElementById("live-probe-wires-svg");
+    if (!svg) return;
+
+    const connections = [
+      { fromId: "dot-scope1-ch1", targetKey: "6-1-vin", color: "#facc15", label: "Scope 1 CH1 (Vin)" },
+      { fromId: "dot-scope1-ch2", targetKey: this.scope1Target, color: "#38bdf8", label: "Scope 1 CH2 (+VE)" },
+      { fromId: "dot-scope2-ch3", targetKey: "6-1-p3", color: "#f43f5e", label: "Scope 2 CH3 (-VE)" },
+      { fromId: "dot-scope2-ch4", targetKey: this.scope2Target, color: "#4ade80", label: "Scope 2 CH4 (Diff)" },
+      { fromId: "dot-dmm1", targetKey: this.dmm1Target, color: "#facc15", label: "DMM 1 (+VE)" },
+      { fromId: "dot-dmm2", targetKey: this.dmm2Target, color: "#4ade80", label: "DMM 2 (Diff)" }
+    ];
+
+    let svgHtml = "";
+
+    connections.forEach(conn => {
+      const dotEl = document.getElementById(conn.fromId);
+      if (!dotEl) return;
+      const dotRect = dotEl.getBoundingClientRect();
+      const x1 = dotRect.right;
+      const y1 = dotRect.top + dotRect.height / 2;
+
+      // Find target element in page or user anchors
+      let targetEl = document.querySelector(`[data-probe-target="${conn.targetKey}"]`);
+      if (!targetEl) {
+        targetEl = document.getElementById(conn.targetKey);
+      }
+
+      let x2, y2;
+      let isVisible = false;
+
+      if (targetEl) {
+        const tRect = targetEl.getBoundingClientRect();
+        // Check if target is in visible viewport
+        if (tRect.bottom > 0 && tRect.top < window.innerHeight && tRect.right > 350 && tRect.left < window.innerWidth) {
+          x2 = tRect.left + tRect.width / 2;
+          y2 = tRect.top + tRect.height / 2;
+          isVisible = true;
+        }
+      }
+
+      // If target is off-screen or not found, drape wire naturally across rightward
+      if (!isVisible) {
+        // Point toward middle-right of screen
+        x2 = Math.min(window.innerWidth - 30, 420 + Math.sin(y1 * 0.05) * 40);
+        y2 = Math.max(80, Math.min(window.innerHeight - 80, y1 + 30));
+      }
+
+      // Compute smooth cubic Bézier spline
+      const dx = Math.abs(x2 - x1);
+      const cx1 = x1 + dx * 0.5;
+      const cy1 = y1;
+      const cx2 = x2 - dx * 0.3;
+      const cy2 = y2 + 20;
+
+      svgHtml += `
+        <g class="live-wire-group">
+          <!-- Shadow -->
+          <path d="M ${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x2} ${y2}"
+                fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="4" stroke-linecap="round"/>
+          <!-- Physical colored wire lead -->
+          <path d="M ${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x2} ${y2}"
+                fill="none" stroke="${conn.color}" stroke-width="2.2" stroke-linecap="round" opacity="0.88"/>
+          <!-- Needle Probe Tip at destination -->
+          <circle cx="${x2}" cy="${y2}" r="3.5" fill="${conn.color}" stroke="#000000" stroke-width="1.5"/>
+        </g>
+      `;
+    });
+
+    svg.innerHTML = svgHtml;
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+// Global initialization
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    window.floatingMeterDock = new FloatingMeterDock();
+  });
+} else {
   window.floatingMeterDock = new FloatingMeterDock();
-});
+}

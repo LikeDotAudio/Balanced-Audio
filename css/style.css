@@ -7,14 +7,14 @@
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
 
-  /* Dark Theme (Default) */
-  --bg-primary: #0b0f19;
-  --bg-secondary: #111827;
-  --bg-tertiary: #1f2937;
-  --bg-card: rgba(31, 41, 55, 0.7);
-  --bg-card-hover: rgba(55, 65, 81, 0.8);
-  --border-color: #374151;
-  --border-accent: #4b5563;
+  /* Dark Theme (Default) - Pure Black & Grey Borders, Strict Squares */
+  --bg-primary: #000000;
+  --bg-secondary: #000000;
+  --bg-tertiary: #050505;
+  --bg-card: #050505;
+  --bg-card-hover: #0c0c0c;
+  --border-color: #333333;
+  --border-accent: #444444;
 
   --text-primary: #f9fafb;
   --text-secondary: #9ca3af;
@@ -27,57 +27,64 @@
   --accent-emerald: #10b981;
   --accent-rose: #f43f5e;
 
-  --badge-bg: rgba(59, 130, 246, 0.15);
+  --badge-bg: #111111;
   --badge-text: #60a5fa;
 
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 0 20px rgba(6, 182, 212, 0.25);
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-glow: none;
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-full: 9999px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-full: 0px;
 }
 
 [data-theme="light"] {
-  --bg-primary: #f8fafc;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #f1f5f9;
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --bg-card-hover: #ffffff;
-  --border-color: #e2e8f0;
-  --border-accent: #cbd5e1;
+  --bg-primary: #000000;
+  --bg-secondary: #000000;
+  --bg-tertiary: #080808;
+  --bg-card: #050505;
+  --bg-card-hover: #0c0c0c;
+  --border-color: #333333;
+  --border-accent: #444444;
 
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
 
-  --accent-cyan: #0891b2;
-  --accent-blue: #2563eb;
-  --accent-indigo: #4f46e5;
-  --accent-amber: #d97706;
-  --accent-emerald: #059669;
-  --accent-rose: #e11d48;
+  --accent-cyan: #06b6d4;
+  --accent-blue: #3b82f6;
+  --accent-indigo: #6366f1;
+  --accent-amber: #f59e0b;
+  --accent-emerald: #10b981;
+  --accent-rose: #f43f5e;
 
-  --badge-bg: rgba(37, 99, 235, 0.1);
-  --badge-text: #1d4ed8;
+  --badge-bg: #111111;
+  --badge-text: #60a5fa;
 
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-glow: 0 0 20px rgba(8, 145, 178, 0.15);
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-glow: none;
+
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-full: 0px;
 }
 
 /* ==========================================================================
-   Base & Reset
+   Base & Reset - Zero Wasted Space, Squares, No Fades
    ========================================================================== */
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 html {
@@ -118,15 +125,15 @@ code, pre {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: rgba(11, 15, 25, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: #000000 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   border-bottom: 1px solid var(--border-color);
-  padding: 0.85rem 1.5rem;
+  padding: 0.4rem 0.75rem;
 }
 
 [data-theme="light"] .site-header {
-  background-color: rgba(255, 255, 255, 0.88);
+  background-color: #000000 !important;
 }
 
 .header-container {
@@ -308,19 +315,20 @@ code, pre {
    ========================================================================== */
 
 .container {
-  max-width: 1360px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 0.5rem;
 }
 
 .section {
-  padding: 4.5rem 0;
+  padding: 1rem 0.25rem;
   border-bottom: 1px solid var(--border-color);
+  background: #000000 !important;
 }
 
 .section-header {
-  margin-bottom: 2.5rem;
-  text-align: center;
+  margin-bottom: 0.75rem;
+  text-align: left;
 }
 
 .section-badge {
@@ -2486,16 +2494,7 @@ code, pre {
    ========================================================================== */
 
 .vintage-test-bench {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-  gap: 1.5rem;
-  align-items: stretch;
-  background: radial-gradient(circle at 50% 20%, #172033 0%, #090d16 100%);
-  border: 2px solid #334155;
-  border-radius: 10px;
-  padding: 1.25rem;
-  box-shadow: inset 0 3px 12px rgba(0, 0, 0, 0.8), 0 8px 24px rgba(0, 0, 0, 0.6);
-  margin-bottom: 1.5rem;
+  display: none !important; /* Duplicate Vector SVG removed from page body; instruments permanently docked on Left Rack */
 }
 
 /* Authentic HP Laboratory Instrument Housing */
@@ -2525,6 +2524,80 @@ code, pre {
   transform-origin: 190px 250px;
   transform-box: view-box;
   transition: transform 0.22s cubic-bezier(0.12, 0.9, 0.25, 1);
+}
+
+/* Broken Needle Physics & Severed Fragment */
+.hp-severed-needle {
+  transform-origin: 190px 140px;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
+  pointer-events: none;
+}
+
+/* Mechanical Zero Screw Interactive Tool */
+.meter-zero-screw {
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.25s ease;
+}
+
+.meter-zero-screw:hover circle:first-child {
+  stroke: #0284c7;
+  stroke-width: 1.8px;
+}
+
+.meter-zero-screw.screw-pulse circle:first-child {
+  animation: zeroScrewGlow 1.4s ease-in-out infinite;
+}
+
+@keyframes zeroScrewGlow {
+  0%, 100% {
+    stroke: #ef4444;
+    stroke-width: 1.5px;
+    filter: drop-shadow(0 0 2px #ef4444);
+  }
+  50% {
+    stroke: #f59e0b;
+    stroke-width: 2.2px;
+    filter: drop-shadow(0 0 8px #f59e0b);
+  }
+}
+
+/* Meter Overload Snap Alert Banner */
+.hp-needle-broken-alert {
+  animation: needleAlertPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-origin: 190px 110px;
+}
+
+@keyframes needleAlertPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Range Zones: Quantum Floor & Singularity */
+.range-dial-tick.zone-quantum.active text {
+  fill: #a855f7 !important;
+  font-weight: 900 !important;
+}
+
+.range-dial-tick.zone-quantum.active line {
+  stroke: #a855f7 !important;
+  stroke-width: 2px !important;
+}
+
+.range-dial-tick.zone-singularity.active text {
+  fill: #ec4899 !important;
+  font-weight: 900 !important;
+  filter: drop-shadow(0 0 3px #ec4899);
+}
+
+.range-dial-tick.zone-singularity.active line {
+  stroke: #ec4899 !important;
+  stroke-width: 2.5px !important;
 }
 
 /* Legacy aliases for backwards compatibility */
@@ -2751,57 +2824,247 @@ code, pre {
 }
 
 /* 1970s Tactile Pushbutton Bank */
+/* =====================================================================
+   Fluke 8050A Calibrated Dynamic Headroom Pyramid Scale & VFD Annunciator
+   ===================================================================== */
+.dmm-pyramid-scale-wrapper {
+  background: #020617;
+  border: 1.5px solid #1e293b;
+  border-radius: 4px;
+  padding: 0.5rem 0.65rem;
+  margin-bottom: 0.75rem;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dmm-pyramid-scale-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.45rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.dmm-scale-title {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.dmm-scale-annunciator {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #10b981;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 6px currentColor;
+  transition: all 0.25s ease;
+}
+
+.dmm-pyramid-tiers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dmm-pyr-tier {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid #1e293b;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  user-select: none;
+}
+
+.dmm-pyr-tier:hover {
+  background: rgba(30, 41, 59, 0.8);
+  filter: brightness(1.25);
+  transform: translateX(2px);
+}
+
+.dmm-pyr-tier.tier-active {
+  background: rgba(15, 23, 42, 0.95) !important;
+  opacity: 1 !important;
+  transform: translateX(4px);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.dmm-pyr-tier.tier-zone-headroom.tier-active {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4), inset 0 0 8px rgba(239, 68, 68, 0.2) !important;
+}
+
+.dmm-pyr-tier.tier-zone-pro.tier-active {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4), inset 0 0 8px rgba(16, 185, 129, 0.2) !important;
+}
+
+.dmm-pyr-tier.tier-zone-consumer.tier-active {
+  border-color: #06b6d4 !important;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.4), inset 0 0 8px rgba(6, 182, 212, 0.2) !important;
+}
+
+.dmm-pyr-tier.tier-zone-mic.tier-active {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4), inset 0 0 8px rgba(245, 158, 11, 0.2) !important;
+}
+
+.dmm-pyr-tier.tier-dimmed {
+  opacity: 0.42;
+}
+
+.dmm-tier-pill {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 900;
+  padding: 0.12rem 0.4rem;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.red-pill { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+.green-pill { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+.cyan-pill { background: rgba(6, 182, 212, 0.2); color: #38bdf8; border: 1px solid #06b6d4; }
+.amber-pill { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+
+.dmm-tier-desc {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  flex: 1;
+  margin: 0 0.5rem;
+}
+
+.dmm-tier-margin {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #94a3b8;
+}
+
+/* =====================================================================
+   1970s Fluke 8050A Tactile Mechanical Pushbutton Bank (High Presence)
+   ===================================================================== */
 .dmm-keypad {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
-  background: #0f172a;
-  padding: 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #334155;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+  gap: 0.4rem;
+  background: linear-gradient(180deg, #090e17 0%, #0f172a 100%);
+  padding: 0.65rem;
+  border-radius: 5px;
+  border: 1.5px solid #1e293b;
+  box-shadow: 
+    inset 0 3px 6px rgba(0, 0, 0, 0.9),
+    0 1px 0 rgba(255, 255, 255, 0.15);
   margin-bottom: 0.75rem;
 }
 
 .dmm-key {
   flex: 1 1 18%;
-  background: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 90%, #94a3b8 100%);
-  border: 1px solid #64748b;
-  border-radius: 2px;
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 40%, #cbd5e1 90%, #94a3b8 100%);
+  border-top: 1.5px solid #ffffff;
+  border-left: 1.5px solid #f1f5f9;
+  border-right: 2px solid #475569;
+  border-bottom: 3px solid #334155;
+  border-radius: 3px;
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   font-weight: 800;
   color: #0f172a;
   text-align: center;
-  padding: 0.35rem 0.2rem;
-  box-shadow: 0 2px 0 #475569, 0 3px 2px rgba(0,0,0,0.4);
+  padding: 0.45rem 0.25rem;
+  box-shadow: 
+    0 3px 4px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
   cursor: pointer;
   user-select: none;
+  position: relative;
+  transition: all 0.12s ease;
 }
 
+.dmm-key:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+}
+
+.dmm-key:active {
+  transform: translateY(2px) !important;
+  border-bottom-width: 1px !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Mechanical Interlocked Latching Key State */
 .dmm-key.active {
-  background: linear-gradient(180deg, #e2e8f0 0%, #94a3b8 100%);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
-  transform: translateY(1px);
-  color: #ca8a04;
-  border-color: #ca8a04;
-  font-weight: 900;
+  background: linear-gradient(180deg, #94a3b8 0%, #cbd5e1 40%, #cbd5e1 100%) !important;
+  border-top: 1px solid #475569 !important;
+  border-left: 1px solid #475569 !important;
+  border-right: 1.5px solid #e2e8f0 !important;
+  border-bottom: 1.5px solid #f8fafc !important;
+  transform: translateY(2px);
+  box-shadow: 
+    inset 0 3px 6px rgba(0, 0, 0, 0.65),
+    0 0 8px rgba(250, 204, 21, 0.4) !important;
+  color: #854d0e !important;
+  font-weight: 900 !important;
+}
+
+/* Illuminated Tally Lamp on Latching Mode Keys */
+.dmm-key.active::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #facc15;
+  box-shadow: 0 0 6px #facc15, 0 0 2px #ffffff;
 }
 
 .dmm-key.active.key-auto {
-  background: linear-gradient(180deg, #fef08a 0%, #eab308 100%);
-  color: #0f172a;
-  border-color: #ca8a04;
+  background: linear-gradient(180deg, #fef08a 0%, #eab308 100%) !important;
+  color: #0f172a !important;
 }
 
+/* Bold 1970s Red Anodized POWER Switch */
 .dmm-key.key-red {
-  background: linear-gradient(180deg, #fca5a5 0%, #ef4444 80%, #b91c1c 100%);
-  color: #fff;
-  border-color: #991b1b;
+  background: linear-gradient(180deg, #f87171 0%, #ef4444 40%, #dc2626 80%, #991b1b 100%) !important;
+  color: #ffffff !important;
+  border-top: 1.5px solid #fca5a5 !important;
+  border-left: 1.5px solid #f87171 !important;
+  border-right: 2px solid #7f1d1d !important;
+  border-bottom: 3px solid #450a0a !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.6), 0 0 8px rgba(239, 68, 68, 0.35) !important;
 }
 
-/* Front Probe Terminals */
+.dmm-key.key-red::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #f87171;
+  box-shadow: 0 0 6px #ef4444, 0 0 2px #ffffff;
+}
+
+/* Front Probe Terminals with Specular Depth */
 .dmm-terminals {
+
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
@@ -4100,309 +4363,324 @@ code, pre {
   }
 }
 
-/* Breakaway Floating Instrument Dock (Right HUD) */
-.floating-meter-dock {
-  position: fixed;
-  right: 1.5rem;
-  bottom: 1.5rem;
-  width: 330px;
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(16px);
-  border: 1.5px solid rgba(56, 189, 248, 0.4);
-  border-radius: 12px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 25px rgba(6, 182, 212, 0.2);
-  z-index: 1000;
-  display: none;
-  flex-direction: column;
-  gap: 0.65rem;
-  padding: 0.85rem;
-  animation: dockSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+/* ==========================================================================
+   Permanent Left Laboratory Instrument Rack & Wires Engine
+   "meters dont scroll, always there on the left, 2 scopes, 2 dmm, 2 vu meters,
+    no text until someone clicks the meter, squares, black with grey borders"
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  body {
+    margin-left: 350px !important;
+    padding: 0 !important;
+    background: #000000 !important;
+  }
+  .site-header {
+    margin-left: 0 !important;
+    background: #050505 !important;
+    border-bottom: 1px solid #333333 !important;
+    padding: 0.5rem 1rem !important;
+  }
+}
+
+.floating-meter-dock,
+.permanent-left-rack {
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 350px !important;
+  background: #000000 !important;
+  border-right: 1px solid #333333 !important;
+  border-radius: 0 !important;
+  z-index: 1000 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
   user-select: none;
 }
 
-@keyframes dockSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.floating-meter-dock.active {
-  display: flex;
-}
-
-.floating-meter-dock.minimized {
-  width: 240px;
-  gap: 0;
-  padding: 0.6rem 0.85rem;
-}
-
-.floating-meter-dock.minimized .dock-probes-bar,
-.floating-meter-dock.minimized .dock-meter-card,
-.floating-meter-dock.minimized .dock-target-selector,
-.floating-meter-dock.minimized .dock-settings-drawer {
-  display: none !important;
-}
-
-.dock-header {
+.rack-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(51, 65, 85, 0.7);
-  padding-bottom: 0.5rem;
+  background: #0a0a0a;
+  border-bottom: 1px solid #333333;
+  padding: 6px 8px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
-.dock-title-group {
+.rack-nav-tabs {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  gap: 3px;
 }
 
-.dock-icon {
-  font-size: 1.1rem;
-  color: #38bdf8;
-}
-
-.dock-title {
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: #f8fafc;
-  letter-spacing: 0.05em;
-}
-
-.dock-probe-status {
-  font-size: 0.68rem;
-  color: #38bdf8;
-  font-weight: 600;
-}
-
-.dock-action-btns {
-  display: flex;
-  gap: 0.3rem;
-}
-
-.dock-mini-btn {
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid #475569;
-  color: #cbd5e1;
-  border-radius: 4px;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.72rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.dock-mini-btn:hover {
-  background: #38bdf8;
-  color: #0f172a;
-}
-
-/* Probes Lead Bar */
-.dock-probes-bar {
-  display: flex;
-  gap: 0.4rem;
-}
-
-.probe-lead {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid #334155;
-  border-radius: 6px;
-  padding: 0.3rem 0.5rem;
-  font-size: 0.68rem;
-  color: #94a3b8;
-}
-
-.probe-lead.red {
-  border-color: rgba(239, 68, 68, 0.4);
-  color: #fca5a5;
-}
-
-.probe-lead.black {
-  border-color: rgba(148, 163, 184, 0.3);
-  color: #cbd5e1;
-}
-
-.probe-tip-led {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #ef4444;
-  box-shadow: 0 0 8px #ef4444;
-  display: inline-block;
-}
-
-.probe-tip-led.black-led {
-  background: #64748b;
-  box-shadow: 0 0 6px #64748b;
-}
-
-/* Meter Cards */
-.dock-meter-card {
-  background: #090d16;
-  border: 1px solid #334155;
-  border-radius: 8px;
-  padding: 0.55rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.dock-meter-card:hover {
-  border-color: #38bdf8;
-  transform: translateY(-1px);
-}
-
-.dock-meter-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.rack-nav-tab {
+  background: #111111;
+  border: 1px solid #333333;
+  color: #888888;
+  font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 700;
-  color: #94a3b8;
-  margin-bottom: 0.35rem;
+  padding: 4px 7px;
+  cursor: pointer;
+  border-radius: 0 !important;
 }
 
-.badge-mini {
-  font-size: 0.62rem;
-  padding: 0.1rem 0.35rem;
-  border-radius: 3px;
-  background: rgba(245, 158, 11, 0.15);
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  color: #f59e0b;
-}
-
-.badge-mini.cyan {
-  background: rgba(6, 182, 212, 0.15);
-  border-color: rgba(6, 182, 212, 0.4);
+.rack-nav-tab.active {
+  background: #000000;
+  border-color: #38bdf8;
   color: #38bdf8;
 }
 
-.dock-meter-face-wrapper {
-  background: #fbf9f2;
-  border: 1px solid #1e293b;
-  border-radius: 6px;
-  overflow: hidden;
-  height: 120px;
+.rack-quick-actions {
+  display: flex;
+  gap: 4px;
 }
 
-.dock-canvas {
+.rack-action-btn {
+  background: #111111;
+  border: 1px solid #333333;
+  color: #e5e5e5;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 4px 6px;
+  cursor: pointer;
+  border-radius: 0 !important;
+}
+
+.rack-action-btn.anchor-btn {
+  border-color: #facc15;
+  color: #facc15;
+}
+
+.rack-action-btn.anchor-btn.active {
+  background: #facc15;
+  color: #000000;
+}
+
+.rack-action-btn.poke-btn {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.rack-action-btn.poke-btn.active {
+  background: #ef4444;
+  color: #000000;
+}
+
+.rack-instruments-bay {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px;
+  background: #000000;
+}
+
+/* 6-Meter Cards: Strict Squares, Pure Black, Grey Borders */
+.rack-meter-card {
+  background: #000000;
+  border: 1px solid #333333;
+  border-radius: 0 !important;
+  padding: 3px 5px 5px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.15s ease;
+}
+
+.rack-meter-card:hover {
+  border-color: #555555;
+}
+
+.rack-meter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 0 3px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #888888;
+  border-bottom: 1px solid #1a1a1a;
+  margin-bottom: 2px;
+}
+
+.rack-meter-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.rack-terminal-dot {
+  width: 7px;
+  height: 7px;
+  display: inline-block;
+  border: 1px solid #333333;
+  border-radius: 0 !important;
+}
+
+.rack-terminal-dot.yellow { background: #facc15; }
+.rack-terminal-dot.cyan { background: #38bdf8; }
+.rack-terminal-dot.pink { background: #f43f5e; }
+.rack-terminal-dot.green { background: #4ade80; }
+
+.rack-status-pill {
+  font-size: 0.6rem;
+  padding: 1px 4px;
+  border: 1px solid #333333;
+  border-radius: 0 !important;
+}
+
+.rack-status-pill.green { color: #4ade80; border-color: #22c55e; }
+.rack-status-pill.yellow { color: #facc15; border-color: #ca8a04; }
+.rack-status-pill.amber { color: #f59e0b; border-color: #d97706; }
+
+.rack-scope-bezel {
+  background: #000000;
+  border: 1px solid #222222;
+  overflow: hidden;
+  height: 115px;
+}
+
+.rack-vu-bezel {
+  background: #fbf9f2;
+  border: 1px solid #222222;
+  overflow: hidden;
+  height: 90px;
+}
+
+.rack-canvas {
   width: 100%;
   height: 100%;
   display: block;
 }
 
-/* Fluke VFD Display */
-.dock-dmm-vfd-display {
-  background: #020617;
-  border: 1px solid #1e293b;
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
+.rack-dmm-face {
+  background: #000000;
+  border: 1px solid #222222;
+  padding: 4px 6px;
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.dmm-vfd-row {
-  display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
 }
 
-.dmm-vfd-label {
-  font-size: 0.65rem;
-  color: #64748b;
-  font-weight: 600;
-}
-
-.dmm-vfd-number {
-  font-size: 0.95rem;
-  color: #38bdf8;
+.rack-dmm-digits {
+  font-size: 1.15rem;
   font-weight: 800;
-  text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+  letter-spacing: 0.05em;
 }
 
-.dmm-vfd-status {
-  font-size: 0.78rem;
-  color: #34d399;
-  font-weight: 800;
-  text-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+.rack-dmm-sub-digits {
+  font-size: 0.72rem;
+  font-weight: 700;
 }
 
-.dmm-vfd-status.amber {
-  color: #fbbf24;
-  text-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
-}
-
-.dock-target-selector {
-  margin-top: 0.2rem;
-}
-
-.dock-probe-dropdown {
-  width: 100%;
-  background: #090d16;
-  border: 1px solid #334155;
-  color: #f8fafc;
-  border-radius: 4px;
-  padding: 0.35rem 0.5rem;
-  font-size: 0.74rem;
-  margin-top: 0.25rem;
-}
-
-/* Settings Slide-out Drawer */
-.dock-settings-drawer {
+/* "no text until someone clicks the meter" */
+.meter-collapsible-drawer {
   display: none;
-  border-top: 1px solid #334155;
-  padding-top: 0.5rem;
+  padding-top: 4px;
+  margin-top: 4px;
+  border-top: 1px dashed #222222;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: #aaaaaa;
 }
 
-.dock-settings-drawer.open {
+.rack-meter-card.open .meter-collapsible-drawer {
   display: block;
 }
 
-.drawer-header {
+.rack-telemetry-text {
+  margin-top: 3px;
+  font-size: 0.66rem;
+  color: #777777;
+}
+
+.rack-probe-dropdown {
+  width: 100%;
+  background: #050505;
+  border: 1px solid #333333;
+  color: #f8fafc;
+  border-radius: 0 !important;
+  padding: 4px 6px;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  margin-top: 3px;
+}
+
+/* Scope Mini Controls inside drawer */
+.scope-btn-row, .vu-range-btn-row, .dmm-keypad-mini {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.78rem;
-  margin-bottom: 0.4rem;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 3px;
 }
 
-.drawer-close-btn {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
+.scope-btn, .drawer-btn, .dmm-key {
+  background: #111111;
+  border: 1px solid #333333;
+  color: #cccccc;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 2px 5px;
   cursor: pointer;
-  font-size: 1rem;
+  border-radius: 0 !important;
 }
 
-.drawer-btn {
-  background: #1e293b;
-  border: 1px solid #334155;
-  color: #cbd5e1;
-  border-radius: 4px;
-  padding: 0.25rem;
-  font-size: 0.68rem;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.drawer-btn:hover,
-.drawer-btn.active {
+.scope-btn.active, .drawer-btn.active, .dmm-key.active {
   background: #38bdf8;
-  color: #0f172a;
+  color: #000000;
   border-color: #38bdf8;
+}
+
+/* Fullscreen SVG Probe Wires Overlay */
+.live-probe-wires-svg {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 9999 !important;
+}
+
+/* User-Created Circuit Test Anchors */
+.circuit-test-anchor {
+  position: absolute;
+  background: #000000;
+  border: 1.5px solid #facc15;
+  color: #facc15;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  cursor: pointer;
+  z-index: 500;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.circuit-test-anchor::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 6px;
+  background: #facc15;
 }
 
 /* LTP Fader Canvas Container & Focus-and-Fade Glow */
@@ -5102,9 +5380,261 @@ body.probe-cursor-active * {
   filter: drop-shadow(0 0 4px currentColor);
 }
 
+/* Reference Impedance (R) Controls on Left Meter (HP 400FL) */
+.hp-refz-selector-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  background: #0f172a;
+  padding: 0.45rem 0.65rem;
+  border-top: 1.5px solid #334155;
+  border-radius: 0 0 6px 6px;
+  font-family: var(--font-mono);
+}
+
+.hp-refz-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hp-refz-btn-group {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.hp-refz-btn {
+  background: #1e293b;
+  border: 1px solid #475569;
+  color: #cbd5e1;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.45rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hp-refz-btn:hover {
+  background: #334155;
+  color: #ffffff;
+  border-color: #38bdf8;
+}
+
+.hp-refz-btn.active {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #38bdf8;
+  font-weight: 900;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.5);
+}
+
+.hp-refz-btn.hp-cycle-btn {
+  background: #78350f;
+  border-color: #d97706;
+  color: #fef3c7;
+}
+
+.hp-refz-btn.hp-cycle-btn:hover {
+  background: #b45309;
+  border-color: #f59e0b;
+}
+
+/* Dial plate clickable target hover effect */
+.meter-refz-dial-target {
+  transition: opacity 0.15s ease;
+}
+
+.meter-refz-dial-target:hover rect {
+  fill: rgba(56, 189, 248, 0.2) !important;
+  stroke: #0284c7 !important;
+}
+
+.meter-refz-dial-target:hover text {
+  fill: #0284c7 !important;
+}
+
+/* Fluke 8050A dB and REF Z Keys */
+.dmm-key.key-db.active {
+  background: linear-gradient(180deg, #fef08a 0%, #eab308 100%);
+  color: #0f172a;
+  border-color: #ca8a04;
+  font-weight: 900;
+}
+
+.dmm-key.key-refz {
+  background: linear-gradient(180deg, #fef3c7 0%, #fde68a 80%, #f59e0b 100%);
+  color: #78350f;
+  border-color: #d97706;
+}
+
+.dmm-key.key-refz:hover {
+  background: linear-gradient(180deg, #fde68a 0%, #f59e0b 100%);
+  color: #451a03;
+}
+
+/* Transformer Simulator Meter Sync Buttons */
+.xfmr-sync-r-btn {
+  background: #1e293b;
+  border: 1px solid #475569;
+  color: #94a3b8;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.xfmr-sync-r-btn:hover {
+  background: #334155;
+  color: #ffffff;
+  border-color: #facc15;
+}
+
+.xfmr-sync-r-btn.active {
+  background: #ca8a04;
+  color: #0f172a;
+  border-color: #facc15;
+  font-weight: 900;
+  box-shadow: 0 0 8px rgba(250, 204, 21, 0.45);
+}
+
+
 .range-dial-tick.active line {
   stroke-width: 2.4px;
   filter: drop-shadow(0 0 3px currentColor);
 }
+
+/* =====================================================================
+   Meter Dial Scale Dynamic Range Pyramid & 1970s HP Fluted Knob Presence
+   ===================================================================== */
+.meter-scale-pyramid {
+  pointer-events: auto;
+}
+
+.meter-scale-pyramid-tier {
+  cursor: pointer;
+  outline: none;
+  transition: opacity 0.25s ease, filter 0.25s ease, stroke-width 0.25s ease;
+}
+
+.meter-scale-pyramid-tier:hover {
+  filter: brightness(1.3) drop-shadow(0 0 6px currentColor);
+}
+
+.meter-scale-pyramid-tier.tier-active {
+  opacity: 1 !important;
+  filter: brightness(1.4) drop-shadow(0 0 8px currentColor);
+}
+
+.meter-scale-pyramid-tier.tier-active polygon,
+.meter-scale-pyramid-tier.tier-active .pyramid-tier-poly {
+  stroke-width: 2.2px !important;
+}
+
+.meter-scale-pyramid-tier.tier-dimmed {
+  opacity: 0.38;
+}
+
+.meter-scale-pyramid-tier.tier-dimmed:hover {
+  opacity: 0.85;
+}
+
+/* Rotary Range Knob Tactile Presence */
+.range-knob-rotor {
+  cursor: grab;
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.range-knob-rotor:hover {
+  filter: drop-shadow(2px 6px 6px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 10px rgba(239, 68, 68, 0.25));
+}
+
+.range-knob-rotor:active {
+  cursor: grabbing !important;
+  filter: drop-shadow(1px 3px 4px rgba(0, 0, 0, 0.8));
+}
+
+.range-detent-dot {
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.range-detent-dot:hover {
+  r: 3.2px;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.range-detent-dot.active {
+  r: 3.2px;
+  stroke: #ffffff;
+  stroke-width: 0.8px;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* Headroom Pyramid Engineering Scale Axis */
+#pyramid-engineering-scale {
+  user-select: none;
+}
+
+/* ==========================================================================
+   Transformer Lab Full-Width and Full-Screen Diagram Enhancements
+   ========================================================================== */
+.xfmr-main-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.xfmr-instruments-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 1.25rem;
+}
+
+@media (max-width: 860px) {
+  .xfmr-instruments-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Ensure full screen mode takes over completely and dims the floating dock so it never obstructs */
+body.has-circuit-fullscreen #floating-meter-dock {
+  opacity: 0.12;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+body.has-circuit-fullscreen #floating-meter-dock:hover {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Clean vector styling for Audio Transformer Schematic */
+#xfmr-schematic-svg {
+  filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.5));
+  width: 100% !important;
+  height: auto !important;
+}
+
+#xfmr-schematic-svg text {
+  user-select: none;
+}
+
+
 
 
