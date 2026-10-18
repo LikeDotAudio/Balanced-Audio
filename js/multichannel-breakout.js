@@ -214,6 +214,7 @@ class QTPSimulatorEngine {
         <g transform="translate(100, 85)" data-qtp-pair="sun">
           <rect x="0" y="0" width="650" height="36" rx="6" fill="#131d2e" stroke="${wireState.sun_hot && wireState.sun_cold ? '#f97316' : '#ef4444'}" stroke-width="1.5"/>
           <text x="15" y="18" fill="#f97316" font-size="10" font-weight="800">SUN • Pair 2</text>
+          ${wireState.shield ? "" : '<text x="15" y="31" fill="#ef4444" font-size="8" font-weight="800">⇅ same hum on both legs</text>'}
           
           <!-- Pin 2 Hot Wire (Solid Orange) -->
           <line x1="120" y1="12" x2="620" y2="12" stroke="#f97316" stroke-width="3" stroke-dasharray="${wireState.sun_hot ? 'none' : '6,4'}"/>
@@ -238,6 +239,7 @@ class QTPSimulatorEngine {
         <g transform="translate(100, 132)" data-qtp-pair="sky">
           <rect x="0" y="0" width="650" height="36" rx="6" fill="#131d2e" stroke="${wireState.sky_hot ? '#38bdf8' : '#ef4444'}" stroke-width="1.5"/>
           <text x="15" y="18" fill="#38bdf8" font-size="10" font-weight="800">SKY • Pair 1</text>
+          ${wireState.shield ? "" : '<text x="15" y="31" fill="#ef4444" font-size="8" font-weight="800">⇅ same hum on both legs</text>'}
           
           <!-- Pin 4 Hot Wire (Solid Blue) -->
           <line x1="120" y1="12" x2="620" y2="12" stroke="#38bdf8" stroke-width="3" stroke-dasharray="${wireState.sky_hot ? 'none' : '6,4'}"/>
@@ -262,6 +264,7 @@ class QTPSimulatorEngine {
         <g transform="translate(100, 179)" data-qtp-pair="grass">
           <rect x="0" y="0" width="650" height="36" rx="6" fill="#131d2e" stroke="${wireState.grass_hot && wireState.grass_cold ? '#10b981' : '#ef4444'}" stroke-width="1.5"/>
           <text x="15" y="18" fill="#10b981" font-size="10" font-weight="800">GRASS • Pair 3</text>
+          ${wireState.shield ? "" : '<text x="15" y="31" fill="#ef4444" font-size="8" font-weight="800">⇅ same hum on both legs</text>'}
           
           <!-- Pin 6 Hot Wire (Solid Green) -->
           <line x1="120" y1="12" x2="620" y2="12" stroke="#10b981" stroke-width="3" stroke-dasharray="${wireState.grass_hot ? 'none' : '6,4'}"/>
@@ -286,6 +289,7 @@ class QTPSimulatorEngine {
         <g transform="translate(100, 226)" data-qtp-pair="earth">
           <rect x="0" y="0" width="650" height="36" rx="6" fill="#131d2e" stroke="#ca8a04" stroke-width="1.5"/>
           <text x="15" y="18" fill="#ca8a04" font-size="10" font-weight="800">EARTH • Pair 4</text>
+          ${wireState.shield ? "" : '<text x="15" y="31" fill="#ef4444" font-size="8" font-weight="800">⇅ same hum on both legs</text>'}
           
           <!-- Pin 8 Hot Wire (Solid Brown) -->
           <line x1="120" y1="12" x2="620" y2="12" stroke="#ca8a04" stroke-width="3"/>

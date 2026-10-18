@@ -15,6 +15,9 @@
  * 5b. QTP mode: while the Multi-Pair Snake / QTP fault simulator is on screen, the 8 scopes become one per
  *     conductor (4 pairs × hot/cold). Hot legs are solid in their TIA-568-B pair colour, cold legs
  *     (white-striped) are white dashed, and the simulator's fault state drives every trace and meter.
+ * 5c. AES59 send/return snake: each end of the DB25 snake has 4 generators and 4 receivers
+ *     (CH1–4 send End A → End B, CH5–8 return End B → End A); receivers meter live against +4 dBu
+ *     and are wired to their 8-CH rows.
  * 6. The multichannel breakout (AES59 DB25 → AES72 RJ45 → 8 × XLR/TRS) is wired to these meters:
  *    each breakout output gets a live wire to its meter row, and channel selection is shared both ways.
  */
@@ -76,6 +79,7 @@ class EightChannelBench {
     this.renderPanel();
     this.buildSidebarSelector();
     this.focusLine(this.focus, false);
+    this.renderSnakeDiagram();
     this.initBreakoutLink();
     this.startLoop();
   }
@@ -313,6 +317,96 @@ class EightChannelBench {
     this.updateMonitor();
   }
 
+  // ---------- AES59 send / return snake ----------
+
+  renderSnakeDiagram() {
+    const host = document.getElementById("aes59-snake-diagram");
+    if (!host) return;
+    const pins = (n) => (typeof MULTICHANNEL_DATA !== "undefined" ? MULTICHANNEL_DATA.channels[n - 1].db25 : null);
+    const rowY = (n) => 74 + (n - 1) * 44;
+    const SIDE_W = 230;
+    const LEFT_X = 10;
+    const RIGHT_X = 1000 - 10 - SIDE_W;
+
+    const genBlock = (ch, x) => `
+      <g class="snk-block" data-snk-line="${ch.n}" transform="translate(${x}, ${rowY(ch.n) - 18})">
+        <rect width="${SIDE_W}" height="36" rx="4" fill="#0b1220" stroke="${ch.color}" stroke-width="1.6" />
+        <text x="10" y="15" fill="${ch.color}" font-size="11" font-weight="800">GEN · CH${ch.n}</text>
+        <text id="snk-gen-txt-${ch.n}" x="10" y="29" fill="#cbd5e1" font-size="9.5">∿ ${ch.freq} Hz · +4.0 dBu</text>
+        <text x="${SIDE_W - 10}" y="23" fill="${ch.color}" font-size="14" font-weight="900" text-anchor="end">${ch.n <= 4 ? "▶" : "◀"}</text>
+      </g>`;
+
+    const rxBlock = (ch, x) => `
+      <g class="snk-block" data-snk-line="${ch.n}" data-aes59-rx="${ch.n}" transform="translate(${x}, ${rowY(ch.n) - 18})">
+        <rect width="${SIDE_W}" height="36" rx="4" fill="#0b1220" stroke="#475569" stroke-width="1.2" />
+        <text x="10" y="15" fill="${ch.color}" font-size="11" font-weight="800">RX · CH${ch.n}</text>
+        <text id="snk-rx-dbu-${ch.n}" x="${SIDE_W - 10}" y="15" fill="#facc15" font-size="10.5" font-weight="800" text-anchor="end">+4.0 dBu ✓</text>
+        <rect x="10" y="22" width="${SIDE_W - 20}" height="7" fill="#111827" />
+        <rect id="snk-rx-bar-${ch.n}" x="10" y="22" width="0" height="7" fill="#4ade80" />
+        <rect x="${10 + ((4 - BENCH_METER_MIN) / (BENCH_METER_MAX - BENCH_METER_MIN)) * (SIDE_W - 20)}" y="20" width="1.5" height="11" fill="#ffffff" />
+      </g>`;
+
+    const lines = this.channels.map(ch => {
+      const y = rowY(ch.n);
+      const p = pins(ch.n);
+      const pinTxt = p ? `+${p.hot} / −${p.cold} / G${p.shield}` : "";
+      return `
+        <line id="snk-line-${ch.n}" class="snk-flow ${ch.n <= 4 ? "" : "snk-rev"}" x1="${LEFT_X + SIDE_W}" y1="${y}" x2="${RIGHT_X}" y2="${y}"
+          stroke="${ch.color}" stroke-width="3" />
+        <text x="500" y="${y - 6}" fill="#94a3b8" font-size="9" text-anchor="middle">CH${ch.n} · DB25 ${pinTxt}</text>`;
+    }).join("");
+
+    host.innerHTML = `
+      <svg viewBox="0 0 1000 430" width="100%" xmlns="http://www.w3.org/2000/svg" style="display: block; background: #060910; border: 1px solid #1e293b; border-radius: 6px;">
+        <text x="${LEFT_X + SIDE_W / 2}" y="24" fill="#f8fafc" font-size="13" font-weight="800" text-anchor="middle">END A · STAGE BOX</text>
+        <text x="${LEFT_X + SIDE_W / 2}" y="40" fill="#94a3b8" font-size="9.5" text-anchor="middle">4 generators (CH1–4) · 4 receivers (CH5–8)</text>
+        <text x="${RIGHT_X + SIDE_W / 2}" y="24" fill="#f8fafc" font-size="13" font-weight="800" text-anchor="middle">END B · FOH</text>
+        <text x="${RIGHT_X + SIDE_W / 2}" y="40" fill="#94a3b8" font-size="9.5" text-anchor="middle">4 receivers (CH1–4) · 4 generators (CH5–8)</text>
+        <rect x="400" y="48" width="200" height="${8 * 44 + 4}" rx="10" fill="rgba(56, 189, 248, 0.06)" stroke="#38bdf8" stroke-dasharray="6,4" />
+        <text x="500" y="24" fill="#38bdf8" font-size="12" font-weight="800" text-anchor="middle">AES59 DB25 SNAKE</text>
+        <text x="500" y="40" fill="#94a3b8" font-size="9.5" text-anchor="middle">SENDS 1–4 ▶ · ◀ RETURNS 5–8</text>
+        ${lines}
+        ${this.channels.map(ch => ch.n <= 4 ? genBlock(ch, LEFT_X) + rxBlock(ch, RIGHT_X) : rxBlock(ch, LEFT_X) + genBlock(ch, RIGHT_X)).join("")}
+      </svg>`;
+
+    host.querySelectorAll("[data-snk-line]").forEach(g => g.addEventListener("click", () => {
+      const n = Number(g.dataset.snkLine);
+      this.focusLine(n, true);
+      if (window.multichannelEngine) window.multichannelEngine.selectChannel(n, true);
+    }));
+    this.snakeHost = host;
+  }
+
+  updateSnakeDiagram() {
+    if (!this.snakeHost) return;
+    const r = this.snakeHost.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > window.innerHeight) return;
+    const span = BENCH_METER_MAX - BENCH_METER_MIN;
+    const glyph = (w) => (BENCH_WAVES.find(x => x.id === w) || BENCH_WAVES[0]).glyph;
+
+    this.channels.forEach(ch => {
+      const src = this.sourceFor(ch);
+      const lv = this.levels(src);
+      const live = isFinite(lv.dbu);
+      const delta = lv.dbu - 4;
+      const onGoal = Math.abs(delta) < 0.5;
+      const genTxt = document.getElementById(`snk-gen-txt-${ch.n}`);
+      const rxDbu = document.getElementById(`snk-rx-dbu-${ch.n}`);
+      const bar = document.getElementById(`snk-rx-bar-${ch.n}`);
+      const line = document.getElementById(`snk-line-${ch.n}`);
+      const srcName = ch.src === "tone" ? "" : ` (GEN ${ch.src})`;
+
+      genTxt.textContent = live ? `${glyph(src.wave)} ${this.fmtFreq(src.freq)} Hz · ${lv.dbu >= 0 ? "+" : ""}${lv.dbu.toFixed(1)} dBu${srcName}` : `OFF${srcName}`;
+      rxDbu.textContent = live ? `${lv.dbu >= 0 ? "+" : ""}${lv.dbu.toFixed(1)} dBu ${onGoal ? "✓" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}`}` : "−∞ dBu";
+      rxDbu.setAttribute("fill", onGoal ? "#4ade80" : "#facc15");
+      const frac = live ? Math.max(0, Math.min(1, (lv.dbu - BENCH_METER_MIN) / span)) : 0;
+      bar.setAttribute("width", (frac * 210).toFixed(1));
+      bar.setAttribute("fill", lv.dbu > 18 ? "#ef4444" : lv.dbu > 4.5 ? "#facc15" : "#4ade80");
+      line.classList.toggle("snk-dead", !live);
+      line.setAttribute("stroke-width", this.focus === ch.n ? 5 : 3);
+    });
+  }
+
   // ---------- Breakout → meter wiring ----------
 
   initBreakoutLink() {
@@ -323,14 +417,14 @@ class EightChannelBench {
 
     // Bring the meters up while the breakout or QTP snake diagram is in view, back to the lab rack once both leave
     if (!("IntersectionObserver" in window)) return;
-    this.inView = { mc: false, qtp: false };
-    const watch = { mc: "mc-svg-container", qtp: "qtp-sim-svg-container" };
+    this.inView = { mc: false, qtp: false, snake: false };
+    const watch = { mc: "mc-svg-container", qtp: "qtp-sim-svg-container", snake: "aes59-snake-diagram" };
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => { this.inView[entry.target.dataset.benchWatch] = entry.isIntersecting; });
       this.setMode(this.inView.qtp ? "qtp" : "lines");
       const dock = window.floatingMeterDock;
       if (!dock || dock.autoTrack === false) return;
-      const wanted = this.inView.qtp || this.inView.mc;
+      const wanted = this.inView.qtp || this.inView.mc || this.inView.snake;
       if (wanted && dock.currentTab !== "8ch") dock.switchRackTab("8ch");
       else if (!wanted && dock.currentTab === "8ch") dock.switchRackTab("rack");
     }, { threshold: 0.3 });
@@ -353,6 +447,7 @@ class EightChannelBench {
       const ch = this.channels[n - 1];
       row.style.setProperty("--line-color", qtp ? wire.color : ch.color);
       row.classList.toggle("qtp-cold", qtp && wire.leg === "cold");
+      if (!qtp) row.classList.remove("cm-alert", "cm-top", "cm-bottom");
       row.querySelector(".bench-line-name").textContent = qtp ? wire.label : `CH${n}`;
       row.querySelector(".bench-line-ref").textContent = qtp ? "→ GND (SHIELD)" : "P2↔P3 ACROSS";
     });
@@ -363,8 +458,8 @@ class EightChannelBench {
     const qtp = this.mode === "qtp";
     const ends = qtp
       ? QTP_WIRES.map((w, i) => ({ n: i + 1, el: document.querySelector(`[data-qtp-wire="${w.key}"]`), color: w.color, dashed: w.leg === "cold" }))
-      : [...document.querySelectorAll("[data-mc-out]")].map(el => {
-          const n = Number(el.dataset.mcOut);
+      : [...document.querySelectorAll("[data-mc-out], [data-aes59-rx]")].map(el => {
+          const n = Number(el.dataset.mcOut || el.dataset.aes59Rx);
           return { n, el, color: this.channels[n - 1].color, dashed: false };
         });
     if (this.panel.offsetParent === null || !ends.some(e => e.el)) {
@@ -391,6 +486,17 @@ class EightChannelBench {
       html += `<circle cx="${x1}" cy="${y1}" r="3" fill="${color}" /><circle cx="${x2}" cy="${y2}" r="3" fill="${color}" />`;
     });
     this.wiresSvg.innerHTML = html;
+  }
+
+  // Outline both rows of a pair in red while common-mode hum is on the line (shield lifted)
+  markCommonMode(n, wire, leg) {
+    const row = this.panel.querySelector(`.bench-line[data-line="${n}"]`);
+    const on = !!leg.cm;
+    if (row.classList.contains("cm-alert") === on) return;
+    row.classList.toggle("cm-alert", on);
+    row.classList.toggle("cm-top", on && wire.leg === "hot");
+    row.classList.toggle("cm-bottom", on && wire.leg === "cold");
+    row.querySelector(".bench-line-ref").textContent = on ? "⇅ SAME CM" : "→ GND (SHIELD)";
   }
 
   // ---------- Audio monitor ----------
@@ -438,7 +544,8 @@ class EightChannelBench {
   }
 
   // Draws one trace; sampleAt(tMs) returns volts. Dashed traces are used for cold (white-striped) legs.
-  drawScope(cv, color, sampleAt, dashed = false) {
+  // cmSampleAt (optional) draws the common-mode component in red behind the trace
+  drawScope(cv, color, sampleAt, dashed = false, cmSampleAt = null) {
     const ctx = this.fitCanvas(cv);
     const w = cv.width;
     const h = cv.height;
@@ -461,6 +568,18 @@ class EightChannelBench {
     // Fixed 3 V full-scale half-height so level differences are visible
     const scale = (h / 2 - 2) / 3.0;
 
+    if (cmSampleAt) {
+      ctx.strokeStyle = "rgba(239, 68, 68, 0.9)";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      for (let x = 0; x <= w; x++) {
+        const y = h / 2 - cmSampleAt((x / w) * BENCH_WINDOW_MS) * scale;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
     ctx.strokeStyle = color;
     ctx.lineWidth = 2.6;
     ctx.shadowColor = color;
@@ -478,31 +597,53 @@ class EightChannelBench {
     ctx.shadowBlur = 0;
   }
 
-  // One QTP conductor: half the pair's differential swing, polarity by leg, shaped by the simulator's fault state
-  qtpLeg(wire, tSec) {
+  // Fault state for one QTP conductor and its pair
+  qtpState(wire) {
     const sim = window.qtpSimulator;
     const st = sim && typeof sim.getWireState === "function" ? sim.getWireState() : {};
-    const intact = st[`${wire.pair}_${wire.leg}`] !== false;
-    const flipped = wire.pair === "sun" && st.sunFlipped;
-    const shieldOk = st.shield !== false;
+    return {
+      hotOk: st[`${wire.pair}_hot`] !== false,
+      coldOk: st[`${wire.pair}_cold`] !== false,
+      flipped: wire.pair === "sun" && !!st.sunFlipped,
+      shieldOk: st.shield !== false
+    };
+  }
 
+  // Hum / RFI picked up with the shield lifted. It is common-mode: the identical waveform rides on BOTH legs of every pair.
+  qtpCommonMode(tSec) {
+    const humVpk = 0.45;
+    return {
+      vpk: humVpk,
+      vrms: Math.sqrt(Math.pow(humVpk / Math.SQRT2, 2) + Math.pow(0.12 / Math.SQRT2, 2)),
+      sampleAt: (tMs) => {
+        const t = tMs / 1000;
+        return humVpk * Math.sin(2 * Math.PI * 60 * t + tSec) + 0.12 * Math.sin(2 * Math.PI * 2900 * t + tSec * 7);
+      }
+    };
+  }
+
+  // One QTP conductor: half the pair's differential swing, polarity by leg, plus any common-mode hum
+  qtpLeg(wire, tSec) {
+    const st = this.qtpState(wire);
+    const intact = wire.leg === "hot" ? st.hotOk : st.coldOk;
     const ch = this.channels[wire.ch - 1];
     const diffVrms = ch.muted ? 0 : 0.775 * Math.pow(10, ch.levelDbu / 20);
     const legVpk = intact ? (diffVrms * Math.SQRT2) / 2 : 0;
-    const sign = (wire.leg === "hot") !== flipped ? 1 : -1;
-    const humVpk = shieldOk ? 0 : 0.45;
+    const sign = (wire.leg === "hot") !== st.flipped ? 1 : -1;
+    const cm = st.shieldOk ? null : this.qtpCommonMode(tSec);
 
-    const sampleAt = (tMs) => {
-      const t = tMs / 1000;
-      let v = sign * legVpk * Math.sin(2 * Math.PI * ch.freq * t);
-      if (humVpk) v += humVpk * Math.sin(2 * Math.PI * 60 * t + tSec) + 0.12 * Math.sin(2 * Math.PI * 2900 * t + tSec * 7);
-      return v;
-    };
-
-    const vrms = Math.sqrt(Math.pow(legVpk / Math.SQRT2, 2) + Math.pow(humVpk / Math.SQRT2, 2));
+    const sampleAt = (tMs) => sign * legVpk * Math.sin(2 * Math.PI * ch.freq * tMs / 1000) + (cm ? cm.sampleAt(tMs) : 0);
+    const vrms = Math.sqrt(Math.pow(legVpk / Math.SQRT2, 2) + (cm ? cm.vrms * cm.vrms : 0));
     const dbu = vrms > 0 ? 20 * Math.log10(vrms / 0.775) : -Infinity;
-    const status = !intact ? "OPEN" : flipped ? "180° FLIP" : !shieldOk ? "HUM/RFI" : wire.leg === "hot" ? "HOT +" : "COLD −";
-    return { sampleAt, vrms, vpk: legVpk + humVpk, dbu, status };
+    const status = !intact ? "OPEN" : st.flipped ? "180° FLIP" : cm ? "CM HUM" : wire.leg === "hot" ? "HOT +" : "COLD −";
+
+    // What a balanced receiver sees across the pair: the hum cancels only while both legs are intact
+    const sigVrms = ((st.hotOk ? 1 : 0) + (st.coldOk ? 1 : 0)) * diffVrms / 2;
+    const humInDiff = cm && st.hotOk !== st.coldOk ? cm.vrms : 0;
+    const pairVrms = Math.sqrt(sigVrms * sigVrms + humInDiff * humInDiff);
+    const pairDbu = pairVrms > 0 ? 20 * Math.log10(pairVrms / 0.775) : -Infinity;
+
+    return { sampleAt, vrms, vpk: legVpk + (cm ? cm.vpk : 0), dbu, status, cm, pairDbu, cmCancels: cm && st.hotOk && st.coldOk };
   }
 
   drawBar(cv, dbu) {
@@ -538,9 +679,18 @@ class EightChannelBench {
       if (this.mode === "qtp") {
         const wire = QTP_WIRES[i];
         const leg = this.qtpLeg(wire, tSec);
-        this.drawScope(this.scopes[i], wire.color, leg.sampleAt, wire.leg === "cold");
+        this.drawScope(this.scopes[i], wire.color, leg.sampleAt, wire.leg === "cold", leg.cm ? leg.cm.sampleAt : null);
         dbu = leg.dbu;
-        vEl.textContent = isFinite(dbu) ? `${leg.vrms.toFixed(3)}V · ${leg.status}` : leg.status;
+        this.markCommonMode(i + 1, wire, leg);
+        if (leg.cm && wire.leg === "hot") {
+          // Hot row reports the pair as the receiver sees it
+          const d = leg.pairDbu;
+          vEl.textContent = `DIFF ${isFinite(d) ? `${d >= 0 ? "+" : ""}${d.toFixed(1)}` : "−∞"} · ${leg.cmCancels ? "CM cancels" : "CM leaks!"}`;
+        } else if (leg.cm) {
+          vEl.textContent = `CM ${leg.cm.vrms.toFixed(2)}V on + & −`;
+        } else {
+          vEl.textContent = isFinite(dbu) ? `${leg.vrms.toFixed(3)}V · ${leg.status}` : leg.status;
+        }
       } else {
         const src = this.sourceFor(ch);
         const lv = this.levels(src);
@@ -569,6 +719,7 @@ class EightChannelBench {
       if (benchUp) this.renderFrame(ts / 1000);
       if (this.genDock.classList.contains("shown") !== benchUp) this.genDock.classList.toggle("shown", benchUp);
       this.renderBreakoutWires();
+      this.updateSnakeDiagram();
       this.animFrame = requestAnimationFrame(loop);
     };
     this.animFrame = requestAnimationFrame(loop);

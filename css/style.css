@@ -6948,3 +6948,517 @@ body.has-story-sidebar.sidebar-taxonomy-active {
   background: #ef4444;
   color: #ffffff;
 }
+
+/* Shield lifted: hum is common-mode — identical on both legs of each pair. Outline each pair's two rows as one. */
+.bench-panel.qtp-mode .bench-lines {
+  gap: 0;
+}
+
+.bench-panel.qtp-mode .bench-line.cm-top {
+  border: 2px solid #ef4444;
+  border-bottom: 1px dashed rgba(239, 68, 68, 0.5);
+  margin-top: 3px;
+}
+
+.bench-panel.qtp-mode .bench-line.cm-bottom {
+  border: 2px solid #ef4444;
+  border-top: none;
+}
+
+.bench-line.cm-alert .bench-line-ref {
+  color: #ef4444;
+  font-weight: 800;
+}
+
+/* AES59 send / return snake diagram */
+.aes59-snake-diagram {
+  margin: 0 0 1.25rem;
+}
+
+.aes59-snake-diagram .snk-block {
+  cursor: pointer;
+}
+
+.aes59-snake-diagram .snk-flow {
+  stroke-dasharray: 10 6;
+  animation: snk-flow 0.8s linear infinite;
+}
+
+.aes59-snake-diagram .snk-flow.snk-rev {
+  animation-direction: reverse;
+}
+
+.aes59-snake-diagram .snk-flow.snk-dead {
+  stroke: #334155;
+  animation: none;
+}
+
+@keyframes snk-flow {
+  to { stroke-dashoffset: -16; }
+}
+
+/* Header groups: demos | references | credits */
+.nav-sep {
+  align-self: stretch;
+  width: 1px;
+  min-height: 1.1rem;
+  margin: 0 0.35rem;
+  background: rgba(148, 163, 184, 0.35);
+}
+
+/* Header nav: wrap into rows instead of running off the edge; one-line labels */
+.site-nav {
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.15rem 0.2rem;
+}
+
+.site-nav .nav-link {
+  white-space: nowrap;
+  font-size: 0.82rem;
+  padding: 0.25rem 0.45rem;
+}
+
+.sub-nav-container {
+  flex-wrap: wrap;
+}
+
+/* Four HP-style voltmeters, 2 × 2 */
+.rack-vm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+
+.rack-vm-card {
+  padding: 2px 3px 3px;
+  min-width: 0;
+}
+
+.rack-vm-card .rack-meter-title {
+  font-size: 0.56rem;
+}
+
+.rack-vm-card .rack-status-pill {
+  font-size: 0.52rem;
+  padding: 0 3px;
+}
+
+.rack-vm-canvas {
+  width: 100%;
+  height: 92px;
+  display: block;
+}
+
+.rack-vm-read {
+  display: flex;
+  justify-content: space-between;
+  gap: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  padding-top: 1px;
+}
+
+.rack-vm-read b {
+  color: #facc15;
+  font-weight: 900;
+}
+
+.rack-vm-read i {
+  font-style: normal;
+  font-weight: 800;
+}
+
+.rack-vm-read i.on { color: #4ade80; }
+.rack-vm-read i.off { color: #f87171; }
+.rack-vm-read span { color: #cbd5e1; }
+
+.rack-vm-card .rack-ref-line {
+  font-size: 0.5rem;
+}
+
+.rack-vm-canvas {
+  height: 84px;
+}
+
+/* Voltmeter reference: one line (the goal reading is in the digital readout above) */
+.rack-vm-card .rack-ref-line {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rack-vm-card .rack-goal {
+  display: none;
+}
+
+/* Reference lines: "V+ … · COM …" on one line (full text on hover), Vrms / dBu / goal on the next */
+.rack-ref-line .rack-ref-text {
+  flex: 1 1 100%;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rack-ref-line .rack-com-btn + .rack-ref-text {
+  flex-basis: 0;
+}
+
+/* Rack instruments shrink with the window height so all ten fit without scrolling */
+#rack-scope1-canvas,
+#rack-scope2-canvas {
+  width: 100%;
+  height: clamp(56px, calc((100vh - 760px) / 2), 110px);
+  display: block;
+}
+
+.rack-vm-canvas {
+  height: clamp(56px, calc((100vh - 760px) / 2.6), 84px);
+}
+
+.rack-scope-bezel,
+.rack-vu-bezel {
+  height: auto !important;
+}
+
+/* Rule cards: big number and title on one line */
+.rule-number {
+  display: inline-block;
+  font-size: 2.1rem;
+  font-weight: 900;
+  line-height: 1;
+  margin: 0 0.6rem 0 0;
+  vertical-align: baseline;
+  font-variant-numeric: tabular-nums;
+}
+
+.rule-title {
+  display: inline;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.rule-title + .rule-desc,
+.rule-number + .rule-title + * {
+  margin-top: 0.75rem;
+}
+
+/* Sidebar sub-items light up while their section scrolls past */
+.subnode-link.passing {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  box-shadow: inset 2px 0 0 #38bdf8;
+  font-weight: 700;
+}
+
+.fault-subnodes.passing {
+  border-left: 2px solid #38bdf8;
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.fault-subnodes.passing .subnode-heading {
+  color: #38bdf8;
+}
+
+/* XLR Hub: the mating-face inspector slides down alongside the AES14 tables (positioned by xlr-hub.js) */
+.xlr-inspector-sticky {
+  align-self: start;
+  will-change: transform;
+}
+
+/* Levels Pyramid section: pyramid (left half) beside the laboratory instruments (right half) */
+.pyr-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.pyr-split-left,
+.pyr-split-right {
+  min-width: 0;
+}
+
+@media (max-width: 1100px) {
+  .pyr-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Calibration panel: rotary step switch + VFD readouts */
+.cal-panel {
+  display: grid;
+  grid-template-columns: minmax(170px, 230px) 1fr;
+  gap: 1rem;
+  align-items: center;
+  background: linear-gradient(180deg, #e2e7e0, #cbd3c9);
+  border: 2px solid #64748b;
+  border-radius: 6px;
+  padding: 0.9rem;
+  margin-top: 1rem;
+}
+
+.cal-rotary-wrap {
+  text-align: center;
+}
+
+.cal-panel-label {
+  font-family: Arial, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: #0f172a;
+  margin-bottom: 0.3rem;
+}
+
+.cal-rotary svg {
+  display: block;
+  user-select: none;
+}
+
+.cal-readouts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.cal-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: #050a07;
+  border: 2px solid #0f172a;
+  border-radius: 4px;
+  padding: 0.35rem 0.55rem;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8);
+}
+
+.cal-readout-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.cal-readout-label em {
+  font-style: normal;
+  font-weight: 600;
+}
+
+.cal-readout .calc-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #4ade80;
+  font-family: var(--font-mono);
+  font-size: 1.45rem;
+  font-weight: 800;
+  text-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+  padding: 0;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.cal-readout .calc-input::-webkit-outer-spin-button,
+.cal-readout .calc-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.cal-readout .calc-input[readonly] {
+  color: #fbbf24;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.55);
+}
+
+.cal-tier-name {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  background: #0f172a;
+  border: 2px solid #10b981;
+  border-radius: 4px;
+  padding: 0.3rem;
+}
+
+/* Instruments sit side by side inside the right half (shown here even though the bench is hidden elsewhere) */
+.pyr-split-right .vintage-test-bench {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+/* 8-channel scope on one timebase */
+.scope8-canvas {
+  width: 100%;
+  height: clamp(150px, calc(100vh - 690px), 250px) !important;
+  display: block;
+}
+
+.scope8-zoom {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.scope8-zoom-btn {
+  background: #111111;
+  border: 1px solid #555555;
+  color: #e5e5e5;
+  font-family: var(--font-mono);
+  font-weight: 900;
+  font-size: 0.75rem;
+  line-height: 1;
+  width: 18px;
+  height: 16px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.scope8-zoom-btn:hover {
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+/* Less text, more information: meters are named by what they measure; the readout isn't repeated */
+.rack-meter-name {
+  font-weight: 900;
+  letter-spacing: 0.03em;
+}
+
+.rack-ref-line .rack-ref-text,
+.rack-ref-line .rack-goal {
+  display: none;
+}
+
+.rack-ref-line {
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+
+/* Drop bar: −30 … +10 dB around the +4 dBu goal (white tick) */
+.rack-drop {
+  position: relative;
+  flex: 1 1 auto;
+  height: 12px;
+  background: #111827;
+  border: 1px solid #333333;
+  min-width: 80px;
+}
+
+.rack-drop::after {
+  content: "";
+  position: absolute;
+  left: 75%;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  background: #ffffff;
+}
+
+.rack-drop i {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  background: #f87171;
+}
+
+.rack-drop.on i { background: #4ade80; }
+.rack-drop.leg i { background: #facc15; }
+
+.rack-drop b {
+  position: absolute;
+  right: 3px;
+  top: -1px;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  font-weight: 900;
+  color: #f8fafc;
+  text-shadow: 0 0 3px #000000, 0 0 3px #000000;
+}
+
+.rack-drop.on b { color: #4ade80; }
+
+.rack-vm-canvas {
+  height: clamp(64px, calc((100vh - 600px) / 2.2), 110px) !important;
+}
+
+/* Page / design credit: Anthony Kuzub · Like.audio */
+.page-credit-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  border: 1.5px solid #c084fc;
+  border-left-width: 4px;
+  background: rgba(192, 132, 252, 0.07);
+  border-radius: 6px;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1.25rem;
+}
+
+.page-credit-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #c084fc;
+}
+
+.page-credit-name {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #f8fafc;
+}
+
+.page-credit-sub {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.footer-credit {
+  margin-top: 0.35rem;
+  color: #c084fc;
+}
+
+.rack-credit {
+  margin-top: auto;
+  padding: 3px 6px;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: #6b7280;
+  text-align: center;
+  border-top: 1px solid #1f2937;
+}
+
+/* DMM name plate fades away after a few seconds so the readouts get the space; hover the meter to see it again */
+.dmm-plate {
+  overflow: hidden;
+  max-height: 4rem;
+  animation: dmm-plate-retire 0.6s ease 4s forwards;
+}
+
+.dmm-display-card:hover .dmm-plate {
+  animation: none;
+}
+
+@keyframes dmm-plate-retire {
+  to {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-width: 0;
+  }
+}

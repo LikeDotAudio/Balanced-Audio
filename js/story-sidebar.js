@@ -26,6 +26,7 @@ class StorySidebar {
     this.lockSidebarOpen();
     this.setupScrollListener();
     this.setupIntersectionObserver();
+    this.setupSubnodeSpy();
     this.setupGlobalTreeLinks();
   }
 
@@ -400,6 +401,47 @@ class StorySidebar {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
+  }
+
+  // Highlight sub-items (e.g. 6.1–6.8) while their section is passing the upper part of the screen
+  setupSubnodeSpy() {
+    if (!this.sidebar) return;
+    const links = [...this.sidebar.querySelectorAll(".subnode-link[href^='#']")];
+    let queued = false;
+    let lastPassing = null;
+
+    const update = () => {
+      queued = false;
+      const vh = window.innerHeight;
+      const inBand = (el) => {
+        if (!el || el.offsetParent === null) return false;
+        const r = el.getBoundingClientRect();
+        return r.top < vh * 0.45 && r.bottom > vh * 0.15;
+      };
+
+      let passing = null;
+      links.forEach(link => {
+        const group = link.closest(".fault-subnodes");
+        const on = inBand(document.querySelector(link.getAttribute("href")));
+        if (group) {
+          group.classList.toggle("passing", on);
+          return;
+        }
+        link.classList.toggle("passing", on);
+        if (on && !passing) passing = link;
+      });
+
+      if (passing && passing !== lastPassing) passing.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      lastPassing = passing;
+    };
+
+    window.addEventListener("scroll", () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    }, { passive: true });
+    update();
   }
 
   setActiveChapter(targetId) {

@@ -125,7 +125,37 @@ class XLRHubEngine {
     this.init();
   }
 
+  // Slide the mating-face inspector down beside the AES14 tables as the reader scrolls,
+  // never past the bottom of the tables column
+  initFollowInspector() {
+    const panel = document.querySelector(".xlr-inspector-sticky");
+    if (!panel) return;
+    const column = panel.parentElement;
+    const GAP = 12;
+    let queued = false;
+
+    const place = () => {
+      queued = false;
+      panel.style.transform = "";
+      const colRect = column.getBoundingClientRect();
+      const panelH = panel.offsetHeight;
+      const maxShift = Math.max(0, colRect.height - panelH);
+      const shift = Math.min(maxShift, Math.max(0, GAP - colRect.top));
+      panel.style.transform = shift ? `translateY(${shift}px)` : "";
+    };
+    const queue = () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(place);
+      }
+    };
+    window.addEventListener("scroll", queue, { passive: true });
+    window.addEventListener("resize", queue);
+    place();
+  }
+
   init() {
+    this.initFollowInspector();
     this.bindEvents();
     this.renderCircuit(1);
   }
@@ -220,6 +250,7 @@ class XLRHubEngine {
   renderSVG(item) {
     const svgContainer = document.getElementById("xlr-svg-container");
     if (!svgContainer) return;
+    queueMicrotask(() => this.tagProbePoints(item));
 
     if (!item.is5Pin) {
       // 3-Pin Circular (XLR-3)
@@ -356,6 +387,38 @@ class XLRHubEngine {
           </g>
         </svg>
       `;
+    }
+  }
+
+  // Make every pin / socket on the mating faces a probe point for the lab rack, plus an across-the-pair point
+  tagProbePoints(item) {
+    const svg = document.querySelector("#xlr-svg-container svg");
+    if (!svg) return;
+    const faces = svg.querySelectorAll(":scope > g");
+    const sides = [["xlrm", "Male pin"], ["xlrf", "Female socket"]];
+    faces.forEach((face, f) => {
+      if (!sides[f]) return;
+      const [prefix, label] = sides[f];
+      const contacts = [...face.querySelectorAll("circle")].filter(c => ["14", "11"].includes(c.getAttribute("r")));
+      contacts.forEach((c, i) => {
+        c.setAttribute("data-probe-target", `${prefix}-p${i + 1}`);
+        c.setAttribute("data-probe-label", `${label} ${i + 1}: ${item.pins[i + 1]?.name || ""}`);
+        c.style.cursor = "crosshair";
+      });
+    });
+
+    // Socket-side point for meters reading across contacts 2 and 3
+    const female = faces[1];
+    if (female) {
+      const ns = "http://www.w3.org/2000/svg";
+      const g = document.createElementNS(ns, "g");
+      g.innerHTML = `
+        <rect x="-26" y="-2" width="52" height="16" rx="3" fill="#0f172a" stroke="#f97316" stroke-width="1.2" />
+        <text x="0" y="10" fill="#f97316" font-size="9" font-weight="800" text-anchor="middle">V 2↔3</text>`;
+      g.setAttribute("data-probe-target", "xlrf-diff");
+      g.setAttribute("data-probe-label", "Across contacts 2 & 3 (differential)");
+      g.style.cursor = "crosshair";
+      female.appendChild(g);
     }
   }
 

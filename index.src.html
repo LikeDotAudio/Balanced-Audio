@@ -42,7 +42,9 @@
       </a>
 
       <nav class="site-nav">
+        <!-- Demo sheets first (page order), then references, then credits last -->
         <a href="#enclosure-explorer" class="nav-link">Box &amp; Enclosure</a>
+        <a href="#multichannel-hierarchy" class="nav-link">Multichannel Snake</a>
         <a href="#xlr-hub" class="nav-link">Universal XLR Hub</a>
         <a href="#top-level" class="nav-link">Top Level Rules</a>
         <a href="#triad" class="nav-link">The Triad</a>
@@ -51,12 +53,16 @@
         <a href="#transformer-simulator" class="nav-link">Transformer Lab</a>
         <a href="#deepest-dive" class="nav-link">The Deepest Dive</a>
         <a href="#tutorials-section" class="nav-link">Tutorials &amp; Matrix</a>
+        <a href="#aes-vst" class="nav-link">AES-VST Plugin</a>
+        <span class="nav-sep" aria-hidden="true"></span>
         <a href="#curriculum-modules" class="nav-link" style="color: var(--accent-cyan); font-weight: 700;">100 Modules</a>
         <a href="#tree-explorer" class="nav-link" onclick="if(window.storySidebar){window.storySidebar.openTaxonomyTree();return false;}">Taxonomy Tree</a>
-        <a href="#aes-vst" class="nav-link">AES-VST Plugin</a>
         <a href="#datasheet-templates" class="nav-link">Free Datasheets</a>
         <a href="#dennis-bohn-par" class="nav-link">Dennis Bohn PAR</a>
+        <a href="#landmark-papers" class="nav-link">Landmark Papers</a>
         <a href="#timeline-section" class="nav-link">Timeline &amp; Books</a>
+        <span class="nav-sep" aria-hidden="true"></span>
+        <a href="#sc0505-roster" class="nav-link">Credits</a>
         <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">☀️ Light Mode</button>
       </nav>
     </div>
@@ -74,12 +80,16 @@
         <a href="#transformer-simulator" class="sub-nav-pill" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">Transformer Lab</a>
         <a href="#deepest-dive" class="sub-nav-pill">Jim Meyer Thevenin</a>
         <a href="#tutorials-section" class="sub-nav-pill">Hess Compatibility</a>
+        <a href="#aes-vst" class="sub-nav-pill" style="border-color: #10b981; color: #34d399;">AES-VST Plugin</a>
+        <span class="nav-sep" aria-hidden="true"></span>
         <a href="#curriculum-modules" class="sub-nav-pill" style="border-color: #38bdf8; color: #38bdf8; font-weight: 700;">100 Modules (MD)</a>
         <a href="#tree-explorer" class="sub-nav-pill" onclick="if(window.storySidebar){window.storySidebar.openTaxonomyTree();return false;}">Taxonomy Tree</a>
-        <a href="#aes-vst" class="sub-nav-pill" style="border-color: #10b981; color: #34d399;">AES-VST Plugin</a>
         <a href="#datasheet-templates" class="sub-nav-pill">Free Datasheets</a>
         <a href="#dennis-bohn-par" class="sub-nav-pill" style="border-color: #f59e0b; color: #fbbf24;">Dennis Bohn PAR</a>
+        <a href="#landmark-papers" class="sub-nav-pill">Landmark Papers</a>
         <a href="#timeline-section" class="sub-nav-pill">Timeline &amp; Prior Works</a>
+        <span class="nav-sep" aria-hidden="true"></span>
+        <a href="#sc0505-roster" class="sub-nav-pill">Credits</a>
       </div>
     </div>
   </header>
@@ -931,6 +941,9 @@
           </div>
         </div>
 
+        <!-- Send / return snake: 4 generators + 4 receivers at each end (drawn by eight-channel-bench.js) -->
+        <div id="aes59-snake-diagram" class="aes59-snake-diagram"></div>
+
         <div class="table-responsive">
           <table class="aes-spec-table" style="font-size: 0.84rem; width: 100%;">
             <thead>
@@ -1155,8 +1168,8 @@
           </div>
         </div>
 
-        <!-- Right: Interactive Mating Face Inspector & Dynamic Insights -->
-        <div>
+        <!-- Right: Interactive Mating Face Inspector & Dynamic Insights (follows the reader down the AES14 tables) -->
+        <div class="xlr-inspector-sticky">
           <div class="xlr-table-card">
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
               <h3 style="margin: 0; color: var(--text-primary);">Connector Mating Face Pin Inspector</h3>
@@ -1311,6 +1324,36 @@
               <text x="820" y="218" fill="#6ee7b7" font-size="9" font-weight="600" text-anchor="middle">100% Noise Rejection</text>
 
               <rect x="15" y="250" width="890" height="22" rx="4" fill="rgba(6, 182, 212, 0.08)" stroke="rgba(6, 182, 212, 0.25)"/>
+              <!-- Current flow: signal loop (green) and equal common-mode noise currents (orange) -->
+              <g class="golden-current-flow" pointer-events="none">
+              <circle r="3.6" fill="#4ade80"><animateMotion dur="6s" begin="-0.00s" repeatCount="indefinite" path="M 66 70 L 705 70 L 705 205 L 50 205 L 50 86"/></circle>
+              <circle r="3.6" fill="#4ade80"><animateMotion dur="6s" begin="-0.50s" repeatCount="indefinite" path="M 66 70 L 705 70 L 705 205 L 50 205 L 50 86"/></circle>
+              <circle r="3.6" fill="#4ade80"><animateMotion dur="6s" begin="-1.00s" repeatCount="indefinite" path="M 66 70 L 705 70 L 705 205 L 50 205 L 50 86"/></circle>
+              <circle r="3.6" fill="#4ade80"><animateMotion dur="6s" begin="-1.50s" repeatCount="indefinite" path="M 66 70 L 705 70 L 705 205 L 50 205 L 50 86"/></circle>
+              <circle r="3.6" fill="#4ade80"><animateMotion dur="6s" begin="-2.00s" repeatCount="indefinite" path="M 66 70 L 705 70 L 705 205 L 50 205 L 50 86"/></circle>
+              <circle r="3.6" fill="#4ade80"><animateMotion dur="6s" begin="-2.50s" repeatCount="indefinite" path="M 66 70 L 705 70 L 705 205 L 50 205 L 50 86"/></circle>
+              <circle r="3.6" fill="#4ade80"><animateMotion dur="6s" begin="-3.00s" repeatCount="indefinite" path="M 66 70 L 705 70 L 705 205 L 50 205 L 50 86"/></circle>
+              <circle r="3.6" fill="#4ade80"><animateMotion dur="6s" begin="-3.50s" repeatCount="indefinite" path="M 66 70 L 705 70 L 705 205 L 50 205 L 50 86"/></circle>
+              <circle r="3.6" fill="#4ade80"><animateMotion dur="6s" begin="-4.00s" repeatCount="indefinite" path="M 66 70 L 705 70 L 705 205 L 50 205 L 50 86"/></circle>
+              <circle r="3.6" fill="#4ade80"><animateMotion dur="6s" begin="-4.50s" repeatCount="indefinite" path="M 66 70 L 705 70 L 705 205 L 50 205 L 50 86"/></circle>
+              <circle r="3.6" fill="#4ade80"><animateMotion dur="6s" begin="-5.00s" repeatCount="indefinite" path="M 66 70 L 705 70 L 705 205 L 50 205 L 50 86"/></circle>
+              <circle r="3.6" fill="#4ade80"><animateMotion dur="6s" begin="-5.50s" repeatCount="indefinite" path="M 66 70 L 705 70 L 705 205 L 50 205 L 50 86"/></circle>
+              <circle r="3" fill="#f59e0b"><animateMotion dur="2.6s" begin="-0.00s" repeatCount="indefinite" path="M 535 113 L 535 70 L 175 70"/></circle>
+              <circle r="3" fill="#f59e0b"><animateMotion dur="2.6s" begin="-0.52s" repeatCount="indefinite" path="M 535 113 L 535 70 L 175 70"/></circle>
+              <circle r="3" fill="#f59e0b"><animateMotion dur="2.6s" begin="-1.04s" repeatCount="indefinite" path="M 535 113 L 535 70 L 175 70"/></circle>
+              <circle r="3" fill="#f59e0b"><animateMotion dur="2.6s" begin="-1.56s" repeatCount="indefinite" path="M 535 113 L 535 70 L 175 70"/></circle>
+              <circle r="3" fill="#f59e0b"><animateMotion dur="2.6s" begin="-2.08s" repeatCount="indefinite" path="M 535 113 L 535 70 L 175 70"/></circle>
+              <circle r="3" fill="#f59e0b"><animateMotion dur="2.6s" begin="-0.00s" repeatCount="indefinite" path="M 535 161 L 535 205 L 175 205"/></circle>
+              <circle r="3" fill="#f59e0b"><animateMotion dur="2.6s" begin="-0.52s" repeatCount="indefinite" path="M 535 161 L 535 205 L 175 205"/></circle>
+              <circle r="3" fill="#f59e0b"><animateMotion dur="2.6s" begin="-1.04s" repeatCount="indefinite" path="M 535 161 L 535 205 L 175 205"/></circle>
+              <circle r="3" fill="#f59e0b"><animateMotion dur="2.6s" begin="-1.56s" repeatCount="indefinite" path="M 535 161 L 535 205 L 175 205"/></circle>
+              <circle r="3" fill="#f59e0b"><animateMotion dur="2.6s" begin="-2.08s" repeatCount="indefinite" path="M 535 161 L 535 205 L 175 205"/></circle>
+                <rect x="245" y="104" width="250" height="34" rx="4" fill="rgba(9, 13, 22, 0.85)" stroke="#334155"/>
+                <circle cx="257" cy="115" r="3.6" fill="#4ade80"/>
+                <text x="266" y="118" fill="#4ade80" font-size="9" font-weight="700">I_sig: out on Pin 2, back on Pin 3</text>
+                <circle cx="257" cy="129" r="3" fill="#f59e0b"/>
+                <text x="266" y="132" fill="#f59e0b" font-size="9" font-weight="700">I_n₁ = I_n₂: same way on both (common-mode)</text>
+              </g>
               <text x="460" y="265" fill="#38bdf8" font-size="10.5" font-weight="700" text-anchor="middle">THE GOLDEN RULE: Noise immunity depends EXCLUSIVELY on equal impedance to ground (Z₁ = Z₂). Signal voltage symmetry is completely irrelevant!</text>
             </svg>
           </div>
@@ -1978,6 +2021,9 @@
         </p>
       </div>
 
+      <!-- Pyramid (left half) beside the laboratory instruments (right half) -->
+      <div class="pyr-split">
+      <div class="pyr-split-left">
       <!-- Graphical SVG Headroom Pyramid -->
       <div class="svg-diagram-wrapper" style="margin-bottom: 2rem;">
         <svg viewBox="0 0 920 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
@@ -2037,6 +2083,8 @@
         </div>
       </div>
 
+      </div>
+      <div class="pyr-split-right">
       <!-- 1970s Laboratory Instrument Rack & Level Converter -->
       <div class="interactive-calc-card" style="background: #0d131f; border: 1.5px solid #334155;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem;">
@@ -2199,8 +2247,7 @@
   <!-- APK Cyan Badge Logo -->
   <rect x="0" y="0" width="24" height="18" rx="3" fill="#06b6d4"/>
   <text x="12" y="13" fill="#040711" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="11" text-anchor="middle">APK</text>
-  <text x="32" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.08em">ANTHONY PETER KUZUB</text>
-  <text x="175" y="13" fill="#0284c7" font-family="'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="800" letter-spacing="0.06em">PRECISION AC VOLTMETER</text>
+  <text x="32" y="13" fill="#0284c7" font-family="'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="800" letter-spacing="0.06em">PRECISION AC VOLTMETER</text>
   <text x="96" y="25" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="0.05em">IN ~ 100kHz L.P. FILTER ~ OUT</text>
 </g>
 
@@ -2366,7 +2413,7 @@
           <!-- Fluke 8050A Precision Benchtop DMM -->
           <div class="dmm-display-card">
             <div class="dmm-plate">
-              <span class="dmm-plate-title">FLUKE 8050A DIGITAL MULTIMETER</span>
+              <span class="dmm-plate-title">DIGITAL MULTIMETER</span>
               <span class="dmm-plate-sub">TRUE RMS &bull; 4&frac12; DIGIT AUDIO BENCH</span>
             </div>
             <div class="dmm-bezel">
@@ -2418,12 +2465,20 @@
           </div>
         </div>
 
-        <!-- Calibrated Standard Presets Dropdown & Numerical Controls -->
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid #334155; border-radius: 6px; padding: 1rem; margin-bottom: 1.25rem;">
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
-            <div>
-              <span style="font-size: 0.82rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Standard Audio Calibration Step:</span>
-              <select id="pyr-preset-select" class="military-preset-select" style="margin-left: 0.5rem; min-width: 280px;">
+        <!-- Calibration panel: rotary step switch (pyramid-tier coloured) + VFD level readouts -->
+        <div class="cal-panel">
+          <div class="cal-rotary-wrap">
+            <div class="cal-panel-label">CALIBRATION STEP</div>
+            <div id="cal-rotary" class="cal-rotary" title="Click a step, click the knob to advance, or scroll"></div>
+          </div>
+          <div class="cal-readouts">
+            <label class="cal-readout"><span class="cal-readout-label">LEVEL &bull; dBu <em>(0.775 V)</em></span><input type="number" id="calc-dbu" class="calc-input" value="4.0" step="0.5" /></label>
+            <label class="cal-readout"><span class="cal-readout-label">LEVEL &bull; dBV <em>(1.000 V)</em></span><input type="number" id="calc-dbv" class="calc-input" value="1.78" step="0.5" /></label>
+            <label class="cal-readout"><span class="cal-readout-label">V<sub>RMS</sub></span><input type="number" id="calc-vrms" class="calc-input" value="1.228" step="0.05" /></label>
+            <label class="cal-readout"><span class="cal-readout-label">V<sub>PEAK</sub></span><input type="number" id="calc-vpeak" class="calc-input" value="1.737" step="0.05" readonly /></label>
+            <div id="cal-tier-name" class="cal-tier-name">PRO LINE &bull; +4 dBu / 0 VU</div>
+          </div>
+          <select id="pyr-preset-select" hidden aria-hidden="true">
                 <option value="4.0" selected>+4.0 dBu (1.228 VRMS) — Professional Studio (+4 dBu / 0 VU)</option>
                 <option value="0.0">0.0 dBu (0.775 VRMS) — European Broadcast Reference</option>
                 <option value="-7.78">-10.0 dBV (-7.78 dBu / 0.316 VRMS) — Consumer Line Level</option>
@@ -2433,30 +2488,9 @@
                 <option value="-60.0">-60.0 dBu (0.775 mVRMS) — Low-Output Ribbon Mic</option>
                 <option value="custom">Manual Numeric Entry (Custom)</option>
               </select>
-            </div>
-            <span style="font-size: 0.78rem; color: #64748b;">Changing presets dynamically deflects VU needle &amp; recalculates DMM</span>
-          </div>
         </div>
-
-        <!-- Live Bidirectional Numerical Inputs -->
-        <div class="calc-row">
-          <div class="calc-input-group">
-            <label for="calc-dbu">Level in dBu (0.775 V Ref):</label>
-            <input type="number" id="calc-dbu" class="calc-input" value="4.0" step="0.5" />
-          </div>
-          <div class="calc-input-group">
-            <label for="calc-dbv">Level in dBV (1.000 V Ref):</label>
-            <input type="number" id="calc-dbv" class="calc-input" value="1.78" step="0.5" />
-          </div>
-          <div class="calc-input-group">
-            <label for="calc-vrms">RMS Voltage (V<sub>RMS</sub>):</label>
-            <input type="number" id="calc-vrms" class="calc-input" value="1.228" step="0.05" />
-          </div>
-          <div class="calc-input-group">
-            <label for="calc-vpeak">Peak Voltage (V<sub>PEAK</sub>):</label>
-            <input type="number" id="calc-vpeak" class="calc-input" value="1.737" step="0.05" readonly style="background: rgba(255,255,255,0.03);" />
-          </div>
-        </div>
+      </div>
+      </div>
       </div>
     </div>
   </section>
@@ -3053,8 +3087,7 @@
   <!-- APK Cyan Badge Logo -->
   <rect x="0" y="0" width="24" height="18" rx="3" fill="#06b6d4"/>
   <text x="12" y="13" fill="#040711" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="11" text-anchor="middle">APK</text>
-  <text x="32" y="13" fill="#0f172a" font-family="'Helvetica Neue', Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.08em">ANTHONY PETER KUZUB</text>
-  <text x="175" y="13" fill="#0284c7" font-family="'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="800" letter-spacing="0.06em">PRECISION AC VOLTMETER</text>
+  <text x="32" y="13" fill="#0284c7" font-family="'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="800" letter-spacing="0.06em">PRECISION AC VOLTMETER</text>
   <text x="96" y="25" fill="#475569" font-family="Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="0.05em">IN ~ 100kHz L.P. FILTER ~ OUT</text>
 </g>
 
@@ -3220,7 +3253,7 @@
               <!-- Fluke 8050A Precision Benchtop DMM -->
               <div class="dmm-display-card">
                 <div class="dmm-plate">
-                  <span class="dmm-plate-title">FLUKE 8050A DIGITAL MULTIMETER</span>
+                  <span class="dmm-plate-title">DIGITAL MULTIMETER</span>
                   <span class="dmm-plate-sub">TRUE RMS &bull; SYSTEM DIFFERENTIAL LOAD MONITOR</span>
                 </div>
                 <div class="dmm-bezel">
@@ -4147,9 +4180,9 @@
             <div class="xfmr-meter-sync-group" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
               <span style="font-size: 0.68rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Set Meters R_REF:</span>
               <div class="xfmr-sync-btn-bar" id="xfmr-sync-btn-bar" style="display: flex; gap: 0.35rem;">
-                <button type="button" class="xfmr-sync-r-btn" data-xfmr-sync-r="150" title="Set HP Voltmeter &amp; Fluke 8050A to 150 Ω Primary">150 Ω (Pri)</button>
-                <button type="button" class="xfmr-sync-r-btn active" data-xfmr-sync-r="600" title="Set HP Voltmeter &amp; Fluke 8050A to 600 Ω Standard">600 Ω (Sec/Std)</button>
-                <button type="button" class="xfmr-sync-r-btn" data-xfmr-sync-r="2400" title="Set HP Voltmeter &amp; Fluke 8050A to 2.4 kΩ Step-Up">2.4 kΩ (Step-Up)</button>
+                <button type="button" class="xfmr-sync-r-btn" data-xfmr-sync-r="150" title="Set voltmeter &amp; DMM to 150 Ω Primary">150 Ω (Pri)</button>
+                <button type="button" class="xfmr-sync-r-btn active" data-xfmr-sync-r="600" title="Set voltmeter &amp; DMM to 600 Ω Standard">600 Ω (Sec/Std)</button>
+                <button type="button" class="xfmr-sync-r-btn" data-xfmr-sync-r="2400" title="Set voltmeter &amp; DMM to 2.4 kΩ Step-Up">2.4 kΩ (Step-Up)</button>
               </div>
               <span style="font-size: 0.68rem; color: #facc15; font-family: monospace; font-weight: 800;" id="xfmr-sync-active-r">Active: 600 Ω</span>
             </div>
@@ -6910,6 +6943,13 @@
           </span>
         </div>
 
+        <!-- Page credit -->
+        <div class="page-credit-card">
+          <span class="page-credit-label">Page, design &amp; interactive instruments</span>
+          <span class="page-credit-name">Anthony Kuzub &bull; Like.audio</span>
+          <span class="page-credit-sub">Conceived and built the interactive meters, lab rack, schematics and this reference page.</span>
+        </div>
+
         <div class="contributor-roster-grid">
 
           <!-- Bruce Olson -->
@@ -7276,6 +7316,7 @@
 
       <div class="footer-bottom">
         <p>&copy; 2026 Audio Engineering Society SC-05-05 Standards Working Group &bull; Educational &amp; Technical Reference &bull; Pro Audio Reference &copy; Dennis A. Bohn (Donated to AES 2016)</p>
+        <p class="footer-credit">Page, design &amp; interactive meters by <strong>Anthony Kuzub &bull; Like.audio</strong></p>
       </div>
     </div>
   </footer>

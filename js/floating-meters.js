@@ -36,6 +36,19 @@ const SCHEMATIC_CONFIGS = [
     vu2: "enc-chassisb"
   },
   {
+    id: "xlr-svg-container",
+    name: "Section 0.5: Universal XLR Hub (AES14 Table 2)",
+    shortName: "Sec 0.5: XLR Hub",
+    scope1_ch1: "xlrm-p2",
+    scope1_ch2: "xlrf-p2",
+    scope2_ch3: "xlrf-p3",
+    scope2_ch4: "xlrf-diff",
+    dmm1: "xlrf-p2",
+    dmm2: "xlrf-diff",
+    vu1: "xlrm-p2",
+    vu2: "xlrf-diff"
+  },
+  {
     id: "pp-schematic-svg",
     name: "Section 4: Push-Pull Active Balanced Driver",
     shortName: "Sec 4: Push-Pull Driver",
@@ -98,8 +111,20 @@ const PROBE_COLORS = {
   DMM1: "#f97316", // orange
   DMM2: "#a855f7", // purple
   VU1: "#14b8a6", // teal
-  VU2: "#6366f1" // indigo
+  VU2: "#6366f1", // indigo
+  VU3: "#84cc16", // lime
+  VU4: "#f472b6" // pink
 };
+
+// HP-style voltmeter ranges (full-scale volts); each step is ~10 dB
+const VM_RANGES = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100];
+// Level-pyramid zones drawn on the decibel arc (dBu)
+const VM_ZONES = [
+  { from: -60, to: -40, color: "#f59e0b", label: "MIC" },
+  { from: -12, to: -6, color: "#06b6d4", label: "CONSUMER" },
+  { from: -2, to: 10, color: "#10b981", label: "PRO +4" },
+  { from: 18, to: 28, color: "#ef4444", label: "HEADROOM" }
+];
 
 // Line-level goal every meter is judged against: +4 dBu across the balanced pair
 const GOAL_DBU = 4;
@@ -132,6 +157,8 @@ class FloatingMeterDock {
     this.dmm2Target = "xfmr-load";
     this.vu1Target = "xfmr-vin";
     this.vu2Target = "xfmr-load";
+    this.vu3Target = "xfmr-p2";
+    this.vu4Target = "xfmr-p3";
     this.dmm1Mode = "rms"; // 'rms' | 'dbu' | 'peak' | 'crest'
     this.dmm2Mode = "diff"; // 'diff' | 'thd' | 'cmrr' | 'error'
     // LUCKY COM lead: 'gnd' = single-ended to Pin 1 / 0 V, 'across' = probes across both wires of the pair
@@ -146,15 +173,23 @@ class FloatingMeterDock {
     this.scope1VoltsDiv = 1.0;
     this.scope2VoltsDiv = 1.0;
     this.scopeTimeDiv = 0.5; // ms/div
+    this.scope8VoltsDiv = 1.0;
     this.scopeTime = 0;
 
     // VU Meters Ballistics & Sensitivity
     this.vu1Range = 3.0; // 3V (+10 dB)
     this.vu2Range = 3.0;
+    this.vu3Range = 3.0;
+    this.vu4Range = 3.0;
+    this.vmAuto = { 1: true, 2: true, 3: true, 4: true }; // autorange per voltmeter
     this.vu1NeedleDbu = 4.0;
     this.vu2NeedleDbu = 4.0;
+    this.vu3NeedleDbu = 4.0;
+    this.vu4NeedleDbu = 4.0;
     this.vu1TargetDbu = 4.0;
     this.vu2TargetDbu = 4.0;
+    this.vu3TargetDbu = 4.0;
+    this.vu4TargetDbu = 4.0;
     this.attackRate = 0.28;
     this.releaseRate = 0.08;
 
@@ -184,7 +219,7 @@ class FloatingMeterDock {
     const btn2 = this.dock?.querySelector("#rack-btn-refz2");
     if (btn2) btn2.textContent = `REF Z: ${rTxt}`;
     this.updateFromActiveCircuit();
-    this.showToast(`Fluke 8050A Reference Z set to ${rTxt}`);
+    this.showToast(`Reference Z set to ${rTxt}`);
   }
 
   // Blend two #rrggbb colours; t = 0 gives a, t = 1 gives b
@@ -293,6 +328,37 @@ class FloatingMeterDock {
     return html;
   }
 
+  voltmeterCardHtml(n) {
+    const labels = { 1: "DRIVE", 2: "LOAD 2↔3", 3: "PIN 2 HOT", 4: "PIN 3 COLD" };
+    return `
+          <div id="rack-card-vu${n}" class="rack-meter-card rack-vm-card" title="Click for range and probe settings">
+            <div class="rack-meter-bar">
+              <div class="rack-meter-title">
+                <span id="dot-vu${n}" class="rack-terminal-dot" style="background: ${PROBE_COLORS["VU" + n]};"></span>
+                <span id="rack-vu${n}-name" class="rack-meter-name" style="color: ${PROBE_COLORS["VU" + n]};">${labels[n]}</span>
+              </div>
+              <span id="rack-vu${n}-range-badge" class="rack-status-pill">AUTO 3V</span>
+            </div>
+            <div class="rack-vu-bezel">
+              <canvas id="rack-vu${n}-canvas" class="rack-canvas rack-vm-canvas"></canvas>
+            </div>
+            <div class="meter-collapsible-drawer">
+              <span>RANGE (FULL SCALE):</span>
+              <div class="vu-range-btn-row">
+                <button class="drawer-btn active" data-vm="${n}" data-vm-range="auto">AUTO</button>
+                ${VM_RANGES.map(r => `<button class="drawer-btn" data-vm="${n}" data-vm-range="${r}">${r}V</button>`).join("")}
+              </div>
+              <div class="rack-telemetry-text" id="vu${n}-detail-text"></div>
+              <div class="rack-probe-selector-group">
+                <label class="rack-probe-label">MOVE PROBE TO TEST POINT (OR CLICK SCHEMATIC DIRECTLY):</label>
+                <select class="rack-probe-dropdown" data-probe-select="vu${n}">
+                  ${this.renderProbeOptions(this["vu" + n + "Target"])}
+                </select>
+              </div>
+            </div>
+          </div>`;
+  }
+
   init() {
     this.createPermanentRackDOM();
     this.initCanvases();
@@ -339,91 +405,37 @@ class FloatingMeterDock {
       <!-- ================= 1. Six Permanent Instruments Bay ================= -->
       <div id="rack-instruments-bay" class="rack-instruments-bay">
 
-        <!-- Meter 1: SCOPE 1 (Audio In & Pin 2 Hot) -->
-        <div id="rack-card-scope1" class="rack-meter-card" title="Click to open Scope 1 controls and range">
+        <!-- Meter 1: 8-channel scope — one strip per probe point, all on one common timebase -->
+        <div id="rack-card-scope8" class="rack-meter-card" title="Click for volts/div and probe settings">
           <div class="rack-meter-bar">
             <div class="rack-meter-title">
-              <span id="dot-scope1-ch1" class="rack-terminal-dot yellow" style="background: ${PROBE_COLORS.CH1};" title="CH1: Signal Generator Vin"></span>
-              <span id="dot-scope1-ch2" class="rack-terminal-dot cyan" style="background: ${PROBE_COLORS.CH2};" title="CH2: Pin 2 Hot Out"></span>
-              <span>SCOPE 1 &bull; VIN / +VE HOT</span>
+              <span id="dot-scope1-ch1" class="rack-terminal-dot" style="background: ${PROBE_COLORS.CH1};" title="CH1"></span>
+              <span id="dot-scope1-ch2" class="rack-terminal-dot" style="background: ${PROBE_COLORS.CH2};" title="CH2"></span>
+              <span id="dot-scope2-ch3" class="rack-terminal-dot" style="background: ${PROBE_COLORS.CH3};" title="CH3"></span>
+              <span id="dot-scope2-ch4" class="rack-terminal-dot" style="background: ${PROBE_COLORS.CH4};" title="CH4"></span>
+              <span>SCOPE &bull; 8 CH &bull; ONE TIMEBASE</span>
             </div>
-            <span id="scope1-vdiv-badge" class="rack-status-pill yellow">1V &bull; .5ms</span>
+            <div class="scope8-zoom">
+              <button type="button" class="scope8-zoom-btn" data-scope-zoom="1" title="Zoom out (more time)">&minus;</button>
+              <span id="scope8-tb" class="rack-status-pill">.5 ms/div</span>
+              <button type="button" class="scope8-zoom-btn" data-scope-zoom="-1" title="Zoom in (less time)">+</button>
+            </div>
           </div>
           <div class="rack-scope-bezel">
-            <canvas id="rack-scope1-canvas" width="338" height="110" class="rack-canvas"></canvas>
+            <canvas id="rack-scope8-canvas" class="rack-canvas scope8-canvas" title="Scroll to zoom the timebase"></canvas>
           </div>
-          <div class="rack-ref-line" id="rack-scope1-ref"><span class="rack-ref-text"></span><span class="rack-goal"></span></div>
-          <!-- Collapsible Drawer: No text until clicked -->
           <div class="meter-collapsible-drawer">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span>VOLTS/DIV:</span>
+              <span>VOLTS/DIV (ALL CH):</span>
               <div class="scope-btn-row">
-                <button class="scope-btn" data-scope1-vdiv="0.2">.2V</button>
-                <button class="scope-btn" data-scope1-vdiv="0.5">.5V</button>
-                <button class="scope-btn active" data-scope1-vdiv="1.0">1V</button>
-                <button class="scope-btn" data-scope1-vdiv="2.0">2V</button>
-                <button class="scope-btn" data-scope1-vdiv="5.0">5V</button>
+                ${[0.2, 0.5, 1, 2, 5].map(v => `<button class="scope-btn${v === 1 ? " active" : ""}" data-scope8-vdiv="${v}">${v < 1 ? String(v).slice(1) : v}V</button>`).join("")}
               </div>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 3px;">
-              <span>TIME/DIV:</span>
-              <div class="scope-btn-row">
-                <button class="scope-btn" data-tdiv="0.2">.2ms</button>
-                <button class="scope-btn active" data-tdiv="0.5">.5ms</button>
-                <button class="scope-btn" data-tdiv="1.0">1ms</button>
-                <button class="scope-btn" data-tdiv="2.0">2ms</button>
-              </div>
-            </div>
-            <div class="rack-telemetry-text" id="scope1-telemetry">
-              CH1 (Yellow Vin): 1.23V RMS &bull; CH2 (Cyan Hot): 1.23V RMS &bull; Phase: 0.0°
             </div>
             <div class="rack-probe-selector-group">
-              <label class="rack-probe-label">
-                MOVE PROBES TO TEST POINT (OR CLICK SCHEMATIC DIRECTLY):
-              </label>
-              <select class="rack-probe-dropdown" data-probe-select="scope1">
-                ${this.renderProbeOptions(this.scope1Target)}
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Meter 2: SCOPE 2 (Pin 3 Cold & Differential Load) -->
-        <div id="rack-card-scope2" class="rack-meter-card" title="Click to open Scope 2 controls and range">
-          <div class="rack-meter-bar">
-            <div class="rack-meter-title">
-              <span id="dot-scope2-ch3" class="rack-terminal-dot pink" style="background: ${PROBE_COLORS.CH3};" title="CH3: Pin 3 Cold Inverted"></span>
-              <span id="dot-scope2-ch4" class="rack-terminal-dot green" style="background: ${PROBE_COLORS.CH4};" title="CH4: Differential Load Across Pins 2-3"></span>
-              <span>SCOPE 2 &bull; -VE COLD / DIFF LOAD</span>
-            </div>
-            <span id="scope2-vdiv-badge" class="rack-status-pill green">1V &bull; .5ms</span>
-          </div>
-          <div class="rack-scope-bezel">
-            <canvas id="rack-scope2-canvas" width="338" height="110" class="rack-canvas"></canvas>
-          </div>
-          <div class="rack-ref-line" id="rack-scope2-ref"><span class="rack-ref-text"></span><span class="rack-goal"></span></div>
-          <!-- Collapsible Drawer: No text until clicked -->
-          <div class="meter-collapsible-drawer">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span>VOLTS/DIV:</span>
-              <div class="scope-btn-row">
-                <button class="scope-btn" data-scope2-vdiv="0.2">.2V</button>
-                <button class="scope-btn" data-scope2-vdiv="0.5">.5V</button>
-                <button class="scope-btn active" data-scope2-vdiv="1.0">1V</button>
-                <button class="scope-btn" data-scope2-vdiv="2.0">2V</button>
-                <button class="scope-btn" data-scope2-vdiv="5.0">5V</button>
-              </div>
-            </div>
-            <div class="rack-telemetry-text" id="scope2-telemetry">
-              CH3 (Pink Cold): 1.23V RMS &bull; CH4 (Green Diff): 2.46V RMS &bull; CMRR: 95.0 dB
-            </div>
-            <div class="rack-probe-selector-group">
-              <label class="rack-probe-label">
-                MOVE PROBES TO TEST POINT (OR CLICK SCHEMATIC DIRECTLY):
-              </label>
-              <select class="rack-probe-dropdown" data-probe-select="scope2">
-                ${this.renderProbeOptions(this.scope2Target)}
-              </select>
+              <label class="rack-probe-label">CH2 PROBE:</label>
+              <select class="rack-probe-dropdown" data-probe-select="scope1">${this.renderProbeOptions(this.scope1Target)}</select>
+              <label class="rack-probe-label">CH4 PROBE:</label>
+              <select class="rack-probe-dropdown" data-probe-select="scope2">${this.renderProbeOptions(this.scope2Target)}</select>
             </div>
           </div>
         </div>
@@ -433,8 +445,7 @@ class FloatingMeterDock {
           <div class="rack-meter-bar">
             <div class="rack-meter-title">
               <span id="dot-dmm1" class="rack-terminal-dot yellow" style="background: ${PROBE_COLORS.DMM1};"></span>
-              <span style="color: #facc15; font-weight: 800;">LUCKY 8050A #1</span>
-              <span style="color: #888888;">(INPUT / +VE)</span>
+              <span id="rack-dmm1-name" class="rack-meter-name" style="color: ${PROBE_COLORS.DMM1};">PIN 2 → GND</span>
             </div>
             <span id="rack-dmm1-status" class="rack-status-pill yellow">+VE HOT</span>
           </div>
@@ -443,7 +454,7 @@ class FloatingMeterDock {
             <span id="rack-dmm1-val1" class="rack-dmm-digits" style="color: ${PROBE_COLORS.DMM1};">1.228 V</span>
             <span id="rack-dmm1-val2" class="rack-dmm-sub-digits" style="color: ${PROBE_COLORS.DMM1};">+4.0 dBu</span>
           </div>
-          <div class="rack-ref-line" id="rack-dmm1-ref"><button type="button" class="rack-com-btn" data-dmm-com="1" title="Move the COM lead: ground (single-ended) or across both wires of the pair">COM: GND</button><span class="rack-ref-text"></span><span class="rack-goal"></span></div>
+          <div class="rack-ref-line" id="rack-dmm1-ref"><button type="button" class="rack-com-btn" data-dmm-com="1" title="Move the COM lead: ground (single-ended) or across both wires of the pair">COM: GND</button><span class="rack-ref-text"></span><span class="rack-goal"></span><span class="rack-drop" title="Level against the +4 dBu goal"><i></i><b></b></span></div>
           <!-- All Engineering Values & Equivalents Multi-Matrix -->
           <div class="rack-dmm-matrix" id="rack-dmm1-matrix">
             <div class="matrix-item"><span class="m-lbl">Vpk:</span><span id="dmm1-mat-vpk" class="m-val">1.737V</span></div>
@@ -461,7 +472,7 @@ class FloatingMeterDock {
               <button class="dmm-key active" data-dmm1-mode="rms">TRUE RMS</button>
               <button class="dmm-key" data-dmm1-mode="dbu">dBm LEVEL</button>
               <button class="dmm-key" data-dmm1-mode="peak">PEAK</button>
-              <button class="dmm-key" id="rack-btn-refz" title="Cycle Fluke 8050A Reference Impedance R (50Ω to 10kΩ)">REF Z: 600 Ω</button>
+              <button class="dmm-key" id="rack-btn-refz" title="Cycle reference impedance (50 Ω to 10 kΩ)">REF Z: 600 Ω</button>
             </div>
             <!-- Comprehensive Equivalents Conversion Table -->
             <div class="dmm-equivalents-table" style="margin-top: 5px; background: rgba(5, 8, 17, 0.9); border: 1px solid #1e293b; padding: 5px; border-radius: 2px;">
@@ -494,8 +505,7 @@ class FloatingMeterDock {
           <div class="rack-meter-bar">
             <div class="rack-meter-title">
               <span id="dot-dmm2" class="rack-terminal-dot green" style="background: ${PROBE_COLORS.DMM2};"></span>
-              <span style="color: #facc15; font-weight: 800;">LUCKY 8050A #2</span>
-              <span style="color: #888888;">(DIFF / THD)</span>
+              <span id="rack-dmm2-name" class="rack-meter-name" style="color: ${PROBE_COLORS.DMM2};">PIN 2 ↔ PIN 3</span>
             </div>
             <span id="rack-dmm2-status" class="rack-status-pill green">BALANCED</span>
           </div>
@@ -504,7 +514,7 @@ class FloatingMeterDock {
             <span id="rack-dmm2-val1" class="rack-dmm-digits" style="color: ${PROBE_COLORS.DMM2};">2.456 V</span>
             <span id="rack-dmm2-val2" class="rack-dmm-sub-digits" style="color: ${PROBE_COLORS.DMM2};">0.003% THD</span>
           </div>
-          <div class="rack-ref-line" id="rack-dmm2-ref"><button type="button" class="rack-com-btn" data-dmm-com="2" title="Move the COM lead: ground (single-ended) or across both wires of the pair">COM: GND</button><span class="rack-ref-text"></span><span class="rack-goal"></span></div>
+          <div class="rack-ref-line" id="rack-dmm2-ref"><button type="button" class="rack-com-btn" data-dmm-com="2" title="Move the COM lead: ground (single-ended) or across both wires of the pair">COM: GND</button><span class="rack-ref-text"></span><span class="rack-goal"></span><span class="rack-drop" title="Level against the +4 dBu goal"><i></i><b></b></span></div>
           <!-- All Engineering Values & Equivalents Multi-Matrix -->
           <div class="rack-dmm-matrix" id="rack-dmm2-matrix">
             <div class="matrix-item"><span class="m-lbl">Vpk:</span><span id="dmm2-mat-vpk" class="m-val">3.474V</span></div>
@@ -522,7 +532,7 @@ class FloatingMeterDock {
               <button class="dmm-key active" data-dmm2-mode="diff">DIFF RMS</button>
               <button class="dmm-key" data-dmm2-mode="thd">THD+N %</button>
               <button class="dmm-key" data-dmm2-mode="cmrr">CMRR dB</button>
-              <button class="dmm-key" id="rack-btn-refz2" title="Cycle Fluke 8050A Reference Impedance R (50Ω to 10kΩ)">REF Z: 600 Ω</button>
+              <button class="dmm-key" id="rack-btn-refz2" title="Cycle reference impedance (50 Ω to 10 kΩ)">REF Z: 600 Ω</button>
             </div>
             <!-- Comprehensive Differential Equivalents Table -->
             <div class="dmm-equivalents-table" style="margin-top: 5px; background: rgba(5, 8, 17, 0.9); border: 1px solid #1e293b; padding: 5px; border-radius: 2px;">
@@ -550,83 +560,13 @@ class FloatingMeterDock {
           </div>
         </div>
 
-        <!-- Meter 5: APK Precision AC Voltmeter #1 (Channel A: Audio In) -->
-        <div id="rack-card-vu1" class="rack-meter-card" title="Click to open APK Voltmeter #1 calibration settings">
-          <div class="rack-meter-bar">
-            <div class="rack-meter-title">
-              <span id="dot-vu1" class="rack-terminal-dot yellow" style="background: ${PROBE_COLORS.VU1};"></span>
-              <span>APK AC VOLTMETER #1 &bull; CH A DRIVE</span>
-            </div>
-            <span id="rack-vu1-range-badge" class="rack-status-pill yellow">3V &bull; +10dB</span>
-          </div>
-          <div class="rack-vu-bezel">
-            <canvas id="rack-vu1-canvas" width="338" height="85" class="rack-canvas"></canvas>
-          </div>
-          <div class="rack-ref-line" id="rack-vu1-ref"><span class="rack-ref-text"></span><span class="rack-goal"></span></div>
-          <!-- Collapsible Drawer: No text until clicked -->
-          <div class="meter-collapsible-drawer">
-            <span>SENSITIVITY RANGE:</span>
-            <div class="vu-range-btn-row">
-              <button class="drawer-btn" data-vu1-range="0.1">.1V (-20dB)</button>
-              <button class="drawer-btn" data-vu1-range="0.3">.3V (-10dB)</button>
-              <button class="drawer-btn" data-vu1-range="1.0">1V (0dB)</button>
-              <button class="drawer-btn active" data-vu1-range="3.0">3V (+10dB)</button>
-              <button class="drawer-btn" data-vu1-range="10.0">10V (+20dB)</button>
-              <button class="drawer-btn" data-vu1-range="30.0">30V (+30dB)</button>
-            </div>
-            <div class="rack-telemetry-text" id="vu1-detail-text">
-              Tracks audio generator input drive level with 300ms mechanical needle ballistics.
-            </div>
-            <div class="rack-probe-selector-group">
-              <label class="rack-probe-label">
-                MOVE PROBES TO TEST POINT (OR CLICK SCHEMATIC DIRECTLY):
-              </label>
-              <select class="rack-probe-dropdown" data-probe-select="vu1">
-                ${this.renderProbeOptions(this.vu1Target)}
-              </select>
-            </div>
-          </div>
+        <!-- Meters 5–8: four HP-style AC voltmeters (2 × 2) -->
+        <div class="rack-vm-grid">
+          ${[1, 2, 3, 4].map(n => this.voltmeterCardHtml(n)).join("")}
         </div>
-
-        <!-- Meter 6: APK Precision AC Voltmeter #2 (Channel B: Differential Load) -->
-        <div id="rack-card-vu2" class="rack-meter-card" title="Click to open APK Voltmeter #2 calibration settings">
-          <div class="rack-meter-bar">
-            <div class="rack-meter-title">
-              <span id="dot-vu2" class="rack-terminal-dot green" style="background: ${PROBE_COLORS.VU2};"></span>
-              <span>APK AC VOLTMETER #2 &bull; CH B LOAD</span>
-            </div>
-            <span id="rack-vu2-range-badge" class="rack-status-pill green">3V &bull; +10dB</span>
-          </div>
-          <div class="rack-vu-bezel">
-            <canvas id="rack-vu2-canvas" width="338" height="85" class="rack-canvas"></canvas>
-          </div>
-          <div class="rack-ref-line" id="rack-vu2-ref"><span class="rack-ref-text"></span><span class="rack-goal"></span></div>
-          <!-- Collapsible Drawer: No text until clicked -->
-          <div class="meter-collapsible-drawer">
-            <span>SENSITIVITY RANGE:</span>
-            <div class="vu-range-btn-row">
-              <button class="drawer-btn" data-vu2-range="0.1">.1V (-20dB)</button>
-              <button class="drawer-btn" data-vu2-range="0.3">.3V (-10dB)</button>
-              <button class="drawer-btn" data-vu2-range="1.0">1V (0dB)</button>
-              <button class="drawer-btn active" data-vu2-range="3.0">3V (+10dB)</button>
-              <button class="drawer-btn" data-vu2-range="10.0">10V (+20dB)</button>
-              <button class="drawer-btn" data-vu2-range="30.0">30V (+30dB)</button>
-            </div>
-            <div class="rack-telemetry-text" id="vu2-detail-text">
-              Tracks differential output level across balanced receiver terminating load.
-            </div>
-            <div class="rack-probe-selector-group">
-              <label class="rack-probe-label">
-                MOVE PROBES TO TEST POINT (OR CLICK SCHEMATIC DIRECTLY):
-              </label>
-              <select class="rack-probe-dropdown" data-probe-select="vu2">
-                ${this.renderProbeOptions(this.vu2Target)}
-              </select>
-            </div>
-          </div>
-        </div>
-
       </div>
+
+      <div class="rack-credit">Instruments &amp; design &bull; Anthony Kuzub &bull; Like.audio</div>
 
       <!-- ================= 1.5 Signal Generator Quick Bay ================= -->
       <div id="rack-panel-gen" class="rack-instrument-panel" style="display: none; padding: 6px;">
@@ -801,6 +741,7 @@ class FloatingMeterDock {
   }
 
   initCanvases() {
+    this.scope8Canvas = document.getElementById("rack-scope8-canvas");
     this.scope1Canvas = document.getElementById("rack-scope1-canvas");
     if (this.scope1Canvas) this.scope1Ctx = this.scope1Canvas.getContext("2d");
 
@@ -812,6 +753,12 @@ class FloatingMeterDock {
 
     this.vu2Canvas = document.getElementById("rack-vu2-canvas");
     if (this.vu2Canvas) this.vu2Ctx = this.vu2Canvas.getContext("2d");
+
+    this.vu3Canvas = document.getElementById("rack-vu3-canvas");
+    if (this.vu3Canvas) this.vu3Ctx = this.vu3Canvas.getContext("2d");
+
+    this.vu4Canvas = document.getElementById("rack-vu4-canvas");
+    if (this.vu4Canvas) this.vu4Ctx = this.vu4Canvas.getContext("2d");
 
     this.trendCanvas = document.getElementById("rack-trend-canvas");
     if (this.trendCanvas) this.trendCtx = this.trendCanvas.getContext("2d");
@@ -985,12 +932,13 @@ class FloatingMeterDock {
 
     // Hover tracking on individual meter cards to illuminate specific channel wires
     const cardChannels = {
-      "rack-card-scope1": ["CH1", "CH2"],
-      "rack-card-scope2": ["CH3", "CH4"],
+      "rack-card-scope8": ["CH1", "CH2", "CH3", "CH4"],
       "rack-card-dmm1": ["DMM1"],
       "rack-card-dmm2": ["DMM2"],
       "rack-card-vu1": ["VU1"],
-      "rack-card-vu2": ["VU2"]
+      "rack-card-vu2": ["VU2"],
+      "rack-card-vu3": ["VU3"],
+      "rack-card-vu4": ["VU4"]
     };
 
     Object.entries(cardChannels).forEach(([cardId, channels]) => {
@@ -1071,6 +1019,28 @@ class FloatingMeterDock {
       });
     });
 
+    // 8-channel scope: shared volts/div, timebase zoom (buttons or mouse wheel)
+    const TIMEBASES = [0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20];
+    const setTimebase = (dir) => {
+      const i = TIMEBASES.findIndex(t => t >= this.scopeTimeDiv - 1e-9);
+      this.scopeTimeDiv = TIMEBASES[Math.max(0, Math.min(TIMEBASES.length - 1, (i < 0 ? 3 : i) + dir))];
+      const tb = dock.querySelector("#scope8-tb");
+      if (tb) tb.textContent = `${this.scopeTimeDiv < 1 ? String(this.scopeTimeDiv).replace(/^0/, "") : this.scopeTimeDiv} ms/div`;
+    };
+    dock.querySelectorAll("[data-scope-zoom]").forEach(btn => {
+      btn.addEventListener("click", () => setTimebase(Number(btn.dataset.scopeZoom)));
+    });
+    this.scope8Canvas?.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      setTimebase(e.deltaY > 0 ? 1 : -1);
+    }, { passive: false });
+    dock.querySelectorAll("[data-scope8-vdiv]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        dock.querySelectorAll("[data-scope8-vdiv]").forEach(b => b.classList.toggle("active", b === btn));
+        this.scope8VoltsDiv = parseFloat(btn.dataset.scope8Vdiv);
+      });
+    });
+
     // Shared Time/Div Controls
     dock.querySelectorAll("[data-tdiv]").forEach(btn => {
       btn.addEventListener("click", (e) => {
@@ -1113,26 +1083,17 @@ class FloatingMeterDock {
       });
     });
 
-    // VU Meter 1 Range
-    dock.querySelectorAll("[data-vu1-range]").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        dock.querySelectorAll("[data-vu1-range]").forEach(b => b.classList.remove("active"));
-        e.currentTarget.classList.add("active");
-        this.vu1Range = parseFloat(e.currentTarget.getAttribute("data-vu1-range"));
-        const b = dock.querySelector("#rack-vu1-range-badge");
-        if (b) b.textContent = `${this.vu1Range}V Range`;
-        this.updateFromActiveCircuit();
-      });
-    });
-
-    // VU Meter 2 Range
-    dock.querySelectorAll("[data-vu2-range]").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        dock.querySelectorAll("[data-vu2-range]").forEach(b => b.classList.remove("active"));
-        e.currentTarget.classList.add("active");
-        this.vu2Range = parseFloat(e.currentTarget.getAttribute("data-vu2-range"));
-        const b = dock.querySelector("#rack-vu2-range-badge");
-        if (b) b.textContent = `${this.vu2Range}V Range`;
+    // Voltmeter ranges: AUTO or a fixed full-scale range
+    dock.querySelectorAll("[data-vm-range]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const n = Number(btn.dataset.vm);
+        dock.querySelectorAll(`[data-vm="${n}"]`).forEach(b => b.classList.toggle("active", b === btn));
+        if (btn.dataset.vmRange === "auto") {
+          this.vmAuto[n] = true;
+        } else {
+          this.vmAuto[n] = false;
+          this[`vu${n}Range`] = parseFloat(btn.dataset.vmRange);
+        }
         this.updateFromActiveCircuit();
       });
     });
@@ -1148,6 +1109,8 @@ class FloatingMeterDock {
         if (type === "dmm2") this.dmm2Target = val;
         if (type === "vu1") this.vu1Target = val;
         if (type === "vu2") this.vu2Target = val;
+        if (type === "vu3") this.vu3Target = val;
+        if (type === "vu4") this.vu4Target = val;
         this.updateFromActiveCircuit();
       });
     });
@@ -1407,6 +1370,8 @@ class FloatingMeterDock {
       this.dmm2Target = activeCfg.dmm2;
       this.vu1Target = activeCfg.vu1;
       this.vu2Target = activeCfg.vu2;
+      this.vu3Target = activeCfg.vu3 || activeCfg.scope1_ch2;
+      this.vu4Target = activeCfg.vu4 || activeCfg.scope2_ch3;
 
       // Update dropdown selections in drawer if open
       this.dock?.querySelectorAll("[data-probe-select='scope1']").forEach(sel => sel.value = this.scope1Target);
@@ -1415,6 +1380,8 @@ class FloatingMeterDock {
       this.dock?.querySelectorAll("[data-probe-select='dmm2']").forEach(sel => sel.value = this.dmm2Target);
       this.dock?.querySelectorAll("[data-probe-select='vu1']").forEach(sel => sel.value = this.vu1Target);
       this.dock?.querySelectorAll("[data-probe-select='vu2']").forEach(sel => sel.value = this.vu2Target);
+      this.dock?.querySelectorAll("[data-probe-select='vu3']").forEach(sel => sel.value = this.vu3Target);
+      this.dock?.querySelectorAll("[data-probe-select='vu4']").forEach(sel => sel.value = this.vu4Target);
 
       // Update active circuit badge in dock header
       const badge = this.dock?.querySelector("#rack-active-circuit-badge");
@@ -1668,6 +1635,36 @@ class FloatingMeterDock {
         status = "EQUIPMENT A CHASSIS";
         name = "Equipment A Chassis Ground";
       }
+    } else if (key.startsWith("xlrm-") || key.startsWith("xlrf-")) {
+      // Universal XLR Hub: contact voltages for the selected AES14 Table 2 configuration, +4 dBu line
+      const item = (typeof AES14_TABLE2_DATA !== "undefined" && window.xlrHubEngine)
+        ? AES14_TABLE2_DATA.find(d => d.id === window.xlrHubEngine.currentCircuitId) || AES14_TABLE2_DATA[0]
+        : null;
+      const lineVrms = isMuted ? 0 : 1.228;
+      const side = key.startsWith("xlrm-") ? "Male" : "Female";
+      const pins = item ? item.pins : {};
+      // Unbalanced configs carry the whole signal on the hot contact; balanced split it between hot and cold
+      const balanced = Object.values(pins).some(p => p && p.type === "cold");
+      const dcNote = (p) => (p && p.dc && !/^0V/.test(p.dc) ? ` · ${p.dc}` : "");
+
+      if (key.endsWith("-diff")) {
+        vRms = lineVrms;
+        name = `${item ? item.name : "XLR"}: across 2↔3`;
+        status = item && item.id === 4 ? "DIFFERENTIAL · 12V DC ACROSS 2-3!" : "RECEIVER DIFFERENTIAL";
+      } else {
+        const n = Number(key.split("-p")[1]);
+        const pin = pins[n];
+        name = `${side} ${n}: ${pin ? pin.name : "n/c"}`;
+        if (!pin || pin.type === "shield" || pin.type === "jumper") {
+          vRms = 0.0001;
+          shape = "flatline";
+          status = pin ? `${pin.type === "jumper" ? "TIED TO PIN 1" : "CHASSIS"}${dcNote(pin)}` : "NOT CONNECTED";
+        } else {
+          vRms = balanced ? lineVrms / 2 : lineVrms;
+          phase = pin.type === "cold" ? Math.PI : 0;
+          status = `${pin.type === "cold" ? "COLD" : "HOT"}${dcNote(pin)}`;
+        }
+      }
     } else {
       vRms = 1.0;
       status = "CUSTOM TEST ANCHOR";
@@ -1695,7 +1692,7 @@ class FloatingMeterDock {
 
   // Target keys that are already a measurement across the pair (Pin 2 to Pin 3) rather than one wire to ground
   isAcrossKey(key) {
-    return /-(load|diff|sec)$/.test(key || "");
+    return /-(load|diff|sec)$/.test(key || "");  // e.g. xfmr-load, meyer-diff, xlrf-diff
   }
 
   // Hot, cold and across-the-pair keys for the schematic currently in view
@@ -1709,6 +1706,26 @@ class FloatingMeterDock {
     const target = n === 1 ? this.dmm1Target : this.dmm2Target;
     const com = n === 1 ? this.dmm1Com : this.dmm2Com;
     return com === "across" ? this.activePairKeys().across : target;
+  }
+
+  // Short name of a probed point: PIN 2, GEN, SHIELD, CHASSIS …
+  shortPoint(key) {
+    const nm = (this.getSignalForTarget(key).name || key || "").toUpperCase();
+    const pin = nm.match(/(?:PIN|SOCKET|CONTACT)\s*(\d)/);
+    if (/ACROSS 2↔3|DIFFERENTIAL|ACROSS LOAD|-LOAD$|-DIFF$/.test(nm) || this.isAcrossKey(key)) return "PIN 2 ↔ PIN 3";
+    if (pin) return `PIN ${pin[1]}`;
+    if (/VIN|INPUT DRIVE|GENERATOR|AUDIO INP|PRIMARY/.test(nm)) return "GEN";
+    if (/SHIELD/.test(nm)) return "SHIELD";
+    if (/CHASSIS|BOND/.test(nm)) return "CHASSIS";
+    if (/SECONDARY/.test(nm)) return "SECONDARY";
+    return nm.length > 12 ? nm.slice(0, 11) + "…" : nm;
+  }
+
+  // What a meter is measuring, as its whole name: "PIN 2 → GND" or "PIN 2 ↔ PIN 3"
+  measuredLabel(key, forceAcross = false) {
+    if (forceAcross || this.isAcrossKey(key)) return "PIN 2 ↔ PIN 3";
+    const pt = this.shortPoint(key);
+    return pt === "PIN 2 ↔ PIN 3" ? pt : `${pt} → GND`;
   }
 
   // "V+ … · COM …" text describing what a meter is connected between
@@ -1733,13 +1750,18 @@ class FloatingMeterDock {
     const delta = dbu - GOAL_DBU;
     const txt = line.querySelector(".rack-ref-text");
     const goal = line.querySelector(".rack-goal");
-    if (txt) txt.textContent = this.referenceText(key, forceAcross);
+    if (txt) {
+      txt.textContent = this.referenceText(key, forceAcross);
+      txt.title = txt.textContent;
+    }
     if (goal) {
       const onGoal = Math.abs(delta) < 0.5;
       const oneLeg = !across && Math.abs(delta + 6.02) < 0.6;
       goal.textContent = `${vRms.toFixed(3)} Vrms · ${dbu >= 0 ? "+" : ""}${dbu.toFixed(1)} dBu · GOAL +${GOAL_DBU}: ${onGoal ? "✓ ON" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} dB`}${oneLeg ? " (one leg = ½ swing)" : ""}`;
       goal.className = `rack-goal ${onGoal ? "on" : oneLeg ? "leg" : "off"}`;
     }
+    const drop = line.querySelector(".rack-drop");
+    if (drop) this.setDropBar(drop, dbu);
     const comBtn = line.querySelector(".rack-com-btn");
     if (comBtn) {
       comBtn.textContent = forceAcross ? "COM: ACROSS" : "COM: GND";
@@ -1747,11 +1769,24 @@ class FloatingMeterDock {
     }
   }
 
+  // Bar from −30 to +10 dB around the +4 dBu goal; the fill shows how far the level drops (or rises)
+  setDropBar(el, dbu) {
+    const delta = dbu - GOAL_DBU;
+    const onGoal = Math.abs(delta) < 0.5;
+    const oneLeg = Math.abs(delta + 6.02) < 0.6;
+    const pos = (d) => ((Math.max(-30, Math.min(10, d)) + 30) / 40) * 100;
+    const fill = el.querySelector("i");
+    const lo = Math.min(pos(delta), pos(0));
+    const hi = Math.max(pos(delta), pos(0));
+    fill.style.left = `${lo}%`;
+    fill.style.width = `${Math.max(1.5, hi - lo)}%`;
+    el.className = `rack-drop ${onGoal ? "on" : oneLeg ? "leg" : "off"}`;
+    el.querySelector("b").textContent = dbu <= -119 ? "—" : onGoal ? "+4 ✓" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} dB`;
+  }
+
   updateFromActiveCircuit() {
     const data1 = this.getSignalForTarget(this.effectiveDmmTarget(1));
     const data2 = this.getSignalForTarget(this.effectiveDmmTarget(2));
-    const vu1Data = this.getSignalForTarget(this.vu1Target);
-    const vu2Data = this.getSignalForTarget(this.vu2Target);
     const sc1Data = this.getSignalForTarget(this.scope1Target);
     const sc2Data = this.getSignalForTarget(this.scope2Target);
 
@@ -1894,24 +1929,31 @@ class FloatingMeterDock {
     setElText("dmm2-tbl-pwr", `${pMw2.toFixed(2)} mW`);
     setElText("dmm2-tbl-cmrr", data2.cmrr >= 100 ? ">100.0 dB" : `${data2.cmrr.toFixed(1)} dB`);
 
-    // 3. Update Target VU Meter dB levels
-    this.vu1TargetDbu = 20 * Math.log10(Math.max(0.00005, vu1Data.vRms / (this.vu1Range || 3.0)));
-    this.vu2TargetDbu = 20 * Math.log10(Math.max(0.00005, vu2Data.vRms / (this.vu2Range || 3.0)));
+    // 3. Voltmeters 1–4: autorange, needle target (dB re full scale), digital readout
+    [1, 2, 3, 4].forEach(n => {
+      const data = this.getSignalForTarget(this[`vu${n}Target`]);
+      const v = Math.max(0, data.vRms);
+      if (this.vmAuto[n]) this[`vu${n}Range`] = VM_RANGES.find(r => v <= r * 1.02) || VM_RANGES[VM_RANGES.length - 1];
+      const range = this[`vu${n}Range`];
+      this[`vu${n}TargetDbu`] = 20 * Math.log10(Math.max(0.00005, v / range));
 
-    const vu1Detail = document.getElementById("vu1-detail-text");
-    if (vu1Detail) {
-      vu1Detail.textContent = `Probed: ${vu1Data.name} • ${vu1Data.vRms.toFixed(3)}V RMS (${(this.vu1TargetDbu >= 0 ? "+" : "") + this.vu1TargetDbu.toFixed(1)} dB relative to range)`;
-    }
-    const vu2Detail = document.getElementById("vu2-detail-text");
-    if (vu2Detail) {
-      vu2Detail.textContent = `Probed: ${vu2Data.name} • ${vu2Data.vRms.toFixed(3)}V RMS (${(this.vu2TargetDbu >= 0 ? "+" : "") + this.vu2TargetDbu.toFixed(1)} dB relative to range)`;
-    }
+      const dbu = v > 0.00001 ? 20 * Math.log10(v / 0.7746) : -120;
+      const delta = dbu - GOAL_DBU;
+      this[`vu${n}Dbu`] = dbu;
+      setElText(`rack-vu${n}-range-badge`, `${this.vmAuto[n] ? "AUTO " : ""}${range}V`);
+      setElText(`vu${n}-detail-text`, `Probed: ${data.name} • ${v.toFixed(3)} V RMS • ${data.status}`);
+    });
+    const vu1Data = this.getSignalForTarget(this.vu1Target);
+    const vu2Data = this.getSignalForTarget(this.vu2Target);
+
+    // Each meter is named only by what it measures
+    setElText("rack-dmm1-name", this.measuredLabel(this.effectiveDmmTarget(1), this.dmm1Com === "across"));
+    setElText("rack-dmm2-name", this.measuredLabel(this.effectiveDmmTarget(2), this.dmm2Com === "across"));
+    [1, 2, 3, 4].forEach(n => setElText(`rack-vu${n}-name`, this.measuredLabel(this[`vu${n}Target`])));
 
     // Reference lines: what each meter is across, Vrms, dBu and distance from +4 dBu
     this.setReferenceLine("rack-dmm1-ref", this.effectiveDmmTarget(1), v1Rms, this.dmm1Com === "across");
     this.setReferenceLine("rack-dmm2-ref", this.effectiveDmmTarget(2), v2Rms, this.dmm2Com === "across");
-    this.setReferenceLine("rack-vu1-ref", this.vu1Target, vu1Data.vRms);
-    this.setReferenceLine("rack-vu2-ref", this.vu2Target, vu2Data.vRms);
     this.setReferenceLine("rack-scope1-ref", this.scope1Target, sc1Data.vRms);
     this.setReferenceLine("rack-scope2-ref", this.scope2Target, sc2Data.vRms);
 
@@ -1944,13 +1986,11 @@ class FloatingMeterDock {
       // 1. Advance VU Meter Ballistics
       this.updateNeedleBallistics();
 
-      // 2. Render Both Oscilloscopes
-      this.renderScope1();
-      this.renderScope2();
+      // 2. Render the 8-channel scope
+      this.renderScope8();
 
       // 3. Render Both APK VU Meters
-      this.renderVuMeter(this.vu1Ctx, this.vu1Canvas, this.vu1NeedleDbu, "APK #1: DRIVE IN", PROBE_COLORS.VU1);
-      this.renderVuMeter(this.vu2Ctx, this.vu2Canvas, this.vu2NeedleDbu, "APK #2: LOAD OUT", PROBE_COLORS.VU2);
+      [1, 2, 3, 4].forEach(n => this.renderHpVoltmeter(n));
 
       // 4. Render Trend Graph if tab active
       if (this.currentTab === "chart") {
@@ -1969,6 +2009,13 @@ class FloatingMeterDock {
   updateNeedleBallistics() {
     const eps = 0.02;
 
+    [3, 4].forEach(n => {
+      const needle = `vu${n}NeedleDbu`;
+      const target = this[`vu${n}TargetDbu`];
+      if (this[needle] < target - eps) this[needle] += (target - this[needle]) * this.attackRate;
+      else if (this[needle] > target + eps) this[needle] -= (this[needle] - target) * this.releaseRate;
+    });
+
     // Meter 1
     if (this.vu1NeedleDbu < this.vu1TargetDbu - eps) {
       this.vu1NeedleDbu += (this.vu1TargetDbu - this.vu1NeedleDbu) * this.attackRate;
@@ -1984,8 +2031,128 @@ class FloatingMeterDock {
     }
   }
 
+  // Eight probe points as separate strips sharing one time axis: CH1–CH4 are the scope probes,
+  // CH5–CH8 show what DMM1, DMM2, VM3 and VM4 are probing
+  scope8Channels() {
+    return [
+      { tag: "CH1", key: this.scope1VinTarget, color: PROBE_COLORS.CH1 },
+      { tag: "CH2", key: this.scope1Target, color: PROBE_COLORS.CH2 },
+      { tag: "CH3", key: this.scope2ColdTarget, color: PROBE_COLORS.CH3 },
+      { tag: "CH4", key: this.scope2Target, color: PROBE_COLORS.CH4 },
+      { tag: "DMM1", key: this.effectiveDmmTarget(1), color: PROBE_COLORS.DMM1 },
+      { tag: "DMM2", key: this.effectiveDmmTarget(2), color: PROBE_COLORS.DMM2 },
+      { tag: "VM3", key: this.vu3Target, color: PROBE_COLORS.VU3 },
+      { tag: "VM4", key: this.vu4Target, color: PROBE_COLORS.VU4 }
+    ];
+  }
+
+  renderScope8() {
+    const canvas = this.scope8Canvas;
+    if (!canvas) return;
+    this.fitCanvasToBox(canvas);
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    const RULER = 13;
+    const LABEL_W = 92;
+    const plotW = w - LABEL_W;
+    const chans = this.scope8Channels();
+    const stripH = (h - RULER) / chans.length;
+    const totalMs = 10 * this.scopeTimeDiv;
+    const halfV = 2 * this.scope8VoltsDiv; // each strip is 4 divisions tall
+
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, w, h);
+
+    // Shared vertical time grid through every strip
+    ctx.strokeStyle = "#1c1c1c";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let i = 0; i <= 10; i++) {
+      const x = Math.round(LABEL_W + (i / 10) * plotW) + 0.5;
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, h - RULER);
+    }
+    ctx.stroke();
+
+    chans.forEach((c, k) => {
+      const top = k * stripH;
+      const mid = top + stripH / 2;
+      const data = this.getSignalForTarget(c.key);
+
+      ctx.strokeStyle = "#262626";
+      ctx.beginPath();
+      ctx.moveTo(LABEL_W, Math.round(top) + 0.5);
+      ctx.lineTo(w, Math.round(top) + 0.5);
+      ctx.stroke();
+      ctx.strokeStyle = "#333333";
+      ctx.setLineDash([2, 3]);
+      ctx.beginPath();
+      ctx.moveTo(LABEL_W, Math.round(mid) + 0.5);
+      ctx.lineTo(w, Math.round(mid) + 0.5);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Label column: tag, probed point, level
+      ctx.fillStyle = c.color;
+      ctx.font = "bold 9px 'JetBrains Mono', monospace";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText(c.tag, 3, mid - 5);
+      ctx.fillStyle = "#9ca3af";
+      ctx.font = "7.5px 'JetBrains Mono', monospace";
+      ctx.fillText(this.measuredLabel(c.key, c.tag === "DMM2" ? this.dmm2Com === "across" : c.tag === "DMM1" ? this.dmm1Com === "across" : false), 3, mid + 5);
+      ctx.fillStyle = c.color;
+      ctx.textAlign = "right";
+      ctx.fillText(`${data.vRms.toFixed(2)}V`, LABEL_W - 4, mid - 5);
+
+      // Trace
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(LABEL_W, top + 1, plotW, stripH - 2);
+      ctx.clip();
+      ctx.strokeStyle = c.color;
+      ctx.lineWidth = 2.2;
+      ctx.shadowColor = c.color;
+      ctx.shadowBlur = 5;
+      ctx.beginPath();
+      const samples = Math.max(120, Math.round(plotW));
+      for (let sIdx = 0; sIdx <= samples; sIdx++) {
+        const t = (sIdx / samples) * totalMs / 1000;
+        let v = 0;
+        if (data.shape !== "flatline") {
+          v = data.vPk * Math.sin(2 * Math.PI * data.freq * t + (data.shape === "hum" ? 0 : (data.phase || 0)));
+          if (data.status && data.status.includes("CLIP")) v = Math.max(-1.5, Math.min(1.5, v * 1.8));
+        }
+        const x = LABEL_W + (sIdx / samples) * plotW;
+        const y = mid - (v / halfV) * (stripH / 2 - 1);
+        if (sIdx === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    // Common time ruler
+    ctx.fillStyle = "#0a0a0a";
+    ctx.fillRect(0, h - RULER, w, RULER);
+    ctx.fillStyle = "#9ca3af";
+    ctx.font = "7.5px 'JetBrains Mono', monospace";
+    ctx.textBaseline = "middle";
+    for (let i = 0; i <= 10; i += 2) {
+      const x = LABEL_W + (i / 10) * plotW;
+      ctx.textAlign = i === 0 ? "left" : i === 10 ? "right" : "center";
+      const ms = i * this.scopeTimeDiv;
+      ctx.fillText(`${ms >= 1 ? ms.toFixed(ms % 1 ? 1 : 0) : ms.toFixed(2)}ms`, x, h - RULER / 2);
+    }
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#64748b";
+    ctx.fillText(`${this.scope8VoltsDiv}V/div`, 3, h - RULER / 2);
+  }
+
   renderScope1() {
     if (!this.scope1Ctx || !this.scope1Canvas) return;
+    this.fitCanvasToBox(this.scope1Canvas);
     const ctx = this.scope1Ctx;
     const w = this.scope1Canvas.width;
     const h = this.scope1Canvas.height;
@@ -2063,6 +2230,7 @@ class FloatingMeterDock {
 
   renderScope2() {
     if (!this.scope2Ctx || !this.scope2Canvas) return;
+    this.fitCanvasToBox(this.scope2Canvas);
     const ctx = this.scope2Ctx;
     const w = this.scope2Canvas.width;
     const h = this.scope2Canvas.height;
@@ -2172,6 +2340,184 @@ class FloatingMeterDock {
       ctx.lineTo(x, midY + 2);
     }
     ctx.stroke();
+  }
+
+  // Keep a canvas's drawing size equal to its laid-out size (the rack shrinks with short windows)
+  fitCanvasToBox(canvas) {
+    const w = Math.round(canvas.clientWidth);
+    const h = Math.round(canvas.clientHeight);
+    if (w > 0 && h > 0 && (canvas.width !== w || canvas.height !== h)) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+  }
+
+  // HP 400-style analog AC voltmeter face: linear volts movement, non-linear decibel arc,
+  // level-pyramid zones placed for the current range, 0–1 and 0–3 R.M.S. volts scales, mirror band
+  renderHpVoltmeter(n) {
+    const canvas = this[`vu${n}Canvas`];
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const cw = Math.max(1, Math.round(canvas.clientWidth * dpr));
+    const ch = Math.max(1, Math.round(canvas.clientHeight * dpr));
+    if (canvas.width !== cw || canvas.height !== ch) {
+      canvas.width = cw;
+      canvas.height = ch;
+    }
+    const ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    const color = PROBE_COLORS[`VU${n}`];
+    const range = this[`vu${n}Range`];
+    const rangeDb = 20 * Math.log10(range / 0.7746);
+
+    ctx.fillStyle = "#fbf9f2";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, w, 3);
+
+    const cx = w / 2;
+    const cy = h * 1.08;
+    const A0 = -Math.PI * 0.77;
+    const A1 = -Math.PI * 0.23;
+    const ang = (frac) => A0 + Math.max(-0.03, Math.min(1.05, frac)) * (A1 - A0);
+    const pt = (r, a) => [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+    const rDb = h * 0.98;
+    const rV1 = h * 0.72;
+    const rV3 = h * 0.52;
+    const rCap = h * 0.2;
+
+    // Level-pyramid zones (dBu) at their place on this range
+    VM_ZONES.forEach(z => {
+      const f0 = (0.7746 * Math.pow(10, z.from / 20)) / range;
+      const f1 = (0.7746 * Math.pow(10, z.to / 20)) / range;
+      if (f1 <= 0.01 || f0 >= 1.05) return;
+      ctx.strokeStyle = z.color;
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(cx, cy, rDb + 4, ang(Math.max(0, f0)), ang(Math.min(1.05, f1)));
+      ctx.stroke();
+    });
+
+    // Mirror band
+    ctx.strokeStyle = "rgba(148, 163, 184, 0.45)";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(cx, cy, rDb - 19, A0, A1);
+    ctx.stroke();
+
+    // Decibel arc: 0 dB at 0.775 of full scale on the 1 V range (HP convention); red above 0
+    const dbFrac = (d) => 0.7746 * Math.pow(10, d / 20);
+    ctx.lineWidth = 1.4;
+    ctx.strokeStyle = "#0f172a";
+    ctx.beginPath();
+    ctx.arc(cx, cy, rDb, ang(dbFrac(-20)), ang(dbFrac(0)));
+    ctx.stroke();
+    ctx.strokeStyle = "#dc2626";
+    ctx.lineWidth = 2.4;
+    ctx.beginPath();
+    ctx.arc(cx, cy, rDb, ang(dbFrac(0)), ang(dbFrac(2.2)));
+    ctx.stroke();
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    const tick = (r, frac, len, lw, col) => {
+      const a = ang(frac);
+      const [x1, y1] = pt(r, a);
+      const [x2, y2] = pt(r - len, a);
+      ctx.strokeStyle = col;
+      ctx.lineWidth = lw;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    };
+    const label = (r, frac, txt, col, size) => {
+      const [x, y] = pt(r, ang(frac));
+      ctx.fillStyle = col;
+      ctx.font = `700 ${size}px Arial, sans-serif`;
+      ctx.fillText(txt, x, y);
+    };
+
+    [-20, -10, -6, -4, -2, 0, 1, 2].forEach(d => {
+      const col = d > 0 ? "#dc2626" : "#0f172a";
+      tick(rDb, dbFrac(d), 5, 1.2, col);
+      label(rDb - 11, dbFrac(d), d > 0 ? `+${d}` : `${d}`, col, 7);
+    });
+
+    // 0–1.0 volts scale
+    ctx.strokeStyle = "#0f172a";
+    ctx.lineWidth = 0.9;
+    ctx.beginPath();
+    ctx.arc(cx, cy, rV1, A0, A1);
+    ctx.stroke();
+    for (let i = 0; i <= 50; i++) tick(rV1, i / 50, i % 10 === 0 ? 5 : i % 5 === 0 ? 3.5 : 2, i % 10 === 0 ? 1 : 0.5, "#334155");
+    [0, 0.2, 0.4, 0.6, 0.8, 1].forEach(v => label(rV1 - 10, v, v === 1 ? "1.0" : v === 0 ? "0" : `.${v * 10}`, "#0f172a", 6.5));
+
+    // 0–3 volts scale
+    ctx.beginPath();
+    ctx.arc(cx, cy, rV3, A0, A1);
+    ctx.stroke();
+    for (let i = 0; i <= 30; i++) tick(rV3, i / 30, i % 10 === 0 ? 4 : 2, 0.6, "#475569");
+    [0, 1, 2, 3].forEach(v => label(rV3 - 9, v / 3, `${v}`, "#334155", 6.5));
+
+    // Scale captions at the left end of each arc, hp badge, range
+    ctx.font = "800 6px Arial, sans-serif";
+    ctx.fillStyle = "#0f172a";
+    const cap = (r, txt) => {
+      const [x, y] = pt(r, A0 - 0.09);
+      ctx.fillText(txt, x, y);
+    };
+    cap(rDb - 11, "dB");
+    cap(rV1 - 10, "V");
+    cap(rV3 - 9, "3V");
+    ctx.font = "800 5.5px Arial, sans-serif";
+    ctx.fillText("R.M.S. VOLTS", cx, cy - rCap - 6);
+    ctx.fillStyle = "#006699";
+    ctx.fillRect(5, 6, 13, 12);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "italic bold 9px Georgia, serif";
+    ctx.fillText("hp", 11.5, 12.5);
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#475569";
+    ctx.font = "700 7px Arial, sans-serif";
+    ctx.fillText(`${range}V · ${rangeDb >= 0 ? "+" : ""}${rangeDb.toFixed(0)} dB`, w - 5, 11);
+
+    // Reading inside the face: dBu (left) and drop from the +4 dBu goal (right)
+    const dbuNow = this[`vu${n}Dbu`];
+    if (dbuNow !== undefined) {
+      const delta = dbuNow - GOAL_DBU;
+      const onGoal = Math.abs(delta) < 0.5;
+      ctx.textBaseline = "alphabetic";
+      ctx.font = "900 11px 'JetBrains Mono', monospace";
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText(dbuNow <= -119 ? "−∞" : `${dbuNow >= 0 ? "+" : ""}${dbuNow.toFixed(1)}`, 5, h - 5);
+      ctx.textAlign = "right";
+      ctx.fillStyle = onGoal ? "#15803d" : Math.abs(delta + 6.02) < 0.6 ? "#b45309" : "#dc2626";
+      ctx.fillText(onGoal ? "+4 ✓" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}`, w - 5, h - 5);
+      ctx.textBaseline = "middle";
+    }
+
+    // Needle (linear in volts) with probe-colour pivot
+    const frac = Math.pow(10, this[`vu${n}NeedleDbu`] / 20);
+    const a = ang(frac);
+    const [tx, ty] = pt(rDb + 2, a);
+    const [bx, by] = pt(rCap, a);
+    ctx.strokeStyle = "#111827";
+    ctx.lineWidth = 1.8;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(bx, by);
+    ctx.lineTo(tx, ty);
+    ctx.stroke();
+    ctx.lineCap = "butt";
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(cx, cy, rCap, Math.PI * 1.15, Math.PI * 1.85);
+    ctx.lineTo(cx, cy);
+    ctx.fill();
   }
 
   renderVuMeter(ctx, canvas, dBuVal, label, probeColor = "#0f172a") {
@@ -2353,8 +2699,10 @@ class FloatingMeterDock {
       { fromId: "dot-scope2-ch4", targetKey: this.scope2Target || activeCfg?.scope2_ch4 || "xfmr-load", color: PROBE_COLORS.CH4, badge: "CH4", label: "Scope 2 CH4" },
       { fromId: "dot-dmm1", targetKey: this.effectiveDmmTarget(1) || activeCfg?.dmm1 || "xfmr-p2", color: PROBE_COLORS.DMM1, badge: "DMM1", label: "DMM 1" },
       { fromId: "dot-dmm2", targetKey: this.effectiveDmmTarget(2) || activeCfg?.dmm2 || "xfmr-load", color: PROBE_COLORS.DMM2, badge: "DMM2", label: "DMM 2" },
-      { fromId: "dot-vu1", targetKey: this.vu1Target || activeCfg?.vu1 || "xfmr-vin", color: PROBE_COLORS.VU1, badge: "VU1", label: "VU 1" },
-      { fromId: "dot-vu2", targetKey: this.vu2Target || activeCfg?.vu2 || "xfmr-load", color: PROBE_COLORS.VU2, badge: "VU2", label: "VU 2" }
+      { fromId: "dot-vu1", targetKey: this.vu1Target || activeCfg?.vu1 || "xfmr-vin", color: PROBE_COLORS.VU1, badge: "VM1", label: "VM 1" },
+      { fromId: "dot-vu2", targetKey: this.vu2Target || activeCfg?.vu2 || "xfmr-load", color: PROBE_COLORS.VU2, badge: "VM2", label: "VM 2" },
+      { fromId: "dot-vu3", targetKey: this.vu3Target || activeCfg?.scope1_ch2 || "xfmr-p2", color: PROBE_COLORS.VU3, badge: "VM3", label: "VM 3" },
+      { fromId: "dot-vu4", targetKey: this.vu4Target || activeCfg?.scope2_ch3 || "xfmr-p3", color: PROBE_COLORS.VU4, badge: "VM4", label: "VM 4" }
     ];
 
     // Count how many probes connect to each targetKey to calculate non-overlapping offsets

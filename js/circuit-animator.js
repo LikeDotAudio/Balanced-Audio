@@ -5,6 +5,17 @@
  * and real-time Falstad-style probe readouts.
  */
 
+// Pyramid tier for a level in dBu, and the voltmeter range / colour / name each tier uses
+const CAL_TIER_RANGE = { mic: 7, consumer: 11, pro: 13, headroom: 15 };
+const CAL_TIER_COLOR = { mic: "#f59e0b", consumer: "#06b6d4", pro: "#10b981", headroom: "#ef4444" };
+const CAL_TIER_NAME = { mic: "MIC LEVEL", consumer: "CONSUMER LINE", pro: "PRO LINE", headroom: "HEADROOM" };
+function calTierFor(dbu) {
+  if (dbu <= -30) return "mic";
+  if (dbu < -2) return "consumer";
+  if (dbu < 15) return "pro";
+  return "headroom";
+}
+
 class CircuitSimulator {
   constructor() {
     this.animationFrame = null;
@@ -1357,6 +1368,99 @@ class CircuitSimulator {
     });
   }
 
+  // Calibration-step rotary switch: one detent per preset in #pyr-preset-select, coloured by pyramid tier
+  initCalRotary() {
+    const host = document.getElementById("cal-rotary");
+    const select = document.getElementById("pyr-preset-select");
+    if (!host || !select) return;
+    this.calSteps = [...select.options]
+      .filter(o => o.value !== "custom")
+      .map(o => ({ value: o.value, dbu: parseFloat(o.value) }))
+      .sort((a, b) => a.dbu - b.dbu);
+
+    const choose = (value) => {
+      select.value = value;
+      select.dispatchEvent(new Event("change"));
+    };
+    const step = (dir) => {
+      const i = this.calSteps.findIndex(s => s.value === select.value);
+      const next = this.calSteps[Math.max(0, Math.min(this.calSteps.length - 1, (i < 0 ? 0 : i) + dir))];
+      choose(next.value);
+    };
+
+    host.addEventListener("click", (e) => {
+      const detent = e.target.closest("[data-cal-value]");
+      if (detent) choose(detent.dataset.calValue);
+      else if (e.target.closest(".cal-knob")) {
+        const i = this.calSteps.findIndex(s => s.value === select.value);
+        choose(this.calSteps[(i + 1) % this.calSteps.length].value);
+      }
+    });
+    host.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      step(e.deltaY > 0 ? 1 : -1);
+    }, { passive: false });
+    this.drawCalRotary();
+  }
+
+  drawCalRotary() {
+    const host = document.getElementById("cal-rotary");
+    const select = document.getElementById("pyr-preset-select");
+    if (!host || !this.calSteps) return;
+    const n = this.calSteps.length;
+    const START = -135;
+    const SPAN = 270;
+    const angleOf = (i) => START + (SPAN * i) / (n - 1);
+    const pos = (deg, r) => {
+      const a = ((deg - 90) * Math.PI) / 180;
+      return [100 + r * Math.cos(a), 100 + r * Math.sin(a)];
+    };
+    const cur = this.calSteps.findIndex(s => s.value === select.value);
+    const curDbu = cur >= 0 ? this.calSteps[cur].dbu : this.lastDbu;
+    const tier = calTierFor(curDbu);
+
+    const detents = this.calSteps.map((st, i) => {
+      const a = angleOf(i);
+      const [dx, dy] = pos(a, 62);
+      const [lx, ly] = pos(a, 84);
+      const col = CAL_TIER_COLOR[calTierFor(st.dbu)];
+      const on = i === cur;
+      const txt = st.value === "-7.78" ? "−10 dBV" : `${st.dbu > 0 ? "+" : st.dbu < 0 ? "−" : ""}${Math.abs(st.dbu)}`;
+      return `
+        <g data-cal-value="${st.value}" style="cursor: pointer;">
+          <circle cx="${dx}" cy="${dy}" r="${on ? 6 : 4.5}" fill="${on ? col : "#0f172a"}" stroke="${col}" stroke-width="2" />
+          <text x="${lx}" y="${ly + 4}" fill="${col}" font-size="${on ? 13 : 11}" font-weight="${on ? 900 : 700}" text-anchor="middle">${txt}</text>
+        </g>`;
+    }).join("");
+
+    const pointer = cur >= 0 ? angleOf(cur) : START;
+    const [px, py] = pos(pointer, 40);
+    host.innerHTML = `
+      <svg viewBox="0 0 200 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="96" fill="#d6ddd4" stroke="#94a3b8" stroke-width="2" />
+        <path d="M ${pos(START, 62).join(",")} A 62 62 0 1 1 ${pos(START + SPAN, 62).join(",")}" fill="none" stroke="#475569" stroke-width="1" stroke-dasharray="2,3" />
+        ${detents}
+        <g class="cal-knob" style="cursor: pointer;">
+          <circle cx="100" cy="100" r="46" fill="url(#cal-knob-grad)" stroke="#020617" stroke-width="2" />
+          <circle cx="100" cy="100" r="34" fill="#111827" stroke="#334155" />
+          <line x1="100" y1="100" x2="${px}" y2="${py}" stroke="${CAL_TIER_COLOR[tier]}" stroke-width="5" stroke-linecap="round" />
+          <circle cx="100" cy="100" r="6" fill="#e2e8f0" />
+        </g>
+        <defs>
+          <radialGradient id="cal-knob-grad" cx="40%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#475569" /><stop offset="70%" stop-color="#0f172a" /><stop offset="100%" stop-color="#020617" />
+          </radialGradient>
+        </defs>
+      </svg>`;
+
+    const name = document.getElementById("cal-tier-name");
+    if (name) {
+      name.textContent = `${CAL_TIER_NAME[tier]} • ${curDbu >= 0 ? "+" : ""}${Number(curDbu).toFixed(curDbu % 1 ? 2 : 1)} dBu`;
+      name.style.color = CAL_TIER_COLOR[tier];
+      name.style.borderColor = CAL_TIER_COLOR[tier];
+    }
+  }
+
   // 1970s Laboratory Audio Level Converter & DMM LCD Driver
   initLevelConverter() {
     const dbuEl = document.getElementById("calc-dbu");
@@ -1458,10 +1562,17 @@ class CircuitSimulator {
       presetSelect.addEventListener("change", (e) => {
         if (e.target.value !== "custom") {
           const dbu = parseFloat(e.target.value);
-          if (!isNaN(dbu)) syncFromDbu(dbu);
+          if (!isNaN(dbu)) {
+            syncFromDbu(dbu);
+            // The voltmeter range and pyramid slice follow the calibration step
+            if (typeof this.setVoltmeterRange === "function") this.setVoltmeterRange(CAL_TIER_RANGE[calTierFor(dbu)]);
+          }
         }
+        this.drawCalRotary();
       });
     }
+
+    this.initCalRotary();
 
     // Initialize with +4.0 dBu studio standard
     syncFromDbu(4.0);
