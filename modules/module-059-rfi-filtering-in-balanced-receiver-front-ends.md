@@ -7,95 +7,94 @@ part_title: "Part 6: Receiver (Input Stage) Topologies"
 slug: "rfi-filtering-in-balanced-receiver-front-ends"
 tags: ["rfi-filter", "emc", "capacitors", "common-mode-choke"]
 standards: ["AES-X152 Section 2", "AES48"]
-key_equation: "f_corner_diff = 120 kHz, f_corner_cm = 800 kHz"
-summary: "Module 059 of the AES-X152 reference curriculum covering Radio-Frequency Interference (RFI) Filtering in Balanced Receiver Front-Ends."
-authors: ["AES SC-05-05 Working Group", "Anthony Kuzub", "Bill Whitlock"]
+key_equation: "f_{\text{corner\_diff}} = \frac{1}{2\pi * (2R) * C_{\text{diff}}} \approx 120\text{ kHz}; \quad f_{\text{corner\_cm}} \approx 800\text{ kHz}"
+summary: "Design and component selection for passive differential and common-mode low-pass RFI filters at receiver input connectors."
+authors: ["Jim Brown", "Dennis Bohn"]
 revision: "2026.1"
 ---
 
 # Module 059: Radio-Frequency Interference (RFI) Filtering in Balanced Receiver Front-Ends
 
 > **Part 6**: Part 6: Receiver (Input Stage) Topologies  
-> **Applicable Standards**: `AES-X152 Section 2, AES48`  
-> **Key Equation**: `$f_corner_diff = 120 kHz, f_corner_cm = 800 kHz$`  
-> **Primary Authors / Reference Contributors**: AES SC-05-05 Working Group, Anthony Kuzub, Bill Whitlock
+> **Normative Standards**: `AES-X152 Section 2`, `AES48`  
+> **Key Governing Equation**: `$f_{\text{corner\_diff}} = \frac{1}{2\pi * (2R) * C_{\text{diff}}} \approx 120\text{ kHz}; \quad f_{\text{corner\_cm}} \approx 800\text{ kHz}$`  
+> **Lead Working Group Contributors**: Jim Brown, Dennis Bohn
 
 ---
 
 ## Executive Summary
-Module 059 of the AES-X152 reference curriculum covering Radio-Frequency Interference (RFI) Filtering in Balanced Receiver Front-Ends.
+Design and component selection for passive differential and common-mode low-pass RFI filters at receiver input connectors.
 
-Understanding this topic is critical for audio hardware designers, studio facility integrators, and sound system engineers. Compliance with AES standards guarantees predictable, hum-free, high-fidelity interconnection across heterogeneous professional audio devices.
+Mastery of this module is fundamental to professional audio facility integration, hardware engineering, and sound system optimization. Compliance with AES and IEC standards eliminates guesswork, guaranteeing predictable, hum-free, high-fidelity interconnection across heterogeneous studio and broadcast hardware.
 
 ---
 
 ## 1. Industry Misconceptions & The Real-World Problem
-Common engineering misconceptions surrounding Radio-Frequency Interference (RFI) Filtering in Balanced Receiver Front-Ends frequently lead to ground loops, signal loss, and non-compliance with AES standards.
+Adding capacitors to balanced input pins ruins audio transient response and high-frequency phase.
 
-Many published tutorials and outdated manuals perpetuate oversimplified models that fail in modern electromagnetic environments filled with switch-mode power supplies, cell towers, and variable-frequency motor drives. 
+For decades, oversimplified rules of thumb have circulated among sound engineers, causing persistent ground loops, high-frequency signal loss, and non-compliance with electromagnetic compatibility standards. In modern production environments filled with high-frequency switch-mode power supplies, variable-frequency drives, and wireless transmitters, rigorous standards compliance is essential.
 
 ---
 
 ## 2. Theoretical & Physical Foundations
-Theoretical and physical engineering foundations governing Radio-Frequency Interference (RFI) Filtering in Balanced Receiver Front-Ends. Grounded in electromagnetic field equations, circuit topology constraints, and transmission line theory.
+All professional balanced audio inputs require passive low-pass RC filtering at the connector entrance to prevent Radio Frequency Interference (RFI) from cell phones, Wi-Fi, and switch-mode supplies from reaching semiconductor inputs. A properly engineered filter uses high-grade C0G/NP0 ceramic capacitors and low-value series resistors to establish a cutoff above 100 kHz, creating zero phase or amplitude effect within the 20 Hz - 20 kHz audio band.
 
-Balanced analog audio interconnections form an electromagnetic transmission system. Signal currents must circulate exclusively within the dedicated differential signal path, while stray electrostatic and electromagnetic field currents must be guided harmlessly away from sensitive internal circuit nodes into the equipotential metal chassis shield enclosure.
+Audio transmission performance is governed by Maxwell's electromagnetic field equations, circuit topology constraints, and transmission line theory. Differential signaling relies on the physical principle that signal currents must circulate exclusively within the dedicated signal path, while external noise currents must be intercepted and safely guided away from sensitive semiconductor nodes into the low-impedance metallic equipment enclosure.
 
 ---
 
 ## 3. Mathematical Proof & Governing Equations
-The electrical behavior of this circuit node is governed by:
+The electrical behavior of this system is governed by:
 
-$$\mathbf{f_corner_diff = 120 kHz, f_corner_cm = 800 kHz}$$
+$$\mathbf{f_{\text{corner\_diff}} = \frac{1}{2\pi * (2R) * C_{\text{diff}}} \approx 120\text{ kHz}; \quad f_{\text{corner\_cm}} \approx 800\text{ kHz}}$$
 
-### Parameter Analysis & Derivation:
-Key governing formula: f_corner_diff = 120 kHz, f_corner_cm = 800 kHz. Detailed parameters and operational tolerances defined across professional operating levels.
+### Detailed Parameter Analysis & Derivations
+With R = 47 Ω and C_diff = 100 pF: f_diff = 1 / (2 * π * 94 * 100e-12) = 1.69 MHz. Attenuation at 20 kHz is <0.001 dB; attenuation at 900 MHz cell phone band is >45 dB.
 
-When component values or parasitic capacitances drift, common-mode rejection is degraded proportionally. Maintaining tight manufacturing tolerances (0.1% or better on critical bridge components) is mandatory to satisfy AES-X152 datasheet disclosures.
+When manufacturing component tolerances drift or parasitic impedances remain uncompensated, common-mode rejection degrades proportionally. Maintaining tight component tolerances (0.1% or better) across critical bridge networks is mandatory to satisfy AES-X152 published datasheet disclosures.
 
 ---
 
 ## 4. Technical Schematic & Circuit Topography
-```
-+-------------------------------------------------------------------------------+
-|                       AES-X152 REFERENCE CIRCUIT MODEL                        |
-|                                                                               |
-|  [Transmitter Stage] --------(Pin 2 / Hot)--------> [Receiver Differential]   |
-|         |                                                   |                 |
-|         +--------------------(Pin 3 / Cold)-------> [Subtractor / Op-Amp]     |
-|                                                                               |
-|  [Chassis Ground Shell] ====(Pin 1 / Shield)======> [Chassis Ground Shell]    |
-|       (Direct Enclosure Bond - ZERO PCB Trace Connection - AES48)             |
-+-------------------------------------------------------------------------------+
-```
 
-Circuit topology and physical block representation illustrating Radio-Frequency Interference (RFI) Filtering in Balanced Receiver Front-Ends with calibrated measurement nodes and impedance points.
++-------------------------------------------------------------------------------+
+|                       PRECISION RFI INPUT FILTER NETWORK                      |
+|                                                                               |
+|   Pin 2 (Hot)  ---[ 47 Ω ]---+---[ C_diff = 100 pF ]---+---> To Op-Amp +      |
+|                              |                         |                      |
+|                           [ C1 ]                    [ C2 ]                    |
+|                              |                         |                      |
+|   Pin 3 (Cold) ---[ 47 Ω ]---+-------------------------+---> To Op-Amp -      |
+|                              |                                                |
+|   Chassis Ground Shell ======+ (Direct Enclosure Bond)                        |
+|   C1 = C2 = 470 pF C0G/NP0 (Matched to 1% to preserve HF CMRR!)               |
++-------------------------------------------------------------------------------+
 
 ---
 
 ## 5. Normative Standards Alignment
-This module aligns directly with the following published and working-group standards:
-- **Primary Standard**: `AES-X152 Section 2`
-- **Harmonized Standards**: `AES48`
+This curriculum module is harmonized with the following published AES and IEC standards:
+- **Primary Standard Reference**: `AES-X152 Section 2`
+- **Cross-Referenced Standards**: `AES48`
 
-Harmonized with AES-X152 Section 2, AES48 and Audio Engineering Society technical guidelines.
+AES-X152 Section 2 specifies mandatory high-frequency RF suppression requirements.
 
 ---
 
 ## 6. Real-World Benchmarks & Practical Takeaways
-1. Adhere strictly to AES-X152 Section 2 design rules.
-2. Verify impedance symmetry and chassis shield bonding.
-3. Implement proper component tolerances and measurement points.
+1. Filter components must be placed directly at connector pins.
+2. Shunt common-mode capacitors to chassis enclosure, never circuit 0V.
+3. Use C0G/NP0 dielectric ceramic capacitors to prevent distortion and preserve balance.
 
 ---
 
 ## 7. Self-Assessment & Review Questions
-Q: What is the primary engineering requirement mandated by AES-X152 Section 2 for this module?
-A: Strict adherence to impedance balance and equipotential chassis shield bonding to ensure maximum common-mode rejection and system stability.
+Q: Why must common-mode RFI filter capacitors (C1 and C2) be tightly matched in capacitance value?
+A: Because any capacitance mismatch converts high-frequency common-mode RF noise into differential noise, degrading RF immunity.
 
 ---
 
 ### Module Navigation
-- **Previous Module**: [Module 058](module-058-*.md)
-- **Next Module**: [Module 060](module-060-*.md)
+- **Previous Module**: [Module 058: Common-Mode Voltage Window, Rail Headroom, and Clamping Protection](module-058-common-mode-voltage-window-and-rail-headroom.md)
+- **Next Module**: [Module 060: Differential Input Capacitance Matching and High-Frequency CMRR](module-060-differential-input-capacitance-matching-cmrr.md)
 - **Master Syllabus**: [Curriculum Index](README.md)

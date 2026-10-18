@@ -51,7 +51,8 @@
         <a href="#transformer-simulator" class="nav-link">Transformer Lab</a>
         <a href="#deepest-dive" class="nav-link">The Deepest Dive</a>
         <a href="#tutorials-section" class="nav-link">Tutorials &amp; Matrix</a>
-        <a href="#tree-explorer" class="nav-link">Taxonomy Tree</a>
+        <a href="#curriculum-modules" class="nav-link" style="color: var(--accent-cyan); font-weight: 700;">100 Modules</a>
+        <a href="#tree-explorer" class="nav-link" onclick="if(window.storySidebar){window.storySidebar.openTaxonomyTree();return false;}">Taxonomy Tree</a>
         <a href="#aes-vst" class="nav-link">AES-VST Plugin</a>
         <a href="#datasheet-templates" class="nav-link">Free Datasheets</a>
         <a href="#dennis-bohn-par" class="nav-link">Dennis Bohn PAR</a>
@@ -73,7 +74,8 @@
         <a href="#transformer-simulator" class="sub-nav-pill" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">Transformer Lab</a>
         <a href="#deepest-dive" class="sub-nav-pill">Jim Meyer Thevenin</a>
         <a href="#tutorials-section" class="sub-nav-pill">Hess Compatibility</a>
-        <a href="#tree-explorer" class="sub-nav-pill">Taxonomy Tree</a>
+        <a href="#curriculum-modules" class="sub-nav-pill" style="border-color: #38bdf8; color: #38bdf8; font-weight: 700;">100 Modules (MD)</a>
+        <a href="#tree-explorer" class="sub-nav-pill" onclick="if(window.storySidebar){window.storySidebar.openTaxonomyTree();return false;}">Taxonomy Tree</a>
         <a href="#aes-vst" class="sub-nav-pill" style="border-color: #10b981; color: #34d399;">AES-VST Plugin</a>
         <a href="#datasheet-templates" class="sub-nav-pill">Free Datasheets</a>
         <a href="#dennis-bohn-par" class="sub-nav-pill" style="border-color: #f59e0b; color: #fbbf24;">Dennis Bohn PAR</a>
@@ -2422,6 +2424,86 @@
             <!-- Instrument Bays Grid -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
               
+              <!-- Bay 0: Calibrated Audio Signal Generator -->
+              <div class="military-fader-cell siggen-bay">
+                <div class="control-label" style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-weight: 800; letter-spacing: 0.05em; color: #38bdf8;">SIGNAL GENERATOR</span>
+                  <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <div id="siggen-led" class="siggen-led active" title="Generator Output Active"></div>
+                    <button type="button" id="siggen-mute-btn" class="siggen-toggle-btn active" title="Toggle Signal Output Relay">OUT ON</button>
+                  </div>
+                </div>
+
+                <!-- Waveform Selectors -->
+                <div class="siggen-waveform-bar" style="margin: 0.45rem 0;">
+                  <span style="font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Waveform:</span>
+                  <div class="siggen-wave-btn-group">
+                    <button type="button" class="siggen-wave-btn active" data-wave="sine" title="Pure Sine Wave (Low THD+N)">∿ Sine</button>
+                    <button type="button" class="siggen-wave-btn" data-wave="square" title="Square Wave (Transient Test)">⊓ Sq</button>
+                    <button type="button" class="siggen-wave-btn" data-wave="triangle" title="Triangle Wave">▲ Tri</button>
+                    <button type="button" class="siggen-wave-btn" data-wave="noise" title="Pink Noise (-3dB/oct)">〰 Pink</button>
+                  </div>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin: 0.35rem 0;">
+                  <!-- Rotary Frequency Dial Knob -->
+                  <div class="knob-unit">
+                    <div id="siggen-freq-knob" class="rotary-knob" style="transform: rotate(0deg); cursor: grab;" title="Drag or Scroll to Sweep Frequency">
+                      <div class="knob-cap">
+                        <div class="knob-line" style="background: #38bdf8;"></div>
+                      </div>
+                    </div>
+                    <span class="knob-label">FREQ TUNE</span>
+                  </div>
+
+                  <!-- Spot Frequency Dropdown -->
+                  <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                      <label style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Frequency:</label>
+                      <span id="siggen-freq-display" style="font-family: monospace; font-weight: 800; color: #38bdf8; font-size: 0.85rem;">1,000 Hz</span>
+                    </div>
+                    <select id="siggen-spot-select" class="military-preset-select" style="width: 100%; margin-top: 0.2rem;">
+                      <option value="20">20 Hz (Sub-Bass Limit)</option>
+                      <option value="100">100 Hz (Mains Hum Ref)</option>
+                      <option value="400">400 Hz (AES Standard Test)</option>
+                      <option value="1000" selected>1 kHz (0 dBu Pro Ref)</option>
+                      <option value="10000">10 kHz (HF Bandwidth)</option>
+                      <option value="20000">20 kHz (Audio Band Edge)</option>
+                      <option value="custom">Continuous Dial Sweep</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Continuous Logarithmic Frequency Slider (10 Hz – 100 kHz) -->
+                <div style="margin: 0.3rem 0 0.4rem;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.65rem; color: #64748b; font-family: monospace; margin-bottom: 2px;">
+                    <span>10 Hz</span>
+                    <span>100 Hz</span>
+                    <span>1 kHz</span>
+                    <span>10 kHz</span>
+                    <span>100 kHz</span>
+                  </div>
+                  <input type="range" id="siggen-freq-slider" class="range-slider" min="1.0" max="5.0" step="0.005" value="3.0" style="width: 100%;" title="Continuous Log Frequency Sweep" />
+                </div>
+
+                <!-- Live Audible Monitor Speaker Control -->
+                <div class="siggen-speaker-bar" style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(51, 65, 85, 0.8); border-radius: 4px; padding: 0.35rem 0.5rem; margin-top: 0.25rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <button type="button" id="siggen-speaker-btn" class="siggen-speaker-btn" title="Toggle Live Audible Audition via Web Audio API">
+                      <span id="siggen-speaker-icon">🔇</span>
+                      <span id="siggen-speaker-txt">Monitor: Muted</span>
+                    </button>
+                    <div style="display: flex; align-items: center; gap: 0.35rem;">
+                      <span style="font-size: 0.65rem; color: #94a3b8; font-weight: 700;">VOL:</span>
+                      <input type="range" id="siggen-speaker-vol" min="0" max="0.5" step="0.01" value="0.15" style="width: 55px; height: 4px;" title="Monitor Volume" />
+                    </div>
+                  </div>
+                  <div style="font-size: 0.64rem; color: #64748b; margin-top: 0.25rem; text-align: center;">
+                    ⚡ 100 kHz Calibrated Meter L.P. Roll-Off Filter
+                  </div>
+                </div>
+              </div>
+
               <!-- Bay 1: Input Drive Voltage (V_IN) -->
               <div class="military-fader-cell">
                 <div class="control-label">
@@ -2954,14 +3036,14 @@
 
           <!-- Vector Schematic SVG with Dynamic Wires and Overlaid Values -->
           <div class="svg-diagram-wrapper">
-            <svg viewBox="0 0 850 300" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 850 300" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" id="pp-schematic-svg">
               <rect width="850" height="300" fill="var(--bg-secondary)" rx="8"/>
               
               <!-- Input Signal Wire with Dynamic Stroke -->
               <text x="30" y="150" fill="#38bdf8" font-size="13" font-weight="700">Audio In</text>
               <line id="pp-svg-wire-drive" x1="90" y1="145" x2="160" y2="145" stroke="#38bdf8" stroke-width="2.5"/>
               <path class="animated-current-flow" data-flow-speed="2.2" d="M 90,145 L 160,145" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
-              <circle cx="160" cy="145" r="4" fill="#38bdf8"/>
+              <circle id="pp-probe-vin" data-probe-target="pp-vin" data-probe-label="Audio In Drive (Vin)" cx="160" cy="145" r="5" fill="#38bdf8" cursor="pointer"/>
               <text id="pp-svg-vin" x="125" y="135" fill="#38bdf8" font-size="11" font-weight="700">1.2 V</text>
 
               <!-- Branch to Top OpAmp -->
@@ -2992,7 +3074,7 @@
               <text id="pp-svg-zpo" x="357" y="112" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle">50 &Omega;</text>
               <circle cx="385" cy="90" r="3" class="solder-lug"/>
               <line x1="385" y1="90" x2="630" y2="90" stroke="#38bdf8" stroke-width="2.5"/>
-              <circle cx="630" cy="90" r="7" fill="#10b981"/>
+              <circle id="pp-probe-p2" data-probe-target="pp-p2" data-probe-label="Push-Pull Pin 2 (HOT +)" cx="630" cy="90" r="7" fill="#10b981" cursor="pointer"/>
               <circle cx="630" cy="90" r="3" class="solder-lug"/>
               <text x="655" y="95" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <text id="pp-svg-probe-p2" x="490" y="80" fill="#10b981" font-size="10" font-weight="600">3.4 mA / 1.03 V</text>
@@ -3006,7 +3088,7 @@
               <text id="pp-svg-zro" x="357" y="232" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle">50 &Omega;</text>
               <circle cx="385" cy="210" r="3" class="solder-lug"/>
               <line x1="385" y1="210" x2="630" y2="210" stroke="#38bdf8" stroke-width="2.5"/>
-              <circle cx="630" cy="210" r="7" fill="#ef4444"/>
+              <circle id="pp-probe-p3" data-probe-target="pp-p3" data-probe-label="Push-Pull Pin 3 (COLD -)" cx="630" cy="210" r="7" fill="#ef4444" cursor="pointer"/>
               <circle cx="630" cy="210" r="3" class="solder-lug"/>
               <text x="655" y="215" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
               <text id="pp-svg-probe-p3" x="490" y="228" fill="#ef4444" font-size="10" font-weight="600">3.4 mA / -1.03 V</text>
@@ -3015,7 +3097,7 @@
               <!-- Differential Load Resistor (Scales Dynamically) -->
               <line x1="630" y1="90" x2="630" y2="120" stroke="#f59e0b" stroke-width="2"/>
               <circle cx="630" cy="120" r="3" class="solder-lug"/>
-              <rect id="pp-svg-rload-rect" x="622" y="120" width="16" height="60" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+              <rect id="pp-svg-rload-rect" data-probe-target="pp-load" data-probe-label="Differential Load Resistor" x="622" y="120" width="16" height="60" fill="#0f172a" stroke="#f59e0b" stroke-width="2" cursor="pointer"/>
               <text x="655" y="152" fill="#f59e0b" font-size="10" font-weight="600">R_Load</text>
               <text id="pp-svg-rload" x="655" y="172" fill="#f59e0b" font-size="11" font-weight="700">600 &Omega;</text>
               <circle cx="630" cy="180" r="3" class="solder-lug"/>
@@ -3024,7 +3106,7 @@
               <!-- Pin 3 Short to Ground Link (Visible & Highlighted when toggled) -->
               <g id="svg-pp-short-group" opacity="0.3">
                 <line id="pp-svg-short-dash" x1="630" y1="210" x2="630" y2="260" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4,4"/>
-                <circle cx="630" cy="260" r="5" fill="#94a3b8"/>
+                <circle id="pp-probe-p1" data-probe-target="pp-p1" data-probe-label="Pin 1 (CHASSIS)" cx="630" cy="260" r="5" fill="#94a3b8" cursor="pointer"/>
                 <circle cx="630" cy="260" r="3" class="solder-lug"/>
                 <line x1="420" y1="260" x2="630" y2="260" stroke="#94a3b8" stroke-width="2"/>
                 <path d="M 410,260 L 430,260 M 415,265 L 425,265 M 418,270 L 422,270" stroke="#94a3b8" stroke-width="2"/>
@@ -3128,11 +3210,12 @@
             </div>
           </div>
           <div class="svg-diagram-wrapper">
-            <svg viewBox="0 0 850 280" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 850 280" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" id="ib-schematic-svg">
               <rect width="850" height="280" fill="var(--bg-secondary)" rx="8"/>
 
               <text x="30" y="85" fill="#38bdf8" font-size="13" font-weight="700">Audio In</text>
               <line x1="90" y1="80" x2="200" y2="80" stroke="#38bdf8" stroke-width="2.5"/>
+              <circle id="ib-probe-vin" data-probe-target="ib-vin" data-probe-label="Audio In (Vin)" cx="200" cy="80" r="4" fill="#38bdf8" cursor="pointer"/>
               <polygon points="200,55 200,105 250,80" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
               <text x="212" y="73" fill="#38bdf8" font-size="12" font-weight="700">+</text>
               <text x="212" y="96" fill="#94a3b8" font-size="12" font-weight="700">&minus;</text>
@@ -3141,7 +3224,7 @@
               <rect x="330" y="72" width="60" height="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
               <text x="360" y="84" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">R_PO (50&Omega;)</text>
               <line x1="390" y1="80" x2="640" y2="80" stroke="#10b981" stroke-width="2.5"/>
-              <circle cx="640" cy="80" r="7" fill="#10b981"/>
+              <circle id="ib-probe-p2" data-probe-target="ib-p2" data-probe-label="Impedance-Balanced Pin 2 (HOT +)" cx="640" cy="80" r="7" fill="#10b981" cursor="pointer"/>
               <text x="665" y="85" fill="#10b981" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
               <path class="animated-current-flow" data-flow-speed="1.8" d="M 250,80 L 640,80" fill="none" stroke="#10b981" stroke-width="2.5"/>
 
@@ -3151,19 +3234,19 @@
               <rect x="330" y="172" width="60" height="16" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
               <text x="360" y="184" fill="#f8fafc" font-size="10" font-weight="600" text-anchor="middle">R_RO (50&Omega;)</text>
               <line x1="390" y1="180" x2="640" y2="180" stroke="#94a3b8" stroke-width="2.5"/>
-              <circle cx="640" cy="180" r="7" fill="#ef4444"/>
+              <circle id="ib-probe-p3" data-probe-target="ib-p3" data-probe-label="Impedance-Balanced Pin 3 (COLD -)" cx="640" cy="180" r="7" fill="#ef4444" cursor="pointer"/>
               <text x="665" y="185" fill="#ef4444" font-size="14" font-weight="700"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
               <text x="440" y="165" fill="#94a3b8" font-size="10" font-weight="600">Zero Audio Signal Voltage (Passive Balance)</text>
 
               <!-- Bridging Load Resistor -->
               <line x1="640" y1="80" x2="640" y2="110" stroke="#f59e0b" stroke-width="2"/>
-              <rect x="632" y="110" width="16" height="40" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+              <rect id="ib-probe-load" data-probe-target="ib-load" data-probe-label="10k Load Resistor" x="632" y="110" width="16" height="40" fill="#0f172a" stroke="#f59e0b" stroke-width="2" cursor="pointer"/>
               <text x="655" y="135" fill="#f59e0b" font-size="10" font-weight="600">10k &Omega;</text>
               <line x1="640" y1="150" x2="640" y2="180" stroke="#f59e0b" stroke-width="2"/>
 
               <!-- Pin 1 Shield -->
               <line x1="210" y1="230" x2="640" y2="230" stroke="#94a3b8" stroke-width="2"/>
-              <circle cx="640" cy="230" r="7" fill="#94a3b8"/>
+              <circle id="ib-probe-p1" data-probe-target="ib-p1" data-probe-label="Pin 1 (CHASSIS)" cx="640" cy="230" r="7" fill="#94a3b8" cursor="pointer"/>
               <text x="665" y="235" fill="#94a3b8" font-size="14" font-weight="700">Pin 1 (CHASSIS)</text>
             </svg>
           </div>
@@ -3604,7 +3687,7 @@
 
   <!-- ================= 1. PRIMARY DRIVER STAGE (LEFT) ================= -->
   <!-- Audio Signal Generator -->
-  <g id="xfmr-probe-pri-gen" class="circuit-probe-point" data-probe-label="Signal Generator In" style="cursor: pointer;">
+  <g id="xfmr-probe-pri-gen" class="circuit-probe-point" data-probe-target="xfmr-vin" data-probe-label="Transformer Gen In (Vin)" style="cursor: pointer;">
     <circle cx="70" cy="140" r="28" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
     <path d="M 52,140 Q 61,126 70,140 T 88,140" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
     <text x="70" y="118" fill="#38bdf8" font-size="10.5" font-family="'JetBrains Mono', monospace" font-weight="800" text-anchor="middle">GEN (V_IN)</text>
@@ -3631,7 +3714,7 @@
   <path class="animated-current-flow" data-flow-speed="2.0" d="M 135,80 L 280,80 L 280,200 L 135,200 Z" fill="none" stroke="#38bdf8" stroke-width="2.5" opacity="0.8"/>
 
   <!-- Primary Winding Coils (4 smooth arcs from y=80 down to y=200) -->
-  <path id="xfmr-svg-pri-coil" d="M 280,80 A 15,15 0 0,1 280,110 A 15,15 0 0,1 280,140 A 15,15 0 0,1 280,170 A 15,15 0 0,1 280,200" fill="none" stroke="#10b981" stroke-width="3.8"/>
+  <path id="xfmr-svg-pri-coil" data-probe-target="xfmr-pri" data-probe-label="Primary Winding (N1)" d="M 280,80 A 15,15 0 0,1 280,110 A 15,15 0 0,1 280,140 A 15,15 0 0,1 280,170 A 15,15 0 0,1 280,200" fill="none" stroke="#10b981" stroke-width="3.8"/>
 
   <!-- Primary Labels -->
   <text x="245" y="65" fill="#10b981" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="800" text-anchor="middle">PRIMARY (N₁)</text>
@@ -3674,12 +3757,12 @@
 
   <!-- Top Output Line (Pin 2 Hot) -->
   <line x1="370" y1="80" x2="810" y2="80" stroke="#10b981" stroke-width="2.5"/>
-  <circle cx="810" cy="80" r="7" fill="#10b981"/>
+  <circle id="xfmr-probe-p2" data-probe-target="xfmr-p2" data-probe-label="Transformer Pin 2 (HOT +)" cx="810" cy="80" r="7" fill="#10b981" cursor="pointer"/>
   <text x="830" y="85" fill="#10b981" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="800"><a href="#xlr-hub" class="text-emerald">Pin 2 (HOT +)</a></text>
 
   <!-- Bottom Output Line (Pin 3 Cold) -->
   <line x1="370" y1="200" x2="810" y2="200" stroke="#ef4444" stroke-width="2.5"/>
-  <circle cx="810" cy="200" r="7" fill="#ef4444"/>
+  <circle id="xfmr-probe-p3" data-probe-target="xfmr-p3" data-probe-label="Transformer Pin 3 (COLD -)" cx="810" cy="200" r="7" fill="#ef4444" cursor="pointer"/>
   <text x="830" y="205" fill="#ef4444" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="800"><a href="#xlr-hub" class="text-rose">Pin 3 (COLD &minus;)</a></text>
 
   <!-- Animated Secondary Current Flow -->
@@ -3687,7 +3770,7 @@
 
   <!-- AES48 Pin 1 Chassis Earth Ground Bus (Horizontal at y=295) -->
   <line x1="490" y1="295" x2="810" y2="295" stroke="#94a3b8" stroke-width="2.5"/>
-  <circle cx="810" cy="295" r="7" fill="#94a3b8"/>
+  <circle id="xfmr-probe-p1" data-probe-target="xfmr-p1" data-probe-label="Transformer Pin 1 (CHASSIS)" cx="810" cy="295" r="7" fill="#94a3b8" cursor="pointer"/>
   <text x="830" y="300" fill="#94a3b8" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="800">Pin 1 (CHASSIS)</text>
 
   <!-- Standard Earth Ground Symbol at y=295 -->
@@ -3697,7 +3780,7 @@
   <!-- ================= 4. SECONDARY TERMINATION & ZOBEL RC BAY ================= -->
   <!-- Termination 1: Secondary Load Resistor R_LOAD (at x=580) -->
   <line x1="580" y1="80" x2="580" y2="115" stroke="#f59e0b" stroke-width="2"/>
-  <rect x="571" y="115" width="18" height="50" fill="#0f172a" stroke="#f59e0b" stroke-width="2" rx="2"/>
+  <rect id="xfmr-probe-load" data-probe-target="xfmr-load" data-probe-label="Secondary Load Resistor" x="571" y="115" width="18" height="50" fill="#0f172a" stroke="#f59e0b" stroke-width="2" rx="2" cursor="pointer"/>
   <text x="580" y="138" fill="#f59e0b" font-size="8" font-family="'JetBrains Mono', monospace" font-weight="800" text-anchor="middle">R_LOAD</text>
   <text id="xfmr-svg-rload-lbl" x="580" y="152" fill="#fbbf24" font-size="8.5" font-family="'JetBrains Mono', monospace" font-weight="700" text-anchor="middle">600 &Omega;</text>
   <line x1="580" y1="165" x2="580" y2="200" stroke="#f59e0b" stroke-width="2"/>
@@ -4121,7 +4204,7 @@
 
         <!-- Full Jim Meyer Vector SVG Schematic -->
         <div class="svg-diagram-wrapper">
-          <svg viewBox="0 0 960 400" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 960 400" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" id="meyer-schematic-svg">
             <rect width="960" height="400" fill="var(--bg-secondary)" rx="8"/>
 
             <!-- Enclosure 1 Box (Source Chassis) -->
@@ -4577,51 +4660,6 @@
     </div>
   </section>
 
-  <!-- Section 7: Interactive SC-05-05 Taxonomy Tree Explorer -->
-  <section id="tree-explorer" class="section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-badge">Taxonomy Mind Map</span>
-        <h2 class="section-title">Interactive SC-05-05 Taxonomy Tree Explorer</h2>
-        <p class="section-lead">
-          Explore the hierarchical tree created by the AES SC-05-05 working group mapping every dimension of balanced audio: 
-          transmitter circuits, cable parameters, receiver electronics, grounding topology, and test specifications.
-        </p>
-      </div>
-
-      <div class="tree-explorer-container">
-        <div>
-          <div class="tree-toolbar">
-            <input type="text" id="tree-search-input" class="tree-search-input" placeholder="Search tree (e.g., CMRR, transformer, star-quad, AES48)..." />
-            <div style="display: flex; gap: 0.5rem;">
-              <button id="tree-expand-all" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Expand All</button>
-              <button id="tree-collapse-all" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Collapse All</button>
-            </div>
-          </div>
-          <div class="tree-viewport">
-            <div id="tree-root-container"></div>
-          </div>
-        </div>
-
-        <!-- Right: Node Detail Card -->
-        <div class="tree-detail-panel detail-card" id="tree-node-inspector">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h3 id="node-inspector-title" style="margin: 0; color: var(--accent-cyan); font-size: 1.15rem;">Select a Node</h3>
-            <span id="node-inspector-badge" class="badge badge-accent">SC-05-05</span>
-          </div>
-          <div id="node-inspector-path" style="font-size: 0.8rem; color: var(--text-muted); font-family: monospace; margin-bottom: 0.75rem;">
-            Root / ...
-          </div>
-          <p id="node-inspector-desc" style="color: var(--text-secondary); line-height: 1.6; font-size: 0.9rem;">
-            Click any branch or leaf in the taxonomy tree on the left to inspect its formal AES-X152 engineering definition, 
-            mathematical equations, and related standards.
-          </p>
-          <div id="node-inspector-extra" style="margin-top: 1rem;"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Section 8: "AES-VST" Plugin Interactive GUI Preview & Standards Map -->
   <section id="aes-vst" class="section">
     <div class="container">
@@ -4911,6 +4949,65 @@
       </div>
     </div>
   </section>
+
+  <!-- Section: The 100-Module AES-X152 Reference Curriculum & Module Browser -->
+  <section id="curriculum-modules" class="section" style="background: var(--bg-secondary, #0c1220);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">100 Technical Modules</span>
+        <h2 class="section-title">The 100-Module AES-X152 Reference Curriculum &amp; Knowledge Base</h2>
+        <p class="section-lead">
+          The complete physical, electrical, and standards domain of balanced audio broken down into 
+          <strong>100 modular Markdown documents</strong> across 10 structured engineering parts. 
+          Each module feeds complete theoretical proofs, mathematical derivations, circuit schematics, 
+          and normative standards citations directly into the portal.
+        </p>
+      </div>
+
+      <!-- Search & Part Filter Bar -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem; display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div style="display: flex; gap: 0.75rem; flex: 1; min-width: 280px; align-items: center;">
+          <input type="text" id="module-search-input" placeholder="🔍 Search 100 modules by keyword, standard, tag, or topic (e.g. Pin 1, THAT 1200, P48, Thevenin)..." style="width: 100%; padding: 0.65rem 1rem; border-radius: 6px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.9); color: var(--text-primary); font-size: 0.9rem;" />
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <select id="module-part-filter" style="padding: 0.65rem 1rem; border-radius: 6px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.9); color: var(--text-primary); font-size: 0.88rem;">
+            <option value="all">All 10 Parts (100 Modules)</option>
+            <option value="1">Part 1: Foundations &amp; Core Principles (001-010)</option>
+            <option value="2">Part 2: Grounding, Shielding &amp; EMC (011-020)</option>
+            <option value="3">Part 3: Levels &amp; Dynamic Range (021-030)</option>
+            <option value="4">Part 4: Transmitter Topologies (031-040)</option>
+            <option value="5">Part 5: Cable Medium &amp; Connectors (041-050)</option>
+            <option value="6">Part 6: Receiver Topologies (051-060)</option>
+            <option value="7">Part 7: Phantom Power &amp; Transducers (061-070)</option>
+            <option value="8">Part 8: Compatibility &amp; Adapters (071-080)</option>
+            <option value="9">Part 9: Advanced Math &amp; Instruments (081-090)</option>
+            <option value="10">Part 10: Standards &amp; Legacy (091-100)</option>
+          </select>
+          <a href="modules/README.md" target="_blank" class="btn-raw-md" style="text-decoration: none;">
+            📋 Master Syllabus (MD)
+          </a>
+          <span id="module-count-display" style="font-size: 0.85rem; color: #38bdf8; font-weight: 600; min-width: 180px; text-align: right;">
+            Displaying 100 of 100 Technical Modules
+          </span>
+        </div>
+      </div>
+
+      <!-- Modules Grid -->
+      <div id="modules-grid-container">
+        <!-- Rendered dynamically by js/modules-viewer.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal Reader for Modules -->
+  <div id="module-reader-modal" class="modal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); z-index: 10000; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: var(--bg-card, #131b2e); border: 1px solid var(--accent-cyan, #38bdf8); border-radius: 10px; width: 100%; max-width: 900px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,0.8); position: relative;">
+      <button id="module-modal-close" style="position: absolute; top: 1.25rem; right: 1.25rem; background: rgba(255, 255, 255, 0.1); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; z-index: 10;">&times;</button>
+      <div id="module-modal-content">
+        <!-- Injected dynamically by openModuleReader(mod) -->
+      </div>
+    </div>
+  </div>
 
   <!-- Section 9: Free AES Data Sheet Templates & Specification Generator -->
   <section id="datasheet-templates" class="section">
@@ -6620,7 +6717,7 @@
             <li><a href="#transformer-simulator">Audio Transformer Simulator &amp; Test Bench</a></li>
             <li><a href="#deepest-dive">Jim Meyer Thevenin Model</a></li>
             <li><a href="#tutorials-section">Richard Hess Compatibility Matrix</a></li>
-            <li><a href="#tree-explorer">SC-05-05 Taxonomy Tree</a></li>
+            <li><a href="#tree-explorer" onclick="if(window.storySidebar){window.storySidebar.openTaxonomyTree();return false;}">SC-05-05 Taxonomy Tree</a></li>
             <li><a href="#aes-vst">AES-VST Plugin &amp; Standards Map</a></li>
             <li><a href="#datasheet-templates">Free AES Datasheet Templates</a></li>
             <li><a href="#dennis-bohn-par">Dennis Bohn PAR &amp; Style Guide</a></li>
@@ -6637,6 +6734,7 @@
   <!-- Scripts -->
   <script src="js/ltp-fader.js"></script>
   <script src="js/audio-analyzer.js"></script>
+  <script src="js/signal-generator.js"></script>
   <script src="js/story-sidebar.js"></script>
   <script src="js/floating-meters.js"></script>
   <script src="js/tree-data.js"></script>
@@ -6652,6 +6750,8 @@
   <script src="js/datasheet-generator.js"></script>
   <script src="js/par-glossary.js"></script>
   <script src="js/landmark-papers.js"></script>
+  <script src="js/modules-data.js"></script>
+  <script src="js/modules-viewer.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

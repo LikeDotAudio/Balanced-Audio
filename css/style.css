@@ -4616,6 +4616,22 @@ code, pre {
   margin-top: 3px;
 }
 
+.rack-probe-selector-group {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px dashed #222222;
+}
+
+.rack-probe-label {
+  font-size: 0.62rem;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: block;
+  margin-bottom: 3px;
+}
+
 /* Scope Mini Controls inside drawer */
 .scope-btn-row, .vu-range-btn-row, .dmm-keypad-mini {
   display: flex;
@@ -5624,6 +5640,249 @@ body.has-circuit-fullscreen #floating-meter-dock:hover {
   pointer-events: auto;
 }
 
+/* ==========================================================================
+   AN/URM-1960 Precision Audio Laboratory Signal Generator Bay
+   ========================================================================== */
+.siggen-bay {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 12px rgba(56, 189, 248, 0.12);
+}
+
+.siggen-led {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 4px #ef4444;
+  transition: all 0.2s ease;
+}
+
+.siggen-led.active {
+  background: #22c55e;
+  box-shadow: 0 0 10px #22c55e, 0 0 16px rgba(34, 197, 94, 0.6);
+}
+
+.siggen-toggle-btn {
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid #475569;
+  border-radius: 3px;
+  color: #94a3b8;
+  font-family: monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.siggen-toggle-btn.active {
+  background: rgba(34, 197, 94, 0.25);
+  border-color: #22c55e;
+  color: #4ade80;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+}
+
+.siggen-waveform-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.siggen-wave-btn-group {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.siggen-wave-btn {
+  flex: 1;
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid #475569;
+  border-radius: 3px;
+  color: #94a3b8;
+  font-family: var(--font-sans, system-ui);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.25rem 0.2rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.siggen-wave-btn:hover {
+  background: rgba(51, 65, 85, 0.9);
+  color: #f8fafc;
+  border-color: #38bdf8;
+}
+
+.siggen-wave-btn.active {
+  background: rgba(56, 189, 248, 0.25);
+  border-color: #38bdf8;
+  color: #38bdf8;
+  font-weight: 700;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.3);
+}
+
+.siggen-speaker-bar {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 4px;
+}
+
+.siggen-speaker-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid #475569;
+  border-radius: 3px;
+  color: #94a3b8;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s ease;
+}
+
+.siggen-speaker-btn:hover {
+  background: rgba(51, 65, 85, 0.9);
+  color: #f8fafc;
+  border-color: #38bdf8;
+}
+
+.siggen-speaker-btn.active {
+  background: rgba(16, 185, 129, 0.25);
+  border-color: #10b981;
+  color: #34d399;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+}
+
+/* ==========================================================================
+   Dual-Tab Story Sidebar & Embedded Taxonomy Tree Explorer
+   ========================================================================== */
+.sidebar-tabs {
+  display: flex;
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 1px solid rgba(51, 65, 85, 0.7);
+  padding: 0.35rem 0.5rem;
+  gap: 0.35rem;
+}
+
+.sidebar-tab-btn {
+  flex: 1;
+  padding: 0.45rem 0.5rem;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 4px;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.sidebar-tab-btn:hover {
+  background: rgba(51, 65, 85, 0.8);
+  color: #f8fafc;
+}
+
+.sidebar-tab-btn.active {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+.story-index-sidebar.taxonomy-active {
+  width: 360px;
+}
+
+@media (min-width: 1280px) {
+  body.has-story-sidebar.sidebar-taxonomy-active {
+    padding-left: 360px;
+  }
+}
+
+.sidebar-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-tree-toolbar {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  background: rgba(15, 23, 42, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.sidebar-tree-search {
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid #334155;
+  border-radius: 4px;
+  color: #f8fafc;
+  font-size: 0.78rem;
+  box-sizing: border-box;
+}
+
+.sidebar-tree-search:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.4);
+}
+
+.sidebar-tree-btn-group {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.sidebar-tree-btn {
+  flex: 1;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid #475569;
+  border-radius: 3px;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.4rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sidebar-tree-btn:hover {
+  background: #334155;
+  color: #f8fafc;
+  border-color: #38bdf8;
+}
+
+.sidebar-tree-viewport {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 0.6rem;
+  min-height: 200px;
+}
+
+.sidebar-tree-inspector {
+  padding: 0.75rem;
+  border-top: 1px solid rgba(56, 189, 248, 0.25);
+  background: rgba(15, 23, 42, 0.85);
+  max-height: 240px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.story-index-sidebar.collapsed .sidebar-tabs,
+.story-index-sidebar.collapsed .sidebar-view {
+  display: none !important;
+}
+
+
 /* Clean vector styling for Audio Transformer Schematic */
 #xfmr-schematic-svg {
   filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.5));
@@ -5638,3 +5897,183 @@ body.has-circuit-fullscreen #floating-meter-dock:hover {
 
 
 
+
+
+/* ==========================================================================
+   100-MODULE AES-X152 CURRICULUM BROWSER & READER STYLING
+   ========================================================================== */
+
+#modules-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.module-card {
+  background: var(--bg-card, #131b2e);
+  border: 1px solid var(--border-color, #1e293b);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.module-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-cyan, #38bdf8);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.module-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.module-badge {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.module-part-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #a855f7;
+  background: rgba(168, 85, 247, 0.1);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.module-card-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  color: var(--text-primary, #f8fafc);
+  line-height: 1.35;
+}
+
+.module-card-summary {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #94a3b8);
+  line-height: 1.5;
+  margin-bottom: 0.85rem;
+  flex-grow: 1;
+}
+
+.module-card-equation {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 5px;
+  padding: 0.5rem 0.65rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+}
+
+.module-card-equation code {
+  font-size: 0.78rem;
+  color: #38bdf8;
+  white-space: nowrap;
+}
+
+.module-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 0.75rem;
+  margin-top: auto;
+}
+
+.module-tags-wrapper {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.module-tag {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.btn-read-module {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-read-module:hover {
+  background: #38bdf8;
+  color: #090d16;
+}
+
+.btn-raw-md {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  padding: 0.4rem 0.85rem;
+  border-radius: 5px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-raw-md:hover {
+  background: #10b981;
+  color: #042f2e;
+}
+
+.module-modal-header-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem 1.75rem;
+  border-bottom: 1px solid var(--border-color, #1e293b);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.module-modal-body-scroll {
+  padding: 1.75rem;
+  overflow-y: auto;
+  max-height: calc(85vh - 120px);
+}
+
+.module-ascii-schematic {
+  background: #090d16;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 6px;
+  padding: 1rem;
+  color: #38bdf8;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  overflow-x: auto;
+  margin-bottom: 1.25rem;
+}
+
+.module-takeaways-box {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid #10b981;
+  padding: 0.85rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: var(--text-secondary, #94a3b8);
+  line-height: 1.6;
+}

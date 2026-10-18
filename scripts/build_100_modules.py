@@ -1,23 +1,36 @@
 #!/usr/bin/env python3
 """
 scripts/build_100_modules.py
-Authoritative generator for all 100 Balanced Audio & AES-X152 Markdown Modules.
-Generates comprehensive technical text, ASCII schematics, mathematical equations,
-standards alignment citations, and review assessments.
+Master compilation & builder for all 100 Balanced Audio & AES-X152 Markdown Modules.
+- Assembles Parts 1 through 10 (100 distinct modules with zero placeholders)
+- Writes 100 individual Markdown (.md) documents into modules/
+- Generates modules/README.md (Master Syllabus & Index)
+- Generates modules/modules-manifest.json (Machine-readable catalog)
+- Generates js/modules-data.js (Front-end dynamic data feed)
 """
 
 import os
 import json
+import re
 from pathlib import Path
 
 BASE_DIR = Path("/home/anthony/Documents/GitProjects/Balanced Audio")
 MODULES_DIR = BASE_DIR / "modules"
 MODULES_DIR.mkdir(parents=True, exist_ok=True)
 
-# Master Data Dictionary for the 100 Modules
-# Each entry is rich with domain-specific knowledge
-ALL_MODULES = [
-    # ---------------- PART 1: FOUNDATIONS & CORE PRINCIPLES (001 - 010) ----------------
+# Import Parts 2 through 10
+from data_part2 import PART2_MODULES
+from data_part3 import PART3_MODULES
+from data_part4 import PART4_MODULES
+from data_part5 import PART5_MODULES
+from data_part6 import PART6_MODULES
+from data_part7 import PART7_MODULES
+from data_part8 import PART8_MODULES
+from data_part9 import PART9_MODULES
+from data_part10 import PART10_MODULES
+
+# Part 1 definition
+PART1_MODULES = [
     {
         "num": 1, "part_num": 1, "part_title": "Part 1: Foundations & Core Principles",
         "slug": "golden-rule-of-balance",
@@ -63,8 +76,8 @@ ALL_MODULES = [
 |                       CMRR MEASUREMENT TEST RIG (IEC 60268-3)                |
 |                                                                               |
 |   Audio Gen (10 V CM) ---+----[ Rs1 = 50 Ω ]----> Pin 2 (+ Input)             |
-|                          |                                   \                |
-|                          +----[ Rs2 = 50 Ω ]----> Pin 3 (- Input) \ [Diff Amp]|
+|                          |                                   \\                |
+|                          +----[ Rs2 = 50 Ω ]----> Pin 3 (- Input) \\ [Diff Amp]|
 |                                                                     |--> Vout |
 |   Chassis Ground Shell -------------------------> Pin 1 (Shield)   /          |
 |                                                                               |
@@ -309,4 +322,241 @@ ALL_MODULES = [
     }
 ]
 
-print(f"Loaded {len(ALL_MODULES)} foundational modules in ALL_MODULES.")
+# Combine all 100 modules into a single contiguous array
+ALL_100_MODULES = (
+    PART1_MODULES +
+    PART2_MODULES +
+    PART3_MODULES +
+    PART4_MODULES +
+    PART5_MODULES +
+    PART6_MODULES +
+    PART7_MODULES +
+    PART8_MODULES +
+    PART9_MODULES +
+    PART10_MODULES
+)
+
+def render_module_markdown(mod):
+    num_str = f"{mod['num']:03d}"
+    prev_num = max(1, mod['num'] - 1)
+    next_num = min(100, mod['num'] + 1)
+    prev_str = f"{prev_num:03d}"
+    next_str = f"{next_num:03d}"
+
+    # Lookup slugs for prev and next
+    prev_slug = ALL_100_MODULES[prev_num - 1]['slug']
+    next_slug = ALL_100_MODULES[next_num - 1]['slug']
+
+    content = f"""---
+module_id: "MOD-{num_str}"
+module_number: {mod['num']}
+title: "{mod['title']}"
+part_number: {mod['part_num']}
+part_title: "{mod['part_title']}"
+slug: "{mod['slug']}"
+tags: {json.dumps(mod['tags'])}
+standards: {json.dumps(mod['standards'])}
+key_equation: "{mod['equation']}"
+summary: "{mod['summary']}"
+authors: {json.dumps(mod['authors'])}
+revision: "2026.1"
+---
+
+# Module {num_str}: {mod['title']}
+
+> **Part {mod['part_num']}**: {mod['part_title']}  
+> **Normative Standards**: {', '.join([f'`{s}`' for s in mod['standards']])}  
+> **Key Governing Equation**: `${mod['equation']}$`  
+> **Lead Working Group Contributors**: {', '.join(mod['authors'])}
+
+---
+
+## Executive Summary
+{mod['summary']}
+
+Mastery of this module is fundamental to professional audio facility integration, hardware engineering, and sound system optimization. Compliance with AES and IEC standards eliminates guesswork, guaranteeing predictable, hum-free, high-fidelity interconnection across heterogeneous studio and broadcast hardware.
+
+---
+
+## 1. Industry Misconceptions & The Real-World Problem
+{mod['myth']}
+
+For decades, oversimplified rules of thumb have circulated among sound engineers, causing persistent ground loops, high-frequency signal loss, and non-compliance with electromagnetic compatibility standards. In modern production environments filled with high-frequency switch-mode power supplies, variable-frequency drives, and wireless transmitters, rigorous standards compliance is essential.
+
+---
+
+## 2. Theoretical & Physical Foundations
+{mod['theory']}
+
+Audio transmission performance is governed by Maxwell's electromagnetic field equations, circuit topology constraints, and transmission line theory. Differential signaling relies on the physical principle that signal currents must circulate exclusively within the dedicated signal path, while external noise currents must be intercepted and safely guided away from sensitive semiconductor nodes into the low-impedance metallic equipment enclosure.
+
+---
+
+## 3. Mathematical Proof & Governing Equations
+The electrical behavior of this system is governed by:
+
+$$\\mathbf{{{mod['equation']}}}$$
+
+### Detailed Parameter Analysis & Derivations
+{mod['math']}
+
+When manufacturing component tolerances drift or parasitic impedances remain uncompensated, common-mode rejection degrades proportionally. Maintaining tight component tolerances (0.1% or better) across critical bridge networks is mandatory to satisfy AES-X152 published datasheet disclosures.
+
+---
+
+## 4. Technical Schematic & Circuit Topography
+{mod['schematic']}
+
+---
+
+## 5. Normative Standards Alignment
+This curriculum module is harmonized with the following published AES and IEC standards:
+- **Primary Standard Reference**: `{mod['standards'][0]}`
+- **Cross-Referenced Standards**: {', '.join([f'`{s}`' for s in mod['standards'][1:]]) if len(mod['standards']) > 1 else 'Normative audio engineering reference'}
+
+{mod['standards_ref']}
+
+---
+
+## 6. Real-World Benchmarks & Practical Takeaways
+{mod['takeaways']}
+
+---
+
+## 7. Self-Assessment & Review Questions
+{mod['quiz']}
+
+---
+
+### Module Navigation
+- **Previous Module**: [Module {prev_str}: {ALL_100_MODULES[prev_num - 1]['title']}](module-{prev_str}-{prev_slug}.md)
+- **Next Module**: [Module {next_str}: {ALL_100_MODULES[next_num - 1]['title']}](module-{next_str}-{next_slug}.md)
+- **Master Syllabus**: [Curriculum Index](README.md)
+"""
+    return content
+
+def build_all():
+    print(f"Building all {len(ALL_100_MODULES)} Balanced Audio & AES-X152 modules...")
+    assert len(ALL_100_MODULES) == 100, f"Expected 100 modules, found {len(ALL_100_MODULES)}"
+
+    manifest = []
+    js_modules = []
+
+    for mod in ALL_100_MODULES:
+        num_str = f"{mod['num']:03d}"
+        filename = f"module-{num_str}-{mod['slug']}.md"
+        filepath = MODULES_DIR / filename
+
+        md_text = render_module_markdown(mod)
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(md_text)
+
+        word_count = len(md_text.split())
+        manifest_entry = {
+            "module_id": f"MOD-{num_str}",
+            "module_number": mod["num"],
+            "title": mod["title"],
+            "part_number": mod["part_num"],
+            "part_title": mod["part_title"],
+            "slug": mod["slug"],
+            "filename": filename,
+            "tags": mod["tags"],
+            "standards": mod["standards"],
+            "equation": mod["equation"],
+            "summary": mod["summary"],
+            "authors": mod["authors"],
+            "word_count": word_count
+        }
+        manifest.append(manifest_entry)
+
+        # For front-end dynamic feed
+        js_modules.append({
+            "id": f"MOD-{num_str}",
+            "num": mod["num"],
+            "title": mod["title"],
+            "part": mod["part_num"],
+            "partTitle": mod["part_title"],
+            "slug": mod["slug"],
+            "filename": filename,
+            "tags": mod["tags"],
+            "standards": mod["standards"],
+            "equation": mod["equation"],
+            "summary": mod["summary"],
+            "authors": mod["authors"],
+            "myth": mod["myth"],
+            "theory": mod["theory"],
+            "math": mod["math"],
+            "schematic": mod["schematic"].strip(),
+            "takeaways": mod["takeaways"],
+            "quiz": mod["quiz"]
+        })
+
+    # 1. Write modules/modules-manifest.json
+    manifest_path = MODULES_DIR / "modules-manifest.json"
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "title": "AES-X152 & Balanced Audio 100-Module Master Curriculum",
+            "total_modules": len(manifest),
+            "generated_by": "scripts/build_100_modules.py",
+            "parts_count": 10,
+            "modules": manifest
+        }, f, indent=2)
+    print(f"Generated manifest -> {manifest_path} ({len(manifest)} modules)")
+
+    # 2. Write modules/README.md (Master Syllabus)
+    readme_path = MODULES_DIR / "README.md"
+    readme_lines = [
+        "# Balanced Audio & AES-X152: 100-Module Master Reference Curriculum",
+        "",
+        "> **Audio Engineering Society Standards Committee (AESSC)**  ",
+        "> **SC-05-05 Working Group on Grounding and EMC Practices**  ",
+        "> **Project AES-X152**: *Standard for Presenting Signal Levels, Circuit Impedances, and Topologies of Analog Audio System Components for Product Data Sheets*",
+        "",
+        "---",
+        "",
+        "## Overview & Syllabus",
+        "",
+        "This curriculum breaks down the complete physical, electrical, and standards domain of balanced audio interconnections into **100 comprehensive modules** organized across **10 parts**. Each module provides theoretical proofs, mathematical derivations, circuit schematics, normative standards citations, practical takeaways, and self-assessment benchmarks.",
+        "",
+        "| Part | Title | Module Range | Core Focus |",
+        "| :--- | :--- | :--- | :--- |",
+        "| **Part 1** | Foundations & Core Principles | MOD-001 - MOD-010 | The Golden Rule of Balance, CMRR derivation, differential physics, and resistor bridge tolerances. |",
+        "| **Part 2** | Grounding, Shielding & EMC Practices | MOD-011 - MOD-020 | AES48 Pin 1 problem, chassis vs 0V, ground loops, SCIN, shield types, and RF ingress. |",
+        "| **Part 3** | Interconnection Levels & Dynamic Range | MOD-021 - MOD-030 | Dynamic Range Pyramid, mic level, -10 dBV, +4 dBu, headroom, decibel systems, and EIN. |",
+        "| **Part 4** | Transmitter (Driver/Output) Topologies | MOD-031 - MOD-040 | Topologies 6.1 through 6.5, push-pull hazards, impedance-balanced drivers, and THAT 1646. |",
+        "| **Part 5** | Cable Medium & Connector Standards | MOD-041 - MOD-050 | Cable LCR parameters, star-quad geometry, AES14 XLR, AES59 DB25, and AES72 RJ45 Cat6 audio. |",
+        "| **Part 6** | Receiver (Input Stage) Topologies | MOD-051 - MOD-060 | Input transformers, difference amplifiers, In-Amps, THAT 1200 InGenius, and RFI filtering. |",
+        "| **Part 7** | Phantom Power & Transducers | MOD-061 - MOD-070 | IEC 61938 P48, 6.81k matching, The Phantom Menace transients, dynamic/ribbon/condenser mics, and DIs. |",
+        "| **Part 8** | Compatibility, Adapters & Safety | MOD-071 - MOD-080 | Richard Hess compatibility matrix, balanced-to-unbalanced wiring, pseudo-balancing, and hum troubleshooting. |",
+        "| **Part 9** | Advanced Math & Test Equipment | MOD-081 - MOD-090 | Jim Meyer Thevenin model, HP 400FL voltmeter, Lucky 8050A DMM, HP 353A Patch Panel, and MDP probing. |",
+        "| **Part 10**| AES-X152 Standard, Literature & Legacy | MOD-091 - MOD-100 | AES-X152 datasheet sections, SC-05-05 roster, Whitlock/Brown dossier, Dennis Bohn PAR, and AoIP future. |",
+        "",
+        "---",
+        "",
+        "## Complete 100-Module Catalog",
+        ""
+    ]
+
+    current_part = 0
+    for mod in manifest:
+        if mod["part_number"] != current_part:
+            current_part = mod["part_number"]
+            readme_lines.append(f"\n### {mod['part_title']}\n")
+        readme_lines.append(f"- **[{mod['module_id']}: {mod['title']}]({mod['filename']})** — *{mod['summary']}* (`{', '.join(mod['standards'])}`)")
+
+    with open(readme_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(readme_lines) + "\n")
+    print(f"Generated Master Syllabus -> {readme_path}")
+
+    # 3. Write js/modules-data.js for dynamic front-end feed
+    js_data_path = BASE_DIR / "js" / "modules-data.js"
+    with open(js_data_path, "w", encoding="utf-8") as f:
+        f.write("/**\n * Balanced Audio & AES-X152 100-Module Reference Curriculum Dataset\n")
+        f.write(" * Auto-generated by scripts/build_100_modules.py\n */\n\n")
+        f.write("const BALANCED_MODULES_DATA = ")
+        json.dump(js_modules, f, indent=2)
+        f.write(";\n\nif (typeof module !== 'undefined' && module.exports) {\n  module.exports = { BALANCED_MODULES_DATA };\n}\n")
+    print(f"Generated Front-End Dynamic Data Feed -> {js_data_path} ({len(js_modules)} modules)")
+
+if __name__ == "__main__":
+    build_all()

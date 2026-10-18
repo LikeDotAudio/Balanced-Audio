@@ -7,7 +7,7 @@ part_title: "Part 1: Foundations & Core Principles"
 slug: "common-mode-to-differential-mode-conversion"
 tags: ["mode-conversion", "cm-dm", "parasitics", "capacitance", "interference"]
 standards: ["AES-X152 Section 5", "AES48"]
-key_equation: "V_diff_noise = V_cm * (Delta_Z / Z_cm_input)"
+key_equation: "V_{\text{diff\_noise}} = V_{\text{cm}} * \left(\frac{\Delta Z}{Z_{\text{cm\_input}}}\right)"
 summary: "How common-mode voltage is converted to differential hum by impedance imbalances in cables and terminations."
 authors: ["Jim Brown", "Bill Whitlock"]
 revision: "2026.1"
@@ -16,67 +16,67 @@ revision: "2026.1"
 # Module 007: Common-Mode to Differential-Mode Conversion Mechanisms
 
 > **Part 1**: Part 1: Foundations & Core Principles  
-> **Applicable Standards**: `AES-X152 Section 5, AES48`  
-> **Key Equation**: `$V_diff_noise = V_cm * (Delta_Z / Z_cm_input)$`  
-> **Primary Authors / Reference Contributors**: Jim Brown, Bill Whitlock
+> **Normative Standards**: `AES-X152 Section 5`, `AES48`  
+> **Key Governing Equation**: `$V_{\text{diff\_noise}} = V_{\text{cm}} * \left(\frac{\Delta Z}{Z_{\text{cm\_input}}}\right)$`  
+> **Lead Working Group Contributors**: Jim Brown, Bill Whitlock
 
 ---
 
 ## Executive Summary
 How common-mode voltage is converted to differential hum by impedance imbalances in cables and terminations.
 
-Understanding this topic is critical for audio hardware designers, studio facility integrators, and sound system engineers. Compliance with AES standards guarantees predictable, hum-free, high-fidelity interconnection across heterogeneous professional audio devices.
+Mastery of this module is fundamental to professional audio facility integration, hardware engineering, and sound system optimization. Compliance with AES and IEC standards eliminates guesswork, guaranteeing predictable, hum-free, high-fidelity interconnection across heterogeneous studio and broadcast hardware.
 
 ---
 
 ## 1. Industry Misconceptions & The Real-World Problem
 A high-quality differential receiver with 100 dB CMRR can eliminate any hum entering a balanced cable.
 
-Many published tutorials and outdated manuals perpetuate oversimplified models that fail in modern electromagnetic environments filled with switch-mode power supplies, cell towers, and variable-frequency motor drives. 
+For decades, oversimplified rules of thumb have circulated among sound engineers, causing persistent ground loops, high-frequency signal loss, and non-compliance with electromagnetic compatibility standards. In modern production environments filled with high-frequency switch-mode power supplies, variable-frequency drives, and wireless transmitters, rigorous standards compliance is essential.
 
 ---
 
 ## 2. Theoretical & Physical Foundations
 If an impedance imbalance exists anywhere in the transmission path before the receiver's differential subtraction node, the common-mode interference voltage is physically transformed into a differential-mode voltage. Once converted into a differential signal, it is identical in character to audio and cannot be rejected.
 
-Balanced analog audio interconnections form an electromagnetic transmission system. Signal currents must circulate exclusively within the dedicated differential signal path, while stray electrostatic and electromagnetic field currents must be guided harmlessly away from sensitive internal circuit nodes into the equipotential metal chassis shield enclosure.
+Audio transmission performance is governed by Maxwell's electromagnetic field equations, circuit topology constraints, and transmission line theory. Differential signaling relies on the physical principle that signal currents must circulate exclusively within the dedicated signal path, while external noise currents must be intercepted and safely guided away from sensitive semiconductor nodes into the low-impedance metallic equipment enclosure.
 
 ---
 
 ## 3. Mathematical Proof & Governing Equations
-The electrical behavior of this circuit node is governed by:
+The electrical behavior of this system is governed by:
 
-$$\mathbf{V_diff_noise = V_cm * (Delta_Z / Z_cm_input)}$$
+$$\mathbf{V_{\text{diff\_noise}} = V_{\text{cm}} * \left(\frac{\Delta Z}{Z_{\text{cm\_input}}}\right)}$$
 
-### Parameter Analysis & Derivation:
+### Detailed Parameter Analysis & Derivations
 Mode conversion factor: K_cd = (Z1 - Z2) / (Z1 + Z2 + 2*Z_load). V_diff = V_cm * K_cd.
 
-When component values or parasitic capacitances drift, common-mode rejection is degraded proportionally. Maintaining tight manufacturing tolerances (0.1% or better on critical bridge components) is mandatory to satisfy AES-X152 datasheet disclosures.
+When manufacturing component tolerances drift or parasitic impedances remain uncompensated, common-mode rejection degrades proportionally. Maintaining tight component tolerances (0.1% or better) across critical bridge networks is mandatory to satisfy AES-X152 published datasheet disclosures.
 
 ---
 
 ## 4. Technical Schematic & Circuit Topography
-```
-+-------------------------------------------------------------------------------+
-|                       AES-X152 REFERENCE CIRCUIT MODEL                        |
-|                                                                               |
-|  [Transmitter Stage] --------(Pin 2 / Hot)--------> [Receiver Differential]   |
-|         |                                                   |                 |
-|         +--------------------(Pin 3 / Cold)-------> [Subtractor / Op-Amp]     |
-|                                                                               |
-|  [Chassis Ground Shell] ====(Pin 1 / Shield)======> [Chassis Ground Shell]    |
-|       (Direct Enclosure Bond - ZERO PCB Trace Connection - AES48)             |
-+-------------------------------------------------------------------------------+
-```
 
-Impedance bridge circuit showing conversion of common-mode generator excitation into differential load voltage.
++-------------------------------------------------------------------------------+
+|                       MODE CONVERSION BRIDGE MECHANISM                        |
+|                                                                               |
+|   Common-Mode Noise (V_cm) couples to both conductors.                        |
+|                                                                               |
+|   Conductor 1 (Hot)  ---[ Z1 = 50 Ω ]----+----> [ Receiver Hot ]              |
+|                                          |                                    |
+|                                        (Load)  <=== V_diff_converted develops |
+|                                          |          across load terminals!    |
+|   Conductor 2 (Cold) ---[ Z2 = 60 Ω ]----+----> [ Receiver Cold ]             |
+|                                                                               |
+|   Because Z1 != Z2, V_cm divides unequally, creating differential noise.      |
++-------------------------------------------------------------------------------+
 
 ---
 
 ## 5. Normative Standards Alignment
-This module aligns directly with the following published and working-group standards:
-- **Primary Standard**: `AES-X152 Section 5`
-- **Harmonized Standards**: `AES48`
+This curriculum module is harmonized with the following published AES and IEC standards:
+- **Primary Standard Reference**: `AES-X152 Section 5`
+- **Cross-Referenced Standards**: `AES48`
 
 AES-X152 Section 5 details mode conversion in audio cables and termination networks.
 
@@ -96,6 +96,6 @@ A: No. Once converted to differential-mode, the noise appears between Pin 2 and 
 ---
 
 ### Module Navigation
-- **Previous Module**: [Module 006](module-006-*.md)
-- **Next Module**: [Module 008](module-008-*.md)
+- **Previous Module**: [Module 006: Balanced vs Unbalanced Systems: Comparative Electrical Analysis](module-006-balanced-vs-unbalanced-systems.md)
+- **Next Module**: [Module 008: Audio Bandwidth, Slew Rate, and High-Frequency Noise Coupling](module-008-audio-bandwidth-slew-rate-noise.md)
 - **Master Syllabus**: [Curriculum Index](README.md)

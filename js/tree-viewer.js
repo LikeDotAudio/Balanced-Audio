@@ -2,7 +2,10 @@
  * AES-X152 Taxonomy Tree Interactive Viewer
  * Renders the hierarchical tree structure from X152_TREE_DATA,
  * supports expand/collapse, searching/filtering, and detail inspection.
+ * Integrates directly with the Story Index Left-Side Sidebar and Document.
  */
+
+let isTreeViewerInitialized = false;
 
 function renderTreeNode(node, parentElement, level = 0, isMatch = false) {
   const hasChildren = node.children && node.children.length > 0;
@@ -73,41 +76,81 @@ function renderTreeNode(node, parentElement, level = 0, isMatch = false) {
 }
 
 function displayNodeDetail(node) {
-  const detailCard = document.getElementById("tree-detail-card");
-  if (!detailCard) return;
+  // 1. Sidebar Node Inspector Elements
+  const titleEl = document.getElementById("node-inspector-title");
+  const badgeEl = document.getElementById("node-inspector-badge");
+  const descEl = document.getElementById("node-inspector-desc");
+  const pathEl = document.getElementById("node-inspector-path");
+  const extraEl = document.getElementById("node-inspector-extra");
 
-  let prosConsHtml = "";
-  if (node.pros || node.cons) {
-    prosConsHtml = `
-      <div class="pros-cons-grid mt-3">
-        ${node.pros ? `<div class="pro-box"><strong>✓ Advantages:</strong> ${node.pros}</div>` : ""}
-        ${node.cons ? `<div class="con-box"><strong>⚠ Limitations:</strong> ${node.cons}</div>` : ""}
+  if (titleEl) titleEl.textContent = node.name || "Select a Node";
+  if (badgeEl) {
+    badgeEl.textContent = node.tag || "SC-05-05";
+    badgeEl.style.display = node.tag ? "inline-block" : "none";
+  }
+  if (pathEl) {
+    pathEl.textContent = node.subtitle || `AES-X152 / ${node.tag || 'Taxonomy'}`;
+  }
+  if (descEl) {
+    descEl.textContent = node.description || "No detailed description provided.";
+  }
+  if (extraEl) {
+    let prosConsHtml = "";
+    if (node.pros || node.cons) {
+      prosConsHtml = `
+        <div class="pros-cons-grid mt-2" style="display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.75rem;">
+          ${node.pros ? `<div class="pro-box" style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding: 0.3rem 0.5rem; border-radius: 3px; color: #6ee7b7;"><strong>✓ Advantages:</strong> ${node.pros}</div>` : ""}
+          ${node.cons ? `<div class="con-box" style="background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 0.3rem 0.5rem; border-radius: 3px; color: #fca5a5;"><strong>⚠ Limitations:</strong> ${node.cons}</div>` : ""}
+        </div>
+      `;
+    }
+    if (node.children && node.children.length > 0) {
+      prosConsHtml += `<div style="margin-top: 0.4rem; color: #94a3b8; font-size: 0.72rem;">Contains <strong>${node.children.length}</strong> sub-elements. Click arrows in tree to expand.</div>`;
+    }
+    extraEl.innerHTML = prosConsHtml;
+  }
+
+  // 2. Legacy / Fallback Card Container if present
+  const detailCard = document.getElementById("tree-detail-card");
+  if (detailCard) {
+    let prosConsHtml = "";
+    if (node.pros || node.cons) {
+      prosConsHtml = `
+        <div class="pros-cons-grid mt-3">
+          ${node.pros ? `<div class="pro-box"><strong>✓ Advantages:</strong> ${node.pros}</div>` : ""}
+          ${node.cons ? `<div class="con-box"><strong>⚠ Limitations:</strong> ${node.cons}</div>` : ""}
+        </div>
+      `;
+    }
+    detailCard.innerHTML = `
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">${node.name}</h4>
+        ${node.tag ? `<span class="badge badge-primary">${node.tag}</span>` : ""}
+      </div>
+      <div class="card-body">
+        ${node.subtitle ? `<h6 class="text-muted mb-2">${node.subtitle}</h6>` : ""}
+        <p class="lead-sm">${node.description || "No detailed description provided."}</p>
+        ${prosConsHtml}
+        ${node.children ? `<div class="mt-3 text-muted small">Contains <strong>${node.children.length}</strong> sub-elements. Click arrows in the tree to expand.</div>` : ""}
       </div>
     `;
   }
 
-  detailCard.innerHTML = `
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <h4 class="mb-0">${node.name}</h4>
-      ${node.tag ? `<span class="badge badge-primary">${node.tag}</span>` : ""}
-    </div>
-    <div class="card-body">
-      ${node.subtitle ? `<h6 class="text-muted mb-2">${node.subtitle}</h6>` : ""}
-      <p class="lead-sm">${node.description || "No detailed description provided."}</p>
-      ${prosConsHtml}
-      ${node.children ? `<div class="mt-3 text-muted small">Contains <strong>${node.children.length}</strong> sub-elements. Click arrows in the tree to expand.</div>` : ""}
-    </div>
-  `;
-
-  // Flash highlight on card
-  detailCard.classList.remove("fade-highlight");
-  void detailCard.offsetWidth; // trigger reflow
-  detailCard.classList.add("fade-highlight");
+  // Flash highlight on inspector card
+  const inspector = document.getElementById("tree-node-inspector") || detailCard;
+  if (inspector) {
+    inspector.classList.remove("fade-highlight");
+    void inspector.offsetWidth;
+    inspector.classList.add("fade-highlight");
+  }
 }
 
 function initTreeViewer() {
   const container = document.getElementById("tree-root-container");
   if (!container || typeof X152_TREE_DATA === "undefined") return;
+
+  if (isTreeViewerInitialized) return;
+  isTreeViewerInitialized = true;
 
   container.innerHTML = "";
   renderTreeNode(X152_TREE_DATA, container, 0);
@@ -156,7 +199,8 @@ function filterTree(query) {
   if (!query) {
     document.querySelectorAll(".tree-node").forEach(el => {
       el.style.display = "";
-      el.querySelector(".tree-node-header").classList.remove("highlight-match");
+      const header = el.querySelector(":scope > .tree-node-header");
+      if (header) header.classList.remove("highlight-match");
     });
     return;
   }
@@ -196,5 +240,8 @@ function filterTree(query) {
 
   searchNode(X152_TREE_DATA);
 }
+
+window.initTreeViewer = initTreeViewer;
+window.displayNodeDetail = displayNodeDetail;
 
 document.addEventListener("DOMContentLoaded", initTreeViewer);

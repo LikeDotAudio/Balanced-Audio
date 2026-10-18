@@ -1411,42 +1411,48 @@ class CircuitSimulator {
     const rloadMan = document.getElementById("pp-rload-manual");
     if (rloadMan && document.activeElement !== rloadMan) rloadMan.value = Math.round(rload);
 
+    // Check if Signal Generator output relay is active or muted
+    const isMuted = (this.sigGenOutputActive === false) || (window.signalGenerator && !window.signalGenerator.outputActive);
+    const activeVin = isMuted ? 0.0 : vin;
+
     let vPin2, vPin3, iPin2, iPin3, vDiff, iLoad, isClipped = false;
 
     if (!shortPin3) {
       const rTotal = 2 * rout + rload;
-      iLoad = (2 * vin) / rTotal;
-      vPin2 = vin - iLoad * rout;
-      vPin3 = -(vin - iLoad * rout);
+      iLoad = (2 * activeVin) / rTotal;
+      vPin2 = activeVin - iLoad * rout;
+      vPin3 = -(activeVin - iLoad * rout);
       iPin2 = iLoad;
       iPin3 = iLoad;
       vDiff = vPin2 - vPin3;
     } else {
-      const iShort = vin / Math.max(1, rout);
+      const iShort = activeVin / Math.max(1, rout);
       iPin3 = iShort;
       vPin3 = 0;
-      iLoad = vin / (rout + rload);
-      vPin2 = vin - iLoad * rout;
+      iLoad = activeVin / (rout + rload);
+      vPin2 = activeVin - iLoad * rout;
       iPin2 = iLoad;
       vDiff = vPin2;
       if (iShort > 0.05) isClipped = true;
     }
 
     // Panel probe readouts
-    const vrmsText = `${(vin * 0.707).toFixed(2)} VRMS / ${(vin * 1000 / 10000).toFixed(1)} mA`;
+    const vrmsText = `${(activeVin * 0.707).toFixed(2)} VRMS / ${(activeVin * 1000 / 10000).toFixed(1)} mA`;
     this.setProbe("pp-probe-gen", vrmsText);
     this.setProbe("pp-probe-in", vrmsText);
     this.setProbe("pp-probe-p2", `${(iPin2 * 1000).toFixed(1)} mA / ${vPin2.toFixed(2)} V`);
     this.setProbe("pp-probe-p3", `${(iPin3 * 1000).toFixed(1)} mA / ${vPin3.toFixed(2)} V`);
     this.setProbe("pp-probe-load", `V_diff: ${vDiff.toFixed(2)} V | I_load: ${(iLoad * 1000).toFixed(1)} mA`);
 
-    // APK Precision AC Voltmeter needle on Circuit 6.1
-    this.lastPpVdiff = vDiff;
-    const dBuOut = 20 * Math.log10(Math.max(0.001, vDiff / 0.775));
-    this.updateVuMeter("pp-vu-needle", dBuOut, vDiff);
+    // APK Precision AC Voltmeter needle on Circuit 6.1 (with calibrated 100 kHz LP filter roll-off)
+    const filterRollOff = (this.sigGenFilterRollOff !== undefined) ? this.sigGenFilterRollOff : 1.0;
+    const filteredVdiff = vDiff * filterRollOff;
+    this.lastPpVdiff = filteredVdiff;
+    const dBuOut = (filteredVdiff > 0.00001) ? 20 * Math.log10(filteredVdiff / 0.775) : -150;
+    this.updateVuMeter("pp-vu-needle", dBuOut, filteredVdiff);
 
     // LUCKY 8050A Precision DMM readouts (Yellow Font & Multi-Mode)
-    this.updateLuckyDmmDisplay(vPin2, vPin3, vDiff, iLoad, shortPin3, isClipped);
+    this.updateLuckyDmmDisplay(vPin2 * filterRollOff, vPin3 * filterRollOff, filteredVdiff, iLoad * filterRollOff, shortPin3, isClipped);
 
     // Broadcast to Breakaway Floating Meter Dock
     if (window.floatingMeterDock) {

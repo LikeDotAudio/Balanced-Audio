@@ -4,8 +4,11 @@
  * Requirements:
  * - When scrolling down, the top header smoothly hides to maximize document reading space.
  * - A persistent, interactive left-side Story Index Tree slides into view like a table of contents / story chapters.
- * - Highlights active chapter/demo in real time via IntersectionObserver.
- * - Clicking any item smoothly scrolls directly to that section.
+ * - Dual-Tab Interface:
+ *     1) 📖 Story Index: Highlights active chapter/demo in real time via IntersectionObserver.
+ *     2) 🌳 Taxonomy Tree: Full interactive SC-05-05 Taxonomy Tree Explorer with search, expand/collapse,
+ *        and detail inspector integrated directly into the sidebar.
+ * - Clicking any chapter or taxonomy link smoothly scrolls or switches to the mind map.
  */
 
 class StorySidebar {
@@ -14,6 +17,7 @@ class StorySidebar {
     this.sidebar = null;
     this.activeSectionId = null;
     this.lastScrollY = 0;
+    this.activeTab = "chapters";
     this.init();
   }
 
@@ -21,6 +25,7 @@ class StorySidebar {
     this.createSidebarDOM();
     this.setupScrollListener();
     this.setupIntersectionObserver();
+    this.setupGlobalTreeLinks();
   }
 
   createSidebarDOM() {
@@ -33,132 +38,177 @@ class StorySidebar {
     const aside = document.createElement("aside");
     aside.id = "story-index-sidebar";
     aside.className = "story-index-sidebar";
-    aside.setAttribute("aria-label", "Story Index Navigation");
+    aside.setAttribute("aria-label", "Story Index & Taxonomy Mind Map Navigation");
 
     aside.innerHTML = `
       <div class="sidebar-header">
         <div class="sidebar-brand">
           <span class="sidebar-icon">📖</span>
           <div class="sidebar-title-group">
-            <span class="sidebar-title">Story Index</span>
+            <span class="sidebar-title">Story &amp; Standards</span>
             <span class="sidebar-sub">AES-X152 Reference</span>
           </div>
         </div>
         <button id="sidebar-collapse-btn" class="sidebar-toggle-btn" title="Toggle Sidebar">◀</button>
       </div>
 
-      <div class="sidebar-scrollable-tree">
-        <div class="story-chapter" data-target="hero">
-          <div class="chapter-dot"></div>
-          <a href="#hero" class="chapter-link">0. Prologue &amp; Mandate</a>
-        </div>
+      <!-- Dual Navigation Tabs -->
+      <div class="sidebar-tabs">
+        <button type="button" id="sidebar-tab-chapters" class="sidebar-tab-btn active" data-tab="chapters">
+          📖 Chapters
+        </button>
+        <button type="button" id="sidebar-tab-tree" class="sidebar-tab-btn" data-tab="tree">
+          🌳 Taxonomy Tree
+        </button>
+      </div>
 
-        <div class="story-chapter" data-target="enclosure-explorer">
-          <div class="chapter-dot"></div>
-          <a href="#enclosure-explorer" class="chapter-link">0.0 Enclosure &amp; Ground Physics</a>
-        </div>
+      <!-- View 1: Story Chapters Index -->
+      <div id="sidebar-chapters-view" class="sidebar-view active" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+        <div class="sidebar-scrollable-tree">
+          <div class="story-chapter" data-target="hero">
+            <div class="chapter-dot"></div>
+            <a href="#hero" class="chapter-link">0. Prologue &amp; Mandate</a>
+          </div>
 
-        <div class="story-chapter" data-target="multichannel-hierarchy">
-          <div class="chapter-dot"></div>
-          <a href="#multichannel-hierarchy" class="chapter-link">0.2 Multichannel Breakout (DB25 / RJ45)</a>
-        </div>
+          <div class="story-chapter" data-target="enclosure-explorer">
+            <div class="chapter-dot"></div>
+            <a href="#enclosure-explorer" class="chapter-link">0.0 Enclosure &amp; Ground Physics</a>
+          </div>
 
-        <div class="story-chapter" data-target="xlr-hub">
-          <div class="chapter-dot"></div>
-          <a href="#xlr-hub" class="chapter-link">0.5 Universal XLR Hub &amp; Polarity</a>
-        </div>
+          <div class="story-chapter" data-target="multichannel-hierarchy">
+            <div class="chapter-dot"></div>
+            <a href="#multichannel-hierarchy" class="chapter-link">0.2 Multichannel Breakout (DB25 / RJ45)</a>
+          </div>
 
-        <div class="story-chapter" data-target="top-level">
-          <div class="chapter-dot"></div>
-          <a href="#top-level" class="chapter-link">1.0 Top-Level Normative Rules</a>
-        </div>
+          <div class="story-chapter" data-target="xlr-hub">
+            <div class="chapter-dot"></div>
+            <a href="#xlr-hub" class="chapter-link">0.5 Universal XLR Hub &amp; Polarity</a>
+          </div>
 
-        <div class="story-chapter" data-target="triad">
-          <div class="chapter-dot"></div>
-          <a href="#triad" class="chapter-link">2.0 The Triad of Interconnection</a>
-        </div>
+          <div class="story-chapter" data-target="top-level">
+            <div class="chapter-dot"></div>
+            <a href="#top-level" class="chapter-link">1.0 Top-Level Normative Rules</a>
+          </div>
 
-        <div class="story-chapter" data-target="pyramid-section">
-          <div class="chapter-dot"></div>
-          <a href="#pyramid-section" class="chapter-link">3.0 Dynamic Range &amp; Levels Pyramid</a>
-        </div>
+          <div class="story-chapter" data-target="triad">
+            <div class="chapter-dot"></div>
+            <a href="#triad" class="chapter-link">2.0 The Triad of Interconnection</a>
+          </div>
 
-        <div class="story-chapter" data-target="topologies">
-          <div class="chapter-dot"></div>
-          <a href="#topologies" class="chapter-link">4.0 Standardized Circuits (6.1–6.8)</a>
-          <div class="chapter-subnodes">
-            <a href="#circuit-6-1" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-1')">6.1 Dual Push-Pull</a>
-            <a href="#circuit-6-2" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-2')">6.2 Active Impedance-Balanced</a>
-            <a href="#circuit-6-3" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-3')">6.3 Transformer Floating</a>
-            <a href="#circuit-6-4" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-4')">6.4 Cascaded Link</a>
-            <a href="#circuit-6-5" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-5')">6.5 Cross-Coupled</a>
-            <a href="#circuit-6-6" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-6')">6.6 Diff Receiver</a>
-            <a href="#circuit-6-7" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-7')">6.7 Instrumentation Amp</a>
-            <a href="#circuit-6-8" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-8')">6.8 Active-Transformer</a>
+          <div class="story-chapter" data-target="pyramid-section">
+            <div class="chapter-dot"></div>
+            <a href="#pyramid-section" class="chapter-link">3.0 Dynamic Range &amp; Levels Pyramid</a>
+          </div>
+
+          <div class="story-chapter" data-target="topologies">
+            <div class="chapter-dot"></div>
+            <a href="#topologies" class="chapter-link">4.0 Standardized Circuits (6.1–6.8)</a>
+            <div class="chapter-subnodes">
+              <a href="#circuit-6-1" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-1')">6.1 Dual Push-Pull</a>
+              <a href="#circuit-6-2" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-2')">6.2 Active Impedance-Balanced</a>
+              <a href="#circuit-6-3" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-3')">6.3 Transformer Floating</a>
+              <a href="#circuit-6-4" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-4')">6.4 Cascaded Link</a>
+              <a href="#circuit-6-5" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-5')">6.5 Cross-Coupled</a>
+              <a href="#circuit-6-6" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-6')">6.6 Diff Receiver</a>
+              <a href="#circuit-6-7" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-7')">6.7 Instrumentation Amp</a>
+              <a href="#circuit-6-8" class="subnode-link" onclick="if(window.switchCircuit) switchCircuit('6-8')">6.8 Active-Transformer</a>
+            </div>
+          </div>
+
+          <div class="story-chapter" data-target="transformer-simulator">
+            <div class="chapter-dot"></div>
+            <a href="#transformer-simulator" class="chapter-link">4.5 Audio Transformer Lab &amp; Zobel</a>
+          </div>
+
+          <div class="story-chapter" data-target="deepest-dive">
+            <div class="chapter-dot"></div>
+            <a href="#deepest-dive" class="chapter-link">5.0 Jim Meyer Thevenin CMRR</a>
+          </div>
+
+          <div class="story-chapter" data-target="tutorials-section">
+            <div class="chapter-dot"></div>
+            <a href="#tutorials-section" class="chapter-link">6.0 Richard Hess Unbalanced Matrix</a>
+          </div>
+
+          <div class="story-chapter" data-target="adapter-wiring-suite">
+            <div class="chapter-dot"></div>
+            <a href="#adapter-wiring-suite" class="chapter-link">6.9 Vector Adapter Wiring Suite</a>
+          </div>
+
+          <div class="story-chapter" data-target="taxonomy-tree">
+            <div class="chapter-dot" style="background: var(--accent-cyan); box-shadow: 0 0 6px var(--accent-cyan);"></div>
+            <a href="javascript:void(0)" id="sidebar-chapter-tree-btn" class="chapter-link" style="color: var(--accent-cyan); font-weight: 700;">
+              7.0 Standards Taxonomy Tree ↗
+            </a>
+          </div>
+
+          <div class="story-chapter" data-target="aes-vst">
+            <div class="chapter-dot"></div>
+            <a href="#aes-vst" class="chapter-link">8.0 AES-VST Plugin &amp; Map</a>
+          </div>
+
+          <div class="story-chapter" data-target="datasheet-templates">
+            <div class="chapter-dot"></div>
+            <a href="#datasheet-templates" class="chapter-link">9.0 Free Datasheet Templates</a>
+          </div>
+
+          <div class="story-chapter" data-target="dennis-bohn-par">
+            <div class="chapter-dot"></div>
+            <a href="#dennis-bohn-par" class="chapter-link">10.0 Dennis Bohn PAR Glossary</a>
+          </div>
+
+          <div class="story-chapter" data-target="landmark-papers">
+            <div class="chapter-dot"></div>
+            <a href="#landmark-papers" class="chapter-link">10.5 Landmark Papers Dossier</a>
+          </div>
+
+          <div class="story-chapter" data-target="timeline-section">
+            <div class="chapter-dot"></div>
+            <a href="#timeline-section" class="chapter-link">11.0 Standards Timeline</a>
+          </div>
+
+          <div class="story-chapter" data-target="roster-section">
+            <div class="chapter-dot"></div>
+            <a href="#roster-section" class="chapter-link">12.0 Contributor Roster</a>
           </div>
         </div>
 
-        <div class="story-chapter" data-target="transformer-simulator">
-          <div class="chapter-dot"></div>
-          <a href="#transformer-simulator" class="chapter-link">4.5 Audio Transformer Lab &amp; Zobel</a>
-        </div>
-
-        <div class="story-chapter" data-target="deepest-dive">
-          <div class="chapter-dot"></div>
-          <a href="#deepest-dive" class="chapter-link">5.0 Jim Meyer Thevenin CMRR</a>
-        </div>
-
-        <div class="story-chapter" data-target="tutorials-section">
-          <div class="chapter-dot"></div>
-          <a href="#tutorials-section" class="chapter-link">6.0 Richard Hess Unbalanced Matrix</a>
-        </div>
-
-        <div class="story-chapter" data-target="adapter-wiring-suite">
-          <div class="chapter-dot"></div>
-          <a href="#adapter-wiring-suite" class="chapter-link">6.9 Vector Adapter Wiring Suite</a>
-        </div>
-
-        <div class="story-chapter" data-target="tree-explorer">
-          <div class="chapter-dot"></div>
-          <a href="#tree-explorer" class="chapter-link">7.0 Standards Taxonomy Tree</a>
-        </div>
-
-        <div class="story-chapter" data-target="aes-vst">
-          <div class="chapter-dot"></div>
-          <a href="#aes-vst" class="chapter-link">8.0 AES-VST Plugin &amp; Map</a>
-        </div>
-
-        <div class="story-chapter" data-target="datasheet-templates">
-          <div class="chapter-dot"></div>
-          <a href="#datasheet-templates" class="chapter-link">9.0 Free Datasheet Templates</a>
-        </div>
-
-        <div class="story-chapter" data-target="dennis-bohn-par">
-          <div class="chapter-dot"></div>
-          <a href="#dennis-bohn-par" class="chapter-link">10.0 Dennis Bohn PAR Glossary</a>
-        </div>
-
-        <div class="story-chapter" data-target="landmark-papers">
-          <div class="chapter-dot"></div>
-          <a href="#landmark-papers" class="chapter-link">10.5 Landmark Papers Dossier</a>
-        </div>
-
-        <div class="story-chapter" data-target="timeline-section">
-          <div class="chapter-dot"></div>
-          <a href="#timeline-section" class="chapter-link">11.0 Standards Timeline</a>
-        </div>
-
-        <div class="story-chapter" data-target="roster-section">
-          <div class="chapter-dot"></div>
-          <a href="#roster-section" class="chapter-link">12.0 Contributor Roster</a>
+        <!-- Quick meter launch dock toggle in sidebar -->
+        <div class="sidebar-meter-action">
+          <button id="sidebar-float-meters-btn" class="btn btn-outline" style="width: 100%; font-size: 0.76rem; padding: 0.35rem 0.5rem;">
+            🎛️ Breakaway Meters
+          </button>
         </div>
       </div>
 
-      <!-- Quick meter launch dock toggle in sidebar -->
-      <div class="sidebar-meter-action">
-        <button id="sidebar-float-meters-btn" class="btn btn-outline" style="width: 100%; font-size: 0.76rem; padding: 0.35rem 0.5rem;">
-          🎛️ Breakaway Meters
-        </button>
+      <!-- View 2: SC-05-05 Taxonomy Tree Explorer & Node Inspector -->
+      <div id="sidebar-tree-view" class="sidebar-view" style="display: none; flex-direction: column; flex: 1; overflow: hidden;">
+        <div class="sidebar-tree-toolbar">
+          <input type="text" id="tree-search-input" class="sidebar-tree-search" placeholder="Search tree (e.g. CMRR, transformer, star-quad, AES48)..." />
+          <div class="sidebar-tree-btn-group">
+            <button type="button" id="tree-expand-all" class="sidebar-tree-btn">Expand All</button>
+            <button type="button" id="tree-collapse-all" class="sidebar-tree-btn">Collapse All</button>
+          </div>
+        </div>
+
+        <div class="sidebar-tree-viewport">
+          <div id="tree-root-container"></div>
+        </div>
+
+        <!-- Node Detail Inspector Card -->
+        <div class="sidebar-tree-inspector detail-card" id="tree-node-inspector">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <h4 id="node-inspector-title" style="margin: 0; color: var(--accent-cyan); font-size: 0.95rem; font-weight: 700;">Select a Node</h4>
+            <span id="node-inspector-badge" class="badge badge-accent" style="font-size: 0.65rem;">SC-05-05</span>
+          </div>
+          <div id="node-inspector-path" style="font-size: 0.72rem; color: var(--text-muted); font-family: monospace; margin-bottom: 0.35rem;">
+            Root / ...
+          </div>
+          <p id="node-inspector-desc" style="color: var(--text-secondary); line-height: 1.45; font-size: 0.78rem; margin: 0;">
+            Click any branch or leaf in the taxonomy tree above to inspect its formal AES-X152 engineering definition, mathematical equations, and related standards.
+          </p>
+          <div id="node-inspector-extra" style="margin-top: 0.4rem; font-size: 0.75rem;"></div>
+        </div>
       </div>
     `;
 
@@ -195,6 +245,77 @@ class StorySidebar {
         }
       });
     }
+
+    // Tab buttons
+    const tabChaptersBtn = aside.querySelector("#sidebar-tab-chapters");
+    const tabTreeBtn = aside.querySelector("#sidebar-tab-tree");
+    if (tabChaptersBtn) {
+      tabChaptersBtn.addEventListener("click", () => this.switchTab("chapters"));
+    }
+    if (tabTreeBtn) {
+      tabTreeBtn.addEventListener("click", () => this.switchTab("tree"));
+    }
+
+    // Chapter 7 direct button
+    const ch7Btn = aside.querySelector("#sidebar-chapter-tree-btn");
+    if (ch7Btn) {
+      ch7Btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.switchTab("tree");
+      });
+    }
+  }
+
+  switchTab(tabName) {
+    if (!this.sidebar) return;
+    this.activeTab = tabName;
+
+    const chaptersTabBtn = this.sidebar.querySelector("#sidebar-tab-chapters");
+    const treeTabBtn = this.sidebar.querySelector("#sidebar-tab-tree");
+    const chaptersView = this.sidebar.querySelector("#sidebar-chapters-view");
+    const treeView = this.sidebar.querySelector("#sidebar-tree-view");
+
+    if (tabName === "tree") {
+      if (chaptersTabBtn) chaptersTabBtn.classList.remove("active");
+      if (treeTabBtn) treeTabBtn.classList.add("active");
+      if (chaptersView) chaptersView.style.display = "none";
+      if (treeView) treeView.style.display = "flex";
+      this.sidebar.classList.add("taxonomy-active");
+      document.body.classList.add("sidebar-taxonomy-active");
+
+      // Initialize tree viewer if not yet done
+      if (typeof window.initTreeViewer === "function") {
+        window.initTreeViewer();
+      }
+    } else {
+      if (treeTabBtn) treeTabBtn.classList.remove("active");
+      if (chaptersTabBtn) chaptersTabBtn.classList.add("active");
+      if (treeView) treeView.style.display = "none";
+      if (chaptersView) chaptersView.style.display = "flex";
+      this.sidebar.classList.remove("taxonomy-active");
+      document.body.classList.remove("sidebar-taxonomy-active");
+    }
+  }
+
+  openTaxonomyTree() {
+    if (this.sidebar) {
+      this.sidebar.classList.add("sidebar-visible");
+      this.sidebar.classList.remove("collapsed");
+      document.body.classList.add("has-story-sidebar");
+      document.body.classList.remove("sidebar-collapsed");
+      this.switchTab("tree");
+      const searchInput = document.getElementById("tree-search-input");
+      if (searchInput) searchInput.focus();
+    }
+  }
+
+  setupGlobalTreeLinks() {
+    document.querySelectorAll("a[href='#tree-explorer']").forEach(link => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.openTaxonomyTree();
+      });
+    });
   }
 
   setupScrollListener() {
@@ -230,7 +351,6 @@ class StorySidebar {
       "deepest-dive",
       "tutorials-section",
       "adapter-wiring-suite",
-      "tree-explorer",
       "aes-vst",
       "datasheet-templates",
       "dennis-bohn-par",

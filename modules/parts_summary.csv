@@ -1,0 +1,11 @@
+part_number,part_title,module_range,module_count,total_words,standards_count,standards_list
+1,Part 1: Foundations & Core Principles,MOD-001 to MOD-010,10,6346,19,AES-X152; AES-X152 Section 2; AES-X152 Section 3; AES-X152 Section 4; AES-X152 Section 5; AES-X152 Section 6.7; AES-X246; AES-X249; AES11; AES14; AES26; AES48; AES54; AES59; AES72; IEC 60268-3; IEC 60268-3 Section 13.2; IEC 61938; IEC 61938 Section 5
+2,"Part 2: Grounding, Shielding & EMC Practices",MOD-011 to MOD-020,10,6087,6,AES-X152; AES-X152 Section 4; AES48; AES54; AES72; IEEE 1100
+3,Part 3: Interconnection Levels & Dynamic Range,MOD-021 to MOD-030,10,6145,8,AES-X152; AES-X152 Section 2; AES11; EBU R68; IEC 60268-3; IEC 61938; ITU-R BS.1770; SMPTE RP155
+4,Part 4: Transmitter (Driver/Output) Topologies,MOD-031 to MOD-040,10,6174,10,AES-X152 Section 1; AES-X152 Section 6.1; AES-X152 Section 6.2; AES-X152 Section 6.3; AES-X152 Section 6.4; AES-X152 Section 6.5; AES-X152 Section 6.8; AES48; IEC 60268-3; IEC 61938
+5,Part 5: Cable Transmission Medium & Connector Standards,MOD-041 to MOD-050,10,6293,9,AES-X152; AES-X152 Section 7; AES-X246; AES-X249; AES14; AES48; AES59; AES72; IEC 60268-3
+6,Part 6: Receiver (Input Stage) Topologies,MOD-051 to MOD-060,10,6332,9,"AES-X152; AES-X152 Section 2; AES-X152 Section 3; AES-X152 Section 6.3; AES-X152 Section 6.6; AES-X152 Section 6.7; AES48; IEC 60268-3; US Patent 5,568,561"
+7,Part 7: Phantom Power & Transducer Interfacing,MOD-061 to MOD-070,10,6573,7,AES Convention Paper 5335; AES-X152; AES-X152 Section 3; AES-X152 Section 4; IEC 60268-3; IEC 60268-4; IEC 61938
+8,"Part 8: Interconnection Compatibility, Adapters & Safety",MOD-071 to MOD-080,10,6435,8,AES-X152; AES-X152 Section 2; AES-X152 Section 6; AES14; AES48; IEC 60268-3; IEC 61938; IEEE 1100
+9,Part 9: Advanced Mathematical Models & Test Equipment,MOD-081 to MOD-090,10,6278,8,AES Convention Paper; AES-X152; AES-X152 Section 2; AES-X152 Section 4; AES-X152 Section 5; AES-X152 Section 6; HP Manual 00353-90003; IEC 60268-3
+10,"Part 10: AES-X152 Standard, Literature, Roster & Legacy",MOD-091 to MOD-100,10,6402,21,AES Bohn Collection; AES E-Library; AES SC-05-05; AES-X152; AES-X152 Clause 1; AES-X152 Clause 2; AES-X152 Clause 3; AES-X152 Clause 4; AES-X246; AES-X249; AES11; AES14; AES26; AES48; AES54; AES59; AES67; AES70; AES72; AESSC; IEC 60268-3

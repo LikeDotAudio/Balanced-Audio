@@ -1,0 +1,2702 @@
+{
+  "title": "Balanced Audio & AES-X152 Master 100-Module Technical Curriculum",
+  "total_modules": 100,
+  "total_words": 63065,
+  "build_date": "2026-10-17T20:17:00.276137",
+  "modules": [
+    {
+      "module_id": "MOD-001",
+      "module_number": 1,
+      "part_number": 1,
+      "part_title": "Part 1: Foundations & Core Principles",
+      "title": "The Golden Rule of Balanced Audio (Impedance Symmetry vs Voltage Equality)",
+      "slug": "golden-rule-of-balance",
+      "filename": "module-001-golden-rule-of-balance.md",
+      "tags": [
+        "impedance",
+        "balance",
+        "aes48",
+        "cmrr",
+        "fundamentals"
+      ],
+      "standards": [
+        "AES-X152",
+        "AES48",
+        "IEC 60268-3"
+      ],
+      "equation": "CMRR = 20 * \\log_{10}\\left|\\frac{Z_{\\text{diff}} / 2}{\\Delta Z}\\right|",
+      "summary": "Explains why balanced audio is an impedance characteristic and not a signal voltage property.",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn",
+        "Anthony Kuzub"
+      ],
+      "word_count": 695
+    },
+    {
+      "module_id": "MOD-002",
+      "module_number": 2,
+      "part_number": 1,
+      "part_title": "Part 1: Foundations & Core Principles",
+      "title": "Common-Mode Rejection Ratio (CMRR) Mathematical Foundations",
+      "slug": "cmrr-mathematical-foundations",
+      "filename": "module-002-cmrr-mathematical-foundations.md",
+      "tags": [
+        "cmrr",
+        "mathematics",
+        "rejection",
+        "differential-gain",
+        "common-mode"
+      ],
+      "standards": [
+        "IEC 60268-3 Section 13.2",
+        "AES-X152"
+      ],
+      "equation": "\\text{CMRR}_{\\text{dB}} = 20 * \\log_{10}\\left|\\frac{A_{\\text{diff}}}{A_{\\text{cm}}}\\right|",
+      "summary": "Mathematical derivation of CMRR, common-mode gain, differential gain, and logarithmic decibel scaling.",
+      "authors": [
+        "Bill Whitlock",
+        "Jim Brown"
+      ],
+      "word_count": 629
+    },
+    {
+      "module_id": "MOD-003",
+      "module_number": 3,
+      "part_number": 1,
+      "part_title": "Part 1: Foundations & Core Principles",
+      "title": "Differential Signaling Physics & Inherent Noise Cancellation",
+      "slug": "differential-signaling-physics",
+      "filename": "module-003-differential-signaling-physics.md",
+      "tags": [
+        "differential",
+        "physics",
+        "superposition",
+        "cancellation"
+      ],
+      "standards": [
+        "AES-X152 Section 4",
+        "AES14"
+      ],
+      "equation": "V_{\\text{out}} = (V_{\\text{hot}} - V_{\\text{cold}}) * A_{\\text{diff}}",
+      "summary": "Physics of differential receivers, common-mode subtraction, and algebraic superposition in balanced lines.",
+      "authors": [
+        "Neil Muncy",
+        "Bill Whitlock"
+      ],
+      "word_count": 579
+    },
+    {
+      "module_id": "MOD-004",
+      "module_number": 4,
+      "part_number": 1,
+      "part_title": "Part 1: Foundations & Core Principles",
+      "title": "Resistor Bridge Tolerances (5%, 1%, 0.1%, 0.01%) & CMRR Degradation",
+      "slug": "resistor-bridge-tolerances-cmrr",
+      "filename": "module-004-resistor-bridge-tolerances-cmrr.md",
+      "tags": [
+        "resistors",
+        "tolerance",
+        "difference-amplifier",
+        "bridge",
+        "cmrr"
+      ],
+      "standards": [
+        "AES-X152 Section 6.7",
+        "IEC 60268-3"
+      ],
+      "equation": "\\text{CMRR}_{\\text{worst-case}} \\approx 20 * \\log_{10}\\left(\\frac{1 + A_d}{4 * \\text{Tolerance}}\\right)",
+      "summary": "Impact of resistor bridge matching in single op-amp differential input stages on common-mode rejection.",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn"
+      ],
+      "word_count": 625
+    },
+    {
+      "module_id": "MOD-005",
+      "module_number": 5,
+      "part_number": 1,
+      "part_title": "Part 1: Foundations & Core Principles",
+      "title": "Source Impedance Imbalance (\u0394Zs) and the 10-Ohm Standard Mismatch",
+      "slug": "source-impedance-imbalance-delta-z",
+      "filename": "module-005-source-impedance-imbalance-delta-z.md",
+      "tags": [
+        "source-impedance",
+        "imbalance",
+        "iec-test",
+        "mismatch",
+        "cmrr"
+      ],
+      "standards": [
+        "IEC 60268-3 Section 13.2",
+        "AES-X152"
+      ],
+      "equation": "\\Delta Z_S = |Z_{\\text{hot}} - Z_{\\text{cold}}| = 10\\ \\Omega",
+      "summary": "IEC 60268-3 standard testing with a 10-Ohm source impedance imbalance and its real-world implications.",
+      "authors": [
+        "Bill Whitlock",
+        "John Woodgate"
+      ],
+      "word_count": 643
+    },
+    {
+      "module_id": "MOD-006",
+      "module_number": 6,
+      "part_number": 1,
+      "part_title": "Part 1: Foundations & Core Principles",
+      "title": "Balanced vs Unbalanced Systems: Comparative Electrical Analysis",
+      "slug": "balanced-vs-unbalanced-systems",
+      "filename": "module-006-balanced-vs-unbalanced-systems.md",
+      "tags": [
+        "unbalanced",
+        "rca",
+        "noise",
+        "ground-current",
+        "comparisons"
+      ],
+      "standards": [
+        "AES-X152 Section 3",
+        "AES48"
+      ],
+      "equation": "V_{\\text{unbal\\_error}} = I_{\\text{shield}} * R_{\\text{shield}}",
+      "summary": "Direct electrical comparison between single-ended unbalanced (RCA/TS) and balanced differential interconnects.",
+      "authors": [
+        "Dennis Bohn",
+        "Anthony Kuzub"
+      ],
+      "word_count": 637
+    },
+    {
+      "module_id": "MOD-007",
+      "module_number": 7,
+      "part_number": 1,
+      "part_title": "Part 1: Foundations & Core Principles",
+      "title": "Common-Mode to Differential-Mode Conversion Mechanisms",
+      "slug": "common-mode-to-differential-mode-conversion",
+      "filename": "module-007-common-mode-to-differential-mode-conversion.md",
+      "tags": [
+        "mode-conversion",
+        "cm-dm",
+        "parasitics",
+        "capacitance",
+        "interference"
+      ],
+      "standards": [
+        "AES-X152 Section 5",
+        "AES48"
+      ],
+      "equation": "V_{\\text{diff\\_noise}} = V_{\\text{cm}} * \\left(\\frac{\\Delta Z}{Z_{\\text{cm\\_input}}}\\right)",
+      "summary": "How common-mode voltage is converted to differential hum by impedance imbalances in cables and terminations.",
+      "authors": [
+        "Jim Brown",
+        "Bill Whitlock"
+      ],
+      "word_count": 611
+    },
+    {
+      "module_id": "MOD-008",
+      "module_number": 8,
+      "part_number": 1,
+      "part_title": "Part 1: Foundations & Core Principles",
+      "title": "Audio Bandwidth, Slew Rate, and High-Frequency Noise Coupling",
+      "slug": "audio-bandwidth-slew-rate-noise",
+      "filename": "module-008-audio-bandwidth-slew-rate-noise.md",
+      "tags": [
+        "bandwidth",
+        "slew-rate",
+        "capacitance",
+        "filters",
+        "ultrasonic"
+      ],
+      "standards": [
+        "AES-X152 Section 2",
+        "IEC 60268-3"
+      ],
+      "equation": "\\text{Slew\\_Rate} = 2 * \\pi * f_{\\max} * V_{\\text{peak}}",
+      "summary": "Interactions between amplifier slew rate, cable capacitance, RF ingress, and ultrasonic common-mode noise.",
+      "authors": [
+        "Richard Cabot",
+        "Dennis Bohn"
+      ],
+      "word_count": 645
+    },
+    {
+      "module_id": "MOD-009",
+      "module_number": 9,
+      "part_number": 1,
+      "part_title": "Part 1: Foundations & Core Principles",
+      "title": "The 600-Ohm Power Transfer Legacy vs Modern Voltage Bridging",
+      "slug": "600-ohm-legacy-vs-modern-bridging",
+      "filename": "module-009-600-ohm-legacy-vs-modern-bridging.md",
+      "tags": [
+        "600-ohm",
+        "bridging",
+        "history",
+        "impedance-matching",
+        "power-transfer"
+      ],
+      "standards": [
+        "IEC 61938 Section 5",
+        "AES-X152"
+      ],
+      "equation": "Z_{\\text{load}} \\ge 10 * Z_{\\text{source}} \\quad \\text{(Modern Bridging Ratio)}",
+      "summary": "Historical analysis of the Bell Labs 600-Ohm power matching standard and why modern audio uses voltage bridging.",
+      "authors": [
+        "Anthony Kuzub",
+        "John Woodgate"
+      ],
+      "word_count": 673
+    },
+    {
+      "module_id": "MOD-010",
+      "module_number": 10,
+      "part_number": 1,
+      "part_title": "Part 1: Foundations & Core Principles",
+      "title": "Top-Level Rules & Normative Standards Alignment Overview",
+      "slug": "top-level-rules-standards-alignment",
+      "filename": "module-010-top-level-rules-standards-alignment.md",
+      "tags": [
+        "standards",
+        "aes11",
+        "aes14",
+        "aes26",
+        "aes48",
+        "aes59",
+        "aes72",
+        "x152"
+      ],
+      "standards": [
+        "AES11",
+        "AES14",
+        "AES26",
+        "AES48",
+        "AES54",
+        "AES59",
+        "AES72",
+        "AES-X152",
+        "AES-X246",
+        "AES-X249",
+        "IEC 60268-3",
+        "IEC 61938"
+      ],
+      "equation": "\\text{System} = \\text{Driver(AES-X152)} + \\text{Cable(AES72/59)} + \\text{Receiver(IEC 60268-3)}",
+      "summary": "Comprehensive taxonomy and interaction matrix of AES and IEC standards governing balanced audio interconnections.",
+      "authors": [
+        "Bruce Olson",
+        "Anthony Kuzub",
+        "Richard Cabot"
+      ],
+      "word_count": 609
+    },
+    {
+      "module_id": "MOD-011",
+      "module_number": 11,
+      "part_number": 2,
+      "part_title": "Part 2: Grounding, Shielding & EMC Practices",
+      "title": "The Pin 1 Problem (AES48 Canonical Analysis & Historical Origins)",
+      "slug": "the-pin-1-problem-aes48",
+      "filename": "module-011-the-pin-1-problem-aes48.md",
+      "tags": [
+        "pin-1",
+        "aes48",
+        "chassis",
+        "shield",
+        "grounding",
+        "muncy"
+      ],
+      "standards": [
+        "AES48",
+        "AES-X152"
+      ],
+      "equation": "V_{\\text{pin1\\_error}} = I_{\\text{shield}} * Z_{\\text{chassis\\_trace}}",
+      "summary": "Canonical investigation into the Pin 1 problem first identified by Neil Muncy in 1994 and codified in AES48.",
+      "authors": [
+        "Neil Muncy",
+        "Bill Whitlock",
+        "Jim Brown"
+      ],
+      "word_count": 650
+    },
+    {
+      "module_id": "MOD-012",
+      "module_number": 12,
+      "part_number": 2,
+      "part_title": "Part 2: Grounding, Shielding & EMC Practices",
+      "title": "Chassis Enclosure Grounding vs Audio Circuit 0V Reference",
+      "slug": "chassis-ground-vs-circuit-0v",
+      "filename": "module-012-chassis-ground-vs-circuit-0v.md",
+      "tags": [
+        "chassis",
+        "circuit-0v",
+        "earth",
+        "enclosure",
+        "isolation"
+      ],
+      "standards": [
+        "AES48",
+        "AES-X152 Section 4"
+      ],
+      "equation": "Z_{\\text{chassis-0V}} = R_{\\text{isolation}} \\parallel \\frac{1}{j\\omega C_{\\text{stray}}}",
+      "summary": "Clear differentiation between protective safety earth, equipment enclosure shielding, and the internal signal reference.",
+      "authors": [
+        "Bill Whitlock",
+        "Anthony Kuzub"
+      ],
+      "word_count": 615
+    },
+    {
+      "module_id": "MOD-013",
+      "module_number": 13,
+      "part_number": 2,
+      "part_title": "Part 2: Grounding, Shielding & EMC Practices",
+      "title": "Ground Loop Physics & Inter-Chassis Potential Differences (Vgvd)",
+      "slug": "ground-loop-physics-vgvd",
+      "filename": "module-013-ground-loop-physics-vgvd.md",
+      "tags": [
+        "ground-loop",
+        "vgvd",
+        "potential-difference",
+        "hum",
+        "earthing"
+      ],
+      "standards": [
+        "AES-X152",
+        "AES48"
+      ],
+      "equation": "I_{\\text{loop}} = \\frac{V_{\\text{gvd}}}{R_{\\text{safety\\_ground}} + R_{\\text{cable\\_shield}}}",
+      "summary": "Physics of ground loops, AC power distribution leakage, and inter-chassis ground voltage differentials (Vgvd).",
+      "authors": [
+        "Bill Whitlock",
+        "Jim Meyer"
+      ],
+      "word_count": 604
+    },
+    {
+      "module_id": "MOD-014",
+      "module_number": 14,
+      "part_number": 2,
+      "part_title": "Part 2: Grounding, Shielding & EMC Practices",
+      "title": "Shield Current Induced Noise (SCIN) in Balanced Interconnects",
+      "slug": "shield-current-induced-noise-scin",
+      "filename": "module-014-shield-current-induced-noise-scin.md",
+      "tags": [
+        "scin",
+        "shield-current",
+        "induction",
+        "magnetic-coupling"
+      ],
+      "standards": [
+        "AES48",
+        "AES-X152"
+      ],
+      "equation": "V_{\\text{scin}} = I_{\\text{shield}} * \\omega * M_{\\text{mutual}}",
+      "summary": "Mechanisms by which shield currents induce differential voltages into signal pairs via mutual magnetic inductance.",
+      "authors": [
+        "Jim Brown",
+        "Neil Muncy"
+      ],
+      "word_count": 638
+    },
+    {
+      "module_id": "MOD-015",
+      "module_number": 15,
+      "part_number": 2,
+      "part_title": "Part 2: Grounding, Shielding & EMC Practices",
+      "title": "Cable Shield Types: Braided, Spiral/Serve, and Foil with Drain Wire",
+      "slug": "cable-shield-types-braid-spiral-foil",
+      "filename": "module-015-cable-shield-types-braid-spiral-foil.md",
+      "tags": [
+        "shield-types",
+        "braid",
+        "spiral",
+        "foil",
+        "drain-wire"
+      ],
+      "standards": [
+        "AES48",
+        "AES72"
+      ],
+      "equation": "\\text{Optical\\_Coverage} = \\left(2F - F^2\\right) * 100\\%",
+      "summary": "Engineering comparison of braided copper, spiral (serve) wrap, and foil/drain shields for RF and audio immunity.",
+      "authors": [
+        "Bill Whitlock",
+        "Anthony Kuzub"
+      ],
+      "word_count": 566
+    },
+    {
+      "module_id": "MOD-016",
+      "module_number": 16,
+      "part_number": 2,
+      "part_title": "Part 2: Grounding, Shielding & EMC Practices",
+      "title": "Ground-Lifting Techniques, Telescoping Shields & Pseudo-Balancing",
+      "slug": "ground-lifting-and-pseudo-balancing",
+      "filename": "module-016-ground-lifting-and-pseudo-balancing.md",
+      "tags": [
+        "ground-lift",
+        "telescoping",
+        "pseudo-balanced",
+        "hum-elimination"
+      ],
+      "standards": [
+        "AES48",
+        "AES-X152"
+      ],
+      "equation": "Z_{\\text{lifted\\_shield}} = \\frac{1}{j\\omega C_{\\text{open}}} \\approx \\infty \\quad \\text{at 60 Hz}",
+      "summary": "Techniques for lifting cable shields at one end, telescoping grounds, and constructing pseudo-balanced cables.",
+      "authors": [
+        "Dennis Bohn",
+        "Bill Whitlock"
+      ],
+      "word_count": 597
+    },
+    {
+      "module_id": "MOD-017",
+      "module_number": 17,
+      "part_number": 2,
+      "part_title": "Part 2: Grounding, Shielding & EMC Practices",
+      "title": "RF Ingress, Connector Shell Bonding, and Microstrip Antennas",
+      "slug": "rf-ingress-and-connector-bonding",
+      "filename": "module-017-rf-ingress-and-connector-bonding.md",
+      "tags": [
+        "rf-ingress",
+        "rfi",
+        "connector-shell",
+        "pin1",
+        "emc"
+      ],
+      "standards": [
+        "AES48",
+        "AES54"
+      ],
+      "equation": "L_{\\text{pigtail}} < 2\\text{ mm} \\quad \\text{(360-degree connector bond)}",
+      "summary": "Mechanisms of Radio Frequency Interference (RFI) ingress, pigtail inductance, and 360-degree connector shell bonding.",
+      "authors": [
+        "Jim Brown",
+        "Anthony Kuzub"
+      ],
+      "word_count": 594
+    },
+    {
+      "module_id": "MOD-018",
+      "module_number": 18,
+      "part_number": 2,
+      "part_title": "Part 2: Grounding, Shielding & EMC Practices",
+      "title": "Ferrite Chokes, Common-Mode Beads & High-Frequency Filtering",
+      "slug": "ferrite-chokes-and-common-mode-beads",
+      "filename": "module-018-ferrite-chokes-and-common-mode-beads.md",
+      "tags": [
+        "ferrite",
+        "choke",
+        "common-mode",
+        "attenuation",
+        "rf"
+      ],
+      "standards": [
+        "AES-X152",
+        "AES48"
+      ],
+      "equation": "Z_{\\text{ferrite}}(f) = R(f) + j\\omega L(f)",
+      "summary": "Selection, placement, and physics of ferrite cores and common-mode beads for audio line RF suppression.",
+      "authors": [
+        "Jim Brown",
+        "Bill Whitlock"
+      ],
+      "word_count": 600
+    },
+    {
+      "module_id": "MOD-019",
+      "module_number": 19,
+      "part_number": 2,
+      "part_title": "Part 2: Grounding, Shielding & EMC Practices",
+      "title": "Electrostatic vs Magnetic Coupling in Shielded Audio Cable Runs",
+      "slug": "electrostatic-vs-magnetic-coupling",
+      "filename": "module-019-electrostatic-vs-magnetic-coupling.md",
+      "tags": [
+        "electrostatic",
+        "magnetic",
+        "faraday",
+        "shielding",
+        "coupling"
+      ],
+      "standards": [
+        "AES-X152",
+        "AES48"
+      ],
+      "equation": "V_{\\text{magnetic}} = -\\mu_0 * A * \\frac{dI_{\\text{power}}}{dt} \\cdot \\cos(\\theta)",
+      "summary": "Electromagnetic field physics distinguishing capacitive (electrostatic) voltage coupling from inductive (magnetic) current coupling.",
+      "authors": [
+        "Bill Whitlock",
+        "Neil Muncy"
+      ],
+      "word_count": 607
+    },
+    {
+      "module_id": "MOD-020",
+      "module_number": 20,
+      "part_number": 2,
+      "part_title": "Part 2: Grounding, Shielding & EMC Practices",
+      "title": "Star-Point Grounding vs Equipotential Ground Planes and Mesh Grids",
+      "slug": "star-grounding-vs-ground-planes",
+      "filename": "module-020-star-grounding-vs-ground-planes.md",
+      "tags": [
+        "star-ground",
+        "ground-plane",
+        "mesh-grid",
+        "facility-earthing"
+      ],
+      "standards": [
+        "AES48",
+        "IEEE 1100"
+      ],
+      "equation": "Z_{\\text{plane}} = \\frac{\\rho * L}{w * t} + j\\omega L_{\\text{sheet}} \\ll Z_{\\text{wire}}",
+      "summary": "Facility grounding topologies: the limitations of star earthing at RF and the supremacy of equipotential mesh ground grids.",
+      "authors": [
+        "Bill Whitlock",
+        "Bruce Olson"
+      ],
+      "word_count": 616
+    },
+    {
+      "module_id": "MOD-021",
+      "module_number": 21,
+      "part_number": 3,
+      "part_title": "Part 3: Interconnection Levels & Dynamic Range",
+      "title": "The Audio Level Hierarchy & Dynamic Range Pyramid",
+      "slug": "audio-level-hierarchy-pyramid",
+      "filename": "module-021-audio-level-hierarchy-pyramid.md",
+      "tags": [
+        "levels",
+        "pyramid",
+        "mic-level",
+        "line-level",
+        "headroom",
+        "hierarchy"
+      ],
+      "standards": [
+        "AES-X152 Section 2",
+        "IEC 60268-3"
+      ],
+      "equation": "\\text{Dynamic\\_Range}_{\\text{dB}} = V_{\\text{clip(dBu)}} - V_{\\text{noise\\_floor(dBu)}}",
+      "summary": "The four distinct voltage regimes of audio engineering: Mic level, Consumer line level, Pro line level, and Speaker level.",
+      "authors": [
+        "Anthony Kuzub",
+        "Dennis Bohn"
+      ],
+      "word_count": 689
+    },
+    {
+      "module_id": "MOD-022",
+      "module_number": 22,
+      "part_number": 3,
+      "part_title": "Part 3: Interconnection Levels & Dynamic Range",
+      "title": "Microphone Level Signals (-60 dBu to -20 dBu) & Preamplifier Noise Floor",
+      "slug": "microphone-level-signals-and-noise",
+      "filename": "module-022-microphone-level-signals-and-noise.md",
+      "tags": [
+        "mic-level",
+        "preamp",
+        "noise-floor",
+        "gain",
+        "transducers"
+      ],
+      "standards": [
+        "IEC 61938",
+        "AES-X152"
+      ],
+      "equation": "V_{\\text{mic\\_open}} = S_{\\text{mic}} * P_{\\text{acoustic}} \\quad \\text{(typically 1 to 20 mV/Pa)}",
+      "summary": "Sensitivity, source impedance, and low-noise preamplification constraints for microphone-level signals.",
+      "authors": [
+        "Bill Whitlock",
+        "Richard Cabot"
+      ],
+      "word_count": 597
+    },
+    {
+      "module_id": "MOD-023",
+      "module_number": 23,
+      "part_number": 3,
+      "part_title": "Part 3: Interconnection Levels & Dynamic Range",
+      "title": "Consumer Line Level (-10 dBV / 316 mV RMS) Specifications & Origins",
+      "slug": "consumer-line-level-minus-10-dbv",
+      "filename": "module-023-consumer-line-level-minus-10-dbv.md",
+      "tags": [
+        "consumer",
+        "-10dbv",
+        "rca",
+        "semi-pro",
+        "headroom"
+      ],
+      "standards": [
+        "AES-X152 Section 2",
+        "IEC 60268-3"
+      ],
+      "equation": "-10\\text{ dBV} = 10^{-10/20}\\text{ V} = 316.2\\text{ mV RMS} = -7.78\\text{ dBu}",
+      "summary": "The origins, circuit constraints, and level matching challenges of the consumer -10 dBV standard.",
+      "authors": [
+        "Dennis Bohn",
+        "Anthony Kuzub"
+      ],
+      "word_count": 619
+    },
+    {
+      "module_id": "MOD-024",
+      "module_number": 24,
+      "part_number": 3,
+      "part_title": "Part 3: Interconnection Levels & Dynamic Range",
+      "title": "Professional Line Level (+4 dBu / 1.228 V RMS) Standards",
+      "slug": "professional-line-level-plus-4-dbu",
+      "filename": "module-024-professional-line-level-plus-4-dbu.md",
+      "tags": [
+        "pro-audio",
+        "+4dbu",
+        "line-level",
+        "broadcast",
+        "calibration"
+      ],
+      "standards": [
+        "AES-X152 Section 2",
+        "IEC 60268-3"
+      ],
+      "equation": "+4\\text{ dBu} = 0.775\\text{ V} * 10^{4/20} = 1.228\\text{ V RMS}",
+      "summary": "Engineering definition, reference calibration, and operational headroom of the professional +4 dBu standard.",
+      "authors": [
+        "Anthony Kuzub",
+        "John Woodgate"
+      ],
+      "word_count": 604
+    },
+    {
+      "module_id": "MOD-025",
+      "module_number": 25,
+      "part_number": 3,
+      "part_title": "Part 3: Interconnection Levels & Dynamic Range",
+      "title": "Maximum Headroom (+24 dBu to +30 dBu) and System Clipping Margins",
+      "slug": "maximum-headroom-and-clipping-margins",
+      "filename": "module-025-maximum-headroom-and-clipping-margins.md",
+      "tags": [
+        "headroom",
+        "clipping",
+        "+24dbu",
+        "+30dbu",
+        "power-rails"
+      ],
+      "standards": [
+        "AES-X152 Section 2",
+        "AES11"
+      ],
+      "equation": "V_{\\text{clip\\_peak}} = V_{\\text{rail}} - V_{\\text{sat\\_drop}}",
+      "summary": "DC power rail voltages, operational amplifier saturation, and maximum output voltage swings in pro equipment.",
+      "authors": [
+        "Richard Cabot",
+        "Bill Whitlock"
+      ],
+      "word_count": 612
+    },
+    {
+      "module_id": "MOD-026",
+      "module_number": 26,
+      "part_number": 3,
+      "part_title": "Part 3: Interconnection Levels & Dynamic Range",
+      "title": "Decibel Systems in Pro Audio: dBu, dBV, dBm, dBFS, and dBSPL",
+      "slug": "decibel-systems-in-pro-audio",
+      "filename": "module-026-decibel-systems-in-pro-audio.md",
+      "tags": [
+        "decibels",
+        "dbu",
+        "dbv",
+        "dbm",
+        "dbfs",
+        "dbspl",
+        "formulas"
+      ],
+      "standards": [
+        "IEC 60268-3",
+        "AES-X152"
+      ],
+      "equation": "\\text{dB} = 20 * \\log_{10}\\left(\\frac{V}{V_{\\text{ref}}}\\right) \\quad \\text{or} \\quad 10 * \\log_{10}\\left(\\frac{P}{P_{\\text{ref}}}\\right)",
+      "summary": "Definitive guide to decibel references: voltage-based (dBu, dBV), power-based (dBm), digital (dBFS), and acoustic (dBSPL).",
+      "authors": [
+        "Dennis Bohn",
+        "Anthony Kuzub"
+      ],
+      "word_count": 600
+    },
+    {
+      "module_id": "MOD-027",
+      "module_number": 27,
+      "part_number": 3,
+      "part_title": "Part 3: Interconnection Levels & Dynamic Range",
+      "title": "Equivalent Input Noise (EIN) and Thermal Johnson-Nyquist Noise Limits",
+      "slug": "equivalent-input-noise-ein-johnson-noise",
+      "filename": "module-027-equivalent-input-noise-ein-johnson-noise.md",
+      "tags": [
+        "ein",
+        "johnson-noise",
+        "thermal-limit",
+        "preamps",
+        "physics"
+      ],
+      "standards": [
+        "AES-X152 Section 2",
+        "IEC 60268-3"
+      ],
+      "equation": "V_{\\text{thermal}} = \\sqrt{4 * k_B * T * B * R}",
+      "summary": "Physics of Johnson-Nyquist thermal noise, theoretical limits of preamplification, and calculating EIN.",
+      "authors": [
+        "Richard Cabot",
+        "Bill Whitlock"
+      ],
+      "word_count": 607
+    },
+    {
+      "module_id": "MOD-028",
+      "module_number": 28,
+      "part_number": 3,
+      "part_title": "Part 3: Interconnection Levels & Dynamic Range",
+      "title": "Signal-to-Noise Ratio (SNR) vs Total Dynamic Range (DNR)",
+      "slug": "snr-vs-dynamic-range-dnr",
+      "filename": "module-028-snr-vs-dynamic-range-dnr.md",
+      "tags": [
+        "snr",
+        "dynamic-range",
+        "noise-floor",
+        "thd+n",
+        "metrics"
+      ],
+      "standards": [
+        "AES-X152",
+        "IEC 60268-3"
+      ],
+      "equation": "\\text{DNR} = V_{\\text{clip}} - V_{\\text{noise}}; \\quad \\text{SNR} = V_{\\text{nominal}} - V_{\\text{noise}}",
+      "summary": "Crucial distinction between Signal-to-Noise Ratio (referenced to nominal level) and Dynamic Range (referenced to clip).",
+      "authors": [
+        "Anthony Kuzub",
+        "Dennis Bohn"
+      ],
+      "word_count": 620
+    },
+    {
+      "module_id": "MOD-029",
+      "module_number": 29,
+      "part_number": 3,
+      "part_title": "Part 3: Interconnection Levels & Dynamic Range",
+      "title": "Inter-Sample Peaks, True-Peak Metering & DAC Reconstruction Overshoots",
+      "slug": "inter-sample-peaks-true-peak-metering",
+      "filename": "module-029-inter-sample-peaks-true-peak-metering.md",
+      "tags": [
+        "inter-sample-peaks",
+        "true-peak",
+        "dac",
+        "reconstruction",
+        "itu-1770"
+      ],
+      "standards": [
+        "ITU-R BS.1770",
+        "AES-X152"
+      ],
+      "equation": "V_{\\text{reconstructed\\_peak}} > 0\\text{ dBFS} \\quad \\text{(via sinc interpolation)}",
+      "summary": "How consecutive digital samples close to 0 dBFS cause analog reconstruction filters to overshoot and clip.",
+      "authors": [
+        "Richard Cabot",
+        "Anthony Kuzub"
+      ],
+      "word_count": 580
+    },
+    {
+      "module_id": "MOD-030",
+      "module_number": 30,
+      "part_number": 3,
+      "part_title": "Part 3: Interconnection Levels & Dynamic Range",
+      "title": "Digital Alignment Standards: Calibrating 0 dBFS to Analog Operating Levels",
+      "slug": "digital-alignment-calibrating-0-dbfs",
+      "filename": "module-030-digital-alignment-calibrating-0-dbfs.md",
+      "tags": [
+        "digital-alignment",
+        "0dbfs",
+        "calibration",
+        "converter",
+        "smpte",
+        "ebu"
+      ],
+      "standards": [
+        "AES11",
+        "AES-X152",
+        "EBU R68",
+        "SMPTE RP155"
+      ],
+      "equation": "0\\text{ dBFS} = +24\\text{ dBu} \\quad \\text{(SMPTE)} \\quad \\text{or} \\quad +18\\text{ dBu} \\quad \\text{(EBU)}",
+      "summary": "Alignment standards for mapping digital Full Scale (0 dBFS) to analog voltage levels across global broadcast and studio systems.",
+      "authors": [
+        "Bruce Olson",
+        "Anthony Kuzub"
+      ],
+      "word_count": 617
+    },
+    {
+      "module_id": "MOD-031",
+      "module_number": 31,
+      "part_number": 4,
+      "part_title": "Part 4: Transmitter (Driver/Output) Topologies",
+      "title": "Thevenin Output Model for Audio Transmitters",
+      "slug": "thevenin-output-model-transmitters",
+      "filename": "module-031-thevenin-output-model-transmitters.md",
+      "tags": [
+        "thevenin",
+        "driver",
+        "source-impedance",
+        "transmitters",
+        "topology"
+      ],
+      "standards": [
+        "AES-X152 Section 1",
+        "IEC 60268-3"
+      ],
+      "equation": "V_{\\text{terminal}} = V_{\\text{open}} * \\left[ \\frac{Z_{\\text{load}}}{Z_{\\text{source}} + Z_{\\text{load}}} \\right]",
+      "summary": "Thevenin equivalent circuit modeling for audio drivers: open-circuit voltage, source resistance, and load regulation.",
+      "authors": [
+        "Jim Meyer",
+        "Bill Whitlock"
+      ],
+      "word_count": 596
+    },
+    {
+      "module_id": "MOD-032",
+      "module_number": 32,
+      "part_number": 4,
+      "part_title": "Part 4: Transmitter (Driver/Output) Topologies",
+      "title": "Topology 6.1: Electronic Push-Pull (Ground-Referenced Dual Active)",
+      "slug": "topology-6-1-electronic-push-pull",
+      "filename": "module-032-topology-6-1-electronic-push-pull.md",
+      "tags": [
+        "push-pull",
+        "dual-opamp",
+        "active-balanced",
+        "topology-6.1",
+        "drivers"
+      ],
+      "standards": [
+        "AES-X152 Section 6.1",
+        "IEC 60268-3"
+      ],
+      "equation": "V_{\\text{pin2}} = +\\frac{V_{\\text{sig}}}{2}, \\quad V_{\\text{pin3}} = -\\frac{V_{\\text{sig}}}{2} \\quad \\text{(Referenced to 0V)}",
+      "summary": "Architecture, voltage swing benefits, and operating principles of ground-referenced push-pull line drivers.",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn"
+      ],
+      "word_count": 592
+    },
+    {
+      "module_id": "MOD-033",
+      "module_number": 33,
+      "part_number": 4,
+      "part_title": "Part 4: Transmitter (Driver/Output) Topologies",
+      "title": "Push-Pull Hazard: Pin 3 Grounding Faults & Thermal Limiting",
+      "slug": "push-pull-hazard-pin-3-grounding",
+      "filename": "module-033-push-pull-hazard-pin-3-grounding.md",
+      "tags": [
+        "push-pull-hazard",
+        "short-circuit",
+        "thermal-limiting",
+        "distortion"
+      ],
+      "standards": [
+        "AES-X152 Section 6.1",
+        "AES48"
+      ],
+      "equation": "I_{\\text{short\\_peak}} = \\frac{V_{\\text{out\\_peak}}}{R_{\\text{protect}}} \\quad \\text{(Op-amp current limits!)}",
+      "summary": "What happens when a Topology 6.1 push-pull driver is plugged into an unbalanced input with Pin 3 shorted to ground.",
+      "authors": [
+        "Bill Whitlock",
+        "Richard Hess"
+      ],
+      "word_count": 667
+    },
+    {
+      "module_id": "MOD-034",
+      "module_number": 34,
+      "part_number": 4,
+      "part_title": "Part 4: Transmitter (Driver/Output) Topologies",
+      "title": "Topology 6.2: Active Impedance-Balanced Output Architecture",
+      "slug": "topology-6-2-active-impedance-balanced",
+      "filename": "module-034-topology-6-2-active-impedance-balanced.md",
+      "tags": [
+        "impedance-balanced",
+        "single-driven",
+        "topology-6.2",
+        "reliability"
+      ],
+      "standards": [
+        "AES-X152 Section 6.2",
+        "IEC 60268-3"
+      ],
+      "equation": "V_{\\text{pin2}} = V_{\\text{sig}}, \\quad V_{\\text{pin3}} = 0.0\\text{ V}; \\quad Z_{\\text{pin2}} = Z_{\\text{pin3}} = R_{\\text{match}}",
+      "summary": "Circuit design, economic advantages, and fail-safe robustness of active impedance-balanced line outputs.",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn"
+      ],
+      "word_count": 631
+    },
+    {
+      "module_id": "MOD-035",
+      "module_number": 35,
+      "part_number": 4,
+      "part_title": "Part 4: Transmitter (Driver/Output) Topologies",
+      "title": "Why Impedance-Balanced Drivers Match Push-Pull CMRR 100%",
+      "slug": "why-impedance-balanced-matches-push-pull",
+      "filename": "module-035-why-impedance-balanced-matches-push-pull.md",
+      "tags": [
+        "impedance-balanced",
+        "cmrr-parity",
+        "noise-cancellation",
+        "efficiency"
+      ],
+      "standards": [
+        "AES-X152 Section 6.2"
+      ],
+      "equation": "\\text{CMRR}_{6.2} = \\text{CMRR}_{6.1} \\quad \\text{(for identical } \\Delta Z\\text{)}",
+      "summary": "Mathematical and physical proof demonstrating that impedance-balanced drivers achieve identical CMRR to push-pull drivers.",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn"
+      ],
+      "word_count": 616
+    },
+    {
+      "module_id": "MOD-036",
+      "module_number": 36,
+      "part_number": 4,
+      "part_title": "Part 4: Transmitter (Driver/Output) Topologies",
+      "title": "Topology 6.3: Transformer-Coupled Floating Output",
+      "slug": "topology-6-3-transformer-floating-output",
+      "filename": "module-036-topology-6-3-transformer-floating-output.md",
+      "tags": [
+        "transformer-output",
+        "floating",
+        "galvanic-isolation",
+        "topology-6.3"
+      ],
+      "standards": [
+        "AES-X152 Section 6.3"
+      ],
+      "equation": "Z_{\\text{isolation\\_DC}} = \\infty; \\quad V_{\\text{breakdown}} > 1500\\text{ V RMS}",
+      "summary": "Galvanic isolation, magnetic flux coupling, common-mode rejection, and behavior of floating transformer line outputs.",
+      "authors": [
+        "Bill Whitlock",
+        "John Woodgate"
+      ],
+      "word_count": 594
+    },
+    {
+      "module_id": "MOD-037",
+      "module_number": 37,
+      "part_number": 4,
+      "part_title": "Part 4: Transmitter (Driver/Output) Topologies",
+      "title": "Topology 6.4: Transformer Output with Grounded Center-Tap",
+      "slug": "topology-6-4-transformer-grounded-center-tap",
+      "filename": "module-037-topology-6-4-transformer-grounded-center-tap.md",
+      "tags": [
+        "transformer-center-tap",
+        "phantom-return",
+        "topology-6.4"
+      ],
+      "standards": [
+        "AES-X152 Section 6.4",
+        "IEC 61938"
+      ],
+      "equation": "V_{\\text{pin2}} = +\\frac{V_{\\text{sig}}}{2}, \\quad V_{\\text{pin3}} = -\\frac{V_{\\text{sig}}}{2} \\quad \\text{(DC referenced via Center Tap)}",
+      "summary": "Circuit analysis of center-tapped transformer outputs: symmetrical DC phantom return paths versus loss of floating isolation.",
+      "authors": [
+        "John Woodgate",
+        "Anthony Kuzub"
+      ],
+      "word_count": 629
+    },
+    {
+      "module_id": "MOD-038",
+      "module_number": 38,
+      "part_number": 4,
+      "part_title": "Part 4: Transmitter (Driver/Output) Topologies",
+      "title": "Topology 6.5: Cross-Coupled Active Floating (Servo-Balanced) Output",
+      "slug": "topology-6-5-cross-coupled-active-floating",
+      "filename": "module-038-topology-6-5-cross-coupled-active-floating.md",
+      "tags": [
+        "cross-coupled",
+        "servo-balanced",
+        "outsmarts",
+        "topology-6.5"
+      ],
+      "standards": [
+        "AES-X152 Section 6.5"
+      ],
+      "equation": "A_{\\text{unbalanced}} = A_{\\text{balanced}} \\quad \\text{(Automatic +6 dB transfer to active leg)}",
+      "summary": "Cross-coupled active line driver topology: electronic emulation of floating transformer windings.",
+      "authors": [
+        "Monty Hebert",
+        "Bill Whitlock"
+      ],
+      "word_count": 629
+    },
+    {
+      "module_id": "MOD-039",
+      "module_number": 39,
+      "part_number": 4,
+      "part_title": "Part 4: Transmitter (Driver/Output) Topologies",
+      "title": "Integrated Silicon Line Drivers: THAT 1646 / 1606 OutSmarts Architecture",
+      "slug": "integrated-silicon-line-drivers-that-1646",
+      "filename": "module-039-integrated-silicon-line-drivers-that-1646.md",
+      "tags": [
+        "that1646",
+        "outsmarts",
+        "line-driver",
+        "integrated-circuits"
+      ],
+      "standards": [
+        "AES-X152 Section 6.5"
+      ],
+      "equation": "\\text{THD+N} < 0.0007\\% \\quad \\text{@ 1 kHz into } 600\\ \\Omega",
+      "summary": "Modern silicon line drivers: THAT 1646 OutSmarts technology, patented dual feedback loops, and short-circuit protection.",
+      "authors": [
+        "Gary Hebert",
+        "Dennis Bohn"
+      ],
+      "word_count": 606
+    },
+    {
+      "module_id": "MOD-040",
+      "module_number": 40,
+      "part_number": 4,
+      "part_title": "Part 4: Transmitter (Driver/Output) Topologies",
+      "title": "Unbalanced Single-Ended Outputs (RCA & TS 1/4\") & Driver Load Driving",
+      "slug": "unbalanced-single-ended-outputs",
+      "filename": "module-040-unbalanced-single-ended-outputs.md",
+      "tags": [
+        "unbalanced-driver",
+        "single-ended",
+        "rca",
+        "ts",
+        "drive-limits"
+      ],
+      "standards": [
+        "AES-X152 Section 6.8"
+      ],
+      "equation": "V_{\\text{out}} = V_{\\text{sig}} \\quad \\text{(Referenced strictly to local circuit 0V)}",
+      "summary": "Single-ended output driver architecture, output current limits, and drive considerations into unbalanced destinations.",
+      "authors": [
+        "Anthony Kuzub",
+        "John Woodgate"
+      ],
+      "word_count": 614
+    },
+    {
+      "module_id": "MOD-041",
+      "module_number": 41,
+      "part_number": 5,
+      "part_title": "Part 5: Cable Transmission Medium & Connector Standards",
+      "title": "Cable Electrical Parameters: Inductance, Capacitance, Resistance (LCR)",
+      "slug": "cable-lcr-electrical-parameters",
+      "filename": "module-041-cable-lcr-electrical-parameters.md",
+      "tags": [
+        "cable-parameters",
+        "lcr",
+        "capacitance",
+        "inductance",
+        "resistance"
+      ],
+      "standards": [
+        "AES-X152 Section 7",
+        "AES72"
+      ],
+      "equation": "Z_0 = \\sqrt{\\frac{R + j\\omega L}{G + j\\omega C}} \\approx \\sqrt{\\frac{L}{C}} \\quad \\text{@ RF}",
+      "summary": "Distributed transmission parameters of shielded twisted pair audio cables: loop resistance, mutual inductance, and dielectric capacitance.",
+      "authors": [
+        "Bill Whitlock",
+        "Anthony Kuzub"
+      ],
+      "word_count": 634
+    },
+    {
+      "module_id": "MOD-042",
+      "module_number": 42,
+      "part_number": 5,
+      "part_title": "Part 5: Cable Transmission Medium & Connector Standards",
+      "title": "Core-to-Core vs Core-to-Shield Distributed Capacitances",
+      "slug": "core-to-core-vs-core-to-shield-capacitance",
+      "filename": "module-042-core-to-core-vs-core-to-shield-capacitance.md",
+      "tags": [
+        "core-to-core",
+        "core-to-shield",
+        "c_cc",
+        "c_cs",
+        "capacitance"
+      ],
+      "standards": [
+        "AES-X152 Section 7"
+      ],
+      "equation": "C_{\\text{effective\\_diff}} = C_{\\text{cc}} + \\frac{C_{\\text{cs1}} * C_{\\text{cs2}}}{C_{\\text{cs1}} + C_{\\text{cs2}}}",
+      "summary": "Electrical distinction between conductor-to-conductor mutual capacitance and conductor-to-shield capacitance.",
+      "authors": [
+        "Jim Brown",
+        "Bill Whitlock"
+      ],
+      "word_count": 600
+    },
+    {
+      "module_id": "MOD-043",
+      "module_number": 43,
+      "part_number": 5,
+      "part_title": "Part 5: Cable Transmission Medium & Connector Standards",
+      "title": "Cable Run Length, Driver Output Impedance & -3dB Cutoff Frequency",
+      "slug": "cable-length-driver-impedance-hf-rolloff",
+      "filename": "module-043-cable-length-driver-impedance-hf-rolloff.md",
+      "tags": [
+        "cable-length",
+        "hf-rolloff",
+        "cutoff-frequency",
+        "driver-impedance"
+      ],
+      "standards": [
+        "AES-X152 Section 7"
+      ],
+      "equation": "f_{-3\\text{dB}} = \\frac{1}{2\\pi * Z_{\\text{source}} * C_{\\text{total}}}",
+      "summary": "Calculating high-frequency roll-off (-3dB cutoff point) as a function of total cable capacitance and driver source impedance.",
+      "authors": [
+        "Dennis Bohn",
+        "Bill Whitlock"
+      ],
+      "word_count": 644
+    },
+    {
+      "module_id": "MOD-044",
+      "module_number": 44,
+      "part_number": 5,
+      "part_title": "Part 5: Cable Transmission Medium & Connector Standards",
+      "title": "Star-Quad Cable Geometry & Magnetic Rejection",
+      "slug": "star-quad-cable-geometry-magnetic-rejection",
+      "filename": "module-044-star-quad-cable-geometry-magnetic-rejection.md",
+      "tags": [
+        "star-quad",
+        "magnetic-rejection",
+        "geometry",
+        "quad-cable",
+        "hum"
+      ],
+      "standards": [
+        "AES-X152",
+        "AES72"
+      ],
+      "equation": "\\text{Magnetic\\_Immunity\\_Improvement} \\approx 20\\text{ dB to } 35\\text{ dB over standard twisted pair}",
+      "summary": "Physics of 4-conductor star-quad cable geometry, cross-connection, and spatial magnetic field cancellation.",
+      "authors": [
+        "Jim Brown",
+        "Anthony Kuzub"
+      ],
+      "word_count": 649
+    },
+    {
+      "module_id": "MOD-045",
+      "module_number": 45,
+      "part_number": 5,
+      "part_title": "Part 5: Cable Transmission Medium & Connector Standards",
+      "title": "AES14 Standard: XLR 3-Pin Interface & Pin Assignment",
+      "slug": "aes14-standard-xlr-3-pin-interface",
+      "filename": "module-045-aes14-standard-xlr-3-pin-interface.md",
+      "tags": [
+        "aes14",
+        "xlr",
+        "pinout",
+        "table1",
+        "table2",
+        "standards"
+      ],
+      "standards": [
+        "AES14",
+        "AES48"
+      ],
+      "equation": "\\text{Pin 1 = Shield/Chassis}, \\quad \\text{Pin 2 = Non-inverting (Hot)}, \\quad \\text{Pin 3 = Inverting (Cold)}",
+      "summary": "The canonical AES14 standard establishing worldwide uniformity for 3-pin XLR audio connectors and resolving the 'Pin 3 Hot' legacy conflict.",
+      "authors": [
+        "John Woodgate",
+        "Bruce Olson"
+      ],
+      "word_count": 626
+    },
+    {
+      "module_id": "MOD-046",
+      "module_number": 46,
+      "part_number": 5,
+      "part_title": "Part 5: Cable Transmission Medium & Connector Standards",
+      "title": "1/4-inch Phone Plugs (TRS vs TS) and B-Gauge Patch Cords",
+      "slug": "quarter-inch-phone-plugs-trs-vs-ts",
+      "filename": "module-046-quarter-inch-phone-plugs-trs-vs-ts.md",
+      "tags": [
+        "trs",
+        "ts",
+        "b-gauge",
+        "patchbays",
+        "phone-jacks"
+      ],
+      "standards": [
+        "AES14",
+        "AES-X152"
+      ],
+      "equation": "\\text{Tip = Hot (+)}, \\quad \\text{Ring = Cold (-)}, \\quad \\text{Sleeve = Ground/Shield}",
+      "summary": "Mechanical tolerances, contact wiping, and short-circuit hazards of 1/4\" TRS, TS, and mil-spec B-gauge phone plugs.",
+      "authors": [
+        "Dennis Bohn",
+        "Anthony Kuzub"
+      ],
+      "word_count": 600
+    },
+    {
+      "module_id": "MOD-047",
+      "module_number": 47,
+      "part_number": 5,
+      "part_title": "Part 5: Cable Transmission Medium & Connector Standards",
+      "title": "AES59 Multi-Pair Pinout Standard: 8-Channel DB25 D-Sub Connector",
+      "slug": "aes59-multi-pair-pinout-standard-db25",
+      "filename": "module-047-aes59-multi-pair-pinout-standard-db25.md",
+      "tags": [
+        "aes59",
+        "db25",
+        "d-sub",
+        "8-channel",
+        "multichannel",
+        "tascam"
+      ],
+      "standards": [
+        "AES59",
+        "AES-X249",
+        "AES48"
+      ],
+      "equation": "8\\text{ Balanced Channels on 25 Pins: } 8 * 3 = 24\\text{ Pins + 1 Unused Chassis}",
+      "summary": "The canonical AES59 standard for 8-channel analog and digital balanced audio interconnection on 25-way D-sub connectors.",
+      "authors": [
+        "Anthony Kuzub",
+        "Bruce Olson"
+      ],
+      "word_count": 670
+    },
+    {
+      "module_id": "MOD-048",
+      "module_number": 48,
+      "part_number": 5,
+      "part_title": "Part 5: Cable Transmission Medium & Connector Standards",
+      "title": "AES72 Quad Twisted Pair (QTP) Standard: Category Cable Audio (RJ45)",
+      "slug": "aes72-quad-twisted-pair-cat-cable-audio",
+      "filename": "module-048-aes72-quad-twisted-pair-cat-cable-audio.md",
+      "tags": [
+        "aes72",
+        "qtp",
+        "rj45",
+        "cat5e",
+        "cat6",
+        "analog-ethernet"
+      ],
+      "standards": [
+        "AES72",
+        "AES-X246"
+      ],
+      "equation": "4\\text{ Balanced Analog Channels over Cat5e / Cat6 (4 UTP/STP Pairs)}",
+      "summary": "The AES72 standard for transporting 4 balanced audio channels over structured Quad Twisted Pair (Category 5e/6/7) cables and 8P8C (RJ45) modular connectors.",
+      "authors": [
+        "Anthony Kuzub",
+        "Bruce Olson"
+      ],
+      "word_count": 647
+    },
+    {
+      "module_id": "MOD-049",
+      "module_number": 49,
+      "part_number": 5,
+      "part_title": "Part 5: Cable Transmission Medium & Connector Standards",
+      "title": "Multichannel Snakes, Stage Drop Boxes & Splitter Systems",
+      "slug": "multichannel-snakes-and-stage-boxes",
+      "filename": "module-049-multichannel-snakes-and-stage-boxes.md",
+      "tags": [
+        "snakes",
+        "stage-box",
+        "multichannel",
+        "splitters",
+        "transformers"
+      ],
+      "standards": [
+        "AES48",
+        "AES59",
+        "AES72"
+      ],
+      "equation": "\\text{Channel\\_Isolation}_{\\text{dB}} > 100\\text{ dB @ 1 kHz}",
+      "summary": "Engineering architecture of multichannel audio snakes, multi-pin disconnects (Mass, Socapex, Whirlwind), and transformer-isolated stage splitters.",
+      "authors": [
+        "Bill Whitlock",
+        "Anthony Kuzub"
+      ],
+      "word_count": 598
+    },
+    {
+      "module_id": "MOD-050",
+      "module_number": 50,
+      "part_number": 5,
+      "part_title": "Part 5: Cable Transmission Medium & Connector Standards",
+      "title": "Connector Contact Resistance, Oxidation, and Noble Metal Platings",
+      "slug": "connector-contact-resistance-and-noble-platings",
+      "filename": "module-050-connector-contact-resistance-and-noble-platings.md",
+      "tags": [
+        "connectors",
+        "contact-resistance",
+        "gold",
+        "silver",
+        "oxidation"
+      ],
+      "standards": [
+        "AES14",
+        "IEC 60268-3"
+      ],
+      "equation": "R_{\\text{contact}} < 5\\text{ m}\\Omega \\quad \\text{(Initial)}; \\quad \\Delta R < 1\\text{ m}\\Omega \\quad \\text{(Imbalance)}",
+      "summary": "Tribology of electrical contacts: gold vs silver platings, galvanic corrosion, wiping action, and contact resistance balance.",
+      "authors": [
+        "John Woodgate",
+        "Dennis Bohn"
+      ],
+      "word_count": 625
+    },
+    {
+      "module_id": "MOD-051",
+      "module_number": 51,
+      "part_number": 6,
+      "part_title": "Part 6: Receiver (Input Stage) Topologies",
+      "title": "Receiver Input Stage Overview & Bridging Load Impedance Philosophy",
+      "slug": "receiver-input-stage-bridging-philosophy",
+      "filename": "module-051-receiver-input-stage-bridging-philosophy.md",
+      "tags": [
+        "receiver",
+        "bridging",
+        "input-impedance",
+        "load",
+        "differentials"
+      ],
+      "standards": [
+        "AES-X152 Section 3",
+        "IEC 60268-3"
+      ],
+      "equation": "Z_{\\text{in\\_diff}} \\ge 10\\text{ k}\\Omega, \\quad Z_{\\text{in\\_cm}} \\ge 20\\text{ k}\\Omega",
+      "summary": "Bridging input philosophy for balanced receivers: Differential Mode Impedance (DMZ) vs Common Mode Impedance (CMZ).",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn"
+      ],
+      "word_count": 620
+    },
+    {
+      "module_id": "MOD-052",
+      "module_number": 52,
+      "part_number": 6,
+      "part_title": "Part 6: Receiver (Input Stage) Topologies",
+      "title": "Passive Transformer-Coupled Balanced Receiver",
+      "slug": "passive-transformer-coupled-balanced-receiver",
+      "filename": "module-052-passive-transformer-coupled-balanced-receiver.md",
+      "tags": [
+        "transformer-receiver",
+        "galvanic-isolation",
+        "jensen",
+        "cmrr"
+      ],
+      "standards": [
+        "AES-X152 Section 6.3",
+        "IEC 60268-3"
+      ],
+      "equation": "\\text{CMRR}_{\\text{transformer}} > 100\\text{ dB @ 60 Hz with } 10\\ \\Omega \\text{ source imbalance}",
+      "summary": "Passive input transformers: Faraday shielding, galvanic isolation, ultra-high common-mode impedance, and benchmark CMRR.",
+      "authors": [
+        "Bill Whitlock",
+        "Deane Jensen"
+      ],
+      "word_count": 617
+    },
+    {
+      "module_id": "MOD-053",
+      "module_number": 53,
+      "part_number": 6,
+      "part_title": "Part 6: Receiver (Input Stage) Topologies",
+      "title": "Basic Single Op-Amp Differential Receiver (Difference Amplifier)",
+      "slug": "basic-single-op-amp-difference-amplifier",
+      "filename": "module-053-basic-single-op-amp-difference-amplifier.md",
+      "tags": [
+        "difference-amp",
+        "single-opamp",
+        "input-stage",
+        "receiver"
+      ],
+      "standards": [
+        "AES-X152 Section 6.7"
+      ],
+      "equation": "V_{\\text{out}} = \\frac{R_2}{R_1} * (V_{\\text{pin2}} - V_{\\text{pin3}}) \\quad \\text{(assuming } R_1=R_3, R_2=R_4\\text{)}",
+      "summary": "Circuit analysis of the ubiquitous 4-resistor single operational amplifier difference receiver stage.",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn"
+      ],
+      "word_count": 625
+    },
+    {
+      "module_id": "MOD-054",
+      "module_number": 54,
+      "part_number": 6,
+      "part_title": "Part 6: Receiver (Input Stage) Topologies",
+      "title": "The Impedance Asymmetry Flaw in Simple Single Op-Amp Receivers",
+      "slug": "impedance-asymmetry-in-single-opamp-receivers",
+      "filename": "module-054-impedance-asymmetry-in-single-opamp-receivers.md",
+      "tags": [
+        "impedance-asymmetry",
+        "single-opamp",
+        "input-impedance-mismatch"
+      ],
+      "standards": [
+        "AES-X152 Section 6.7"
+      ],
+      "equation": "Z_{\\text{in(non-inv)}} = R_3 + R_4; \\quad Z_{\\text{in(inv)}} = \\frac{R_1}{1 - \\frac{V_{\\text{out}}}{V_{\\text{in-}}}} \\approx \\frac{R_1}{1 - (-1)} = \\frac{R_1}{2} \\text{ to } R_1",
+      "summary": "Exposing the inherent impedance asymmetry between inverting and non-inverting inputs in the 4-resistor difference stage.",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn"
+      ],
+      "word_count": 686
+    },
+    {
+      "module_id": "MOD-055",
+      "module_number": 55,
+      "part_number": 6,
+      "part_title": "Part 6: Receiver (Input Stage) Topologies",
+      "title": "Three Op-Amp Differential Instrumentation Amplifier (In-Amp)",
+      "slug": "three-op-amp-instrumentation-amplifier-in-amp",
+      "filename": "module-055-three-op-amp-instrumentation-amplifier-in-amp.md",
+      "tags": [
+        "instrumentation-amp",
+        "in-amp",
+        "3-opamp",
+        "high-z-inputs"
+      ],
+      "standards": [
+        "AES-X152 Section 6.7"
+      ],
+      "equation": "Z_{\\text{in+}} = Z_{\\text{in-}} > 10^9\\ \\Omega \\quad \\text{(Op-amp non-inverting FET/BJT inputs)}",
+      "summary": "Classic 3-op-amp instrumentation amplifier: high-impedance buffered inputs, differential gain control, and common-mode rejection.",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn"
+      ],
+      "word_count": 619
+    },
+    {
+      "module_id": "MOD-056",
+      "module_number": 56,
+      "part_number": 6,
+      "part_title": "Part 6: Receiver (Input Stage) Topologies",
+      "title": "High Common-Mode Impedance Receivers: InGenius & THAT 1200 Architecture",
+      "slug": "high-cm-impedance-receivers-ingenius-that1200",
+      "filename": "module-056-high-cm-impedance-receivers-ingenius-that1200.md",
+      "tags": [
+        "ingenius",
+        "that1200",
+        "bootstrapping",
+        "cmrr",
+        "whitlock-patent"
+      ],
+      "standards": [
+        "US Patent 5,568,561",
+        "AES-X152"
+      ],
+      "equation": "Z_{\\text{cm\\_bootstrapped}} > 10\\text{ M}\\Omega \\quad \\text{across the full audio band}",
+      "summary": "Bill Whitlock's patented InGenius input architecture (THAT 1200 series): active common-mode bootstrapping achieving transformer-grade CMRR.",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn"
+      ],
+      "word_count": 646
+    },
+    {
+      "module_id": "MOD-057",
+      "module_number": 57,
+      "part_number": 6,
+      "part_title": "Part 6: Receiver (Input Stage) Topologies",
+      "title": "Ground-Cancelling and Ground-Sensing Differential Receiver Circuits",
+      "slug": "ground-cancelling-and-ground-sensing-receivers",
+      "filename": "module-057-ground-cancelling-and-ground-sensing-receivers.md",
+      "tags": [
+        "ground-cancelling",
+        "ground-sensing",
+        "unbalanced-interface",
+        "pseudos"
+      ],
+      "standards": [
+        "AES-X152 Section 6.6"
+      ],
+      "equation": "V_{\\text{out}} = V_{\\text{sig}} + (V_{\\text{gnd\\_source}} - V_{\\text{gnd\\_source}}) = V_{\\text{sig}}",
+      "summary": "Ground-cancelling and ground-sensing receiver circuits for eliminating hum when accepting unbalanced sources without ground loops.",
+      "authors": [
+        "Dennis Bohn",
+        "Bill Whitlock"
+      ],
+      "word_count": 575
+    },
+    {
+      "module_id": "MOD-058",
+      "module_number": 58,
+      "part_number": 6,
+      "part_title": "Part 6: Receiver (Input Stage) Topologies",
+      "title": "Common-Mode Voltage Window, Rail Headroom, and Clamping Protection",
+      "slug": "common-mode-voltage-window-and-rail-headroom",
+      "filename": "module-058-common-mode-voltage-window-and-rail-headroom.md",
+      "tags": [
+        "cm-voltage-range",
+        "clamping",
+        "headroom",
+        "input-protection"
+      ],
+      "standards": [
+        "AES-X152 Section 3",
+        "IEC 60268-3"
+      ],
+      "equation": "V_{\\text{cm\\_max}} = \\pm (V_{\\text{rail}} - 2.0\\text{ V}) \\quad \\text{(Active Op-Amps)}",
+      "summary": "The common-mode voltage operating window of active operational amplifiers, rail headroom limits, and input diode protection.",
+      "authors": [
+        "Richard Cabot",
+        "Bill Whitlock"
+      ],
+      "word_count": 614
+    },
+    {
+      "module_id": "MOD-059",
+      "module_number": 59,
+      "part_number": 6,
+      "part_title": "Part 6: Receiver (Input Stage) Topologies",
+      "title": "Radio-Frequency Interference (RFI) Filtering in Balanced Receiver Front-Ends",
+      "slug": "rfi-filtering-in-balanced-receiver-front-ends",
+      "filename": "module-059-rfi-filtering-in-balanced-receiver-front-ends.md",
+      "tags": [
+        "rfi-filter",
+        "emc",
+        "capacitors",
+        "common-mode-choke"
+      ],
+      "standards": [
+        "AES-X152 Section 2",
+        "AES48"
+      ],
+      "equation": "f_{\\text{corner\\_diff}} = \\frac{1}{2\\pi * (2R) * C_{\\text{diff}}} \\approx 120\\text{ kHz}; \\quad f_{\\text{corner\\_cm}} \\approx 800\\text{ kHz}",
+      "summary": "Design and component selection for passive differential and common-mode low-pass RFI filters at receiver input connectors.",
+      "authors": [
+        "Jim Brown",
+        "Dennis Bohn"
+      ],
+      "word_count": 662
+    },
+    {
+      "module_id": "MOD-060",
+      "module_number": 60,
+      "part_number": 6,
+      "part_title": "Part 6: Receiver (Input Stage) Topologies",
+      "title": "Differential Input Capacitance Matching and High-Frequency CMRR",
+      "slug": "differential-input-capacitance-matching-cmrr",
+      "filename": "module-060-differential-input-capacitance-matching-cmrr.md",
+      "tags": [
+        "capacitance-matching",
+        "c0g-np0",
+        "hf-cmrr",
+        "pcb-layout"
+      ],
+      "standards": [
+        "AES-X152 Section 3",
+        "IEC 60268-3"
+      ],
+      "equation": "\\Delta C_{\\text{in}} = |C_{\\text{pin2-gnd}} - C_{\\text{pin3-gnd}}| < 2\\text{ pF for } >60\\text{ dB CMRR @ 20 kHz}",
+      "summary": "Impact of printed circuit board stray capacitance and component dielectric tolerances on high-frequency common-mode rejection.",
+      "authors": [
+        "Bill Whitlock",
+        "Richard Cabot"
+      ],
+      "word_count": 668
+    },
+    {
+      "module_id": "MOD-061",
+      "module_number": 61,
+      "part_number": 7,
+      "part_title": "Part 7: Phantom Power & Transducer Interfacing",
+      "title": "IEC 61938 Phantom Power Standards: P48, P24, and P12 Specifications",
+      "slug": "iec-61938-phantom-power-standards",
+      "filename": "module-061-iec-61938-phantom-power-standards.md",
+      "tags": [
+        "phantom-power",
+        "iec61938",
+        "p48",
+        "p24",
+        "p12",
+        "microphones"
+      ],
+      "standards": [
+        "IEC 61938",
+        "AES-X152"
+      ],
+      "equation": "V_{\\text{supply}} = 48\\text{ V} \\pm 4\\text{ V}; \\quad R_{\\text{feed}} = 6.81\\text{ k}\\Omega \\pm 0.1\\% \\quad \\text{(P48 Standard)}",
+      "summary": "Engineering analysis of IEC 61938: P48, P24, and P12 microphone phantom powering systems, feed resistor tolerances, and current capacity.",
+      "authors": [
+        "John Woodgate",
+        "Anthony Kuzub"
+      ],
+      "word_count": 673
+    },
+    {
+      "module_id": "MOD-062",
+      "module_number": 62,
+      "part_number": 7,
+      "part_title": "Part 7: Phantom Power & Transducer Interfacing",
+      "title": "6.81 k\u03a9 Resistor Bridge Matching and Phantom-Induced CMRR Loss",
+      "slug": "resistor-bridge-matching-phantom-cmrr",
+      "filename": "module-062-resistor-bridge-matching-phantom-cmrr.md",
+      "tags": [
+        "phantom-resistors",
+        "6.81k",
+        "bridge-matching",
+        "cmrr-degradation"
+      ],
+      "standards": [
+        "IEC 61938",
+        "AES-X152"
+      ],
+      "equation": "\\Delta R = |R_1 - R_2| < 6.8\\ \\Omega \\quad (0.1\\% \\text{ match required for } >80\\text{ dB CMRR})",
+      "summary": "How loose tolerance phantom feed resistors destroy preamplifier common-mode rejection and inject power supply ripple.",
+      "authors": [
+        "Bill Whitlock",
+        "Jim Brown"
+      ],
+      "word_count": 669
+    },
+    {
+      "module_id": "MOD-063",
+      "module_number": 63,
+      "part_number": 7,
+      "part_title": "Part 7: Phantom Power & Transducer Interfacing",
+      "title": "The Phantom Menace: Turn-On Transients & Mic Preamp Input Destruction",
+      "slug": "phantom-menace-turn-on-transients",
+      "filename": "module-063-phantom-menace-turn-on-transients.md",
+      "tags": [
+        "phantom-menace",
+        "transients",
+        "turn-on",
+        "hebert-thomas",
+        "preamp-damage"
+      ],
+      "standards": [
+        "AES Convention Paper 5335",
+        "AES-X152"
+      ],
+      "equation": "V_{\\text{transient\\_spike}} > 40\\text{ V peak across input BJT base-emitter junction}",
+      "summary": "Rosalfonso Bortoni, Gary Hebert, and Frank Thomas's landmark research on phantom power hot-plugging destroying mic preamp inputs.",
+      "authors": [
+        "Gary Hebert",
+        "Rosalfonso Bortoni",
+        "Frank Thomas"
+      ],
+      "word_count": 651
+    },
+    {
+      "module_id": "MOD-064",
+      "module_number": 64,
+      "part_number": 7,
+      "part_title": "Part 7: Phantom Power & Transducer Interfacing",
+      "title": "Diode Clamping & Transient Voltage Suppression (TVS) Protection Networks",
+      "slug": "diode-clamping-and-tvs-protection-networks",
+      "filename": "module-064-diode-clamping-and-tvs-protection-networks.md",
+      "tags": [
+        "diode-clamping",
+        "tvs",
+        "transient-protection",
+        "mic-preamp-protection"
+      ],
+      "standards": [
+        "AES-X152 Section 4",
+        "IEC 61938"
+      ],
+      "equation": "V_{\\text{clamp}} = V_{\\text{rail}} + V_{\\text{diode\\_forward}} \\approx \\pm (V_{\\text{rail}} + 0.3\\text{ V})",
+      "summary": "Engineering input protection: ultra-fast Schottky clamping diodes, TVS arrays, and series surge-limiting resistors.",
+      "authors": [
+        "Gary Hebert",
+        "Dennis Bohn"
+      ],
+      "word_count": 627
+    },
+    {
+      "module_id": "MOD-065",
+      "module_number": 65,
+      "part_number": 7,
+      "part_title": "Part 7: Phantom Power & Transducer Interfacing",
+      "title": "Dynamic Microphones & Floating Low-Impedance Voice-Coil Interfacing",
+      "slug": "dynamic-microphones-and-voice-coil-interfacing",
+      "filename": "module-065-dynamic-microphones-and-voice-coil-interfacing.md",
+      "tags": [
+        "dynamic-mic",
+        "voice-coil",
+        "shure-sm58",
+        "floating-transducer"
+      ],
+      "standards": [
+        "IEC 60268-4",
+        "AES-X152"
+      ],
+      "equation": "Z_{\\text{voice\\_coil}}(f) = R_{\\text{dc}} + j\\omega L_{\\text{coil}} \\approx 150\\ \\Omega \\text{ to } 300\\ \\Omega",
+      "summary": "Electro-acoustic interfacing of moving-coil dynamic microphones (e.g. Shure SM57/SM58): voice-coil impedance, floating coils, and loading.",
+      "authors": [
+        "John Woodgate",
+        "Anthony Kuzub"
+      ],
+      "word_count": 661
+    },
+    {
+      "module_id": "MOD-066",
+      "module_number": 66,
+      "part_number": 7,
+      "part_title": "Part 7: Phantom Power & Transducer Interfacing",
+      "title": "Ribbon Microphones: Transformer Coupling, DC Hazard & P48 Protection",
+      "slug": "ribbon-microphones-transformer-coupling-p48-hazard",
+      "filename": "module-066-ribbon-microphones-transformer-coupling-p48-hazard.md",
+      "tags": [
+        "ribbon-mic",
+        "dc-hazard",
+        "transformer",
+        "corrugated-aluminum",
+        "royer"
+      ],
+      "standards": [
+        "AES-X152",
+        "IEC 61938"
+      ],
+      "equation": "I_{\\text{ribbon}} = \\frac{V_{\\text{DC\\_unbalance}}}{R_{\\text{ribbon\\_reflected}}} \\quad \\text{(A few mV DC can stretch or pop the ribbon!)}",
+      "summary": "The vulnerability of passive ribbon microphones to DC phantom power imbalances, patchbay shorts, and blown ribbons.",
+      "authors": [
+        "Bill Whitlock",
+        "Anthony Kuzub"
+      ],
+      "word_count": 691
+    },
+    {
+      "module_id": "MOD-067",
+      "module_number": 67,
+      "part_number": 7,
+      "part_title": "Part 7: Phantom Power & Transducer Interfacing",
+      "title": "Active Condenser Microphones: Phantom Extraction & Impedance Match",
+      "slug": "active-condenser-microphones-phantom-extraction",
+      "filename": "module-067-active-condenser-microphones-phantom-extraction.md",
+      "tags": [
+        "condenser-mic",
+        "dc-converter",
+        "fet-impedance-converter",
+        "capsule",
+        "neumann"
+      ],
+      "standards": [
+        "IEC 61938",
+        "AES-X152"
+      ],
+      "equation": "V_{\\text{polarization}} = 40\\text{ V to } 80\\text{ V DC} \\quad \\text{(Extracted from P48 via DC-DC multiplier)}",
+      "summary": "Internal electronics of condenser microphones: FET impedance conversion, capsule polarization voltage, and audio line driving.",
+      "authors": [
+        "John Woodgate",
+        "Anthony Kuzub"
+      ],
+      "word_count": 647
+    },
+    {
+      "module_id": "MOD-068",
+      "module_number": 68,
+      "part_number": 7,
+      "part_title": "Part 7: Phantom Power & Transducer Interfacing",
+      "title": "Passive Direct Injection (DI) Boxes: Transformer Isolation & Loading",
+      "slug": "passive-direct-injection-di-boxes",
+      "filename": "module-068-passive-direct-injection-di-boxes.md",
+      "tags": [
+        "passive-di",
+        "transformer",
+        "direct-box",
+        "instrument-to-mic"
+      ],
+      "standards": [
+        "AES-X152",
+        "IEC 60268-3"
+      ],
+      "equation": "Z_{\\text{in}} = N^2 * Z_{\\text{load}}; \\quad \\frac{Z_{\\text{in}}}{Z_{\\text{out}}} = \\left(\\frac{N_p}{N_s}\\right)^2 \\approx 100:1",
+      "summary": "Passive Direct Injection (DI) boxes: mu-metal shielded transformers, step-down turns ratios, and guitar pickup loading.",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn"
+      ],
+      "word_count": 675
+    },
+    {
+      "module_id": "MOD-069",
+      "module_number": 69,
+      "part_number": 7,
+      "part_title": "Part 7: Phantom Power & Transducer Interfacing",
+      "title": "Active Direct Injection (DI) Boxes: High-Z FET Buffers & Phantom Powering",
+      "slug": "active-direct-injection-di-boxes-fet-buffers",
+      "filename": "module-069-active-direct-injection-di-boxes-fet-buffers.md",
+      "tags": [
+        "active-di",
+        "fet-buffer",
+        "high-z-input",
+        "phantom-powered",
+        "countryman"
+      ],
+      "standards": [
+        "IEC 61938",
+        "AES-X152"
+      ],
+      "equation": "Z_{\\text{in\\_active}} \\ge 1.0\\text{ M}\\Omega \\text{ to } 10\\text{ M}\\Omega \\quad \\text{(Zero pickup loading)}",
+      "summary": "Active DI box architecture: high-impedance JFET/CMOS input buffers, phantom power extraction, and balanced output driving.",
+      "authors": [
+        "Dennis Bohn",
+        "Bill Whitlock"
+      ],
+      "word_count": 610
+    },
+    {
+      "module_id": "MOD-070",
+      "module_number": 70,
+      "part_number": 7,
+      "part_title": "Part 7: Phantom Power & Transducer Interfacing",
+      "title": "Piezo Pickups, Ultra-High Input Impedances (10M\u03a9), and Buffer Stages",
+      "slug": "piezo-pickups-ultra-high-impedance-buffers",
+      "filename": "module-070-piezo-pickups-ultra-high-impedance-buffers.md",
+      "tags": [
+        "piezo",
+        "ultra-high-z",
+        "10-megohm",
+        "acoustic-instruments",
+        "phase"
+      ],
+      "standards": [
+        "AES-X152 Section 3"
+      ],
+      "equation": "f_{\\text{bass\\_cutoff}} = \\frac{1}{2\\pi * R_{\\text{in}} * C_{\\text{piezo}}}",
+      "summary": "The electrical physics of piezoelectric crystals: pure capacitive sources, bass loss into standard inputs, and 10 Megohm buffer design.",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn"
+      ],
+      "word_count": 669
+    },
+    {
+      "module_id": "MOD-071",
+      "module_number": 71,
+      "part_number": 8,
+      "part_title": "Part 8: Interconnection Compatibility, Adapters & Safety",
+      "title": "Richard L. Hess Interconnection Compatibility Philosophy",
+      "slug": "richard-hess-interconnection-philosophy",
+      "filename": "module-071-richard-hess-interconnection-philosophy.md",
+      "tags": [
+        "hess-matrix",
+        "compatibility",
+        "interconnection",
+        "unbalanced-to-balanced"
+      ],
+      "standards": [
+        "AES-X152",
+        "AES48"
+      ],
+      "equation": "\\text{Compatibility} = f(\\text{Source Topology}, \\text{Destination Topology}, \\text{Cable Wiring})",
+      "summary": "Richard L. Hess's definitive interconnection framework: identifying driver topology before choosing adapter cable wiring.",
+      "authors": [
+        "Richard L. Hess",
+        "Bill Whitlock"
+      ],
+      "word_count": 657
+    },
+    {
+      "module_id": "MOD-072",
+      "module_number": 72,
+      "part_number": 8,
+      "part_title": "Part 8: Interconnection Compatibility, Adapters & Safety",
+      "title": "Interfacing Balanced Outputs to Unbalanced Inputs (By Driver Topology)",
+      "slug": "interfacing-balanced-outputs-to-unbalanced-inputs",
+      "filename": "module-072-interfacing-balanced-outputs-to-unbalanced-inputs.md",
+      "tags": [
+        "balanced-to-unbalanced",
+        "wiring",
+        "push-pull",
+        "impedance-balanced"
+      ],
+      "standards": [
+        "AES-X152 Section 6",
+        "AES48"
+      ],
+      "equation": "\\text{Gain\\_Loss}_{\\text{6.1}} = -6.02\\text{ dB}; \\quad \\text{Gain\\_Loss}_{\\text{6.2}} = 0.00\\text{ dB}",
+      "summary": "Step-by-step wiring rules for connecting all 8 AES-X152 output topologies into unbalanced single-ended inputs.",
+      "authors": [
+        "Richard L. Hess",
+        "Dennis Bohn"
+      ],
+      "word_count": 630
+    },
+    {
+      "module_id": "MOD-073",
+      "module_number": 73,
+      "part_number": 8,
+      "part_title": "Part 8: Interconnection Compatibility, Adapters & Safety",
+      "title": "Interfacing Unbalanced Outputs to Balanced Inputs (Pseudo-Balancing)",
+      "slug": "interfacing-unbalanced-outputs-to-balanced-inputs",
+      "filename": "module-073-interfacing-unbalanced-outputs-to-balanced-inputs.md",
+      "tags": [
+        "unbalanced-to-balanced",
+        "pseudo-balanced",
+        "hum-cancellation"
+      ],
+      "standards": [
+        "AES-X152",
+        "AES48"
+      ],
+      "equation": "\\text{CMRR}_{\\text{pseudo}} \\approx 20 * \\log_{10}\\left(\\frac{Z_{\\text{cm\\_rx}}}{R_{\\text{shield\\_source}}}\\right) > 60\\text{ dB}",
+      "summary": "Pseudo-balanced cable architecture: converting unbalanced sources to balanced inputs with full ground hum cancellation.",
+      "authors": [
+        "Bill Whitlock",
+        "Dennis Bohn"
+      ],
+      "word_count": 670
+    },
+    {
+      "module_id": "MOD-074",
+      "module_number": 74,
+      "part_number": 8,
+      "part_title": "Part 8: Interconnection Compatibility, Adapters & Safety",
+      "title": "RCA to XLR Adapter Wiring (Breaking the Ground Loop Trap)",
+      "slug": "rca-to-xlr-adapter-wiring-rules",
+      "filename": "module-074-rca-to-xlr-adapter-wiring-rules.md",
+      "tags": [
+        "rca-to-xlr",
+        "adapters",
+        "pin1-pin3-jumper",
+        "wiring-hazard"
+      ],
+      "standards": [
+        "AES14",
+        "AES48"
+      ],
+      "equation": "I_{\\text{loop}} = 0\\text{ A} \\quad \\text{(when ground loop path is broken at shield)}",
+      "summary": "Why commercial molded RCA-to-XLR adapters cause hum, and how to wire custom adapters that comply with AES48.",
+      "authors": [
+        "Bill Whitlock",
+        "Anthony Kuzub"
+      ],
+      "word_count": 658
+    },
+    {
+      "module_id": "MOD-075",
+      "module_number": 75,
+      "part_number": 8,
+      "part_title": "Part 8: Interconnection Compatibility, Adapters & Safety",
+      "title": "1/4\" TS Mono to 1/4\" TRS Balanced Interconnections",
+      "slug": "quarter-inch-ts-mono-to-trs-interconnections",
+      "filename": "module-075-quarter-inch-ts-mono-to-trs-interconnections.md",
+      "tags": [
+        "ts-to-trs",
+        "phone-jack",
+        "mono-plug",
+        "ring-shorting-hazard"
+      ],
+      "standards": [
+        "AES14",
+        "AES-X152"
+      ],
+      "equation": "R_{\\text{ring-sleeve}} = 0.0\\ \\Omega \\quad \\text{(Metal TS sleeve shorts jack Ring contact)}",
+      "summary": "Mechanical and electrical interactions when plugging 2-conductor (TS) mono plugs into 3-conductor (TRS) balanced jacks.",
+      "authors": [
+        "Dennis Bohn",
+        "Anthony Kuzub"
+      ],
+      "word_count": 654
+    },
+    {
+      "module_id": "MOD-076",
+      "module_number": 76,
+      "part_number": 8,
+      "part_title": "Part 8: Interconnection Compatibility, Adapters & Safety",
+      "title": "Patchbay Normaling Topologies: Full-Normal, Half-Normal, and Isolated",
+      "slug": "patchbay-normaling-topologies",
+      "filename": "module-076-patchbay-normaling-topologies.md",
+      "tags": [
+        "patchbay",
+        "normaling",
+        "half-normal",
+        "full-normal",
+        "studio-routing"
+      ],
+      "standards": [
+        "AES-X152",
+        "AES14"
+      ],
+      "equation": "\\text{Signal Routing: Top Jack (Source)} \\rightarrow [ \\text{Normals} ] \\rightarrow \\text{Bottom Jack (Destination)}",
+      "summary": "Engineering patchbays: mechanical internal normal switches, half-normal bridging splits, full-normal isolation, and parallel patching.",
+      "authors": [
+        "Anthony Kuzub",
+        "John Woodgate"
+      ],
+      "word_count": 609
+    },
+    {
+      "module_id": "MOD-077",
+      "module_number": 77,
+      "part_number": 8,
+      "part_title": "Part 8: Interconnection Compatibility, Adapters & Safety",
+      "title": "Ground Loops and Ground Bus Architecture in Patchbay Installations",
+      "slug": "ground-loops-in-patchbay-installations",
+      "filename": "module-077-ground-loops-in-patchbay-installations.md",
+      "tags": [
+        "patchbay-grounding",
+        "ground-bus",
+        "isolated-grounds",
+        "facility-wiring"
+      ],
+      "standards": [
+        "AES48",
+        "IEEE 1100"
+      ],
+      "equation": "Z_{\\text{bus\\_bar}} < 1\\text{ m}\\Omega \\quad \\text{(Solid copper ground bus across patchbay)}",
+      "summary": "Facility grounding architectures for patchbays: bussed grounds, vertically strapped grounds, and completely isolated jack sleeves.",
+      "authors": [
+        "Bill Whitlock",
+        "Bruce Olson"
+      ],
+      "word_count": 596
+    },
+    {
+      "module_id": "MOD-078",
+      "module_number": 78,
+      "part_number": 8,
+      "part_title": "Part 8: Interconnection Compatibility, Adapters & Safety",
+      "title": "Electrical Safety: Preventing Accidental 48V Feeds into Line Equipment",
+      "slug": "electrical-safety-preventing-phantom-feeds",
+      "filename": "module-078-electrical-safety-preventing-phantom-feeds.md",
+      "tags": [
+        "phantom-hazard",
+        "blocking-capacitors",
+        "line-gear-safety",
+        "safety"
+      ],
+      "standards": [
+        "IEC 61938",
+        "AES-X152"
+      ],
+      "equation": "V_{\\text{applied}} = +48\\text{ V DC} \\quad \\text{into op-amp output with 25V-rated DC coupling caps}",
+      "summary": "What happens when line-level outputs (keyboards, preamps, processors) are accidentally plugged into 48V phantom-powered mic inputs.",
+      "authors": [
+        "Anthony Kuzub",
+        "Gary Hebert"
+      ],
+      "word_count": 611
+    },
+    {
+      "module_id": "MOD-079",
+      "module_number": 79,
+      "part_number": 8,
+      "part_title": "Part 8: Interconnection Compatibility, Adapters & Safety",
+      "title": "High-Voltage Speaker Level Interfacing & Balanced Attenuator Pads",
+      "slug": "speaker-level-interfacing-balanced-pads",
+      "filename": "module-079-speaker-level-interfacing-balanced-pads.md",
+      "tags": [
+        "speaker-level",
+        "attenuator-pads",
+        "h-pad",
+        "bridging",
+        "power-amps"
+      ],
+      "standards": [
+        "AES-X152 Section 2",
+        "IEC 60268-3"
+      ],
+      "equation": "\\text{Attenuation}_{\\text{dB}} = 20 * \\log_{10}\\left(\\frac{R_{\\text{shunt}}}{2 * R_{\\text{series}} + R_{\\text{shunt}}}\\right) = -40\\text{ dB}",
+      "summary": "Safely tapping high-voltage power amplifier speaker lines (+30 to +50 dBu / 25V to 100V RMS) down to line/mic levels using balanced H-pads.",
+      "authors": [
+        "Dennis Bohn",
+        "Anthony Kuzub"
+      ],
+      "word_count": 680
+    },
+    {
+      "module_id": "MOD-080",
+      "module_number": 80,
+      "part_number": 8,
+      "part_title": "Part 8: Interconnection Compatibility, Adapters & Safety",
+      "title": "Systematic Audio Hum, Buzz, and Noise Troubleshooting Flowchart",
+      "slug": "systematic-hum-and-buzz-troubleshooting",
+      "filename": "module-080-systematic-hum-and-buzz-troubleshooting.md",
+      "tags": [
+        "troubleshooting",
+        "hum-elimination",
+        "buzz",
+        "flowchart",
+        "diagnostics"
+      ],
+      "standards": [
+        "AES48",
+        "AES-X152"
+      ],
+      "equation": "f_{\\text{fundamental}} = 60\\text{ Hz (Clean Hum)} \\quad \\text{vs} \\quad 120\\text{ Hz / Harmonics (Buzzy Rectifier Hash)}",
+      "summary": "Algorithmic flowchart for locating, diagnosing, and eradicating hum, buzz, and RF noise in complex pro audio systems.",
+      "authors": [
+        "Bill Whitlock",
+        "Jim Brown"
+      ],
+      "word_count": 670
+    },
+    {
+      "module_id": "MOD-081",
+      "module_number": 81,
+      "part_number": 9,
+      "part_title": "Part 9: Advanced Mathematical Models & Test Equipment",
+      "title": "Jim Meyer's Thevenin 3-Impedance Equivalent Circuit Model",
+      "slug": "jim-meyer-thevenin-3-impedance-model",
+      "filename": "module-081-jim-meyer-thevenin-3-impedance-model.md",
+      "tags": [
+        "meyer-model",
+        "thevenin-3z",
+        "interconnect-math",
+        "vgvd",
+        "parasitics"
+      ],
+      "standards": [
+        "AES-X152 Section 5",
+        "AES Convention Paper"
+      ],
+      "equation": "V_{\\text{diff}} = V_{\\text{gvd}} * \\left[ \\frac{Z_{\\text{po}} * Z_{\\text{ri}} - Z_{\\text{ro}} * Z_{\\text{pi}}}{(Z_{\\text{po}} + Z_{\\text{pi}})(Z_{\\text{ro}} + Z_{\\text{ri}})} \\right]",
+      "summary": "Jim Meyer's definitive 3-impedance Thevenin interconnect model accounting for driver impedances, cable shield capacitance, and receiver terminations.",
+      "authors": [
+        "Jim Meyer",
+        "Bill Whitlock",
+        "Anthony Kuzub"
+      ],
+      "word_count": 660
+    },
+    {
+      "module_id": "MOD-082",
+      "module_number": 82,
+      "part_number": 9,
+      "part_title": "Part 9: Advanced Mathematical Models & Test Equipment",
+      "title": "Analytical Derivation of Differential Noise from Impedance Imbalance",
+      "slug": "analytical-derivation-noise-from-imbalance",
+      "filename": "module-082-analytical-derivation-noise-from-imbalance.md",
+      "tags": [
+        "mathematical-derivation",
+        "noise-transfer",
+        "delta-z",
+        "closed-form"
+      ],
+      "standards": [
+        "AES-X152 Section 5"
+      ],
+      "equation": "V_{\\text{diff\\_noise}} \\approx V_{\\text{gvd}} * \\left( \\frac{\\Delta Z_{\\text{source}}}{Z_{\\text{receiver\\_common\\_mode}}} \\right)",
+      "summary": "Closed-form mathematical derivation showing how inter-chassis ground potential differences convert to audible noise.",
+      "authors": [
+        "Jim Meyer",
+        "Bill Whitlock"
+      ],
+      "word_count": 655
+    },
+    {
+      "module_id": "MOD-083",
+      "module_number": 83,
+      "part_number": 9,
+      "part_title": "Part 9: Advanced Mathematical Models & Test Equipment",
+      "title": "AC Voltmeters: True RMS vs Average-Responding Meters (HP 400FL)",
+      "slug": "ac-voltmeters-true-rms-vs-average-hp400fl",
+      "filename": "module-083-ac-voltmeters-true-rms-vs-average-hp400fl.md",
+      "tags": [
+        "ac-voltmeter",
+        "true-rms",
+        "crest-factor",
+        "hp400fl",
+        "audio-metering"
+      ],
+      "standards": [
+        "IEC 60268-3",
+        "AES-X152"
+      ],
+      "equation": "V_{\\text{RMS}} = \\sqrt{\\frac{1}{T} \\int_0^T [v(t)]^2 dt}; \\quad V_{\\text{avg}} = \\frac{1}{T} \\int_0^T |v(t)| dt",
+      "summary": "Operating principles of laboratory AC voltmeters (e.g. Hewlett-Packard 400FL): True RMS thermal converters vs average-responding rectifiers.",
+      "authors": [
+        "Anthony Kuzub",
+        "John Woodgate"
+      ],
+      "word_count": 637
+    },
+    {
+      "module_id": "MOD-084",
+      "module_number": 84,
+      "part_number": 9,
+      "part_title": "Part 9: Advanced Mathematical Models & Test Equipment",
+      "title": "Dual-Slope Integration & Benchtop DMM Architecture (Lucky/Fluke 8050A)",
+      "slug": "dual-slope-dmm-architecture-lucky-8050a",
+      "filename": "module-084-dual-slope-dmm-architecture-lucky-8050a.md",
+      "tags": [
+        "dmm",
+        "fluke-8050a",
+        "lucky-8050a",
+        "dual-slope",
+        "true-rms-converter"
+      ],
+      "standards": [
+        "AES-X152"
+      ],
+      "equation": "T_{\\text{de-integrate}} = T_{\\text{integrate}} * \\left( \\frac{V_{\\text{input}}}{V_{\\text{reference}}} \\right)",
+      "summary": "Benchtop digital multimeter architecture: dual-slope integrating analog-to-digital conversion, True RMS AC converters, and dBm readouts.",
+      "authors": [
+        "Anthony Kuzub",
+        "Dennis Bohn"
+      ],
+      "word_count": 637
+    },
+    {
+      "module_id": "MOD-085",
+      "module_number": 85,
+      "part_number": 9,
+      "part_title": "Part 9: Advanced Mathematical Models & Test Equipment",
+      "title": "4-Channel CRT Oscilloscope Probing & Phase Verification",
+      "slug": "four-channel-crt-oscilloscope-probing",
+      "filename": "module-085-four-channel-crt-oscilloscope-probing.md",
+      "tags": [
+        "oscilloscope",
+        "4-channel",
+        "crt",
+        "phase-tracking",
+        "differential-probe"
+      ],
+      "standards": [
+        "AES-X152 Section 6",
+        "IEC 60268-3"
+      ],
+      "equation": "\\Delta \\theta = \\arcsin\\left(\\frac{A}{B}\\right) \\quad \\text{(Lissajous phase angle derivation)}",
+      "summary": "Using 4-channel analog/digital oscilloscopes to probe audio balanced interconnects: CH1 (Vin), CH2 (Hot), CH3 (Cold), and CH4 (Vdiff).",
+      "authors": [
+        "Anthony Kuzub",
+        "Bill Whitlock"
+      ],
+      "word_count": 650
+    },
+    {
+      "module_id": "MOD-086",
+      "module_number": 86,
+      "part_number": 9,
+      "part_title": "Part 9: Advanced Mathematical Models & Test Equipment",
+      "title": "Hewlett-Packard 353A Patch Panel: Precision Attenuation & Calibrated Loads",
+      "slug": "hp-353a-patch-panel-attenuation-and-loads",
+      "filename": "module-086-hp-353a-patch-panel-attenuation-and-loads.md",
+      "tags": [
+        "hp353a",
+        "patch-panel",
+        "attenuation",
+        "impedance-matching",
+        "laboratory"
+      ],
+      "standards": [
+        "HP Manual 00353-90003",
+        "AES-X152"
+      ],
+      "equation": "\\text{Total\\_Attenuation} = \\text{Decade\\_Step (0-100 dB)} + \\text{Vernier\\_Step (0-10 dB)}",
+      "summary": "Engineering study of the classic Hewlett-Packard 353A Patch Panel: precision constant-impedance bridged-T attenuators and selectable terminations.",
+      "authors": [
+        "Anthony Kuzub",
+        "John Woodgate"
+      ],
+      "word_count": 614
+    },
+    {
+      "module_id": "MOD-087",
+      "module_number": 87,
+      "part_number": 9,
+      "part_title": "Part 9: Advanced Mathematical Models & Test Equipment",
+      "title": "Total Harmonic Distortion plus Noise (THD+N) Measurement Techniques",
+      "slug": "thd-plus-n-measurement-techniques",
+      "filename": "module-087-thd-plus-n-measurement-techniques.md",
+      "tags": [
+        "thd+n",
+        "distortion-analyzer",
+        "notch-filter",
+        "harmonics",
+        "audio-precision"
+      ],
+      "standards": [
+        "IEC 60268-3",
+        "AES-X152 Section 2"
+      ],
+      "equation": "\\text{THD+N} = \\frac{\\sqrt{V_{\\text{harmonics}}^2 + V_{\\text{noise}}^2}}{V_{\\text{total}}} * 100\\%",
+      "summary": "State-of-the-art distortion analysis: deep analog notch filters, FFT residual analysis, and distinguishing harmonic distortion from noise.",
+      "authors": [
+        "Richard Cabot",
+        "Dennis Bohn"
+      ],
+      "word_count": 626
+    },
+    {
+      "module_id": "MOD-088",
+      "module_number": 88,
+      "part_number": 9,
+      "part_title": "Part 9: Advanced Mathematical Models & Test Equipment",
+      "title": "SPICE Circuit Simulation of Audio Line Interconnections",
+      "slug": "spice-circuit-simulation-of-interconnects",
+      "filename": "module-088-spice-circuit-simulation-of-interconnects.md",
+      "tags": [
+        "spice",
+        "circuit-simulation",
+        "ltspice",
+        "monte-carlo",
+        "tolerance"
+      ],
+      "standards": [
+        "AES-X152 Section 6"
+      ],
+      "equation": "\\text{Monte Carlo Run: } R_n = R_{\\text{nom}} * (1 + \\text{tol} * \\text{random}(-1, +1))",
+      "summary": "Modeling audio interconnect systems in SPICE: transmission line subcircuits, Monte Carlo resistor tolerance distributions, and CMRR yield.",
+      "authors": [
+        "Bill Whitlock",
+        "Anthony Kuzub"
+      ],
+      "word_count": 629
+    },
+    {
+      "module_id": "MOD-089",
+      "module_number": 89,
+      "part_number": 9,
+      "part_title": "Part 9: Advanced Mathematical Models & Test Equipment",
+      "title": "Time-Domain vs Frequency-Domain Behavior of Balanced Interconnects",
+      "slug": "time-domain-vs-frequency-domain-behavior",
+      "filename": "module-089-time-domain-vs-frequency-domain-behavior.md",
+      "tags": [
+        "time-domain",
+        "frequency-domain",
+        "fft",
+        "step-response",
+        "square-wave"
+      ],
+      "standards": [
+        "AES-X152",
+        "IEC 60268-3"
+      ],
+      "equation": "v(t) = \\frac{1}{2\\pi} \\int_{-\\infty}^{\\infty} V(\\omega) e^{j\\omega t} d\\omega \\quad \\text{(Fourier Transform Pair)}",
+      "summary": "Correlating square wave step-response in the time domain with Bode frequency magnitude and phase responses.",
+      "authors": [
+        "Richard Cabot",
+        "Anthony Kuzub"
+      ],
+      "word_count": 604
+    },
+    {
+      "module_id": "MOD-090",
+      "module_number": 90,
+      "part_number": 9,
+      "part_title": "Part 9: Advanced Mathematical Models & Test Equipment",
+      "title": "Measurement Data Points (MDP): Calibrated Probing Methodology",
+      "slug": "measurement-data-points-mdp-methodology",
+      "filename": "module-090-measurement-data-points-mdp-methodology.md",
+      "tags": [
+        "mdp",
+        "probing",
+        "measurement-points",
+        "calibration",
+        "data-acquisition"
+      ],
+      "standards": [
+        "AES-X152 Section 4"
+      ],
+      "equation": "\\text{MDP-0 (Drive)} \\rightarrow \\text{MDP-1 (Hot)} \\rightarrow \\text{MDP-2 (Cold)} \\rightarrow \\text{MDP-3 (Load)}",
+      "summary": "The AES-X152 standardized Measurement Data Point (MDP) framework for probing, troubleshooting, and verifying balanced line nodes.",
+      "authors": [
+        "Anthony Kuzub",
+        "Bruce Olson"
+      ],
+      "word_count": 566
+    },
+    {
+      "module_id": "MOD-091",
+      "module_number": 91,
+      "part_number": 10,
+      "part_title": "Part 10: AES-X152 Standard, Literature, Roster & Legacy",
+      "title": "The AES-X152 Standard: Origins, Mission, and SC-05-05 Governance",
+      "slug": "aes-x152-standard-origins-and-governance",
+      "filename": "module-091-aes-x152-standard-origins-and-governance.md",
+      "tags": [
+        "aes-x152",
+        "sc-05-05",
+        "standards-governance",
+        "cabot",
+        "working-group"
+      ],
+      "standards": [
+        "AES-X152",
+        "AESSC"
+      ],
+      "equation": "\\text{Mission: 'What can work with what, and how.'}",
+      "summary": "The history, founding mission, and committee governance of AES-X152 by the Audio Engineering Society SC-05-05 Working Group.",
+      "authors": [
+        "Richard Cabot",
+        "Anthony Kuzub",
+        "Bruce Olson"
+      ],
+      "word_count": 635
+    },
+    {
+      "module_id": "MOD-092",
+      "module_number": 92,
+      "part_number": 10,
+      "part_title": "Part 10: AES-X152 Standard, Literature, Roster & Legacy",
+      "title": "AES-X152 Standardized Datasheet Framework: Section 1 Port IDs",
+      "slug": "aes-x152-datasheet-section-1-port-ids",
+      "filename": "module-092-aes-x152-datasheet-section-1-port-ids.md",
+      "tags": [
+        "datasheet-template",
+        "section-1",
+        "port-identification",
+        "connectors"
+      ],
+      "standards": [
+        "AES-X152 Clause 1",
+        "AES14",
+        "AES59",
+        "AES72"
+      ],
+      "equation": "\\text{Port Declaration} = \\{ \\text{Port ID}, \\text{Physical Connector}, \\text{Gender}, \\text{Pin Standard}, \\text{Direction} \\}",
+      "summary": "Clause 1 of the AES-X152 datasheet template: standardized naming, connector types, pin assignment standards, and signal direction.",
+      "authors": [
+        "Anthony Kuzub",
+        "Bruce Olson"
+      ],
+      "word_count": 630
+    },
+    {
+      "module_id": "MOD-093",
+      "module_number": 93,
+      "part_number": 10,
+      "part_title": "Part 10: AES-X152 Standard, Literature, Roster & Legacy",
+      "title": "AES-X152 Datasheet: Section 2 Rated Levels & Maximum Voltage Swings",
+      "slug": "aes-x152-datasheet-section-2-rated-levels",
+      "filename": "module-093-aes-x152-datasheet-section-2-rated-levels.md",
+      "tags": [
+        "datasheet-template",
+        "section-2",
+        "voltage-swing",
+        "headroom",
+        "operating-level"
+      ],
+      "standards": [
+        "AES-X152 Clause 2",
+        "IEC 60268-3"
+      ],
+      "equation": "\\text{Headroom Margin}_{\\text{dB}} = V_{\\text{max\\_undistorted(dBu)}} - V_{\\text{rated\\_nominal(dBu)}}",
+      "summary": "Clause 2 of the AES-X152 datasheet template: rated operating levels, maximum input/output voltages, and dynamic headroom margins.",
+      "authors": [
+        "Richard Cabot",
+        "Anthony Kuzub"
+      ],
+      "word_count": 615
+    },
+    {
+      "module_id": "MOD-094",
+      "module_number": 94,
+      "part_number": 10,
+      "part_title": "Part 10: AES-X152 Standard, Literature, Roster & Legacy",
+      "title": "AES-X152 Datasheet: Section 3 Terminal Impedances vs Frequency",
+      "slug": "aes-x152-datasheet-section-3-terminal-impedances",
+      "filename": "module-094-aes-x152-datasheet-section-3-terminal-impedances.md",
+      "tags": [
+        "datasheet-template",
+        "section-3",
+        "terminal-impedance",
+        "dmz",
+        "cmz"
+      ],
+      "standards": [
+        "AES-X152 Clause 3",
+        "IEC 60268-3"
+      ],
+      "equation": "Z_{\\text{terminal}}(f) = R(f) + jX(f) \\quad \\text{@ 100 Hz, 1 kHz, and 10 kHz}",
+      "summary": "Clause 3 of the AES-X152 datasheet template: Differential-Mode Impedance (DMZ) and Common-Mode Impedance (CMZ) across the audio band.",
+      "authors": [
+        "Bill Whitlock",
+        "Jim Meyer"
+      ],
+      "word_count": 690
+    },
+    {
+      "module_id": "MOD-095",
+      "module_number": 95,
+      "part_number": 10,
+      "part_title": "Part 10: AES-X152 Standard, Literature, Roster & Legacy",
+      "title": "AES-X152 Datasheet: Section 4 Topology & Grounding Classifications",
+      "slug": "aes-x152-datasheet-section-4-topologies-grounding",
+      "filename": "module-095-aes-x152-datasheet-section-4-topologies-grounding.md",
+      "tags": [
+        "datasheet-template",
+        "section-4",
+        "topology-classification",
+        "aes48-status"
+      ],
+      "standards": [
+        "AES-X152 Clause 4",
+        "AES48"
+      ],
+      "equation": "\\text{Topology Code} \\in \\{ 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8 \\}; \\quad \\text{AES48: 'Compliant'}",
+      "summary": "Clause 4 of the AES-X152 datasheet template: standardized topology classification codes (6.1 to 6.8) and AES48 chassis grounding compliance.",
+      "authors": [
+        "Anthony Kuzub",
+        "Bruce Olson"
+      ],
+      "word_count": 612
+    },
+    {
+      "module_id": "MOD-096",
+      "module_number": 96,
+      "part_number": 10,
+      "part_title": "Part 10: AES-X152 Standard, Literature, Roster & Legacy",
+      "title": "AES Standards Alignment (AES11, AES14, AES26, AES48, AES59, AES72, AES-X246, AES-X249)",
+      "slug": "aes-standards-suite-alignment-overview",
+      "filename": "module-096-aes-standards-suite-alignment-overview.md",
+      "tags": [
+        "aes-standards",
+        "interoperability",
+        "aes-suite",
+        "standards-ecosystem"
+      ],
+      "standards": [
+        "AES11",
+        "AES14",
+        "AES26",
+        "AES48",
+        "AES54",
+        "AES59",
+        "AES72",
+        "AES-X246",
+        "AES-X249"
+      ],
+      "equation": "\\text{Total System Compliance} = \\bigcap_{n} \\text{Standard}_n",
+      "summary": "Holistic interaction matrix showing how AES standards interconnect to create a unified, robust professional audio infrastructure.",
+      "authors": [
+        "Bruce Olson",
+        "Anthony Kuzub",
+        "John Woodgate"
+      ],
+      "word_count": 571
+    },
+    {
+      "module_id": "MOD-097",
+      "module_number": 97,
+      "part_number": 10,
+      "part_title": "Part 10: AES-X152 Standard, Literature, Roster & Legacy",
+      "title": "SC-05-05 Working Group History & Contributor Profiles",
+      "slug": "sc-05-05-working-group-contributor-roster",
+      "filename": "module-097-sc-05-05-working-group-contributor-roster.md",
+      "tags": [
+        "contributors",
+        "roster",
+        "woodgate",
+        "whitlock",
+        "cabot",
+        "kuzub",
+        "chinn"
+      ],
+      "standards": [
+        "AES SC-05-05"
+      ],
+      "equation": "\\text{SC-05-05 Leadership: Dedicated to Engineering Rigor and Grounding Truth}",
+      "summary": "Biographical profiles and scientific contributions of the key engineers behind the SC-05-05 working group and AES-X152.",
+      "authors": [
+        "Anthony Kuzub",
+        "Bruce Olson"
+      ],
+      "word_count": 669
+    },
+    {
+      "module_id": "MOD-098",
+      "module_number": 98,
+      "part_number": 10,
+      "part_title": "Part 10: AES-X152 Standard, Literature, Roster & Legacy",
+      "title": "Bill Whitlock, Jim Brown & Neil Muncy: Canonical Papers Dossier",
+      "slug": "landmark-papers-dossier-whitlock-brown-muncy",
+      "filename": "module-098-landmark-papers-dossier-whitlock-brown-muncy.md",
+      "tags": [
+        "landmark-papers",
+        "muncy",
+        "whitlock",
+        "brown",
+        "hebert",
+        "dossier"
+      ],
+      "standards": [
+        "AES E-Library"
+      ],
+      "equation": "\\text{Canonical Dossier: 16 Peer-Reviewed Working Group Papers (1994 - 2025)}",
+      "summary": "Deep dive into the 16 seminal research papers that established the modern scientific foundation of grounding, shielding, and balanced audio.",
+      "authors": [
+        "Bill Whitlock",
+        "Jim Brown",
+        "Neil Muncy",
+        "Gary Hebert"
+      ],
+      "word_count": 631
+    },
+    {
+      "module_id": "MOD-099",
+      "module_number": 99,
+      "part_number": 10,
+      "part_title": "Part 10: AES-X152 Standard, Literature, Roster & Legacy",
+      "title": "Dennis A. Bohn Legacy, Pro Audio Reference (PAR) & Writing Style Guide",
+      "slug": "dennis-a-bohn-legacy-par-glossary",
+      "filename": "module-099-dennis-a-bohn-legacy-par-glossary.md",
+      "tags": [
+        "dennis-bohn",
+        "par",
+        "pro-audio-reference",
+        "glossary",
+        "rane-notes"
+      ],
+      "standards": [
+        "AES Bohn Collection"
+      ],
+      "equation": "\\text{PAR Encyclopedia: 2,290 Verified Terms & Technical Style Conventions}",
+      "summary": "Celebrating the enduring legacy of Dennis A. Bohn (AES Fellow, Rane VP of Engineering) and his 2,290-term Pro Audio Reference.",
+      "authors": [
+        "Dennis A. Bohn",
+        "Anthony Kuzub"
+      ],
+      "word_count": 655
+    },
+    {
+      "module_id": "MOD-100",
+      "module_number": 100,
+      "part_number": 10,
+      "part_title": "Part 10: AES-X152 Standard, Literature, Roster & Legacy",
+      "title": "The Future of Balanced Audio: Digital, Networked (AES67/Dante) & Hybrid",
+      "slug": "the-future-of-balanced-audio-hybrid-systems",
+      "filename": "module-100-the-future-of-balanced-audio-hybrid-systems.md",
+      "tags": [
+        "future-of-audio",
+        "aes67",
+        "dante",
+        "aoip",
+        "hybrid-systems",
+        "conclusion"
+      ],
+      "standards": [
+        "AES67",
+        "AES70",
+        "AES-X152"
+      ],
+      "equation": "\\text{Hybrid Ecosystem} = \\text{Analog Balanced Front-End} + \\text{PTP Master Clock} + \\text{AES67 Gigabit IP Transport}",
+      "summary": "The ultimate synthesis: how analog balanced interconnections remain essential at the physical boundary of modern IP-networked audio (AES67 / Dante).",
+      "authors": [
+        "Anthony Kuzub",
+        "Bruce Olson",
+        "Richard Cabot"
+      ],
+      "word_count": 694
+    }
+  ]
+}

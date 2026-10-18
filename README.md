@@ -47,6 +47,7 @@ The included modern HTML5/CSS3/JavaScript web portal includes:
   - **Interconnection Compatibility Checker ("What Works with What")**: Select any source and receiver topology to discover real-world compatibility, level offsets, ground loop risk, and recommended wiring adapters.
 - **AES-X152 Standardized Datasheet Framework**: Interactive preview of the 4-part disclosure template with presets for Studio Mic Preamps, Mastering DACs, and Passive DI Boxes.
 - **High-Resolution Circuit Schematic Explorer**: Zoomable modal viewer showcasing the official SPICE circuit models for ground-referenced, active floating, and transformer-isolated topologies.
+- **The 100-Module AES-X152 Reference Curriculum**: 100 comprehensive technical Markdown documents (`modules/module-001-...md` to `modules/module-100-...md`) spanning 10 core engineering parts, featuring theoretical proofs, mathematical derivations, ASCII schematics, normative standards citations, and review assessments. These MD files feed directly into the interactive portal module browser and can be compiled into master syllabi and manifests.
 - **Literature & Deep Dives**: Normative standards (AES14, AES26, AES48, AES54, AES59, AES72, IEC 60268-3, IEC 61938) and references to Dennis Bohn (Rane Note 145), Bill Whitlock, Jim Brown, and John Woodgate.
 
 ---

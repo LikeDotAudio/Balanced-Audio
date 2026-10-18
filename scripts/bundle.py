@@ -24,6 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCRIPTS_ORDER = [
     "js/ltp-fader.js",
     "js/audio-analyzer.js",
+    "js/signal-generator.js",
     "js/story-sidebar.js",
     "js/floating-meters.js",
     "js/tree-data.js",
@@ -39,6 +40,8 @@ SCRIPTS_ORDER = [
     "js/datasheet-generator.js",
     "js/par-glossary.js",
     "js/landmark-papers.js",
+    "js/modules-data.js",
+    "js/modules-viewer.js",
     "js/main.js",
 ]
 

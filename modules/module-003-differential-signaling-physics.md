@@ -7,7 +7,7 @@ part_title: "Part 1: Foundations & Core Principles"
 slug: "differential-signaling-physics"
 tags: ["differential", "physics", "superposition", "cancellation"]
 standards: ["AES-X152 Section 4", "AES14"]
-key_equation: "V_out = (V_hot - V_cold) * Gain"
+key_equation: "V_{\text{out}} = (V_{\text{hot}} - V_{\text{cold}}) * A_{\text{diff}}"
 summary: "Physics of differential receivers, common-mode subtraction, and algebraic superposition in balanced lines."
 authors: ["Neil Muncy", "Bill Whitlock"]
 revision: "2026.1"
@@ -16,67 +16,63 @@ revision: "2026.1"
 # Module 003: Differential Signaling Physics & Inherent Noise Cancellation
 
 > **Part 1**: Part 1: Foundations & Core Principles  
-> **Applicable Standards**: `AES-X152 Section 4, AES14`  
-> **Key Equation**: `$V_out = (V_hot - V_cold) * Gain$`  
-> **Primary Authors / Reference Contributors**: Neil Muncy, Bill Whitlock
+> **Normative Standards**: `AES-X152 Section 4`, `AES14`  
+> **Key Governing Equation**: `$V_{\text{out}} = (V_{\text{hot}} - V_{\text{cold}}) * A_{\text{diff}}$`  
+> **Lead Working Group Contributors**: Neil Muncy, Bill Whitlock
 
 ---
 
 ## Executive Summary
 Physics of differential receivers, common-mode subtraction, and algebraic superposition in balanced lines.
 
-Understanding this topic is critical for audio hardware designers, studio facility integrators, and sound system engineers. Compliance with AES standards guarantees predictable, hum-free, high-fidelity interconnection across heterogeneous professional audio devices.
+Mastery of this module is fundamental to professional audio facility integration, hardware engineering, and sound system optimization. Compliance with AES and IEC standards eliminates guesswork, guaranteeing predictable, hum-free, high-fidelity interconnection across heterogeneous studio and broadcast hardware.
 
 ---
 
 ## 1. Industry Misconceptions & The Real-World Problem
 Differential signaling requires that the signal be generated differentially at the transducer element.
 
-Many published tutorials and outdated manuals perpetuate oversimplified models that fail in modern electromagnetic environments filled with switch-mode power supplies, cell towers, and variable-frequency motor drives. 
+For decades, oversimplified rules of thumb have circulated among sound engineers, causing persistent ground loops, high-frequency signal loss, and non-compliance with electromagnetic compatibility standards. In modern production environments filled with high-frequency switch-mode power supplies, variable-frequency drives, and wireless transmitters, rigorous standards compliance is essential.
 
 ---
 
 ## 2. Theoretical & Physical Foundations
 Differential signaling operates on vector voltage differences between two insulated conductors isolated from ground. An external magnetic or electrostatic disturbance introduces an identical vector offset to both conductors.
 
-Balanced analog audio interconnections form an electromagnetic transmission system. Signal currents must circulate exclusively within the dedicated differential signal path, while stray electrostatic and electromagnetic field currents must be guided harmlessly away from sensitive internal circuit nodes into the equipotential metal chassis shield enclosure.
+Audio transmission performance is governed by Maxwell's electromagnetic field equations, circuit topology constraints, and transmission line theory. Differential signaling relies on the physical principle that signal currents must circulate exclusively within the dedicated signal path, while external noise currents must be intercepted and safely guided away from sensitive semiconductor nodes into the low-impedance metallic equipment enclosure.
 
 ---
 
 ## 3. Mathematical Proof & Governing Equations
-The electrical behavior of this circuit node is governed by:
+The electrical behavior of this system is governed by:
 
-$$\mathbf{V_out = (V_hot - V_cold) * Gain}$$
+$$\mathbf{V_{\text{out}} = (V_{\text{hot}} - V_{\text{cold}}) * A_{\text{diff}}}$$
 
-### Parameter Analysis & Derivation:
+### Detailed Parameter Analysis & Derivations
 V_in(+) = V_sig/2 + V_noise; V_in(-) = -V_sig/2 + V_noise. V_diff = V_in(+) - V_in(-) = V_sig + (V_noise - V_noise) = V_sig.
 
-When component values or parasitic capacitances drift, common-mode rejection is degraded proportionally. Maintaining tight manufacturing tolerances (0.1% or better on critical bridge components) is mandatory to satisfy AES-X152 datasheet disclosures.
+When manufacturing component tolerances drift or parasitic impedances remain uncompensated, common-mode rejection degrades proportionally. Maintaining tight component tolerances (0.1% or better) across critical bridge networks is mandatory to satisfy AES-X152 published datasheet disclosures.
 
 ---
 
 ## 4. Technical Schematic & Circuit Topography
-```
-+-------------------------------------------------------------------------------+
-|                       AES-X152 REFERENCE CIRCUIT MODEL                        |
-|                                                                               |
-|  [Transmitter Stage] --------(Pin 2 / Hot)--------> [Receiver Differential]   |
-|         |                                                   |                 |
-|         +--------------------(Pin 3 / Cold)-------> [Subtractor / Op-Amp]     |
-|                                                                               |
-|  [Chassis Ground Shell] ====(Pin 1 / Shield)======> [Chassis Ground Shell]    |
-|       (Direct Enclosure Bond - ZERO PCB Trace Connection - AES48)             |
-+-------------------------------------------------------------------------------+
-```
 
-Differential line pair running through localized electromagnetic flux field; receiver subtractor stage.
++-------------------------------------------------------------------------------+
+|                       DIFFERENTIAL SIGNAL SUPERPOSITION                       |
+|                                                                               |
+|   Pin 2: [ +1.0 V Audio ] + [ 0.5 V Noise ] = +1.5 V Instantaneous            |
+|   Pin 3: [ -1.0 V Audio ] + [ 0.5 V Noise ] = -0.5 V Instantaneous            |
+|                                                                               |
+|   Subtractor: Pin 2 - Pin 3 = (+1.5 V) - (-0.5 V) = +2.0 V Audio              |
+|   Noise: (+0.5 V) - (+0.5 V) = 0.0 V Clean Output!                            |
++-------------------------------------------------------------------------------+
 
 ---
 
 ## 5. Normative Standards Alignment
-This module aligns directly with the following published and working-group standards:
-- **Primary Standard**: `AES-X152 Section 4`
-- **Harmonized Standards**: `AES14`
+This curriculum module is harmonized with the following published AES and IEC standards:
+- **Primary Standard Reference**: `AES-X152 Section 4`
+- **Cross-Referenced Standards**: `AES14`
 
 AES14 identifies Pin 2 as positive differential polarity and Pin 3 as negative differential polarity.
 
@@ -85,7 +81,7 @@ AES14 identifies Pin 2 as positive differential polarity and Pin 3 as negative d
 ## 6. Real-World Benchmarks & Practical Takeaways
 1. Subtraction occurs at the receiving node.
 2. Twisting conductors averages spatial field gradients.
-3. Uncorrelated noise sources add in quadrature (root-sum-square), but common-mode noise cancels linearly.
+3. Uncorrelated noise sources add in quadrature, but common-mode noise cancels linearly.
 
 ---
 
@@ -96,6 +92,6 @@ A: Twisting physically transposes the conductors periodically, ensuring each con
 ---
 
 ### Module Navigation
-- **Previous Module**: [Module 002](module-002-*.md)
-- **Next Module**: [Module 004](module-004-*.md)
+- **Previous Module**: [Module 002: Common-Mode Rejection Ratio (CMRR) Mathematical Foundations](module-002-cmrr-mathematical-foundations.md)
+- **Next Module**: [Module 004: Resistor Bridge Tolerances (5%, 1%, 0.1%, 0.01%) & CMRR Degradation](module-004-resistor-bridge-tolerances-cmrr.md)
 - **Master Syllabus**: [Curriculum Index](README.md)
