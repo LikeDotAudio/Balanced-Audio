@@ -8071,6 +8071,23 @@ html[data-theme="paper"] body > section .svg-diagram-wrapper::after {
   border-color: #f8fafc !important;
 }
 
+/* Phase flip: the reversed pair is outlined as one unit */
+.bench-panel.qtp-mode .bench-line.flip-top {
+  border: 2px solid #f59e0b;
+  border-bottom: 1px dashed rgba(245, 158, 11, 0.5);
+  margin-top: 3px;
+}
+
+.bench-panel.qtp-mode .bench-line.flip-bottom {
+  border: 2px solid #f59e0b;
+  border-top: none;
+}
+
+.bench-line.pair-flipped .bench-line-ref {
+  color: #f59e0b;
+  font-weight: 800;
+}
+
 </style>
   
   <!-- Google Fonts: Inter & JetBrains Mono -->
@@ -8380,6 +8397,38 @@ html[data-theme="paper"] body > section .svg-diagram-wrapper::after {
             <polygon class="pyramid-tier-poly" points="170,238 750,238 820,305 100,305" fill="rgba(245, 158, 11, 0.18)" stroke="#f59e0b" stroke-width="2"/>
             <text x="460" y="265" fill="#fbbf24" font-size="13" font-weight="800" text-anchor="middle">MICROPHONE TRANSDUCER LEVEL (-60 to -40 dBu)</text>
             <text x="460" y="285" fill="#fde68a" font-size="10.5" text-anchor="middle">0.775 mV to 7.75 mV RMS &bull; Ultra-sensitive High-Gain Preamp Stage</text>
+          </g>
+
+          <!-- Reference point in the middle of each tier, and the live calibration level marker -->
+          <g class="pyr-refs">
+            <g class="pyr-ref" data-tier-ref="headroom">
+              <line x1="373.0" y1="60" x2="395.0" y2="60" stroke="#f87171" stroke-width="2.5"/>
+              <line x1="525.0" y1="60" x2="547.0" y2="60" stroke="#f87171" stroke-width="2.5"/>
+              <polygon points="369.0,55 374.0,60 369.0,65 364.0,60" fill="#f87171"/>
+              <text x="359.0" y="64" fill="#f87171" font-size="11.5" font-weight="900" text-anchor="end">+24 dBu</text>
+            </g>
+            <g class="pyr-ref" data-tier-ref="pro">
+              <line x1="263.0" y1="131.5" x2="285.0" y2="131.5" stroke="#34d399" stroke-width="2.5"/>
+              <line x1="635.0" y1="131.5" x2="657.0" y2="131.5" stroke="#34d399" stroke-width="2.5"/>
+              <polygon points="259.0,126.5 264.0,131.5 259.0,136.5 254.0,131.5" fill="#34d399"/>
+              <text x="249.0" y="135.5" fill="#34d399" font-size="11.5" font-weight="900" text-anchor="end">+4 dBu</text>
+            </g>
+            <g class="pyr-ref" data-tier-ref="consumer">
+              <line x1="193.0" y1="201.5" x2="215.0" y2="201.5" stroke="#38bdf8" stroke-width="2.5"/>
+              <line x1="705.0" y1="201.5" x2="727.0" y2="201.5" stroke="#38bdf8" stroke-width="2.5"/>
+              <polygon points="189.0,196.5 194.0,201.5 189.0,206.5 184.0,201.5" fill="#38bdf8"/>
+              <text x="179.0" y="205.5" fill="#38bdf8" font-size="11.5" font-weight="900" text-anchor="end">−10 dBV</text>
+            </g>
+            <g class="pyr-ref" data-tier-ref="mic">
+              <line x1="123.0" y1="271.5" x2="145.0" y2="271.5" stroke="#fbbf24" stroke-width="2.5"/>
+              <line x1="775.0" y1="271.5" x2="797.0" y2="271.5" stroke="#fbbf24" stroke-width="2.5"/>
+              <polygon points="119.0,266.5 124.0,271.5 119.0,276.5 114.0,271.5" fill="#fbbf24"/>
+              <text x="109.0" y="275.5" fill="#fbbf24" font-size="11.5" font-weight="900" text-anchor="end">−50 dBu</text>
+            </g>
+          </g>
+          <g id="pyr-level-marker" transform="translate(271, 131.5)">
+            <polygon points="-14,-7 0,0 -14,7" fill="#ffffff" stroke="#000000" stroke-width="1"/>
+            <text id="pyr-level-marker-txt" x="-78" y="4" fill="#ffffff" font-size="11" font-weight="900" text-anchor="end">+4.0 dBu</text>
           </g>
 
           <!-- Dynamic Voltage Margin Brackets -->
@@ -16890,6 +16939,7 @@ class StorySidebar {
               <a href="#qtp-demo-pin_dropped_4" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_4">❌ 4 Pins Dropped (Trunk Open)</a>
               <a href="#qtp-demo-pair_dropped" class="subnode-link fault-subnode" data-sidebar-fault="pair_dropped">🚫 1 Pair Dropped (Mute)</a>
               <a href="#qtp-demo-shield_lifted" class="subnode-link fault-subnode" data-sidebar-fault="shield_lifted">🛡️ Shield Lifted (P48 Fails)</a>
+              <a href="#qtp-demo-leg_flipped" class="subnode-link fault-subnode" data-sidebar-fault="leg_flipped">⇉ Mixed Polarity (1 Wire Flipped)</a>
             </div>
           </div>
 
@@ -17767,6 +17817,11 @@ class FloatingMeterDock {
     this.initAnchorEngine();
     this.initScrollTracker();
     this.initHoverZoom();
+    // Calibration step (Levels Pyramid) sets the line level used by the probe-only models
+    document.addEventListener("x152-line-level", (e) => {
+      this.lineVrms = e.detail.vrms;
+      this.updateFromActiveCircuit();
+    });
     this.startMainInstrumentLoop();
     this.updateFromActiveCircuit();
   }
@@ -19087,7 +19142,7 @@ class FloatingMeterDock {
       }
     } else if (key.startsWith("p1-") || key.startsWith("gp-")) {
       // Rule 02 grounding diagrams: clean where shields bond at entry, hum + buzz where shield current crosses the PCB 0V
-      const audio = isMuted ? 0 : 1.228;
+      const audio = isMuted ? 0 : (this.lineVrms || 1.228);
       const MODEL = {
         "p1-clean": { sig: audio, hum: 0, name: "Clean audio (AES48 bond)", status: "CLEAN AUDIO" },
         "p1-bond": { sig: 0, hum: 0, name: "Pin 1 chassis bond", status: "CHASSIS 0 V" },
@@ -19112,8 +19167,8 @@ class FloatingMeterDock {
       const item = (typeof AES14_TABLE2_DATA !== "undefined" && window.xlrHubEngine)
         ? AES14_TABLE2_DATA.find(d => d.id === window.xlrHubEngine.currentCircuitId) || AES14_TABLE2_DATA[0]
         : null;
-      const lineVrms = isMuted ? 0 : 1.228;
-      const side = key.startsWith("xlrm-") ? "Male" : "Female";
+      const lineVrms = isMuted ? 0 : (this.lineVrms || 1.228);
+      const side = key.startsWith("xlrm-") ? "Pin conn." : "Socket";
       const pins = item ? item.pins : {};
       // Unbalanced configs carry the whole signal on the hot contact; balanced split it between hot and cold
       const balanced = Object.values(pins).some(p => p && p.type === "cold");
@@ -20611,6 +20666,15 @@ class EightChannelBench {
     this.focusLine(this.focus, false);
     this.renderSnakeDiagram();
     this.initBreakoutLink();
+    // Calibration step sets every line and generator to the same level
+    document.addEventListener("x152-line-level", (e) => {
+      const dbu = Math.max(-40, Math.min(24, e.detail.dbu));
+      this.channels.forEach(ch => { ch.levelDbu = dbu; });
+      this.generators.forEach(g => { g.levelDbu = dbu; });
+      document.querySelectorAll("[data-gen-level]").forEach(inp => { inp.value = Math.round(dbu * 10) / 10; });
+      if (this.focus) this.focusLine(this.focus, false);
+      this.updateMonitor();
+    });
     this.startLoop();
   }
 
@@ -20977,7 +21041,7 @@ class EightChannelBench {
       const ch = this.channels[n - 1];
       row.style.setProperty("--line-color", qtp ? wire.color : ch.color);
       row.classList.toggle("qtp-cold", qtp && wire.leg === "cold");
-      if (!qtp) row.classList.remove("cm-alert", "cm-top", "cm-bottom");
+      if (!qtp) row.classList.remove("cm-alert", "cm-top", "cm-bottom", "pair-flipped", "flip-top", "flip-bottom");
       row.querySelector(".bench-line-name").textContent = qtp ? wire.label : `CH${n}`;
       row.querySelector(".bench-line-ref").textContent = qtp ? "→ GND (SHIELD)" : "P2↔P3 ACROSS";
     });
@@ -21021,8 +21085,20 @@ class EightChannelBench {
   // Outline both rows of a pair in red while common-mode hum is on the line (shield lifted)
   markCommonMode(n, wire, leg) {
     const row = this.panel.querySelector(`.bench-line[data-line="${n}"]`);
+    // A phase flip reverses a whole PAIR relative to the others: outline both of its rows
+    const qs = this.qtpState(wire);
+    const flipped = wire.pair === "sun" && (qs.flipped || qs.coldFlipped);
+    row.classList.toggle("pair-flipped", flipped);
+    row.classList.toggle("flip-top", flipped && wire.leg === "hot");
+    row.classList.toggle("flip-bottom", flipped && wire.leg === "cold");
+    if (flipped) {
+      row.querySelector(".bench-line-ref").textContent = qs.coldFlipped ? "⇉ SAME POLARITY" : "⇄ PAIR FLIPPED";
+      row.dataset.wasFlipped = "1";
+      return;
+    }
     const on = !!leg.cm;
-    if (row.classList.contains("cm-alert") === on) return;
+    if (row.classList.contains("cm-alert") === on && !row.dataset.wasFlipped) return;
+    delete row.dataset.wasFlipped;
     row.classList.toggle("cm-alert", on);
     row.classList.toggle("cm-top", on && wire.leg === "hot");
     row.classList.toggle("cm-bottom", on && wire.leg === "cold");
@@ -21135,6 +21211,7 @@ class EightChannelBench {
       hotOk: st[`${wire.pair}_hot`] !== false,
       coldOk: st[`${wire.pair}_cold`] !== false,
       flipped: wire.pair === "sun" && !!st.sunFlipped,
+      coldFlipped: wire.pair === "sun" && !!st.sunColdFlipped,
       shieldOk: st.shield !== false
     };
   }
@@ -21159,16 +21236,18 @@ class EightChannelBench {
     const ch = this.channels[wire.ch - 1];
     const diffVrms = ch.muted ? 0 : 0.775 * Math.pow(10, ch.levelDbu / 20);
     const legVpk = intact ? (diffVrms * Math.SQRT2) / 2 : 0;
-    const sign = (wire.leg === "hot") !== st.flipped ? 1 : -1;
+    let sign = (wire.leg === "hot") !== st.flipped ? 1 : -1;
+    if (st.coldFlipped && wire.leg === "cold") sign = 1; // same polarity as the hot leg
     const cm = st.shieldOk ? null : this.qtpCommonMode(tSec);
 
     const sampleAt = (tMs) => sign * legVpk * Math.sin(2 * Math.PI * ch.freq * tMs / 1000) + (cm ? cm.sampleAt(tMs) : 0);
     const vrms = Math.sqrt(Math.pow(legVpk / Math.SQRT2, 2) + (cm ? cm.vrms * cm.vrms : 0));
     const dbu = vrms > 0 ? 20 * Math.log10(vrms / 0.775) : -Infinity;
-    const status = !intact ? "OPEN" : st.flipped ? "180° FLIP" : cm ? "CM HUM" : wire.leg === "hot" ? "HOT +" : "COLD −";
+    const status = !intact ? "OPEN" : st.flipped ? "180° FLIP" : st.coldFlipped ? "SAME POLARITY" : cm ? "CM HUM" : wire.leg === "hot" ? "HOT +" : "COLD −";
 
     // What a balanced receiver sees across the pair: the hum cancels only while both legs are intact
-    const sigVrms = ((st.hotOk ? 1 : 0) + (st.coldOk ? 1 : 0)) * diffVrms / 2;
+    // Legs of the same polarity cancel in the receiver
+    const sigVrms = st.coldFlipped ? 0 : ((st.hotOk ? 1 : 0) + (st.coldOk ? 1 : 0)) * diffVrms / 2;
     const humInDiff = cm && st.hotOk !== st.coldOk ? cm.vrms : 0;
     const pairVrms = Math.sqrt(sigVrms * sigVrms + humInDiff * humInDiff);
     const pairDbu = pairVrms > 0 ? 20 * Math.log10(pairVrms / 0.775) : -Infinity;
@@ -24293,7 +24372,52 @@ class CircuitSimulator {
       // APK Precision AC Voltmeter needle deflection
       this.lastPyrVrms = vrms;
       this.updateVuMeter("pyr-vu-needle", dbu, vrms);
+
+      // The calibration step sets the line level for the whole lab (generators, circuits, meters).
+      // Guarded: listeners can lead back here (e.g. via setRefZ), which must not re-broadcast.
+      if (!this._levelBroadcasting) {
+        this._levelBroadcasting = true;
+        try {
+          document.dispatchEvent(new CustomEvent("x152-line-level", { detail: { dbu, vrms } }));
+        } finally {
+          this._levelBroadcasting = false;
+        }
+      }
     };
+
+    // Live marker on the pyramid: sits on the tier's middle reference at nominal, moves ±10 dB around it
+    const PYR_TIERS = {
+      headroom: { cy: 60, nominal: 24, edge: (y) => 460 - ((y - 25) / 70) * 150 },
+      pro: { cy: 131.5, nominal: 4, edge: (y) => 310 - ((y - 98) / 67) * 70 },
+      consumer: { cy: 201.5, nominal: -7.78, edge: (y) => 240 - ((y - 168) / 67) * 70 },
+      mic: { cy: 271.5, nominal: -50, edge: (y) => 170 - ((y - 238) / 67) * 70 }
+    };
+    document.addEventListener("x152-line-level", (e) => {
+      const marker = document.getElementById("pyr-level-marker");
+      const txt = document.getElementById("pyr-level-marker-txt");
+      if (!marker) return;
+      const dbu = e.detail.dbu;
+      const t = PYR_TIERS[calTierFor(dbu)];
+      const y = t.cy - Math.max(-1, Math.min(1, (dbu - t.nominal) / 10)) * 30;
+      const x = t.edge(y) - 4;
+      marker.setAttribute("transform", `translate(${x.toFixed(1)}, ${y.toFixed(1)})`);
+      txt.setAttribute("x", String(-Math.min(78, x - 70)));
+      txt.textContent = `${dbu >= 0 ? "+" : ""}${dbu.toFixed(1)} dBu`;
+    });
+
+    // Circuits follow the line level: each drive fader moves to the new RMS voltage (within its range)
+    document.addEventListener("x152-line-level", (e) => {
+      const v = e.detail.vrms;
+      [this.ltpPpVin, this.ltpIbVin, this.ltpTxVin, this.ltpMeyerVpo].forEach(f => {
+        if (f && typeof f.setValue === "function") f.setValue(v);
+      });
+      ["xfmr-vin", "rack-gen-vin-slider"].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.value = Math.max(+el.min || 0, Math.min(+el.max || 100, v)).toFixed(2);
+        el.dispatchEvent(new Event("input", { bubbles: true }));
+      });
+    });
     this.syncFromDbu = syncFromDbu;
 
     if (dbuEl) {
@@ -24512,9 +24636,9 @@ class CircuitSimulator {
     });
 
     // Synchronize LTP faders if instantiated
-    if (this.ltpPpVin && typeof this.ltpPpVin.setValue === "function") this.ltpPpVin.setValue(vin, false);
-    if (this.ltpPpRout && typeof this.ltpPpRout.setValue === "function") this.ltpPpRout.setValue(rout, false);
-    if (this.ltpPpRload && typeof this.ltpPpRload.setValue === "function") this.ltpPpRload.setValue(rload, false);
+    if (this.ltpPpVin && typeof this.ltpPpVin.setValue === "function") this.ltpPpVin.setValue(vin, true) // sync the fader graphic only; emitting here would recurse;
+    if (this.ltpPpRout && typeof this.ltpPpRout.setValue === "function") this.ltpPpRout.setValue(rout, true) // sync the fader graphic only; emitting here would recurse;
+    if (this.ltpPpRload && typeof this.ltpPpRload.setValue === "function") this.ltpPpRload.setValue(rload, true) // sync the fader graphic only; emitting here would recurse;
 
     // Deep Dive Engineering Metrics Calculation
     const totalZ = 2 * rout;
@@ -25723,7 +25847,8 @@ const QTP_DEMOS = [
   { key: "pin_dropped_3", title: "3 Pins Dropped (Multi-Conductor Open)" },
   { key: "pin_dropped_4", title: "4 Pins Dropped (Quad Trunk Open)" },
   { key: "pair_dropped", title: "1 Pair Dropped (Channel Mute)" },
-  { key: "shield_lifted", title: "Shield Lifted (P48 Fails)" }
+  { key: "shield_lifted", title: "Shield Lifted (P48 Fails)" },
+  { key: "leg_flipped", title: "Mixed Polarity (One Conductor Flipped)" }
 ];
 
 // ==========================================================================
@@ -25772,7 +25897,9 @@ class QTPSimulatorEngine {
       earth_hot: true,
       earth_cold: true,
       shield: f !== "shield_lifted",
-      sunFlipped: f === "phase_flip"
+      sunFlipped: f === "phase_flip",
+      // One conductor of SUN reversed: both legs now carry the same polarity
+      sunColdFlipped: f === "leg_flipped"
     };
   }
 
@@ -25884,7 +26011,7 @@ class QTPSimulatorEngine {
           <circle data-qtp-wire="sun-cold" cx="620" cy="26" r="4" fill="${wireState.sun_cold ? '#fb923c' : '#ef4444'}"/>
           <text x="100" y="29" fill="#fed7aa" font-size="8.5">P1 (&minus;)</text>
           <text x="630" y="29" fill="${wireState.sun_cold ? '#fed7aa' : '#ef4444'}" font-size="8.5">
-            ${wireState.sun_cold ? 'P1 (COLD &minus;)' : 'P1 (DROPPED!)'}
+            ${wireState.sunColdFlipped ? 'P1 (FLIPPED → +)' : wireState.sun_cold ? 'P1 (COLD &minus;)' : 'P1 (DROPPED!)'}
           </text>
         </g>
 
@@ -26027,6 +26154,14 @@ class QTPSimulatorEngine {
       cmrrColor = "#94a3b8";
       p48 = "0.0 VDC (Pair Open)";
       diag = "ONE PAIR DROPPED (SUN / Orange Pair 2 Severed): Channel 1 completely open. Audio receiver reads 0.00 V. Full channel mute.";
+    } else if (f === "leg_flipped") {
+      vdiff = "-inf dB (Audio Cancels!)";
+      phase = "Legs In Phase (✗ Same Polarity)";
+      phaseColor = "#ef4444";
+      cmrr = "Rejects the AUDIO";
+      cmrrColor = "#ef4444";
+      p48 = "48.0 VDC (OK)";
+      diag = "MIXED POLARITY (One Conductor Flipped on Pair 2 / SUN): the cold conductor now carries the SAME polarity as the hot. Both legs swing together, so the audio is common-mode and the balanced receiver cancels it: V_DIFF ≈ 0 while each wire still measures full signal to ground. Check every conductor's polarity, not just the pair.";
     } else if (f === "shield_lifted") {
       vdiff = "+4.0 dBu (Severe Buzz)";
       phase = "0° (Shield Floating)";
@@ -26160,9 +26295,15 @@ class MultichannelBreakoutEngine {
         const ex = RJ_X;
         const ey = yc + dy;
         const midX = 300 + (c.ch - 1) * 6;
-        return `<path d="M ${p.x},${p.y} C ${midX},${p.y} ${midX - 40},${ey} ${ex},${ey}" fill="none"
+        const d = `M ${p.x},${p.y} C ${midX},${p.y} ${midX - 40},${ey} ${ex},${ey}`;
+        // Signal direction on the hot wire: CH1–4 send out of the DB25, CH5–8 return into it
+        const send = c.ch <= 4;
+        const flow = kind !== "hot" ? "" : [0, 1].map(k => `
+          <circle r="3" fill="${c.color}"><animateMotion dur="2.4s" begin="-${(k * 1.2).toFixed(1)}s" repeatCount="indefinite"
+            keyPoints="${send ? "0;1" : "1;0"}" keyTimes="0;1" calcMode="linear" path="${d}"/></circle>`).join("");
+        return `<path d="${d}" fill="none"
           stroke="${conductorColor(c, kind)}" stroke-width="${sel ? 2.2 : 1}" opacity="${sel ? 1 : 0.4}"
-          ${kind === "cold" ? 'stroke-dasharray="5,2"' : ""} />`;
+          ${kind === "cold" ? 'stroke-dasharray="5,2"' : ""} />${flow}`;
       }).join("");
     }).join("");
 
@@ -26245,7 +26386,8 @@ class MultichannelBreakoutEngine {
         <!-- STAGE 1: AES59 DB25 (upright) with + / − / G on every contact -->
         <path d="M ${db.x},${db.y - 6} L ${db.x + 74},${db.y + 8} L ${db.x + 74},${db.y + DB_H - 8} L ${db.x},${db.y + DB_H + 6} Z" fill="#1e293b" fill-opacity="0.85" stroke="#38bdf8" stroke-width="2.5" />
         ${pinsSvg}
-        <text x="${db.x + 37}" y="${db.y - 16}" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">AES59 DB25</text>
+        <text x="${db.x + 37}" y="${db.y - 30}" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">AES59 DB25</text>
+        <text x="${db.x + 37}" y="${db.y - 14}" fill="#e2e8f0" font-size="9.5" font-weight="800" text-anchor="middle">CH1–4 SEND → · ← CH5–8 RETURN</text>
         <text transform="translate(${db.x - 34}, ${db.y + DB_H / 2}) rotate(-90)" fill="#94a3b8" font-size="9" text-anchor="middle">8 balanced channels · Pin 13 n/c · Shell to chassis (AES48)</text>
         <text x="${db.x + 37}" y="${db.y + DB_H + 26}" fill="${item.color}" font-size="9.5" font-weight="700" text-anchor="middle">CH${item.ch} (${item.mnemonic}): + Pin ${item.db25.hot} · − Pin ${item.db25.cold} · G Pin ${item.db25.shield}</text>
         <g font-size="8.5" font-weight="700">
@@ -43706,7 +43848,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ===== BUNDLED: js/modules-data.js ===== */
 /**
  * Balanced Audio & AES-X152 100-Module Reference Curriculum Dataset
- * Compiled by build.py on 2026-10-18 01:35
+ * Compiled by build.py on 2026-10-18 01:46
  */
 
 const BALANCED_MODULES_DATA = [

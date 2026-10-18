@@ -8060,3 +8060,20 @@ html[data-theme="paper"] body > section .svg-diagram-wrapper::after {
 .rack-meter-card.probe-related {
   border-color: #f8fafc !important;
 }
+
+/* Phase flip: the reversed pair is outlined as one unit */
+.bench-panel.qtp-mode .bench-line.flip-top {
+  border: 2px solid #f59e0b;
+  border-bottom: 1px dashed rgba(245, 158, 11, 0.5);
+  margin-top: 3px;
+}
+
+.bench-panel.qtp-mode .bench-line.flip-bottom {
+  border: 2px solid #f59e0b;
+  border-top: none;
+}
+
+.bench-line.pair-flipped .bench-line-ref {
+  color: #f59e0b;
+  font-weight: 800;
+}

@@ -81,6 +81,15 @@ class EightChannelBench {
     this.focusLine(this.focus, false);
     this.renderSnakeDiagram();
     this.initBreakoutLink();
+    // Calibration step sets every line and generator to the same level
+    document.addEventListener("x152-line-level", (e) => {
+      const dbu = Math.max(-40, Math.min(24, e.detail.dbu));
+      this.channels.forEach(ch => { ch.levelDbu = dbu; });
+      this.generators.forEach(g => { g.levelDbu = dbu; });
+      document.querySelectorAll("[data-gen-level]").forEach(inp => { inp.value = Math.round(dbu * 10) / 10; });
+      if (this.focus) this.focusLine(this.focus, false);
+      this.updateMonitor();
+    });
     this.startLoop();
   }
 
@@ -447,7 +456,7 @@ class EightChannelBench {
       const ch = this.channels[n - 1];
       row.style.setProperty("--line-color", qtp ? wire.color : ch.color);
       row.classList.toggle("qtp-cold", qtp && wire.leg === "cold");
-      if (!qtp) row.classList.remove("cm-alert", "cm-top", "cm-bottom");
+      if (!qtp) row.classList.remove("cm-alert", "cm-top", "cm-bottom", "pair-flipped", "flip-top", "flip-bottom");
       row.querySelector(".bench-line-name").textContent = qtp ? wire.label : `CH${n}`;
       row.querySelector(".bench-line-ref").textContent = qtp ? "→ GND (SHIELD)" : "P2↔P3 ACROSS";
     });
@@ -491,8 +500,20 @@ class EightChannelBench {
   // Outline both rows of a pair in red while common-mode hum is on the line (shield lifted)
   markCommonMode(n, wire, leg) {
     const row = this.panel.querySelector(`.bench-line[data-line="${n}"]`);
+    // A phase flip reverses a whole PAIR relative to the others: outline both of its rows
+    const qs = this.qtpState(wire);
+    const flipped = wire.pair === "sun" && (qs.flipped || qs.coldFlipped);
+    row.classList.toggle("pair-flipped", flipped);
+    row.classList.toggle("flip-top", flipped && wire.leg === "hot");
+    row.classList.toggle("flip-bottom", flipped && wire.leg === "cold");
+    if (flipped) {
+      row.querySelector(".bench-line-ref").textContent = qs.coldFlipped ? "⇉ SAME POLARITY" : "⇄ PAIR FLIPPED";
+      row.dataset.wasFlipped = "1";
+      return;
+    }
     const on = !!leg.cm;
-    if (row.classList.contains("cm-alert") === on) return;
+    if (row.classList.contains("cm-alert") === on && !row.dataset.wasFlipped) return;
+    delete row.dataset.wasFlipped;
     row.classList.toggle("cm-alert", on);
     row.classList.toggle("cm-top", on && wire.leg === "hot");
     row.classList.toggle("cm-bottom", on && wire.leg === "cold");
@@ -605,6 +626,7 @@ class EightChannelBench {
       hotOk: st[`${wire.pair}_hot`] !== false,
       coldOk: st[`${wire.pair}_cold`] !== false,
       flipped: wire.pair === "sun" && !!st.sunFlipped,
+      coldFlipped: wire.pair === "sun" && !!st.sunColdFlipped,
       shieldOk: st.shield !== false
     };
   }
@@ -629,16 +651,18 @@ class EightChannelBench {
     const ch = this.channels[wire.ch - 1];
     const diffVrms = ch.muted ? 0 : 0.775 * Math.pow(10, ch.levelDbu / 20);
     const legVpk = intact ? (diffVrms * Math.SQRT2) / 2 : 0;
-    const sign = (wire.leg === "hot") !== st.flipped ? 1 : -1;
+    let sign = (wire.leg === "hot") !== st.flipped ? 1 : -1;
+    if (st.coldFlipped && wire.leg === "cold") sign = 1; // same polarity as the hot leg
     const cm = st.shieldOk ? null : this.qtpCommonMode(tSec);
 
     const sampleAt = (tMs) => sign * legVpk * Math.sin(2 * Math.PI * ch.freq * tMs / 1000) + (cm ? cm.sampleAt(tMs) : 0);
     const vrms = Math.sqrt(Math.pow(legVpk / Math.SQRT2, 2) + (cm ? cm.vrms * cm.vrms : 0));
     const dbu = vrms > 0 ? 20 * Math.log10(vrms / 0.775) : -Infinity;
-    const status = !intact ? "OPEN" : st.flipped ? "180° FLIP" : cm ? "CM HUM" : wire.leg === "hot" ? "HOT +" : "COLD −";
+    const status = !intact ? "OPEN" : st.flipped ? "180° FLIP" : st.coldFlipped ? "SAME POLARITY" : cm ? "CM HUM" : wire.leg === "hot" ? "HOT +" : "COLD −";
 
     // What a balanced receiver sees across the pair: the hum cancels only while both legs are intact
-    const sigVrms = ((st.hotOk ? 1 : 0) + (st.coldOk ? 1 : 0)) * diffVrms / 2;
+    // Legs of the same polarity cancel in the receiver
+    const sigVrms = st.coldFlipped ? 0 : ((st.hotOk ? 1 : 0) + (st.coldOk ? 1 : 0)) * diffVrms / 2;
     const humInDiff = cm && st.hotOk !== st.coldOk ? cm.vrms : 0;
     const pairVrms = Math.sqrt(sigVrms * sigVrms + humInDiff * humInDiff);
     const pairDbu = pairVrms > 0 ? 20 * Math.log10(pairVrms / 0.775) : -Infinity;

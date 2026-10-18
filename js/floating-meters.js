@@ -486,6 +486,11 @@ class FloatingMeterDock {
     this.initAnchorEngine();
     this.initScrollTracker();
     this.initHoverZoom();
+    // Calibration step (Levels Pyramid) sets the line level used by the probe-only models
+    document.addEventListener("x152-line-level", (e) => {
+      this.lineVrms = e.detail.vrms;
+      this.updateFromActiveCircuit();
+    });
     this.startMainInstrumentLoop();
     this.updateFromActiveCircuit();
   }
@@ -1806,7 +1811,7 @@ class FloatingMeterDock {
       }
     } else if (key.startsWith("p1-") || key.startsWith("gp-")) {
       // Rule 02 grounding diagrams: clean where shields bond at entry, hum + buzz where shield current crosses the PCB 0V
-      const audio = isMuted ? 0 : 1.228;
+      const audio = isMuted ? 0 : (this.lineVrms || 1.228);
       const MODEL = {
         "p1-clean": { sig: audio, hum: 0, name: "Clean audio (AES48 bond)", status: "CLEAN AUDIO" },
         "p1-bond": { sig: 0, hum: 0, name: "Pin 1 chassis bond", status: "CHASSIS 0 V" },
@@ -1831,8 +1836,8 @@ class FloatingMeterDock {
       const item = (typeof AES14_TABLE2_DATA !== "undefined" && window.xlrHubEngine)
         ? AES14_TABLE2_DATA.find(d => d.id === window.xlrHubEngine.currentCircuitId) || AES14_TABLE2_DATA[0]
         : null;
-      const lineVrms = isMuted ? 0 : 1.228;
-      const side = key.startsWith("xlrm-") ? "Male" : "Female";
+      const lineVrms = isMuted ? 0 : (this.lineVrms || 1.228);
+      const side = key.startsWith("xlrm-") ? "Pin conn." : "Socket";
       const pins = item ? item.pins : {};
       // Unbalanced configs carry the whole signal on the hot contact; balanced split it between hot and cold
       const balanced = Object.values(pins).some(p => p && p.type === "cold");

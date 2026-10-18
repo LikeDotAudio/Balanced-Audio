@@ -106,6 +106,7 @@ class StorySidebar {
               <a href="#qtp-demo-pin_dropped_4" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_4">❌ 4 Pins Dropped (Trunk Open)</a>
               <a href="#qtp-demo-pair_dropped" class="subnode-link fault-subnode" data-sidebar-fault="pair_dropped">🚫 1 Pair Dropped (Mute)</a>
               <a href="#qtp-demo-shield_lifted" class="subnode-link fault-subnode" data-sidebar-fault="shield_lifted">🛡️ Shield Lifted (P48 Fails)</a>
+              <a href="#qtp-demo-leg_flipped" class="subnode-link fault-subnode" data-sidebar-fault="leg_flipped">⇉ Mixed Polarity (1 Wire Flipped)</a>
             </div>
           </div>
 

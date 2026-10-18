@@ -1498,7 +1498,52 @@ class CircuitSimulator {
       // APK Precision AC Voltmeter needle deflection
       this.lastPyrVrms = vrms;
       this.updateVuMeter("pyr-vu-needle", dbu, vrms);
+
+      // The calibration step sets the line level for the whole lab (generators, circuits, meters).
+      // Guarded: listeners can lead back here (e.g. via setRefZ), which must not re-broadcast.
+      if (!this._levelBroadcasting) {
+        this._levelBroadcasting = true;
+        try {
+          document.dispatchEvent(new CustomEvent("x152-line-level", { detail: { dbu, vrms } }));
+        } finally {
+          this._levelBroadcasting = false;
+        }
+      }
     };
+
+    // Live marker on the pyramid: sits on the tier's middle reference at nominal, moves ±10 dB around it
+    const PYR_TIERS = {
+      headroom: { cy: 60, nominal: 24, edge: (y) => 460 - ((y - 25) / 70) * 150 },
+      pro: { cy: 131.5, nominal: 4, edge: (y) => 310 - ((y - 98) / 67) * 70 },
+      consumer: { cy: 201.5, nominal: -7.78, edge: (y) => 240 - ((y - 168) / 67) * 70 },
+      mic: { cy: 271.5, nominal: -50, edge: (y) => 170 - ((y - 238) / 67) * 70 }
+    };
+    document.addEventListener("x152-line-level", (e) => {
+      const marker = document.getElementById("pyr-level-marker");
+      const txt = document.getElementById("pyr-level-marker-txt");
+      if (!marker) return;
+      const dbu = e.detail.dbu;
+      const t = PYR_TIERS[calTierFor(dbu)];
+      const y = t.cy - Math.max(-1, Math.min(1, (dbu - t.nominal) / 10)) * 30;
+      const x = t.edge(y) - 4;
+      marker.setAttribute("transform", `translate(${x.toFixed(1)}, ${y.toFixed(1)})`);
+      txt.setAttribute("x", String(-Math.min(78, x - 70)));
+      txt.textContent = `${dbu >= 0 ? "+" : ""}${dbu.toFixed(1)} dBu`;
+    });
+
+    // Circuits follow the line level: each drive fader moves to the new RMS voltage (within its range)
+    document.addEventListener("x152-line-level", (e) => {
+      const v = e.detail.vrms;
+      [this.ltpPpVin, this.ltpIbVin, this.ltpTxVin, this.ltpMeyerVpo].forEach(f => {
+        if (f && typeof f.setValue === "function") f.setValue(v);
+      });
+      ["xfmr-vin", "rack-gen-vin-slider"].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.value = Math.max(+el.min || 0, Math.min(+el.max || 100, v)).toFixed(2);
+        el.dispatchEvent(new Event("input", { bubbles: true }));
+      });
+    });
     this.syncFromDbu = syncFromDbu;
 
     if (dbuEl) {
@@ -1717,9 +1762,9 @@ class CircuitSimulator {
     });
 
     // Synchronize LTP faders if instantiated
-    if (this.ltpPpVin && typeof this.ltpPpVin.setValue === "function") this.ltpPpVin.setValue(vin, false);
-    if (this.ltpPpRout && typeof this.ltpPpRout.setValue === "function") this.ltpPpRout.setValue(rout, false);
-    if (this.ltpPpRload && typeof this.ltpPpRload.setValue === "function") this.ltpPpRload.setValue(rload, false);
+    if (this.ltpPpVin && typeof this.ltpPpVin.setValue === "function") this.ltpPpVin.setValue(vin, true) // sync the fader graphic only; emitting here would recurse;
+    if (this.ltpPpRout && typeof this.ltpPpRout.setValue === "function") this.ltpPpRout.setValue(rout, true) // sync the fader graphic only; emitting here would recurse;
+    if (this.ltpPpRload && typeof this.ltpPpRload.setValue === "function") this.ltpPpRload.setValue(rload, true) // sync the fader graphic only; emitting here would recurse;
 
     // Deep Dive Engineering Metrics Calculation
     const totalZ = 2 * rout;

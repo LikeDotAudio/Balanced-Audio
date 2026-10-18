@@ -122,7 +122,8 @@ const QTP_DEMOS = [
   { key: "pin_dropped_3", title: "3 Pins Dropped (Multi-Conductor Open)" },
   { key: "pin_dropped_4", title: "4 Pins Dropped (Quad Trunk Open)" },
   { key: "pair_dropped", title: "1 Pair Dropped (Channel Mute)" },
-  { key: "shield_lifted", title: "Shield Lifted (P48 Fails)" }
+  { key: "shield_lifted", title: "Shield Lifted (P48 Fails)" },
+  { key: "leg_flipped", title: "Mixed Polarity (One Conductor Flipped)" }
 ];
 
 // ==========================================================================
@@ -171,7 +172,9 @@ class QTPSimulatorEngine {
       earth_hot: true,
       earth_cold: true,
       shield: f !== "shield_lifted",
-      sunFlipped: f === "phase_flip"
+      sunFlipped: f === "phase_flip",
+      // One conductor of SUN reversed: both legs now carry the same polarity
+      sunColdFlipped: f === "leg_flipped"
     };
   }
 
@@ -283,7 +286,7 @@ class QTPSimulatorEngine {
           <circle data-qtp-wire="sun-cold" cx="620" cy="26" r="4" fill="${wireState.sun_cold ? '#fb923c' : '#ef4444'}"/>
           <text x="100" y="29" fill="#fed7aa" font-size="8.5">P1 (&minus;)</text>
           <text x="630" y="29" fill="${wireState.sun_cold ? '#fed7aa' : '#ef4444'}" font-size="8.5">
-            ${wireState.sun_cold ? 'P1 (COLD &minus;)' : 'P1 (DROPPED!)'}
+            ${wireState.sunColdFlipped ? 'P1 (FLIPPED → +)' : wireState.sun_cold ? 'P1 (COLD &minus;)' : 'P1 (DROPPED!)'}
           </text>
         </g>
 
@@ -426,6 +429,14 @@ class QTPSimulatorEngine {
       cmrrColor = "#94a3b8";
       p48 = "0.0 VDC (Pair Open)";
       diag = "ONE PAIR DROPPED (SUN / Orange Pair 2 Severed): Channel 1 completely open. Audio receiver reads 0.00 V. Full channel mute.";
+    } else if (f === "leg_flipped") {
+      vdiff = "-inf dB (Audio Cancels!)";
+      phase = "Legs In Phase (✗ Same Polarity)";
+      phaseColor = "#ef4444";
+      cmrr = "Rejects the AUDIO";
+      cmrrColor = "#ef4444";
+      p48 = "48.0 VDC (OK)";
+      diag = "MIXED POLARITY (One Conductor Flipped on Pair 2 / SUN): the cold conductor now carries the SAME polarity as the hot. Both legs swing together, so the audio is common-mode and the balanced receiver cancels it: V_DIFF ≈ 0 while each wire still measures full signal to ground. Check every conductor's polarity, not just the pair.";
     } else if (f === "shield_lifted") {
       vdiff = "+4.0 dBu (Severe Buzz)";
       phase = "0° (Shield Floating)";
@@ -559,9 +570,15 @@ class MultichannelBreakoutEngine {
         const ex = RJ_X;
         const ey = yc + dy;
         const midX = 300 + (c.ch - 1) * 6;
-        return `<path d="M ${p.x},${p.y} C ${midX},${p.y} ${midX - 40},${ey} ${ex},${ey}" fill="none"
+        const d = `M ${p.x},${p.y} C ${midX},${p.y} ${midX - 40},${ey} ${ex},${ey}`;
+        // Signal direction on the hot wire: CH1–4 send out of the DB25, CH5–8 return into it
+        const send = c.ch <= 4;
+        const flow = kind !== "hot" ? "" : [0, 1].map(k => `
+          <circle r="3" fill="${c.color}"><animateMotion dur="2.4s" begin="-${(k * 1.2).toFixed(1)}s" repeatCount="indefinite"
+            keyPoints="${send ? "0;1" : "1;0"}" keyTimes="0;1" calcMode="linear" path="${d}"/></circle>`).join("");
+        return `<path d="${d}" fill="none"
           stroke="${conductorColor(c, kind)}" stroke-width="${sel ? 2.2 : 1}" opacity="${sel ? 1 : 0.4}"
-          ${kind === "cold" ? 'stroke-dasharray="5,2"' : ""} />`;
+          ${kind === "cold" ? 'stroke-dasharray="5,2"' : ""} />${flow}`;
       }).join("");
     }).join("");
 
@@ -644,7 +661,8 @@ class MultichannelBreakoutEngine {
         <!-- STAGE 1: AES59 DB25 (upright) with + / − / G on every contact -->
         <path d="M ${db.x},${db.y - 6} L ${db.x + 74},${db.y + 8} L ${db.x + 74},${db.y + DB_H - 8} L ${db.x},${db.y + DB_H + 6} Z" fill="#1e293b" fill-opacity="0.85" stroke="#38bdf8" stroke-width="2.5" />
         ${pinsSvg}
-        <text x="${db.x + 37}" y="${db.y - 16}" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">AES59 DB25</text>
+        <text x="${db.x + 37}" y="${db.y - 30}" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">AES59 DB25</text>
+        <text x="${db.x + 37}" y="${db.y - 14}" fill="#e2e8f0" font-size="9.5" font-weight="800" text-anchor="middle">CH1–4 SEND → · ← CH5–8 RETURN</text>
         <text transform="translate(${db.x - 34}, ${db.y + DB_H / 2}) rotate(-90)" fill="#94a3b8" font-size="9" text-anchor="middle">8 balanced channels · Pin 13 n/c · Shell to chassis (AES48)</text>
         <text x="${db.x + 37}" y="${db.y + DB_H + 26}" fill="${item.color}" font-size="9.5" font-weight="700" text-anchor="middle">CH${item.ch} (${item.mnemonic}): + Pin ${item.db25.hot} · − Pin ${item.db25.cold} · G Pin ${item.db25.shield}</text>
         <g font-size="8.5" font-weight="700">
