@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AES-X152: Balanced Audio Interconnection & Interface Parameters</title>
-  <meta name="description" content="Master technical reference, report of findings, interactive engineering tools, SVG schematics, AES-X249, AES72-4E, SC-04-04, Jim Meyer Thevenin model, transformer winding simulator, AES-VST plugin, and Dennis A. Bohn Pro Audio Reference for AES-X152 (SC-05-05).">
+  <meta name="description" content="Master technical reference, report of findings, interactive engineering tools, SVG schematics, AES-X249, AES72-4E, SC-04-04, Jim Meyer Thevenin model, transformer winding simulator, and Dennis A. Bohn Pro Audio Reference for AES-X152 (SC-05-05).">
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
@@ -54,7 +54,6 @@
         <a href="#transformer-simulator" class="nav-link">Transformer Lab</a>
         <a href="#deepest-dive" class="nav-link">The Deepest Dive</a>
         <a href="#tutorials-section" class="nav-link">Tutorials &amp; Matrix</a>
-        <a href="#aes-vst" class="nav-link">AES-VST Plugin</a>
         <span class="nav-sep" aria-hidden="true"></span>
         <a href="#curriculum-modules" class="nav-link" style="color: var(--accent-cyan); font-weight: 700;">100 Modules</a>
         <a href="#tree-explorer" class="nav-link" onclick="if(window.storySidebar){window.storySidebar.openTaxonomyTree();return false;}">Taxonomy Tree</a>
@@ -82,7 +81,6 @@
         <a href="#transformer-simulator" class="sub-nav-pill" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">Transformer Lab</a>
         <a href="#deepest-dive" class="sub-nav-pill">Jim Meyer Thevenin</a>
         <a href="#tutorials-section" class="sub-nav-pill">Hess Compatibility</a>
-        <a href="#aes-vst" class="sub-nav-pill" style="border-color: #10b981; color: #34d399;">AES-VST Plugin</a>
         <span class="nav-sep" aria-hidden="true"></span>
         <a href="#curriculum-modules" class="sub-nav-pill" style="border-color: #38bdf8; color: #38bdf8; font-weight: 700;">100 Modules (MD)</a>
         <a href="#tree-explorer" class="sub-nav-pill" onclick="if(window.storySidebar){window.storySidebar.openTaxonomyTree();return false;}">Taxonomy Tree</a>
@@ -110,11 +108,10 @@
       <p class="hero-lead">
         Standard for Presenting Signal Levels, Circuit Impedances, and Topologies of Analog Audio System Components for Product Data Sheets. 
         Interactive engineering tools, continuous vector SVG circuit schematics, Jim Meyer Thevenin 3-impedance models, audio transformer winding simulation, 
-        AES-VST plugin preview, and Dennis A. Bohn's complete Pro Audio Reference.
+        and Dennis A. Bohn's complete Pro Audio Reference.
       </p>
       <div class="hero-actions">
         <a href="#transformer-simulator" class="btn btn-primary">Open Transformer Lab ⚡</a>
-        <a href="#aes-vst" class="btn btn-secondary">AES-VST Plugin &amp; Standards Map 🎛️</a>
         <a href="#datasheet-templates" class="btn btn-secondary">Free AES Datasheets 📄</a>
         <a href="#dennis-bohn-par" class="btn btn-secondary">Dennis Bohn PAR &amp; Style Guide 📖</a>
       </div>
@@ -5460,295 +5457,6 @@
     </div>
   </section>
 
-  <!-- Section 8: "AES-VST" Plugin Interactive GUI Preview & Standards Map -->
-  <section id="aes-vst" class="section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">Interactive Hardware Emulation</span>
-        <h2 class="section-title">AES-VST: Virtual Interconnection &amp; Compliance Plugin</h2>
-        <p class="section-lead">
-          Interactive studio hardware preview of the AES-VST utility plugin. 
-          Audition line impedances, trim common-mode rejection, test Pin 1 ground lift effects, 
-          and click the primary <strong>STANDARDS MAP</strong> button below to open the interactive AES Standards network!
-        </p>
-      </div>
-
-      <!-- VST 19" Rack Hardware Chassis -->
-      <div class="vst-rack-container">
-        <div class="vst-chassis">
-          <!-- Metal Screws -->
-          <div class="vst-screw top-left"></div>
-          <div class="vst-screw top-right"></div>
-          <div class="vst-screw bottom-left"></div>
-          <div class="vst-screw bottom-right"></div>
-
-          <!-- Top Brand & Toolbar -->
-          <div class="vst-top-bar">
-            <div class="vst-brand">
-              <span class="vst-logo-badge">AES-VST</span>
-              <div>
-                <strong style="color: #f8fafc; font-size: 1.1rem; letter-spacing: 0.05em; display: block;">BALANCED INTERCONNECTION MASTER v1.5.2</strong>
-                <span style="color: #94a3b8; font-size: 0.75rem;">AES SC-05-05 STANDARDS COMPLIANCE &bull; VST3 / AU / AAX DSP ENGINE</span>
-              </div>
-            </div>
-
-            <!-- THE FIRST BUTTON: STANDARDS MAP -->
-            <div>
-              <button id="vst-standards-map-btn" class="vst-btn-standards-map">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="7" y1="6" x2="10" y2="10"/><line x1="17" y1="6" x2="14" y2="10"/><line x1="7" y1="18" x2="10" y2="14"/><line x1="17" y1="18" x2="14" y2="14"/></svg>
-                <span>AES STANDARDS &amp; WORKING GROUPS MAP</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Main VST Rack Body Grid -->
-          <div class="vst-main-grid">
-            
-            <!-- Left: Retro Green/Amber OLED Screen -->
-            <div class="vst-oled-display">
-              <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #06b6d4; border-bottom: 1px solid #164e63; padding-bottom: 0.3rem; margin-bottom: 0.5rem;">
-                <span>SYSTEM STATUS</span>
-                <span>48.0 kHz &bull; 24-BIT</span>
-              </div>
-              <div id="vst-oled-text" style="color: #38bdf8; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.35rem;">
-                MODE: AES-X152 / AES14 BALANCED LINE
-              </div>
-              <div id="vst-oled-sub" style="color: #10b981; font-size: 0.8rem; margin-bottom: 0.5rem;">
-                PIN 1 BONDED: Direct Chassis Metal-to-Metal (AES48 OK)
-              </div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.75rem; color: #94a3b8; background: rgba(0,0,0,0.4); padding: 0.4rem; border-radius: 4px;">
-                <span>DMZ: <strong>100 &Omega; Balanced</strong></span>
-                <span>CMRR: <strong>92.4 dB @ 60 Hz</strong></span>
-                <span>V_CM Noise: <strong>&lt; &minus;98 dBu</strong></span>
-                <span>Polarity: <strong>Pin 2 Positive</strong></span>
-              </div>
-            </div>
-
-            <!-- Center: Hardware Knobs Row -->
-            <div style="display: flex; justify-content: space-around; align-items: center; background: rgba(0,0,0,0.25); padding: 0.75rem; border-radius: 8px; border: 1px solid #2d3340;">
-              
-              <!-- Knob 1: Input Level -->
-              <div style="text-align: center;">
-                <label class="control-label" style="font-size: 0.72rem; text-transform: uppercase;">Input Trim</label>
-                <input type="range" id="vst-knob-gain" min="-18" max="18" step="0.5" value="0" class="range-slider" style="width: 90px;" />
-                <span id="vst-gain-val" style="display: block; font-family: monospace; font-size: 0.8rem; color: #38bdf8; margin-top: 0.2rem;">0.0 dB</span>
-              </div>
-
-              <!-- Knob 2: CMRR Balance Trim -->
-              <div style="text-align: center;">
-                <label class="control-label" style="font-size: 0.72rem; text-transform: uppercase;">CMRR Trim</label>
-                <input type="range" id="vst-knob-cmrr" min="40" max="110" step="1" value="92" class="range-slider" style="width: 90px;" />
-                <span id="vst-cmrr-val" style="display: block; font-family: monospace; font-size: 0.8rem; color: #10b981; margin-top: 0.2rem;">92 dB</span>
-              </div>
-
-              <!-- Preset Select -->
-              <div style="text-align: center;">
-                <label class="control-label" style="font-size: 0.72rem; text-transform: uppercase;">Standard</label>
-                <select id="vst-preset-select" class="form-select" style="width: 110px; font-size: 0.75rem; padding: 0.25rem 0.4rem;">
-                  <option value="line" selected>AES14 Line</option>
-                  <option value="mic">SC-04-04 Mic</option>
-                  <option value="digital">AES3 Digital</option>
-                  <option value="db25">AES59 DB25</option>
-                  <option value="qtp">AES72 QTP</option>
-                </select>
-              </div>
-
-            </div>
-
-            <!-- Right: Calibrated Precision Metering & AES48 Grounding Engine -->
-            <div style="background: rgba(0,0,0,0.35); padding: 0.85rem; border-radius: 8px; border: 1px solid #2d3340;">
-              
-              <!-- Meter Mode Selector -->
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.72rem;">
-                <span style="color: #94a3b8; font-weight: 600; text-transform: uppercase;">Metering:</span>
-                <div style="display: flex; gap: 0.25rem;">
-                  <button class="vst-meter-mode-btn active" data-meter-mode="stereo" style="font-size: 0.65rem; padding: 0.15rem 0.4rem; background: #1e293b; border: 1px solid #06b6d4; color: #06b6d4; border-radius: 3px; cursor: pointer;">Stereo (L/R)</button>
-                  <button class="vst-meter-mode-btn" data-meter-mode="balanced" style="font-size: 0.65rem; padding: 0.15rem 0.4rem; background: transparent; border: 1px solid #475569; color: #94a3b8; border-radius: 3px; cursor: pointer;">Pins (2/3)</button>
-                  <button class="vst-meter-mode-btn" data-meter-mode="cm" style="font-size: 0.65rem; padding: 0.15rem 0.4rem; background: transparent; border: 1px solid #475569; color: #94a3b8; border-radius: 3px; cursor: pointer;">Diff / CM</button>
-                </div>
-              </div>
-
-              <!-- Meter Channel 1 -->
-              <div class="vst-meter-channel" style="margin-bottom: 0.45rem;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #e2e8f0; margin-bottom: 0.2rem;">
-                  <span id="vst-m1-label" style="font-weight: 600;">Left Channel (Ch 1)</span>
-                  <div style="display: flex; align-items: center; gap: 0.4rem;">
-                    <span id="vst-m1-val" style="font-family: monospace; font-size: 0.75rem; color: #38bdf8;">+4.0 dBu</span>
-                    <span class="vst-peak-led" id="vst-peak-led-l" title="Clip / Overload"></span>
-                  </div>
-                </div>
-                <div class="vst-meter-track">
-                  <div class="vst-meter-fill" id="vst-vu-bar-l"></div>
-                </div>
-              </div>
-
-              <!-- Meter Channel 2 -->
-              <div class="vst-meter-channel" style="margin-bottom: 0.35rem;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #e2e8f0; margin-bottom: 0.2rem;">
-                  <span id="vst-m2-label" style="font-weight: 600;">Right Channel (Ch 2)</span>
-                  <div style="display: flex; align-items: center; gap: 0.4rem;">
-                    <span id="vst-m2-val" style="font-family: monospace; font-size: 0.75rem; color: #38bdf8;">+4.0 dBu</span>
-                    <span class="vst-peak-led" id="vst-peak-led-r" title="Clip / Overload"></span>
-                  </div>
-                </div>
-                <div class="vst-meter-track">
-                  <div class="vst-meter-fill" id="vst-vu-bar-r"></div>
-                </div>
-              </div>
-
-              <!-- Calibration Scale Legend (dBu) -->
-              <div style="display: flex; justify-content: space-between; font-size: 0.62rem; color: #64748b; font-family: monospace; padding: 0 2px; margin-bottom: 0.6rem;">
-                <span>&minus;40</span>
-                <span>&minus;20</span>
-                <span>&minus;10</span>
-                <span style="color: #38bdf8;">0</span>
-                <span style="color: #10b981; font-weight: 700;">+4</span>
-                <span style="color: #f59e0b;">+12</span>
-                <span style="color: #ef4444;">+24</span>
-              </div>
-
-              <!-- AES48 Pin 1 Shield Grounding Control -->
-              <div style="background: rgba(15, 23, 42, 0.7); padding: 0.5rem 0.65rem; border-radius: 6px; border: 1px solid #334155;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-size: 0.7rem; color: #94a3b8; font-weight: 600;">Pin 1 Shield (AES48):</span>
-                  <button id="vst-gnd-toggle-btn" style="font-size: 0.68rem; padding: 0.2rem 0.55rem; border-radius: 4px; border: 1px solid #10b981; background: rgba(16, 185, 129, 0.2); color: #34d399; font-weight: 700; cursor: pointer; transition: all 0.2s;">
-                    CHASSIS BONDED
-                  </button>
-                </div>
-                <div id="vst-gnd-status-desc" style="font-size: 0.65rem; color: #10b981; margin-top: 0.25rem; line-height: 1.3;">
-                  ✓ Shield bonded to enclosure chassis. Conforms to AES48.
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
-          <!-- EXPANDABLE INTERACTIVE STANDARDS & WORKING GROUPS MAP (MODAL CONTAINER) -->
-          <div id="vst-standards-modal" class="standards-map-modal">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <div>
-                <h3 style="margin: 0; color: #34d399; font-size: 1.25rem;">Map of AES Standards &amp; Working Groups</h3>
-                <span style="font-size: 0.85rem; color: var(--text-muted);">
-                  Click any standard node below to inspect its committee scope, relationships, and normative documentation.
-                </span>
-              </div>
-              <button id="vst-modal-close" class="btn btn-secondary" style="padding: 0.35rem 0.8rem; font-size: 0.8rem;">Close Map &times;</button>
-            </div>
-
-            <!-- Interactive Vector SVG Network Graph -->
-            <div class="svg-diagram-wrapper" style="background: #090e18; border-radius: 8px; padding: 1rem;">
-              <svg viewBox="0 0 920 420" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" id="standards-network-svg">
-                
-                <!-- Central Core Hub: AES Standards Committee -->
-                <circle cx="460" cy="210" r="45" fill="#1e293b" stroke="#34d399" stroke-width="3"/>
-                <text x="460" y="208" fill="#34d399" font-size="12" font-weight="800" text-anchor="middle">AESSC</text>
-                <text x="460" y="222" fill="#94a3b8" font-size="9" text-anchor="middle">Standards Comm.</text>
-
-                <!-- Connecting Interconnection Lines -->
-                <line x1="460" y1="165" x2="460" y2="85" stroke="#3b82f6" stroke-width="2"/>
-                <line x1="420" y1="180" x2="200" y2="120" stroke="#06b6d4" stroke-width="2"/>
-                <line x1="500" y1="180" x2="720" y2="120" stroke="#8b5cf6" stroke-width="2"/>
-                <line x1="420" y1="240" x2="200" y2="300" stroke="#f59e0b" stroke-width="2"/>
-                <line x1="500" y1="240" x2="720" y2="300" stroke="#ec4899" stroke-width="2"/>
-                <line x1="460" y1="255" x2="460" y2="340" stroke="#10b981" stroke-width="2"/>
-
-                <!-- WG 1: SC-05-05 Interconnections (Top Center) -->
-                <g class="standards-map-node selected" data-std-id="sc-05-05" transform="translate(460, 60)">
-                  <rect x="-95" y="-25" width="190" height="50" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
-                  <text x="0" y="-4" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle">SC-05-05</text>
-                  <text x="0" y="14" fill="#94a3b8" font-size="9.5" text-anchor="middle">Interconnections &amp; Grounding</text>
-                </g>
-
-                <!-- Node: AES-X152 (Connected to SC-05-05) -->
-                <line x1="365" y1="60" x2="290" y2="40" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3"/>
-                <g class="standards-map-node" data-std-id="aes-x152" transform="translate(240, 40)">
-                  <rect x="-50" y="-18" width="100" height="36" rx="6" fill="#0f172a" stroke="#06b6d4" stroke-width="2"/>
-                  <text x="0" y="4" fill="#06b6d4" font-size="11" font-weight="700" text-anchor="middle">AES-X152</text>
-                </g>
-
-                <!-- Node: AES-X249 -->
-                <line x1="555" y1="60" x2="630" y2="40" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3"/>
-                <g class="standards-map-node" data-std-id="aes-x249" transform="translate(680, 40)">
-                  <rect x="-50" y="-18" width="100" height="36" rx="6" fill="#0f172a" stroke="#06b6d4" stroke-width="2"/>
-                  <text x="0" y="4" fill="#06b6d4" font-size="11" font-weight="700" text-anchor="middle">AES-X249</text>
-                </g>
-
-                <!-- WG 2: SC-04-04 Microphones (Left Top) -->
-                <g class="standards-map-node" data-std-id="sc-04-04" transform="translate(170, 120)">
-                  <rect x="-85" y="-25" width="170" height="50" rx="8" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
-                  <text x="0" y="-4" fill="#06b6d4" font-size="12" font-weight="700" text-anchor="middle">SC-04-04</text>
-                  <text x="0" y="14" fill="#94a3b8" font-size="9.5" text-anchor="middle">Microphones &amp; Transducers</text>
-                </g>
-
-                <!-- Standard: AES14 (Universal XLR) -->
-                <line x1="170" y1="145" x2="110" y2="200" stroke="#06b6d4" stroke-width="1.5"/>
-                <g class="standards-map-node" data-std-id="aes14" transform="translate(90, 210)">
-                  <rect x="-45" y="-18" width="90" height="36" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
-                  <text x="0" y="4" fill="#10b981" font-size="11" font-weight="700" text-anchor="middle">AES14</text>
-                </g>
-
-                <!-- Standard: AES26 (Polarity) -->
-                <line x1="170" y1="145" x2="180" y2="200" stroke="#06b6d4" stroke-width="1.5"/>
-                <g class="standards-map-node" data-std-id="aes26" transform="translate(185, 210)">
-                  <rect x="-40" y="-18" width="80" height="36" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
-                  <text x="0" y="4" fill="#10b981" font-size="11" font-weight="700" text-anchor="middle">AES26</text>
-                </g>
-
-                <!-- Standard: AES48 (Pin 1 Shield Bonding - Central Flagship) -->
-                <g class="standards-map-node" data-std-id="aes48" transform="translate(460, 355)">
-                  <rect x="-90" y="-22" width="180" height="44" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="2.5"/>
-                  <text x="0" y="-2" fill="#10b981" font-size="12" font-weight="800" text-anchor="middle">AES48 (Pin 1 Standard)</text>
-                  <text x="0" y="14" fill="#a7f3d0" font-size="8.5" text-anchor="middle">Shield to Metal Enclosure</text>
-                </g>
-
-                <!-- WG 3: SC-02-01 Digital Audio Interfaces (Right Top) -->
-                <g class="standards-map-node" data-std-id="sc-02-01" transform="translate(750, 120)">
-                  <rect x="-85" y="-25" width="170" height="50" rx="8" fill="#1e293b" stroke="#8b5cf6" stroke-width="2"/>
-                  <text x="0" y="-4" fill="#c084fc" font-size="12" font-weight="700" text-anchor="middle">SC-02-01</text>
-                  <text x="0" y="14" fill="#94a3b8" font-size="9.5" text-anchor="middle">Digital Audio &amp; AES3/AES11</text>
-                </g>
-
-                <!-- Standard: AES59 (DB25 Multichannel) -->
-                <g class="standards-map-node" data-std-id="aes59" transform="translate(190, 310)">
-                  <rect x="-70" y="-20" width="140" height="40" rx="6" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
-                  <text x="0" y="-2" fill="#f59e0b" font-size="11" font-weight="700" text-anchor="middle">AES59 (DB25)</text>
-                  <text x="0" y="13" fill="#94a3b8" font-size="8.5" text-anchor="middle">8-Channel Multichannel</text>
-                </g>
-
-                <!-- Standard: AES72 (QTP RJ45) -->
-                <g class="standards-map-node" data-std-id="aes72" transform="translate(740, 310)">
-                  <rect x="-75" y="-20" width="150" height="40" rx="6" fill="#0f172a" stroke="#ec4899" stroke-width="2"/>
-                  <text x="0" y="-2" fill="#f472b6" font-size="11" font-weight="700" text-anchor="middle">AES72-4E (QTP RJ45)</text>
-                  <text x="0" y="13" fill="#94a3b8" font-size="8.5" text-anchor="middle">4-Channel Over STP</text>
-                </g>
-
-              </svg>
-            </div>
-
-            <!-- Inspector Panel Below SVG Map -->
-            <div class="mt-3 p-3 detail-card" id="vst-standards-inspector" style="background: #0d131f;">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h4 id="vst-std-title" style="margin: 0; color: #34d399; font-size: 1.15rem;">AES-X152: Method of Presenting Interface Parameters</h4>
-                <div id="vst-std-related"></div>
-              </div>
-              <div id="vst-std-chair" style="font-size: 0.85rem; color: var(--text-muted); font-family: monospace; margin-bottom: 0.5rem;">
-                Committee: AES SC-05-05 Working Group
-              </div>
-              <p id="vst-std-desc" style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">
-                Standard for Presenting Signal Levels, Circuit Impedances, and Topologies of Analog Audio System Components for Product Data Sheets.
-              </p>
-              <a id="vst-std-jump" href="#top-level" class="btn btn-secondary" style="font-size: 0.82rem; padding: 0.35rem 0.8rem;">
-                Jump to AES-X152 on Page &darr;
-              </a>
-            </div>
-
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Section: The 100-Module AES-X152 Reference Curriculum & Module Browser -->
   <section id="curriculum-modules" class="section" style="background: var(--bg-secondary, #0c1220);">
@@ -7409,7 +7117,6 @@
               <div class="contributor-alignment-links">
                 <a href="#enclosure-explorer" class="alignment-pill">🧠 SC-05-05 Mind Maps</a>
                 <a href="#multichannel-hierarchy" class="alignment-pill">📦 AES59 &rarr; AES72 &rarr; XLR Hub</a>
-                <a href="#aes-vst" class="alignment-pill">💻 AES-VST Interactive Plugin GUI</a>
                 <a href="#timeline-section" class="alignment-pill">📅 2019-2021 Mind Maps</a>
               </div>
             </div>
@@ -7500,7 +7207,6 @@
             <li><a href="#deepest-dive">Jim Meyer Thevenin Model</a></li>
             <li><a href="#tutorials-section">Richard Hess Compatibility Matrix</a></li>
             <li><a href="#tree-explorer" onclick="if(window.storySidebar){window.storySidebar.openTaxonomyTree();return false;}">SC-05-05 Taxonomy Tree</a></li>
-            <li><a href="#aes-vst">AES-VST Plugin &amp; Standards Map</a></li>
             <li><a href="#datasheet-templates">Free AES Datasheet Templates</a></li>
             <li><a href="#dennis-bohn-par">Dennis Bohn PAR &amp; Style Guide</a></li>
           </ul>

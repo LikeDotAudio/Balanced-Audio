@@ -169,34 +169,29 @@ class StorySidebar {
             </a>
           </div>
 
-          <div class="story-chapter" data-target="aes-vst">
-            <div class="chapter-dot"></div>
-            <a href="#aes-vst" class="chapter-link">10.0 AES-VST Plugin &amp; Map</a>
-          </div>
-
           <div class="story-chapter" data-target="datasheet-templates">
             <div class="chapter-dot"></div>
-            <a href="#datasheet-templates" class="chapter-link">11.0 Free Datasheet Templates</a>
+            <a href="#datasheet-templates" class="chapter-link">10.0 Free Datasheet Templates</a>
           </div>
 
           <div class="story-chapter" data-target="dennis-bohn-par">
             <div class="chapter-dot"></div>
-            <a href="#dennis-bohn-par" class="chapter-link">12.0 Dennis Bohn PAR Glossary</a>
+            <a href="#dennis-bohn-par" class="chapter-link">11.0 Dennis Bohn PAR Glossary</a>
           </div>
 
           <div class="story-chapter" data-target="landmark-papers">
             <div class="chapter-dot"></div>
-            <a href="#landmark-papers" class="chapter-link">12.5 Landmark Papers Dossier</a>
+            <a href="#landmark-papers" class="chapter-link">11.5 Landmark Papers Dossier</a>
           </div>
 
           <div class="story-chapter" data-target="timeline-section">
             <div class="chapter-dot"></div>
-            <a href="#timeline-section" class="chapter-link">13.0 Standards Timeline</a>
+            <a href="#timeline-section" class="chapter-link">12.0 Standards Timeline</a>
           </div>
 
           <div class="story-chapter" data-target="roster-section">
             <div class="chapter-dot"></div>
-            <a href="#roster-section" class="chapter-link">14.0 Contributor Roster</a>
+            <a href="#roster-section" class="chapter-link">13.0 Contributor Roster</a>
           </div>
         </div>
 
@@ -393,7 +388,6 @@ class StorySidebar {
       "deepest-dive",
       "tutorials-section",
       "adapter-wiring-suite",
-      "aes-vst",
       "datasheet-templates",
       "dennis-bohn-par",
       "landmark-papers",
