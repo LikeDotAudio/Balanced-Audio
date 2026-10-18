@@ -851,7 +851,7 @@ class CircuitSimulator {
     });
 
     // Set initial range (3V / +10 dB)
-    setRange(9);
+    setRange(13);
     // Set initial Reference Impedance (600 Ω)
     this.setRefZ(600);
   }
@@ -1617,7 +1617,11 @@ class CircuitSimulator {
       if (refzEl && document.activeElement !== refzEl) refzEl.value = String(refZ);
       if (dbmEl && document.activeElement !== dbmEl) dbmEl.value = dbm.toFixed(2);
 
-      // 1970s DMM Fluorescent LCD readout
+      // 1970s DMM Fluorescent LCD readout (labels set with the values so they always match)
+      [["dmm-lbl-1", "V_RMS (VOLTAGE)"], ["dmm-lbl-2", "AUDIO LEVEL (dBu)"], ["dmm-lbl-3", "V_PEAK (CREST)"]].forEach(([id, txt]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = txt;
+      });
       const dmmVrms = document.getElementById("dmm-vrms-val");
       if (dmmVrms) dmmVrms.textContent = `${vrms >= 1.0 ? vrms.toFixed(3) : (vrms * 1000).toFixed(1) + ' m'}V`;
       const dmmDbu = document.getElementById("dmm-dbu-val");

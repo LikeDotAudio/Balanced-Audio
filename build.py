@@ -52,6 +52,7 @@ SCRIPTS_ORDER = [
     "js/print-report.js",
     "js/floating-meters.js",
     "js/spice-view.js",
+    "js/posters.js",
     "js/eight-channel-bench.js",
     "js/tree-data.js",
     "js/tree-viewer.js",
@@ -71,6 +72,7 @@ SCRIPTS_ORDER = [
     "js/review-comments.js",
     "js/modules-data.js",
     "js/modules-viewer.js",
+    "js/activity-wayfinding.js",
     "js/main.js",
 ]
 

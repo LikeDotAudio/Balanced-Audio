@@ -616,13 +616,9 @@
 </g>
 
 <!-- ================= Left: INPUT Section (Dual 5-Way Binding Posts) ================= -->
-<g transform="translate(44, 290)">
+<g transform="translate(22, 290)">
   <text x="32" y="14" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">INPUT</text>
-  
-  <!-- Dual Insulating Base -->
   <rect x="12" y="24" width="40" height="96" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
-  
-  <!-- Red Binding Post (HOT / +) -->
   <g transform="translate(32, 46)">
     <circle cx="0" cy="0" r="14" fill="#dc2626" stroke="#991b1b" stroke-width="1.5"/>
     <circle cx="0" cy="0" r="11" fill="#b91c1c"/>
@@ -630,8 +626,6 @@
     <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
     <text x="22" y="4" fill="#dc2626" font-family="Arial, sans-serif" font-size="8" font-weight="800">+</text>
   </g>
-
-  <!-- Black Binding Post (COLD / GND / -) -->
   <g transform="translate(32, 94)">
     <circle cx="0" cy="0" r="14" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
     <circle cx="0" cy="0" r="11" fill="#1e293b"/>
@@ -639,8 +633,6 @@
     <circle cx="0" cy="0" r="3.5" fill="#020617"/>
     <text x="22" y="4" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800">—</text>
   </g>
-
-  <!-- Chassis Ground Post & Symbol -->
   <g transform="translate(32, 134)">
     <circle cx="0" cy="0" r="6" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
     <line x1="-6" y1="10" x2="6" y2="10" stroke="#0f172a" stroke-width="1.2"/>
@@ -649,118 +641,92 @@
   </g>
 </g>
 
-<!-- ================= Center: RANGE Rotary Selector with Pyramid Color Alignment ================= -->
-<g transform="translate(190, 365)">
-  <text x="0" y="-62" fill="#0f172a" font-family="Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.1em" text-anchor="middle">RANGE</text>
-  
-  <!-- Header Labels with Color Accents -->
-  <text x="-58" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">dB</text>
-  <text x="-36" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">mV</text>
-  <text x="36" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">V</text>
-  <text x="58" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">dB</text>
-
-  <!-- Left Bank: Amber (Mic Level: -80 to -40 dB) & Cyan (Consumer: -30, -20 dB) -->
-  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <!-- Range 6: 100 mV / -20 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="6" data-tier="consumer">
-      <text x="-58" y="-34" text-anchor="end" fill="#0284c7">-20</text><text x="-36" y="-34" text-anchor="end" fill="#0284c7">100</text>
-      <line x1="-32" y1="-34" x2="-22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+<!-- ================= Center: RANGE Rotary Selector (full-scale range; ticks share the JS range indices) ================= -->
+<g transform="translate(200, 398)">
+  <text x="0" y="-98" fill="#0f172a" font-family="Arial, sans-serif" font-size="30" font-weight="800" letter-spacing="0.08em" text-anchor="middle">RANGE</text>
+  <text x="-84" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800" text-anchor="end">dB</text>
+  <text x="-40" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800" text-anchor="end">mV</text>
+  <text x="40" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800">V</text>
+  <text x="80" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800">dB</text>
+  <g font-family="Arial, sans-serif" font-size="16" font-weight="700">
+    <g class="range-dial-tick zone-consumer" data-range-idx="10" data-tier="consumer">
+      <text x="-84" y="-54" text-anchor="end" fill="#0284c7">-20</text><text x="-40" y="-54" text-anchor="end" fill="#0284c7">100</text>
+      <line x1="-36" y1="-59" x2="-20.3" y2="-22.1" stroke="#0284c7" stroke-width="1.2"/>
     </g>
-    <!-- Range 5: 30 mV / -30 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="5" data-tier="consumer">
-      <text x="-58" y="-22" text-anchor="end" fill="#0284c7">-30</text><text x="-36" y="-22" text-anchor="end" fill="#0284c7">30</text>
-      <line x1="-32" y1="-22" x2="-26" y2="-16" stroke="#0284c7" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-consumer" data-range-idx="9" data-tier="consumer">
+      <text x="-84" y="-34" text-anchor="end" fill="#0284c7">-30</text><text x="-40" y="-34" text-anchor="end" fill="#0284c7">30</text>
+      <line x1="-36" y1="-39" x2="-25.6" y2="-15.7" stroke="#0284c7" stroke-width="1.2"/>
     </g>
-    <!-- Range 4: 10 mV / -40 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="8" data-tier="mic">
+      <text x="-84" y="-14" text-anchor="end" fill="#d97706">-40</text><text x="-40" y="-14" text-anchor="end" fill="#d97706">10</text>
+      <line x1="-36" y1="-19" x2="-28.9" y2="-8.2" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <g class="range-dial-tick zone-mic" data-range-idx="7" data-tier="mic">
+      <text x="-84" y="6" text-anchor="end" fill="#d97706">-50</text><text x="-40" y="6" text-anchor="end" fill="#d97706">3</text>
+      <line x1="-36" y1="1" x2="-29.9" y2="2.1" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <g class="range-dial-tick zone-mic" data-range-idx="6" data-tier="mic">
+      <text x="-84" y="26" text-anchor="end" fill="#d97706">-60</text><text x="-40" y="26" text-anchor="end" fill="#d97706">1</text>
+      <line x1="-36" y1="21" x2="-28.2" y2="10.1" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <g class="range-dial-tick zone-mic" data-range-idx="5" data-tier="mic">
+      <text x="-84" y="46" text-anchor="end" fill="#d97706">-70</text><text x="-40" y="46" text-anchor="end" fill="#d97706">.3</text>
+      <line x1="-36" y1="41" x2="-24.7" y2="17.1" stroke="#d97706" stroke-width="1.2"/>
+    </g>
     <g class="range-dial-tick zone-mic" data-range-idx="4" data-tier="mic">
-      <text x="-58" y="-10" text-anchor="end" fill="#d97706">-40</text><text x="-36" y="-10" text-anchor="end" fill="#d97706">10</text>
-      <line x1="-32" y1="-10" x2="-28" y2="-8" stroke="#d97706" stroke-width="1.2"/>
+      <text x="-84" y="66" text-anchor="end" fill="#d97706">-80</text><text x="-40" y="66" text-anchor="end" fill="#d97706">.1</text>
+      <line x1="-36" y1="61" x2="-19.4" y2="22.9" stroke="#d97706" stroke-width="1.2"/>
     </g>
-    <!-- Range 3: 3 mV / -50 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="3" data-tier="mic">
-      <text x="-58" y="2" text-anchor="end" fill="#d97706">-50</text><text x="-36" y="2" text-anchor="end" fill="#d97706">3</text>
-      <line x1="-32" y1="2" x2="-28" y2="2" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-consumer" data-range-idx="11" data-tier="consumer">
+      <text x="40" y="-54" fill="#0284c7">.3</text><text x="80" y="-54" fill="#0284c7">-10</text>
+      <line x1="36" y1="-59" x2="20.3" y2="-22.1" stroke="#0284c7" stroke-width="1.2"/>
     </g>
-    <!-- Range 2: 1 mV / -60 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="2" data-tier="mic">
-      <text x="-58" y="14" text-anchor="end" fill="#d97706">-60</text><text x="-36" y="14" text-anchor="end" fill="#d97706">1</text>
-      <line x1="-32" y1="14" x2="-28" y2="10" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-pro" data-range-idx="12" data-tier="pro">
+      <text x="40" y="-34" fill="#16a34a">1</text><text x="80" y="-34" fill="#16a34a">0</text>
+      <line x1="36" y1="-39" x2="25.6" y2="-15.7" stroke="#16a34a" stroke-width="1.2"/>
     </g>
-    <!-- Range 1: .3 mV / -70 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="1" data-tier="mic">
-      <text x="-58" y="26" text-anchor="end" fill="#d97706">-70</text><text x="-36" y="26" text-anchor="end" fill="#d97706">.3</text>
-      <line x1="-32" y1="26" x2="-26" y2="18" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-pro active" data-range-idx="13" data-tier="pro">
+      <text x="40" y="-14" fill="#16a34a">3</text><text x="80" y="-14" fill="#16a34a">10</text>
+      <line x1="36" y1="-19" x2="28.9" y2="-8.2" stroke="#16a34a" stroke-width="1.2"/>
     </g>
-    <!-- Range 0: .1 mV / -80 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="0" data-tier="mic">
-      <text x="-58" y="38" text-anchor="end" fill="#d97706">-80</text><text x="-36" y="38" text-anchor="end" fill="#d97706">.1</text>
-      <line x1="-32" y1="38" x2="-22" y2="26" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="14" data-tier="headroom">
+      <text x="40" y="6" fill="#dc2626">10</text><text x="80" y="6" fill="#dc2626">20</text>
+      <line x1="36" y1="1" x2="29.9" y2="2.1" stroke="#dc2626" stroke-width="1.2"/>
     </g>
-  </g>
-
-  <!-- Right Bank: Cyan (.3V / -10dB), Green (Pro Line: 1V, 3V), Red (Headroom: 10V to 300V) -->
-  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <!-- Range 7: .3 V / -10 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="7" data-tier="consumer">
-      <text x="36" y="-34" fill="#0284c7">.3</text><text x="58" y="-34" fill="#0284c7">-10</text>
-      <line x1="32" y1="-34" x2="22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="15" data-tier="headroom">
+      <text x="40" y="26" fill="#dc2626">30</text><text x="80" y="26" fill="#dc2626">30</text>
+      <line x1="36" y1="21" x2="28.2" y2="10.1" stroke="#dc2626" stroke-width="1.2"/>
     </g>
-    <!-- Range 8: 1 V / 0 dB (Pro Line: Green) -->
-    <g class="range-dial-tick zone-pro" data-range-idx="8" data-tier="pro">
-      <text x="36" y="-22" fill="#16a34a">1</text><text x="58" y="-22" fill="#16a34a">0</text>
-      <line x1="32" y1="-22" x2="26" y2="-16" stroke="#16a34a" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="16" data-tier="headroom">
+      <text x="40" y="46" fill="#dc2626">100</text><text x="80" y="46" fill="#dc2626">40</text>
+      <line x1="36" y1="41" x2="24.7" y2="17.1" stroke="#dc2626" stroke-width="1.2"/>
     </g>
-    <!-- Range 9: 3 V / +10 dB (Pro Line Nominal: Green - Active Default) -->
-    <g class="range-dial-tick zone-pro active" data-range-idx="9" data-tier="pro">
-      <text x="36" y="-10" fill="#16a34a" font-weight="900">3</text><text x="58" y="-10" fill="#16a34a" font-weight="900">+10</text>
-      <line x1="32" y1="-10" x2="28" y2="-8" stroke="#16a34a" stroke-width="2"/>
-    </g>
-    <!-- Range 10: 10 V / +20 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="10" data-tier="headroom">
-      <text x="36" y="2" fill="#dc2626">10</text><text x="58" y="2" fill="#dc2626">+20</text>
-      <line x1="32" y1="2" x2="28" y2="2" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 11: 30 V / +30 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="11" data-tier="headroom">
-      <text x="36" y="14" fill="#dc2626">30</text><text x="58" y="14" fill="#dc2626">+30</text>
-      <line x1="32" y1="14" x2="28" y2="10" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 12: 100 V / +40 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="12" data-tier="headroom">
-      <text x="36" y="26" fill="#dc2626">100</text><text x="58" y="26" fill="#dc2626">+40</text>
-      <line x1="32" y1="26" x2="26" y2="18" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 13: 300 V / +50 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="13" data-tier="headroom">
-      <text x="36" y="38" fill="#dc2626">300</text><text x="58" y="38" fill="#dc2626">+50</text>
-      <line x1="32" y1="38" x2="22" y2="26" stroke="#dc2626" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="17" data-tier="headroom">
+      <text x="40" y="66" fill="#dc2626">300</text><text x="80" y="66" fill="#dc2626">50</text>
+      <line x1="36" y1="61" x2="19.4" y2="22.9" stroke="#dc2626" stroke-width="1.2"/>
     </g>
   </g>
 
   <!-- Interactive Rotary Knob Rotor -->
-  <g id="pyr-range-knob-rotor" class="range-knob-rotor" style="transform-origin: 0px 0px; cursor: grab; transform: rotate(-15.9deg);" data-range-idx="9">
-    <circle cx="0" cy="0" r="23" fill="url(#pyr-knob-base)" stroke="#090d16" stroke-width="2"/>
-    <circle cx="0" cy="0" r="21" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
-    <circle cx="0" cy="0" r="11" fill="url(#pyr-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
-    <!-- Range Pointer Indicator Line (pointing at angle along positive X) -->
-    <line x1="0" y1="0" x2="19" y2="0" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="0" cy="0" r="3.5" fill="#f8fafc"/>
+  <g id="pyr-range-knob-rotor" class="range-knob-rotor" style="transform-origin: 0px 0px; cursor: grab; transform: rotate(-15.9deg);" data-range-idx="13">
+    <circle cx="0" cy="0" r="28" fill="url(#pyr-knob-base)" stroke="#090d16" stroke-width="2"/>
+    <circle cx="0" cy="0" r="25.5" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
+    <circle cx="0" cy="0" r="13" fill="url(#pyr-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
+    <line x1="0" y1="0" x2="24" y2="0" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="4" fill="#f8fafc"/>
   </g>
+  <text x="0" y="82" fill="#475569" font-family="Arial, sans-serif" font-size="8.5" font-weight="700" text-anchor="middle">RANGE = full-scale reading · choose the lowest range above the signal</text>
 </g>
 
 <!-- ================= Right: LINE Power Switch & Jewel Pilot Lamp ================= -->
-<g transform="translate(305, 305)">
+<g transform="translate(322, 305)">
   <text x="18" y="0" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">LINE</text>
-  
-  <!-- Toggle Switch -->
   <g transform="translate(18, 26)">
     <polygon points="-7,-4 0,-8 7,-4 7,4 0,8 -7,4" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
     <circle cx="0" cy="0" r="5" fill="#64748b"/>
     <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
     <circle cx="0" cy="-13" r="3.5" fill="#e2e8f0" stroke="#64748b" stroke-width="0.75"/>
   </g>
-
-  <!-- ON Label & Red Faceted Jewel Pilot Light -->
   <text x="18" y="68" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800" text-anchor="middle">ON</text>
   <g transform="translate(18, 92)">
     <circle cx="0" cy="0" r="14" fill="#94a3b8" stroke="#475569" stroke-width="1.2"/>
@@ -787,15 +753,15 @@
               </div>
               <div class="dmm-grid">
                 <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">V_RMS (VOLTAGE)</div>
+                  <div id="dmm-lbl-1" class="dmm-readout-label">V_RMS (VOLTAGE)</div>
                   <div id="dmm-vrms-val" class="dmm-readout-value cyan">1.228 V</div>
                 </div>
                 <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">AUDIO LEVEL (dBu)</div>
+                  <div id="dmm-lbl-2" class="dmm-readout-label">AUDIO LEVEL (dBu)</div>
                   <div id="dmm-dbu-val" class="dmm-readout-value green">+4.0 dBu</div>
                 </div>
                 <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">V_PEAK (CREST)</div>
+                  <div id="dmm-lbl-3" class="dmm-readout-label">V_PEAK (CREST)</div>
                   <div id="dmm-vpeak-val" class="dmm-readout-value amber">1.737 V</div>
                 </div>
               </div>
@@ -3217,13 +3183,9 @@
 </g>
 
 <!-- ================= Left: INPUT Section (Dual 5-Way Binding Posts) ================= -->
-<g transform="translate(44, 290)">
+<g transform="translate(22, 290)">
   <text x="32" y="14" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">INPUT</text>
-  
-  <!-- Dual Insulating Base -->
   <rect x="12" y="24" width="40" height="96" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
-  
-  <!-- Red Binding Post (HOT / +) -->
   <g transform="translate(32, 46)">
     <circle cx="0" cy="0" r="14" fill="#dc2626" stroke="#991b1b" stroke-width="1.5"/>
     <circle cx="0" cy="0" r="11" fill="#b91c1c"/>
@@ -3231,8 +3193,6 @@
     <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
     <text x="22" y="4" fill="#dc2626" font-family="Arial, sans-serif" font-size="8" font-weight="800">+</text>
   </g>
-
-  <!-- Black Binding Post (COLD / GND / -) -->
   <g transform="translate(32, 94)">
     <circle cx="0" cy="0" r="14" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
     <circle cx="0" cy="0" r="11" fill="#1e293b"/>
@@ -3240,8 +3200,6 @@
     <circle cx="0" cy="0" r="3.5" fill="#020617"/>
     <text x="22" y="4" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800">—</text>
   </g>
-
-  <!-- Chassis Ground Post & Symbol -->
   <g transform="translate(32, 134)">
     <circle cx="0" cy="0" r="6" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
     <line x1="-6" y1="10" x2="6" y2="10" stroke="#0f172a" stroke-width="1.2"/>
@@ -3250,118 +3208,92 @@
   </g>
 </g>
 
-<!-- ================= Center: RANGE Rotary Selector with Pyramid Color Alignment ================= -->
-<g transform="translate(190, 365)">
-  <text x="0" y="-62" fill="#0f172a" font-family="Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.1em" text-anchor="middle">RANGE</text>
-  
-  <!-- Header Labels with Color Accents -->
-  <text x="-58" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">dB</text>
-  <text x="-36" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">mV</text>
-  <text x="36" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">V</text>
-  <text x="58" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">dB</text>
-
-  <!-- Left Bank: Amber (Mic Level: -80 to -40 dB) & Cyan (Consumer: -30, -20 dB) -->
-  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <!-- Range 6: 100 mV / -20 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="6" data-tier="consumer">
-      <text x="-58" y="-34" text-anchor="end" fill="#0284c7">-20</text><text x="-36" y="-34" text-anchor="end" fill="#0284c7">100</text>
-      <line x1="-32" y1="-34" x2="-22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+<!-- ================= Center: RANGE Rotary Selector (full-scale range; ticks share the JS range indices) ================= -->
+<g transform="translate(200, 398)">
+  <text x="0" y="-98" fill="#0f172a" font-family="Arial, sans-serif" font-size="30" font-weight="800" letter-spacing="0.08em" text-anchor="middle">RANGE</text>
+  <text x="-84" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800" text-anchor="end">dB</text>
+  <text x="-40" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800" text-anchor="end">mV</text>
+  <text x="40" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800">V</text>
+  <text x="80" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800">dB</text>
+  <g font-family="Arial, sans-serif" font-size="16" font-weight="700">
+    <g class="range-dial-tick zone-consumer" data-range-idx="10" data-tier="consumer">
+      <text x="-84" y="-54" text-anchor="end" fill="#0284c7">-20</text><text x="-40" y="-54" text-anchor="end" fill="#0284c7">100</text>
+      <line x1="-36" y1="-59" x2="-20.3" y2="-22.1" stroke="#0284c7" stroke-width="1.2"/>
     </g>
-    <!-- Range 5: 30 mV / -30 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="5" data-tier="consumer">
-      <text x="-58" y="-22" text-anchor="end" fill="#0284c7">-30</text><text x="-36" y="-22" text-anchor="end" fill="#0284c7">30</text>
-      <line x1="-32" y1="-22" x2="-26" y2="-16" stroke="#0284c7" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-consumer" data-range-idx="9" data-tier="consumer">
+      <text x="-84" y="-34" text-anchor="end" fill="#0284c7">-30</text><text x="-40" y="-34" text-anchor="end" fill="#0284c7">30</text>
+      <line x1="-36" y1="-39" x2="-25.6" y2="-15.7" stroke="#0284c7" stroke-width="1.2"/>
     </g>
-    <!-- Range 4: 10 mV / -40 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="8" data-tier="mic">
+      <text x="-84" y="-14" text-anchor="end" fill="#d97706">-40</text><text x="-40" y="-14" text-anchor="end" fill="#d97706">10</text>
+      <line x1="-36" y1="-19" x2="-28.9" y2="-8.2" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <g class="range-dial-tick zone-mic" data-range-idx="7" data-tier="mic">
+      <text x="-84" y="6" text-anchor="end" fill="#d97706">-50</text><text x="-40" y="6" text-anchor="end" fill="#d97706">3</text>
+      <line x1="-36" y1="1" x2="-29.9" y2="2.1" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <g class="range-dial-tick zone-mic" data-range-idx="6" data-tier="mic">
+      <text x="-84" y="26" text-anchor="end" fill="#d97706">-60</text><text x="-40" y="26" text-anchor="end" fill="#d97706">1</text>
+      <line x1="-36" y1="21" x2="-28.2" y2="10.1" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <g class="range-dial-tick zone-mic" data-range-idx="5" data-tier="mic">
+      <text x="-84" y="46" text-anchor="end" fill="#d97706">-70</text><text x="-40" y="46" text-anchor="end" fill="#d97706">.3</text>
+      <line x1="-36" y1="41" x2="-24.7" y2="17.1" stroke="#d97706" stroke-width="1.2"/>
+    </g>
     <g class="range-dial-tick zone-mic" data-range-idx="4" data-tier="mic">
-      <text x="-58" y="-10" text-anchor="end" fill="#d97706">-40</text><text x="-36" y="-10" text-anchor="end" fill="#d97706">10</text>
-      <line x1="-32" y1="-10" x2="-28" y2="-8" stroke="#d97706" stroke-width="1.2"/>
+      <text x="-84" y="66" text-anchor="end" fill="#d97706">-80</text><text x="-40" y="66" text-anchor="end" fill="#d97706">.1</text>
+      <line x1="-36" y1="61" x2="-19.4" y2="22.9" stroke="#d97706" stroke-width="1.2"/>
     </g>
-    <!-- Range 3: 3 mV / -50 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="3" data-tier="mic">
-      <text x="-58" y="2" text-anchor="end" fill="#d97706">-50</text><text x="-36" y="2" text-anchor="end" fill="#d97706">3</text>
-      <line x1="-32" y1="2" x2="-28" y2="2" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-consumer" data-range-idx="11" data-tier="consumer">
+      <text x="40" y="-54" fill="#0284c7">.3</text><text x="80" y="-54" fill="#0284c7">-10</text>
+      <line x1="36" y1="-59" x2="20.3" y2="-22.1" stroke="#0284c7" stroke-width="1.2"/>
     </g>
-    <!-- Range 2: 1 mV / -60 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="2" data-tier="mic">
-      <text x="-58" y="14" text-anchor="end" fill="#d97706">-60</text><text x="-36" y="14" text-anchor="end" fill="#d97706">1</text>
-      <line x1="-32" y1="14" x2="-28" y2="10" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-pro" data-range-idx="12" data-tier="pro">
+      <text x="40" y="-34" fill="#16a34a">1</text><text x="80" y="-34" fill="#16a34a">0</text>
+      <line x1="36" y1="-39" x2="25.6" y2="-15.7" stroke="#16a34a" stroke-width="1.2"/>
     </g>
-    <!-- Range 1: .3 mV / -70 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="1" data-tier="mic">
-      <text x="-58" y="26" text-anchor="end" fill="#d97706">-70</text><text x="-36" y="26" text-anchor="end" fill="#d97706">.3</text>
-      <line x1="-32" y1="26" x2="-26" y2="18" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-pro active" data-range-idx="13" data-tier="pro">
+      <text x="40" y="-14" fill="#16a34a">3</text><text x="80" y="-14" fill="#16a34a">10</text>
+      <line x1="36" y1="-19" x2="28.9" y2="-8.2" stroke="#16a34a" stroke-width="1.2"/>
     </g>
-    <!-- Range 0: .1 mV / -80 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="0" data-tier="mic">
-      <text x="-58" y="38" text-anchor="end" fill="#d97706">-80</text><text x="-36" y="38" text-anchor="end" fill="#d97706">.1</text>
-      <line x1="-32" y1="38" x2="-22" y2="26" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="14" data-tier="headroom">
+      <text x="40" y="6" fill="#dc2626">10</text><text x="80" y="6" fill="#dc2626">20</text>
+      <line x1="36" y1="1" x2="29.9" y2="2.1" stroke="#dc2626" stroke-width="1.2"/>
     </g>
-  </g>
-
-  <!-- Right Bank: Cyan (.3V / -10dB), Green (Pro Line: 1V, 3V), Red (Headroom: 10V to 300V) -->
-  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <!-- Range 7: .3 V / -10 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="7" data-tier="consumer">
-      <text x="36" y="-34" fill="#0284c7">.3</text><text x="58" y="-34" fill="#0284c7">-10</text>
-      <line x1="32" y1="-34" x2="22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="15" data-tier="headroom">
+      <text x="40" y="26" fill="#dc2626">30</text><text x="80" y="26" fill="#dc2626">30</text>
+      <line x1="36" y1="21" x2="28.2" y2="10.1" stroke="#dc2626" stroke-width="1.2"/>
     </g>
-    <!-- Range 8: 1 V / 0 dB (Pro Line: Green) -->
-    <g class="range-dial-tick zone-pro" data-range-idx="8" data-tier="pro">
-      <text x="36" y="-22" fill="#16a34a">1</text><text x="58" y="-22" fill="#16a34a">0</text>
-      <line x1="32" y1="-22" x2="26" y2="-16" stroke="#16a34a" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="16" data-tier="headroom">
+      <text x="40" y="46" fill="#dc2626">100</text><text x="80" y="46" fill="#dc2626">40</text>
+      <line x1="36" y1="41" x2="24.7" y2="17.1" stroke="#dc2626" stroke-width="1.2"/>
     </g>
-    <!-- Range 9: 3 V / +10 dB (Pro Line Nominal: Green - Active Default) -->
-    <g class="range-dial-tick zone-pro active" data-range-idx="9" data-tier="pro">
-      <text x="36" y="-10" fill="#16a34a" font-weight="900">3</text><text x="58" y="-10" fill="#16a34a" font-weight="900">+10</text>
-      <line x1="32" y1="-10" x2="28" y2="-8" stroke="#16a34a" stroke-width="2"/>
-    </g>
-    <!-- Range 10: 10 V / +20 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="10" data-tier="headroom">
-      <text x="36" y="2" fill="#dc2626">10</text><text x="58" y="2" fill="#dc2626">+20</text>
-      <line x1="32" y1="2" x2="28" y2="2" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 11: 30 V / +30 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="11" data-tier="headroom">
-      <text x="36" y="14" fill="#dc2626">30</text><text x="58" y="14" fill="#dc2626">+30</text>
-      <line x1="32" y1="14" x2="28" y2="10" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 12: 100 V / +40 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="12" data-tier="headroom">
-      <text x="36" y="26" fill="#dc2626">100</text><text x="58" y="26" fill="#dc2626">+40</text>
-      <line x1="32" y1="26" x2="26" y2="18" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 13: 300 V / +50 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="13" data-tier="headroom">
-      <text x="36" y="38" fill="#dc2626">300</text><text x="58" y="38" fill="#dc2626">+50</text>
-      <line x1="32" y1="38" x2="22" y2="26" stroke="#dc2626" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="17" data-tier="headroom">
+      <text x="40" y="66" fill="#dc2626">300</text><text x="80" y="66" fill="#dc2626">50</text>
+      <line x1="36" y1="61" x2="19.4" y2="22.9" stroke="#dc2626" stroke-width="1.2"/>
     </g>
   </g>
 
   <!-- Interactive Rotary Knob Rotor -->
-  <g id="pp-range-knob-rotor" class="range-knob-rotor" style="transform-origin: 0px 0px; cursor: grab; transform: rotate(-15.9deg);" data-range-idx="9">
-    <circle cx="0" cy="0" r="23" fill="url(#pp-knob-base)" stroke="#090d16" stroke-width="2"/>
-    <circle cx="0" cy="0" r="21" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
-    <circle cx="0" cy="0" r="11" fill="url(#pp-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
-    <!-- Range Pointer Indicator Line (pointing at angle along positive X) -->
-    <line x1="0" y1="0" x2="19" y2="0" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="0" cy="0" r="3.5" fill="#f8fafc"/>
+  <g id="pp-range-knob-rotor" class="range-knob-rotor" style="transform-origin: 0px 0px; cursor: grab; transform: rotate(-15.9deg);" data-range-idx="13">
+    <circle cx="0" cy="0" r="28" fill="url(#pp-knob-base)" stroke="#090d16" stroke-width="2"/>
+    <circle cx="0" cy="0" r="25.5" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
+    <circle cx="0" cy="0" r="13" fill="url(#pp-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
+    <line x1="0" y1="0" x2="24" y2="0" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="4" fill="#f8fafc"/>
   </g>
+  <text x="0" y="82" fill="#475569" font-family="Arial, sans-serif" font-size="8.5" font-weight="700" text-anchor="middle">RANGE = full-scale reading · choose the lowest range above the signal</text>
 </g>
 
 <!-- ================= Right: LINE Power Switch & Jewel Pilot Lamp ================= -->
-<g transform="translate(305, 305)">
+<g transform="translate(322, 305)">
   <text x="18" y="0" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">LINE</text>
-  
-  <!-- Toggle Switch -->
   <g transform="translate(18, 26)">
     <polygon points="-7,-4 0,-8 7,-4 7,4 0,8 -7,4" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
     <circle cx="0" cy="0" r="5" fill="#64748b"/>
     <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
     <circle cx="0" cy="-13" r="3.5" fill="#e2e8f0" stroke="#64748b" stroke-width="0.75"/>
   </g>
-
-  <!-- ON Label & Red Faceted Jewel Pilot Light -->
   <text x="18" y="68" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800" text-anchor="middle">ON</text>
   <g transform="translate(18, 92)">
     <circle cx="0" cy="0" r="14" fill="#94a3b8" stroke="#475569" stroke-width="1.2"/>
@@ -7442,6 +7374,7 @@
   <script src="js/print-report.js"></script>
   <script src="js/floating-meters.js"></script>
   <script src="js/spice-view.js"></script>
+  <script src="js/posters.js"></script>
   <script src="js/eight-channel-bench.js"></script>
   <script src="js/tree-data.js"></script>
   <script src="js/tree-viewer.js"></script>
@@ -7461,6 +7394,7 @@
   <script src="js/review-comments.js"></script>
   <script src="js/modules-data.js"></script>
   <script src="js/modules-viewer.js"></script>
+  <script src="js/activity-wayfinding.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

@@ -200,8 +200,9 @@ class QTPSimulatorEngine {
         const dg = this.diagnosticsFor(d.key);
         return `
           <div class="qtp-demo" id="qtp-demo-${d.key}" data-fault="${d.key}">
-            <h4 class="qtp-demo-title"><span class="qtp-demo-no">Example ${i + 1}</span> ${d.title}</h4>
+            <h4 class="qtp-demo-title"><span class="qtp-demo-no">Example ${i + 1}</span>${d.key === "normal" ? "" : '<span class="qtp-demo-fault">Fault</span>'} ${d.title}</h4>
             ${this.svgFor(d.key)}
+            ${this.scopeFor(d.key)}
             <div class="qtp-demo-metrics">
               <span><b>V<sub>DIFF</sub></b> ${dg.vdiff}</span>
               <span style="color: ${dg.phaseColor};"><b>Phase</b> ${dg.phase}</span>
@@ -235,6 +236,59 @@ class QTPSimulatorEngine {
         requestAnimationFrame(pick);
       }
     }, { passive: true });
+  }
+
+  // Static scope picture of the example: every conductor by pin, then each pair's difference.
+  // Drawn as SVG so it shows on screen and prints under the drawing.
+  scopeFor(f) {
+    const st = this.getWireState(f);
+    const PAIRS = [
+      { key: "sun", name: "SUN", hot: 2, cold: 1, color: "#f97316" },
+      { key: "sky", name: "SKY", hot: 4, cold: 5, color: "#38bdf8" },
+      { key: "grass", name: "GRASS", hot: 6, cold: 3, color: "#10b981" },
+      { key: "earth", name: "EARTH", hot: 8, cold: 7, color: "#ca8a04" }
+    ];
+    const X0 = 170, X1 = 840, ROW = 24, AMP = 7;
+    const hum = st.shield === false;
+    // One leg: half the pair's swing, polarity +1 / -1, plus the common-mode hum when the shield is lifted
+    const wave = (pol, on) => (t) => (on ? pol * Math.sin(t * 4 * Math.PI) : 0) + (hum ? 0.75 * Math.sin(t * 0.9 * Math.PI) + 0.12 * Math.sin(t * 60) : 0);
+    const path = (fn, y, gain) => {
+      let d = "";
+      for (let i = 0; i <= 160; i++) {
+        const t = i / 160;
+        d += `${i ? "L" : "M"}${(X0 + t * (X1 - X0)).toFixed(1)},${(y - fn(t) * AMP * gain).toFixed(1)} `;
+      }
+      return d;
+    };
+    let rows = "";
+    let y = 30;
+    PAIRS.forEach(p => {
+      const hotOk = st[`${p.key}_hot`] !== false, coldOk = st[`${p.key}_cold`] !== false;
+      const flip = p.key === "sun" && st.sunFlipped, legFlip = p.key === "sun" && st.sunColdFlipped;
+      const hot = wave(flip ? -1 : 1, hotOk);
+      const cold = wave(flip || legFlip ? 1 : -1, coldOk);
+      const diff = (t) => (hot(t) - cold(t)) / 2;
+      const diffNote = !hotOk && !coldOk ? "NO SIGNAL" : legFlip ? "CANCELS" : (!hotOk || !coldOk) ? "−6 dB" : flip ? "INVERTED" : "OK";
+      [
+        { label: `${p.name} P${p.hot} (+)`, fn: hot, ok: hotOk, dash: false, gain: 1 },
+        { label: `${p.name} P${p.cold} (−)`, fn: cold, ok: coldOk, dash: true, gain: 1 },
+        { label: `${p.name} P${p.hot} − P${p.cold}`, fn: diff, ok: true, dash: false, gain: 1, diff: diffNote }
+      ].forEach(r => {
+        rows += `
+          <line x1="${X0}" y1="${y}" x2="${X1}" y2="${y}" stroke="#1e293b" stroke-width="1"/>
+          <text x="${X0 - 10}" y="${y + 4}" fill="${r.diff ? "#e2e8f0" : p.color}" font-size="10.5" font-weight="${r.diff ? 900 : 700}" text-anchor="end">${r.label}</text>
+          <path d="${path(r.fn, y, r.gain)}" fill="none" stroke="${r.ok ? (r.diff ? "#e2e8f0" : p.color) : "#ef4444"}" stroke-width="${r.diff ? 2 : 1.6}"${r.dash ? ' stroke-dasharray="5,3"' : ""}/>
+          <text x="${X1 + 10}" y="${y + 4}" fill="${r.ok && r.diff !== "NO SIGNAL" ? "#94a3b8" : "#ef4444"}" font-size="10" font-weight="800">${r.diff || (r.ok ? "" : "OPEN")}</text>`;
+        y += ROW;
+      });
+      y += 6;
+    });
+    return `
+      <svg class="qtp-demo-scope" viewBox="0 0 920 ${y + 4}" width="100%" xmlns="http://www.w3.org/2000/svg" style="background: #060910; font-family: 'JetBrains Mono', monospace;">
+        <text x="20" y="16" fill="#94a3b8" font-size="10" font-weight="800" letter-spacing="0.08em">SCOPE · EACH CONDUCTOR TO CHASSIS, THEN ACROSS THE PAIR${hum ? " · SHIELD LIFTED: SAME HUM ON EVERY LEG" : ""}</text>
+        ${[0.25, 0.5, 0.75].map(t => `<line x1="${X0 + t * (X1 - X0)}" y1="22" x2="${X0 + t * (X1 - X0)}" y2="${y - 6}" stroke="#1e293b" stroke-width="1" stroke-dasharray="2,3"/>`).join("")}
+        ${rows}
+      </svg>`;
   }
 
   svgFor(f) {

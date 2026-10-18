@@ -8070,6 +8070,18 @@ html[data-theme="paper"] .military-fader-readout {
   min-width: 6.5rem;
 }
 
+/* Every example other than the normal one is a fault: say so before its name */
+.qtp-demo-fault {
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f87171;
+  border: 1px solid #f87171;
+  padding: 0.05rem 0.45rem;
+  margin-right: 0.5rem;
+}
+
 .qtp-demo-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -8568,10 +8580,289 @@ html[data-theme="paper"] body > section .qtp-sim-card {
 }
 
 /* ==========================================================================
+   Activity wayfinding (js/activity-wayfinding.js) and 1px rules.
+   Sections, applications (panels, scopes, plots, simulators) and activities
+   are split by one 1px rule in the paper view's rule ink. Neighbouring
+   frames share an edge (negative 1px margins) so rules never double to 2px.
+   Colours are authored for the dark palette; the paper view inverts them.
+   ========================================================================== */
+:root {
+  --wf-rule: #4a4a4a;
+  --wf-head-bg: #0b0b0b;
+}
+
+html[data-theme="paper"] {
+  --wf-rule: #d4d4d4; /* the paper view's rule ink (prints dark grey) */
+  --wf-head-bg: transparent;
+}
+
+/* Section boundaries */
+.section,
+html[data-theme="paper"] body > section {
+  border-bottom: 1px solid var(--wf-rule) !important;
+}
+
+/* Application frames: one 1px rule, square, no glow */
+body > section :is(.svg-diagram-card, .svg-diagram-wrapper, .vintage-military-panel, .scope-screen-wrapper,
+  .interactive-calc-card, .detail-card, .qtp-sim-card, .aes59-always-accessible-card, .xlr-table-card,
+  .adapter-hub-card, .circuit-controls-card, .probe-badge-panel, .zobel-banner, .term-card, .rule-card,
+  .triad-card, .module-card, .enclosure-detail-card, .bohn-tribute-card, .xfmr-main-card, .contributor-card) {
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: var(--wf-rule) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Activity frame */
+.activity {
+  border: 1px solid var(--wf-rule);
+  border-radius: 0;
+  margin: 1.25rem 0;
+  scroll-margin-top: 5rem;
+}
+
+.activity + .activity {
+  margin-top: -1px;
+}
+
+.activity-head {
+  padding: 0.6rem 0.9rem 0.65rem;
+  border-bottom: 1px solid var(--wf-rule);
+  background: var(--wf-head-bg);
+  text-align: left;
+}
+
+.activity-head-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.75rem;
+}
+
+.activity-no {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  white-space: nowrap;
+}
+
+.activity-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.activity-brief,
+.activity-link {
+  margin: 0.25rem 0 0;
+  max-width: none;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.activity-link {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.activity-link::before {
+  content: "\2192\00a0";
+}
+
+/* Body: children sit on the activity rule and on each other, sharing one 1px edge */
+.activity-body {
+  margin: -1px;
+}
+
+.activity-body > * {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border-color: var(--wf-rule) !important;
+}
+
+.activity-body > * + * {
+  margin-top: -1px !important;
+}
+
+.activity-body > .activity-pad {
+  padding: 0.75rem 0.9rem !important;
+}
+
+.activity-body > .activity-pass {
+  padding: 0 !important;
+}
+
+.activity-body > .activity-pass > * {
+  margin: 0 !important;
+}
+
+/* Consecutive activities share one rule */
+.activity:has(+ .activity) {
+  margin-bottom: 0;
+}
+
+.activity-foot {
+  border-top: 1px solid var(--wf-rule);
+  padding: 0.2rem 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: right;
+  color: var(--text-muted);
+}
+
+/* A host card whose content is now activities gives up its own frame */
+.activity-host:not(.circuit-fullscreen-active) {
+  border: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Results that belong to an activity's controls */
+.activity-result::before {
+  content: attr(data-activity-result);
+  display: block;
+  flex: 0 0 100%;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--wf-rule);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Side-by-side instruments inside an activity: zero gap, shared edge */
+.activity-body > .xfmr-instruments-row {
+  gap: 0;
+  padding: 0 !important;
+}
+
+.xfmr-instruments-row > .scope-screen-wrapper + .scope-screen-wrapper {
+  margin-left: -1px;
+}
+
+.activity-body > .ds-generator-grid {
+  gap: 0;
+  padding: 0 !important;
+}
+
+.ds-generator-grid > * + * {
+  margin-left: -1px;
+}
+
+/* The pyramid and its voltmeter: two activities side by side, one shared rule */
+.pyr-split {
+  gap: 0;
+}
+
+.pyr-split {
+  align-items: stretch;
+}
+
+.pyr-split > .activity {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-width: 0;
+}
+
+.pyr-split > .activity > .activity-body {
+  flex: 1 1 auto;
+}
+
+.pyr-split-right.activity-pass > .interactive-calc-card {
+  padding: 0.75rem 0.9rem;
+}
+
+.pyr-split > .activity + .activity {
+  margin-left: -1px;
+}
+
+@media (max-width: 1100px) {
+  .ds-generator-grid > * + * { margin-left: 0; margin-top: -1px; }
+  .pyr-split > .activity + .activity { margin-left: 0; margin-top: -1px; }
+}
+
+@media (max-width: 860px) {
+  .xfmr-instruments-row > .scope-screen-wrapper + .scope-screen-wrapper { margin-left: 0; margin-top: -1px; }
+}
+
+.term-card > .activity {
+  margin: 0.75rem 0 0;
+}
+
+/* "Activities in this section" strip under the section header */
+.activity-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 1rem;
+  margin-top: 0.9rem;
+  padding: 0.45rem 0;
+  border-top: 1px solid var(--wf-rule);
+  border-bottom: 1px solid var(--wf-rule);
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.activity-strip-label {
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.activity-strip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.1rem;
+}
+
+.activity-strip-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.activity-strip-link:hover {
+  text-decoration: underline;
+}
+
+.activity-strip-no {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+/* Paper view: keep the wayfinding text at report size (the page enlarges body p) */
+html[data-theme="paper"] body > section :is(.activity-brief, .activity-link) {
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+html[data-theme="paper"] body > section .activity-no,
+html[data-theme="paper"] body > section .activity-strip-no,
+html[data-theme="paper"] body > section .activity-foot,
+html[data-theme="paper"] body > section .activity-result::before {
+  font-family: var(--font-mono) !important;
+}
+
+/* ==========================================================================
    Print PDF button, version, watermark (js/print-report.js)
    ========================================================================== */
 .sidebar-print-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.6rem;
   padding: 0.4rem 1.1rem;
@@ -8588,6 +8879,7 @@ html[data-theme="paper"] body > section .qtp-sim-card {
 }
 .sidebar-print-btn:hover { background: #38bdf8; color: #000; }
 .sidebar-doc-version {
+  flex-basis: 100%;
   font: 600 0.68rem var(--font-mono);
   color: #94a3b8;
 }
@@ -8624,7 +8916,10 @@ html[data-theme="paper"] body > section .qtp-sim-card {
     display: none !important;
   }
 
-  svg, figure, table, img, canvas, .rule-card, .detail-card { break-inside: avoid; }
+  /* An instrument, card or worked example stays in one rectangle on one page */
+  svg, figure, table, img, canvas, .rule-card, .detail-card,
+  .interactive-calc-card, .vintage-military-panel, .svg-diagram-card, .circuit-subcard,
+  .qtp-demo, .dmm-display-card, .hp-voltmeter-card { break-inside: avoid; }
   h2, h3, h4 { break-after: avoid; }
 
   .print-cover {
@@ -8742,3 +9037,105 @@ html[data-theme="paper"] body > section .qtp-sim-card {
 .spice-points th { color: #9ca3af; font: 700 0.7rem var(--font-mono); text-transform: uppercase; }
 .spice-points code { font-family: var(--font-mono); color: #facc15; }
 .spice-foot { margin: 0.6rem 0.75rem 0; color: #6b7280; font-size: 0.75rem; }
+
+/* ==========================================================================
+   Posters: stand-alone reference tables, rule cards and figures (js/posters.js)
+   ========================================================================== */
+.report-poster { position: relative; }
+.poster-print-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 2;
+  background: #000;
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  font: 700 0.7rem var(--font-mono);
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+}
+.poster-print-btn:hover { background: #38bdf8; color: #000; }
+
+.poster-set-btn {
+  margin-top: 0.6rem;
+  background: #000;
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  font: 700 0.8rem var(--font-mono);
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+}
+.poster-set-btn:hover { background: #38bdf8; color: #000; }
+
+.poster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0;
+}
+.poster-tile {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  margin: 0 -1px -1px 0;
+  text-decoration: none;
+  color: inherit;
+  background: #000;
+  overflow: hidden;
+}
+.poster-tile:hover { border-color: #38bdf8; position: relative; z-index: 1; }
+.poster-tile-title {
+  text-decoration: none;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+  font: 800 0.8rem var(--font-sans);
+  color: var(--text-primary);
+}
+.poster-tile-view {
+  height: 170px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Section numbers keep a gap from their titles in every view */
+.clause-no { margin-right: 0.6rem; }
+
+.print-watermark small.print-watermark-org { font-size: 15pt; letter-spacing: 0.06em; text-transform: none; }
+.print-cover-org { font: 700 10pt var(--font-sans); margin-top: 3mm; }
+
+@media print {
+  /* In the full report a poster starts a page and stays whole */
+  .report-poster { break-before: page; break-inside: avoid; }
+  .poster-print-btn,
+  .poster-set-btn { display: none !important; }
+  .poster-tile-view { height: 220px; }
+
+  /* Printing posters only: the posters and the containers they sit in, one landscape page each */
+  body.print-poster-only > :not(.poster-path):not(.print-watermark) { display: none !important; }
+  body.print-poster-only .poster-path > :not(.poster-path):not(.poster-printing):not(.poster-print-title) { display: none !important; }
+  body.print-poster-only .poster-print-title { break-before: page; break-after: avoid; }
+  body.print-poster-only .poster-print-title + .poster-printing { break-before: avoid; }
+  body.print-poster-only .poster-path::before,
+  body.print-poster-only .poster-path::after { display: none !important; }
+  body.print-poster-only .poster-path {
+    break-before: auto !important;
+    break-inside: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+  }
+  .report-poster,
+  .report-poster * { max-height: none !important; overflow: visible !important; }
+  body.print-poster-only .poster-printing {
+    break-before: page;
+    break-inside: avoid;
+    margin: 0 !important;
+  }
+  .poster-print-title {
+    font: 800 16pt Georgia, "Times New Roman", serif;
+    margin-bottom: 3mm;
+    padding-bottom: 2mm;
+    border-bottom: 1px solid currentColor;
+  }
+}

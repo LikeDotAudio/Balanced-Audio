@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="doc-version" content="2026-10-18 09:34">
+  <meta name="doc-version" content="2026-10-18 09:47">
   <title>Balanced Audio Interconnection: A Report on AES-X152</title>
   <meta name="description" content="Report of findings on balanced audio interconnection for AES project X152 (SC-05-05): interactive engineering tools, SVG schematics, AES-X249, AES72-4E, SC-04-04, Jim Meyer Thevenin model, transformer winding simulator, and Dennis A. Bohn Pro Audio Reference for AES-X152 (SC-05-05).">
   
@@ -8081,6 +8081,18 @@ html[data-theme="paper"] .military-fader-readout {
   min-width: 6.5rem;
 }
 
+/* Every example other than the normal one is a fault: say so before its name */
+.qtp-demo-fault {
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f87171;
+  border: 1px solid #f87171;
+  padding: 0.05rem 0.45rem;
+  margin-right: 0.5rem;
+}
+
 .qtp-demo-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -8579,10 +8591,289 @@ html[data-theme="paper"] body > section .qtp-sim-card {
 }
 
 /* ==========================================================================
+   Activity wayfinding (js/activity-wayfinding.js) and 1px rules.
+   Sections, applications (panels, scopes, plots, simulators) and activities
+   are split by one 1px rule in the paper view's rule ink. Neighbouring
+   frames share an edge (negative 1px margins) so rules never double to 2px.
+   Colours are authored for the dark palette; the paper view inverts them.
+   ========================================================================== */
+:root {
+  --wf-rule: #4a4a4a;
+  --wf-head-bg: #0b0b0b;
+}
+
+html[data-theme="paper"] {
+  --wf-rule: #d4d4d4; /* the paper view's rule ink (prints dark grey) */
+  --wf-head-bg: transparent;
+}
+
+/* Section boundaries */
+.section,
+html[data-theme="paper"] body > section {
+  border-bottom: 1px solid var(--wf-rule) !important;
+}
+
+/* Application frames: one 1px rule, square, no glow */
+body > section :is(.svg-diagram-card, .svg-diagram-wrapper, .vintage-military-panel, .scope-screen-wrapper,
+  .interactive-calc-card, .detail-card, .qtp-sim-card, .aes59-always-accessible-card, .xlr-table-card,
+  .adapter-hub-card, .circuit-controls-card, .probe-badge-panel, .zobel-banner, .term-card, .rule-card,
+  .triad-card, .module-card, .enclosure-detail-card, .bohn-tribute-card, .xfmr-main-card, .contributor-card) {
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: var(--wf-rule) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Activity frame */
+.activity {
+  border: 1px solid var(--wf-rule);
+  border-radius: 0;
+  margin: 1.25rem 0;
+  scroll-margin-top: 5rem;
+}
+
+.activity + .activity {
+  margin-top: -1px;
+}
+
+.activity-head {
+  padding: 0.6rem 0.9rem 0.65rem;
+  border-bottom: 1px solid var(--wf-rule);
+  background: var(--wf-head-bg);
+  text-align: left;
+}
+
+.activity-head-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.75rem;
+}
+
+.activity-no {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  white-space: nowrap;
+}
+
+.activity-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.activity-brief,
+.activity-link {
+  margin: 0.25rem 0 0;
+  max-width: none;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.activity-link {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.activity-link::before {
+  content: "\2192\00a0";
+}
+
+/* Body: children sit on the activity rule and on each other, sharing one 1px edge */
+.activity-body {
+  margin: -1px;
+}
+
+.activity-body > * {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border-color: var(--wf-rule) !important;
+}
+
+.activity-body > * + * {
+  margin-top: -1px !important;
+}
+
+.activity-body > .activity-pad {
+  padding: 0.75rem 0.9rem !important;
+}
+
+.activity-body > .activity-pass {
+  padding: 0 !important;
+}
+
+.activity-body > .activity-pass > * {
+  margin: 0 !important;
+}
+
+/* Consecutive activities share one rule */
+.activity:has(+ .activity) {
+  margin-bottom: 0;
+}
+
+.activity-foot {
+  border-top: 1px solid var(--wf-rule);
+  padding: 0.2rem 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: right;
+  color: var(--text-muted);
+}
+
+/* A host card whose content is now activities gives up its own frame */
+.activity-host:not(.circuit-fullscreen-active) {
+  border: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Results that belong to an activity's controls */
+.activity-result::before {
+  content: attr(data-activity-result);
+  display: block;
+  flex: 0 0 100%;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--wf-rule);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Side-by-side instruments inside an activity: zero gap, shared edge */
+.activity-body > .xfmr-instruments-row {
+  gap: 0;
+  padding: 0 !important;
+}
+
+.xfmr-instruments-row > .scope-screen-wrapper + .scope-screen-wrapper {
+  margin-left: -1px;
+}
+
+.activity-body > .ds-generator-grid {
+  gap: 0;
+  padding: 0 !important;
+}
+
+.ds-generator-grid > * + * {
+  margin-left: -1px;
+}
+
+/* The pyramid and its voltmeter: two activities side by side, one shared rule */
+.pyr-split {
+  gap: 0;
+}
+
+.pyr-split {
+  align-items: stretch;
+}
+
+.pyr-split > .activity {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-width: 0;
+}
+
+.pyr-split > .activity > .activity-body {
+  flex: 1 1 auto;
+}
+
+.pyr-split-right.activity-pass > .interactive-calc-card {
+  padding: 0.75rem 0.9rem;
+}
+
+.pyr-split > .activity + .activity {
+  margin-left: -1px;
+}
+
+@media (max-width: 1100px) {
+  .ds-generator-grid > * + * { margin-left: 0; margin-top: -1px; }
+  .pyr-split > .activity + .activity { margin-left: 0; margin-top: -1px; }
+}
+
+@media (max-width: 860px) {
+  .xfmr-instruments-row > .scope-screen-wrapper + .scope-screen-wrapper { margin-left: 0; margin-top: -1px; }
+}
+
+.term-card > .activity {
+  margin: 0.75rem 0 0;
+}
+
+/* "Activities in this section" strip under the section header */
+.activity-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 1rem;
+  margin-top: 0.9rem;
+  padding: 0.45rem 0;
+  border-top: 1px solid var(--wf-rule);
+  border-bottom: 1px solid var(--wf-rule);
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.activity-strip-label {
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.activity-strip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.1rem;
+}
+
+.activity-strip-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.activity-strip-link:hover {
+  text-decoration: underline;
+}
+
+.activity-strip-no {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+/* Paper view: keep the wayfinding text at report size (the page enlarges body p) */
+html[data-theme="paper"] body > section :is(.activity-brief, .activity-link) {
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+html[data-theme="paper"] body > section .activity-no,
+html[data-theme="paper"] body > section .activity-strip-no,
+html[data-theme="paper"] body > section .activity-foot,
+html[data-theme="paper"] body > section .activity-result::before {
+  font-family: var(--font-mono) !important;
+}
+
+/* ==========================================================================
    Print PDF button, version, watermark (js/print-report.js)
    ========================================================================== */
 .sidebar-print-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.6rem;
   padding: 0.4rem 1.1rem;
@@ -8599,6 +8890,7 @@ html[data-theme="paper"] body > section .qtp-sim-card {
 }
 .sidebar-print-btn:hover { background: #38bdf8; color: #000; }
 .sidebar-doc-version {
+  flex-basis: 100%;
   font: 600 0.68rem var(--font-mono);
   color: #94a3b8;
 }
@@ -8635,7 +8927,10 @@ html[data-theme="paper"] body > section .qtp-sim-card {
     display: none !important;
   }
 
-  svg, figure, table, img, canvas, .rule-card, .detail-card { break-inside: avoid; }
+  /* An instrument, card or worked example stays in one rectangle on one page */
+  svg, figure, table, img, canvas, .rule-card, .detail-card,
+  .interactive-calc-card, .vintage-military-panel, .svg-diagram-card, .circuit-subcard,
+  .qtp-demo, .dmm-display-card, .hp-voltmeter-card { break-inside: avoid; }
   h2, h3, h4 { break-after: avoid; }
 
   .print-cover {
@@ -8753,6 +9048,108 @@ html[data-theme="paper"] body > section .qtp-sim-card {
 .spice-points th { color: #9ca3af; font: 700 0.7rem var(--font-mono); text-transform: uppercase; }
 .spice-points code { font-family: var(--font-mono); color: #facc15; }
 .spice-foot { margin: 0.6rem 0.75rem 0; color: #6b7280; font-size: 0.75rem; }
+
+/* ==========================================================================
+   Posters: stand-alone reference tables, rule cards and figures (js/posters.js)
+   ========================================================================== */
+.report-poster { position: relative; }
+.poster-print-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 2;
+  background: #000;
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  font: 700 0.7rem var(--font-mono);
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+}
+.poster-print-btn:hover { background: #38bdf8; color: #000; }
+
+.poster-set-btn {
+  margin-top: 0.6rem;
+  background: #000;
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  font: 700 0.8rem var(--font-mono);
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+}
+.poster-set-btn:hover { background: #38bdf8; color: #000; }
+
+.poster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0;
+}
+.poster-tile {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  margin: 0 -1px -1px 0;
+  text-decoration: none;
+  color: inherit;
+  background: #000;
+  overflow: hidden;
+}
+.poster-tile:hover { border-color: #38bdf8; position: relative; z-index: 1; }
+.poster-tile-title {
+  text-decoration: none;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+  font: 800 0.8rem var(--font-sans);
+  color: var(--text-primary);
+}
+.poster-tile-view {
+  height: 170px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Section numbers keep a gap from their titles in every view */
+.clause-no { margin-right: 0.6rem; }
+
+.print-watermark small.print-watermark-org { font-size: 15pt; letter-spacing: 0.06em; text-transform: none; }
+.print-cover-org { font: 700 10pt var(--font-sans); margin-top: 3mm; }
+
+@media print {
+  /* In the full report a poster starts a page and stays whole */
+  .report-poster { break-before: page; break-inside: avoid; }
+  .poster-print-btn,
+  .poster-set-btn { display: none !important; }
+  .poster-tile-view { height: 220px; }
+
+  /* Printing posters only: the posters and the containers they sit in, one landscape page each */
+  body.print-poster-only > :not(.poster-path):not(.print-watermark) { display: none !important; }
+  body.print-poster-only .poster-path > :not(.poster-path):not(.poster-printing):not(.poster-print-title) { display: none !important; }
+  body.print-poster-only .poster-print-title { break-before: page; break-after: avoid; }
+  body.print-poster-only .poster-print-title + .poster-printing { break-before: avoid; }
+  body.print-poster-only .poster-path::before,
+  body.print-poster-only .poster-path::after { display: none !important; }
+  body.print-poster-only .poster-path {
+    break-before: auto !important;
+    break-inside: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+  }
+  .report-poster,
+  .report-poster * { max-height: none !important; overflow: visible !important; }
+  body.print-poster-only .poster-printing {
+    break-before: page;
+    break-inside: avoid;
+    margin: 0 !important;
+  }
+  .poster-print-title {
+    font: 800 16pt Georgia, "Times New Roman", serif;
+    margin-bottom: 3mm;
+    padding-bottom: 2mm;
+    border-bottom: 1px solid currentColor;
+  }
+}
 
 </style>
   
@@ -9426,13 +9823,9 @@ html[data-theme="paper"] body > section .qtp-sim-card {
 </g>
 
 <!-- ================= Left: INPUT Section (Dual 5-Way Binding Posts) ================= -->
-<g transform="translate(44, 290)">
+<g transform="translate(22, 290)">
   <text x="32" y="14" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">INPUT</text>
-  
-  <!-- Dual Insulating Base -->
   <rect x="12" y="24" width="40" height="96" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
-  
-  <!-- Red Binding Post (HOT / +) -->
   <g transform="translate(32, 46)">
     <circle cx="0" cy="0" r="14" fill="#dc2626" stroke="#991b1b" stroke-width="1.5"/>
     <circle cx="0" cy="0" r="11" fill="#b91c1c"/>
@@ -9440,8 +9833,6 @@ html[data-theme="paper"] body > section .qtp-sim-card {
     <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
     <text x="22" y="4" fill="#dc2626" font-family="Arial, sans-serif" font-size="8" font-weight="800">+</text>
   </g>
-
-  <!-- Black Binding Post (COLD / GND / -) -->
   <g transform="translate(32, 94)">
     <circle cx="0" cy="0" r="14" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
     <circle cx="0" cy="0" r="11" fill="#1e293b"/>
@@ -9449,8 +9840,6 @@ html[data-theme="paper"] body > section .qtp-sim-card {
     <circle cx="0" cy="0" r="3.5" fill="#020617"/>
     <text x="22" y="4" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800">—</text>
   </g>
-
-  <!-- Chassis Ground Post & Symbol -->
   <g transform="translate(32, 134)">
     <circle cx="0" cy="0" r="6" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
     <line x1="-6" y1="10" x2="6" y2="10" stroke="#0f172a" stroke-width="1.2"/>
@@ -9459,118 +9848,92 @@ html[data-theme="paper"] body > section .qtp-sim-card {
   </g>
 </g>
 
-<!-- ================= Center: RANGE Rotary Selector with Pyramid Color Alignment ================= -->
-<g transform="translate(190, 365)">
-  <text x="0" y="-62" fill="#0f172a" font-family="Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.1em" text-anchor="middle">RANGE</text>
-  
-  <!-- Header Labels with Color Accents -->
-  <text x="-58" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">dB</text>
-  <text x="-36" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">mV</text>
-  <text x="36" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">V</text>
-  <text x="58" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">dB</text>
-
-  <!-- Left Bank: Amber (Mic Level: -80 to -40 dB) & Cyan (Consumer: -30, -20 dB) -->
-  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <!-- Range 6: 100 mV / -20 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="6" data-tier="consumer">
-      <text x="-58" y="-34" text-anchor="end" fill="#0284c7">-20</text><text x="-36" y="-34" text-anchor="end" fill="#0284c7">100</text>
-      <line x1="-32" y1="-34" x2="-22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+<!-- ================= Center: RANGE Rotary Selector (full-scale range; ticks share the JS range indices) ================= -->
+<g transform="translate(200, 398)">
+  <text x="0" y="-98" fill="#0f172a" font-family="Arial, sans-serif" font-size="30" font-weight="800" letter-spacing="0.08em" text-anchor="middle">RANGE</text>
+  <text x="-84" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800" text-anchor="end">dB</text>
+  <text x="-40" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800" text-anchor="end">mV</text>
+  <text x="40" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800">V</text>
+  <text x="80" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800">dB</text>
+  <g font-family="Arial, sans-serif" font-size="16" font-weight="700">
+    <g class="range-dial-tick zone-consumer" data-range-idx="10" data-tier="consumer">
+      <text x="-84" y="-54" text-anchor="end" fill="#0284c7">-20</text><text x="-40" y="-54" text-anchor="end" fill="#0284c7">100</text>
+      <line x1="-36" y1="-59" x2="-20.3" y2="-22.1" stroke="#0284c7" stroke-width="1.2"/>
     </g>
-    <!-- Range 5: 30 mV / -30 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="5" data-tier="consumer">
-      <text x="-58" y="-22" text-anchor="end" fill="#0284c7">-30</text><text x="-36" y="-22" text-anchor="end" fill="#0284c7">30</text>
-      <line x1="-32" y1="-22" x2="-26" y2="-16" stroke="#0284c7" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-consumer" data-range-idx="9" data-tier="consumer">
+      <text x="-84" y="-34" text-anchor="end" fill="#0284c7">-30</text><text x="-40" y="-34" text-anchor="end" fill="#0284c7">30</text>
+      <line x1="-36" y1="-39" x2="-25.6" y2="-15.7" stroke="#0284c7" stroke-width="1.2"/>
     </g>
-    <!-- Range 4: 10 mV / -40 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="8" data-tier="mic">
+      <text x="-84" y="-14" text-anchor="end" fill="#d97706">-40</text><text x="-40" y="-14" text-anchor="end" fill="#d97706">10</text>
+      <line x1="-36" y1="-19" x2="-28.9" y2="-8.2" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <g class="range-dial-tick zone-mic" data-range-idx="7" data-tier="mic">
+      <text x="-84" y="6" text-anchor="end" fill="#d97706">-50</text><text x="-40" y="6" text-anchor="end" fill="#d97706">3</text>
+      <line x1="-36" y1="1" x2="-29.9" y2="2.1" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <g class="range-dial-tick zone-mic" data-range-idx="6" data-tier="mic">
+      <text x="-84" y="26" text-anchor="end" fill="#d97706">-60</text><text x="-40" y="26" text-anchor="end" fill="#d97706">1</text>
+      <line x1="-36" y1="21" x2="-28.2" y2="10.1" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <g class="range-dial-tick zone-mic" data-range-idx="5" data-tier="mic">
+      <text x="-84" y="46" text-anchor="end" fill="#d97706">-70</text><text x="-40" y="46" text-anchor="end" fill="#d97706">.3</text>
+      <line x1="-36" y1="41" x2="-24.7" y2="17.1" stroke="#d97706" stroke-width="1.2"/>
+    </g>
     <g class="range-dial-tick zone-mic" data-range-idx="4" data-tier="mic">
-      <text x="-58" y="-10" text-anchor="end" fill="#d97706">-40</text><text x="-36" y="-10" text-anchor="end" fill="#d97706">10</text>
-      <line x1="-32" y1="-10" x2="-28" y2="-8" stroke="#d97706" stroke-width="1.2"/>
+      <text x="-84" y="66" text-anchor="end" fill="#d97706">-80</text><text x="-40" y="66" text-anchor="end" fill="#d97706">.1</text>
+      <line x1="-36" y1="61" x2="-19.4" y2="22.9" stroke="#d97706" stroke-width="1.2"/>
     </g>
-    <!-- Range 3: 3 mV / -50 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="3" data-tier="mic">
-      <text x="-58" y="2" text-anchor="end" fill="#d97706">-50</text><text x="-36" y="2" text-anchor="end" fill="#d97706">3</text>
-      <line x1="-32" y1="2" x2="-28" y2="2" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-consumer" data-range-idx="11" data-tier="consumer">
+      <text x="40" y="-54" fill="#0284c7">.3</text><text x="80" y="-54" fill="#0284c7">-10</text>
+      <line x1="36" y1="-59" x2="20.3" y2="-22.1" stroke="#0284c7" stroke-width="1.2"/>
     </g>
-    <!-- Range 2: 1 mV / -60 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="2" data-tier="mic">
-      <text x="-58" y="14" text-anchor="end" fill="#d97706">-60</text><text x="-36" y="14" text-anchor="end" fill="#d97706">1</text>
-      <line x1="-32" y1="14" x2="-28" y2="10" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-pro" data-range-idx="12" data-tier="pro">
+      <text x="40" y="-34" fill="#16a34a">1</text><text x="80" y="-34" fill="#16a34a">0</text>
+      <line x1="36" y1="-39" x2="25.6" y2="-15.7" stroke="#16a34a" stroke-width="1.2"/>
     </g>
-    <!-- Range 1: .3 mV / -70 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="1" data-tier="mic">
-      <text x="-58" y="26" text-anchor="end" fill="#d97706">-70</text><text x="-36" y="26" text-anchor="end" fill="#d97706">.3</text>
-      <line x1="-32" y1="26" x2="-26" y2="18" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-pro active" data-range-idx="13" data-tier="pro">
+      <text x="40" y="-14" fill="#16a34a">3</text><text x="80" y="-14" fill="#16a34a">10</text>
+      <line x1="36" y1="-19" x2="28.9" y2="-8.2" stroke="#16a34a" stroke-width="1.2"/>
     </g>
-    <!-- Range 0: .1 mV / -80 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="0" data-tier="mic">
-      <text x="-58" y="38" text-anchor="end" fill="#d97706">-80</text><text x="-36" y="38" text-anchor="end" fill="#d97706">.1</text>
-      <line x1="-32" y1="38" x2="-22" y2="26" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="14" data-tier="headroom">
+      <text x="40" y="6" fill="#dc2626">10</text><text x="80" y="6" fill="#dc2626">20</text>
+      <line x1="36" y1="1" x2="29.9" y2="2.1" stroke="#dc2626" stroke-width="1.2"/>
     </g>
-  </g>
-
-  <!-- Right Bank: Cyan (.3V / -10dB), Green (Pro Line: 1V, 3V), Red (Headroom: 10V to 300V) -->
-  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <!-- Range 7: .3 V / -10 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="7" data-tier="consumer">
-      <text x="36" y="-34" fill="#0284c7">.3</text><text x="58" y="-34" fill="#0284c7">-10</text>
-      <line x1="32" y1="-34" x2="22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="15" data-tier="headroom">
+      <text x="40" y="26" fill="#dc2626">30</text><text x="80" y="26" fill="#dc2626">30</text>
+      <line x1="36" y1="21" x2="28.2" y2="10.1" stroke="#dc2626" stroke-width="1.2"/>
     </g>
-    <!-- Range 8: 1 V / 0 dB (Pro Line: Green) -->
-    <g class="range-dial-tick zone-pro" data-range-idx="8" data-tier="pro">
-      <text x="36" y="-22" fill="#16a34a">1</text><text x="58" y="-22" fill="#16a34a">0</text>
-      <line x1="32" y1="-22" x2="26" y2="-16" stroke="#16a34a" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="16" data-tier="headroom">
+      <text x="40" y="46" fill="#dc2626">100</text><text x="80" y="46" fill="#dc2626">40</text>
+      <line x1="36" y1="41" x2="24.7" y2="17.1" stroke="#dc2626" stroke-width="1.2"/>
     </g>
-    <!-- Range 9: 3 V / +10 dB (Pro Line Nominal: Green - Active Default) -->
-    <g class="range-dial-tick zone-pro active" data-range-idx="9" data-tier="pro">
-      <text x="36" y="-10" fill="#16a34a" font-weight="900">3</text><text x="58" y="-10" fill="#16a34a" font-weight="900">+10</text>
-      <line x1="32" y1="-10" x2="28" y2="-8" stroke="#16a34a" stroke-width="2"/>
-    </g>
-    <!-- Range 10: 10 V / +20 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="10" data-tier="headroom">
-      <text x="36" y="2" fill="#dc2626">10</text><text x="58" y="2" fill="#dc2626">+20</text>
-      <line x1="32" y1="2" x2="28" y2="2" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 11: 30 V / +30 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="11" data-tier="headroom">
-      <text x="36" y="14" fill="#dc2626">30</text><text x="58" y="14" fill="#dc2626">+30</text>
-      <line x1="32" y1="14" x2="28" y2="10" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 12: 100 V / +40 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="12" data-tier="headroom">
-      <text x="36" y="26" fill="#dc2626">100</text><text x="58" y="26" fill="#dc2626">+40</text>
-      <line x1="32" y1="26" x2="26" y2="18" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 13: 300 V / +50 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="13" data-tier="headroom">
-      <text x="36" y="38" fill="#dc2626">300</text><text x="58" y="38" fill="#dc2626">+50</text>
-      <line x1="32" y1="38" x2="22" y2="26" stroke="#dc2626" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="17" data-tier="headroom">
+      <text x="40" y="66" fill="#dc2626">300</text><text x="80" y="66" fill="#dc2626">50</text>
+      <line x1="36" y1="61" x2="19.4" y2="22.9" stroke="#dc2626" stroke-width="1.2"/>
     </g>
   </g>
 
   <!-- Interactive Rotary Knob Rotor -->
-  <g id="pyr-range-knob-rotor" class="range-knob-rotor" style="transform-origin: 0px 0px; cursor: grab; transform: rotate(-15.9deg);" data-range-idx="9">
-    <circle cx="0" cy="0" r="23" fill="url(#pyr-knob-base)" stroke="#090d16" stroke-width="2"/>
-    <circle cx="0" cy="0" r="21" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
-    <circle cx="0" cy="0" r="11" fill="url(#pyr-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
-    <!-- Range Pointer Indicator Line (pointing at angle along positive X) -->
-    <line x1="0" y1="0" x2="19" y2="0" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="0" cy="0" r="3.5" fill="#f8fafc"/>
+  <g id="pyr-range-knob-rotor" class="range-knob-rotor" style="transform-origin: 0px 0px; cursor: grab; transform: rotate(-15.9deg);" data-range-idx="13">
+    <circle cx="0" cy="0" r="28" fill="url(#pyr-knob-base)" stroke="#090d16" stroke-width="2"/>
+    <circle cx="0" cy="0" r="25.5" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
+    <circle cx="0" cy="0" r="13" fill="url(#pyr-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
+    <line x1="0" y1="0" x2="24" y2="0" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="4" fill="#f8fafc"/>
   </g>
+  <text x="0" y="82" fill="#475569" font-family="Arial, sans-serif" font-size="8.5" font-weight="700" text-anchor="middle">RANGE = full-scale reading · choose the lowest range above the signal</text>
 </g>
 
 <!-- ================= Right: LINE Power Switch & Jewel Pilot Lamp ================= -->
-<g transform="translate(305, 305)">
+<g transform="translate(322, 305)">
   <text x="18" y="0" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">LINE</text>
-  
-  <!-- Toggle Switch -->
   <g transform="translate(18, 26)">
     <polygon points="-7,-4 0,-8 7,-4 7,4 0,8 -7,4" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
     <circle cx="0" cy="0" r="5" fill="#64748b"/>
     <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
     <circle cx="0" cy="-13" r="3.5" fill="#e2e8f0" stroke="#64748b" stroke-width="0.75"/>
   </g>
-
-  <!-- ON Label & Red Faceted Jewel Pilot Light -->
   <text x="18" y="68" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800" text-anchor="middle">ON</text>
   <g transform="translate(18, 92)">
     <circle cx="0" cy="0" r="14" fill="#94a3b8" stroke="#475569" stroke-width="1.2"/>
@@ -9597,15 +9960,15 @@ html[data-theme="paper"] body > section .qtp-sim-card {
               </div>
               <div class="dmm-grid">
                 <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">V_RMS (VOLTAGE)</div>
+                  <div id="dmm-lbl-1" class="dmm-readout-label">V_RMS (VOLTAGE)</div>
                   <div id="dmm-vrms-val" class="dmm-readout-value cyan">1.228 V</div>
                 </div>
                 <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">AUDIO LEVEL (dBu)</div>
+                  <div id="dmm-lbl-2" class="dmm-readout-label">AUDIO LEVEL (dBu)</div>
                   <div id="dmm-dbu-val" class="dmm-readout-value green">+4.0 dBu</div>
                 </div>
                 <div class="dmm-readout-item">
-                  <div class="dmm-readout-label">V_PEAK (CREST)</div>
+                  <div id="dmm-lbl-3" class="dmm-readout-label">V_PEAK (CREST)</div>
                   <div id="dmm-vpeak-val" class="dmm-readout-value amber">1.737 V</div>
                 </div>
               </div>
@@ -12027,13 +12390,9 @@ html[data-theme="paper"] body > section .qtp-sim-card {
 </g>
 
 <!-- ================= Left: INPUT Section (Dual 5-Way Binding Posts) ================= -->
-<g transform="translate(44, 290)">
+<g transform="translate(22, 290)">
   <text x="32" y="14" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">INPUT</text>
-  
-  <!-- Dual Insulating Base -->
   <rect x="12" y="24" width="40" height="96" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
-  
-  <!-- Red Binding Post (HOT / +) -->
   <g transform="translate(32, 46)">
     <circle cx="0" cy="0" r="14" fill="#dc2626" stroke="#991b1b" stroke-width="1.5"/>
     <circle cx="0" cy="0" r="11" fill="#b91c1c"/>
@@ -12041,8 +12400,6 @@ html[data-theme="paper"] body > section .qtp-sim-card {
     <circle cx="0" cy="0" r="3.5" fill="#0f172a"/>
     <text x="22" y="4" fill="#dc2626" font-family="Arial, sans-serif" font-size="8" font-weight="800">+</text>
   </g>
-
-  <!-- Black Binding Post (COLD / GND / -) -->
   <g transform="translate(32, 94)">
     <circle cx="0" cy="0" r="14" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
     <circle cx="0" cy="0" r="11" fill="#1e293b"/>
@@ -12050,8 +12407,6 @@ html[data-theme="paper"] body > section .qtp-sim-card {
     <circle cx="0" cy="0" r="3.5" fill="#020617"/>
     <text x="22" y="4" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800">—</text>
   </g>
-
-  <!-- Chassis Ground Post & Symbol -->
   <g transform="translate(32, 134)">
     <circle cx="0" cy="0" r="6" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
     <line x1="-6" y1="10" x2="6" y2="10" stroke="#0f172a" stroke-width="1.2"/>
@@ -12060,118 +12415,92 @@ html[data-theme="paper"] body > section .qtp-sim-card {
   </g>
 </g>
 
-<!-- ================= Center: RANGE Rotary Selector with Pyramid Color Alignment ================= -->
-<g transform="translate(190, 365)">
-  <text x="0" y="-62" fill="#0f172a" font-family="Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="0.1em" text-anchor="middle">RANGE</text>
-  
-  <!-- Header Labels with Color Accents -->
-  <text x="-58" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">dB</text>
-  <text x="-36" y="-48" fill="#d97706" font-family="Arial, sans-serif" font-size="7" font-weight="800" text-anchor="end">mV</text>
-  <text x="36" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">V</text>
-  <text x="58" y="-48" fill="#0284c7" font-family="Arial, sans-serif" font-size="7" font-weight="800">dB</text>
-
-  <!-- Left Bank: Amber (Mic Level: -80 to -40 dB) & Cyan (Consumer: -30, -20 dB) -->
-  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <!-- Range 6: 100 mV / -20 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="6" data-tier="consumer">
-      <text x="-58" y="-34" text-anchor="end" fill="#0284c7">-20</text><text x="-36" y="-34" text-anchor="end" fill="#0284c7">100</text>
-      <line x1="-32" y1="-34" x2="-22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+<!-- ================= Center: RANGE Rotary Selector (full-scale range; ticks share the JS range indices) ================= -->
+<g transform="translate(200, 398)">
+  <text x="0" y="-98" fill="#0f172a" font-family="Arial, sans-serif" font-size="30" font-weight="800" letter-spacing="0.08em" text-anchor="middle">RANGE</text>
+  <text x="-84" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800" text-anchor="end">dB</text>
+  <text x="-40" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800" text-anchor="end">mV</text>
+  <text x="40" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800">V</text>
+  <text x="80" y="-76" fill="#475569" font-family="Arial, sans-serif" font-size="11" font-weight="800">dB</text>
+  <g font-family="Arial, sans-serif" font-size="16" font-weight="700">
+    <g class="range-dial-tick zone-consumer" data-range-idx="10" data-tier="consumer">
+      <text x="-84" y="-54" text-anchor="end" fill="#0284c7">-20</text><text x="-40" y="-54" text-anchor="end" fill="#0284c7">100</text>
+      <line x1="-36" y1="-59" x2="-20.3" y2="-22.1" stroke="#0284c7" stroke-width="1.2"/>
     </g>
-    <!-- Range 5: 30 mV / -30 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="5" data-tier="consumer">
-      <text x="-58" y="-22" text-anchor="end" fill="#0284c7">-30</text><text x="-36" y="-22" text-anchor="end" fill="#0284c7">30</text>
-      <line x1="-32" y1="-22" x2="-26" y2="-16" stroke="#0284c7" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-consumer" data-range-idx="9" data-tier="consumer">
+      <text x="-84" y="-34" text-anchor="end" fill="#0284c7">-30</text><text x="-40" y="-34" text-anchor="end" fill="#0284c7">30</text>
+      <line x1="-36" y1="-39" x2="-25.6" y2="-15.7" stroke="#0284c7" stroke-width="1.2"/>
     </g>
-    <!-- Range 4: 10 mV / -40 dB (Microphone: Amber) -->
+    <g class="range-dial-tick zone-mic" data-range-idx="8" data-tier="mic">
+      <text x="-84" y="-14" text-anchor="end" fill="#d97706">-40</text><text x="-40" y="-14" text-anchor="end" fill="#d97706">10</text>
+      <line x1="-36" y1="-19" x2="-28.9" y2="-8.2" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <g class="range-dial-tick zone-mic" data-range-idx="7" data-tier="mic">
+      <text x="-84" y="6" text-anchor="end" fill="#d97706">-50</text><text x="-40" y="6" text-anchor="end" fill="#d97706">3</text>
+      <line x1="-36" y1="1" x2="-29.9" y2="2.1" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <g class="range-dial-tick zone-mic" data-range-idx="6" data-tier="mic">
+      <text x="-84" y="26" text-anchor="end" fill="#d97706">-60</text><text x="-40" y="26" text-anchor="end" fill="#d97706">1</text>
+      <line x1="-36" y1="21" x2="-28.2" y2="10.1" stroke="#d97706" stroke-width="1.2"/>
+    </g>
+    <g class="range-dial-tick zone-mic" data-range-idx="5" data-tier="mic">
+      <text x="-84" y="46" text-anchor="end" fill="#d97706">-70</text><text x="-40" y="46" text-anchor="end" fill="#d97706">.3</text>
+      <line x1="-36" y1="41" x2="-24.7" y2="17.1" stroke="#d97706" stroke-width="1.2"/>
+    </g>
     <g class="range-dial-tick zone-mic" data-range-idx="4" data-tier="mic">
-      <text x="-58" y="-10" text-anchor="end" fill="#d97706">-40</text><text x="-36" y="-10" text-anchor="end" fill="#d97706">10</text>
-      <line x1="-32" y1="-10" x2="-28" y2="-8" stroke="#d97706" stroke-width="1.2"/>
+      <text x="-84" y="66" text-anchor="end" fill="#d97706">-80</text><text x="-40" y="66" text-anchor="end" fill="#d97706">.1</text>
+      <line x1="-36" y1="61" x2="-19.4" y2="22.9" stroke="#d97706" stroke-width="1.2"/>
     </g>
-    <!-- Range 3: 3 mV / -50 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="3" data-tier="mic">
-      <text x="-58" y="2" text-anchor="end" fill="#d97706">-50</text><text x="-36" y="2" text-anchor="end" fill="#d97706">3</text>
-      <line x1="-32" y1="2" x2="-28" y2="2" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-consumer" data-range-idx="11" data-tier="consumer">
+      <text x="40" y="-54" fill="#0284c7">.3</text><text x="80" y="-54" fill="#0284c7">-10</text>
+      <line x1="36" y1="-59" x2="20.3" y2="-22.1" stroke="#0284c7" stroke-width="1.2"/>
     </g>
-    <!-- Range 2: 1 mV / -60 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="2" data-tier="mic">
-      <text x="-58" y="14" text-anchor="end" fill="#d97706">-60</text><text x="-36" y="14" text-anchor="end" fill="#d97706">1</text>
-      <line x1="-32" y1="14" x2="-28" y2="10" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-pro" data-range-idx="12" data-tier="pro">
+      <text x="40" y="-34" fill="#16a34a">1</text><text x="80" y="-34" fill="#16a34a">0</text>
+      <line x1="36" y1="-39" x2="25.6" y2="-15.7" stroke="#16a34a" stroke-width="1.2"/>
     </g>
-    <!-- Range 1: .3 mV / -70 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="1" data-tier="mic">
-      <text x="-58" y="26" text-anchor="end" fill="#d97706">-70</text><text x="-36" y="26" text-anchor="end" fill="#d97706">.3</text>
-      <line x1="-32" y1="26" x2="-26" y2="18" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-pro active" data-range-idx="13" data-tier="pro">
+      <text x="40" y="-14" fill="#16a34a">3</text><text x="80" y="-14" fill="#16a34a">10</text>
+      <line x1="36" y1="-19" x2="28.9" y2="-8.2" stroke="#16a34a" stroke-width="1.2"/>
     </g>
-    <!-- Range 0: .1 mV / -80 dB (Microphone: Amber) -->
-    <g class="range-dial-tick zone-mic" data-range-idx="0" data-tier="mic">
-      <text x="-58" y="38" text-anchor="end" fill="#d97706">-80</text><text x="-36" y="38" text-anchor="end" fill="#d97706">.1</text>
-      <line x1="-32" y1="38" x2="-22" y2="26" stroke="#d97706" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="14" data-tier="headroom">
+      <text x="40" y="6" fill="#dc2626">10</text><text x="80" y="6" fill="#dc2626">20</text>
+      <line x1="36" y1="1" x2="29.9" y2="2.1" stroke="#dc2626" stroke-width="1.2"/>
     </g>
-  </g>
-
-  <!-- Right Bank: Cyan (.3V / -10dB), Green (Pro Line: 1V, 3V), Red (Headroom: 10V to 300V) -->
-  <g font-family="Arial, sans-serif" font-size="6.5" font-weight="700">
-    <!-- Range 7: .3 V / -10 dB (Consumer: Cyan) -->
-    <g class="range-dial-tick zone-consumer" data-range-idx="7" data-tier="consumer">
-      <text x="36" y="-34" fill="#0284c7">.3</text><text x="58" y="-34" fill="#0284c7">-10</text>
-      <line x1="32" y1="-34" x2="22" y2="-24" stroke="#0284c7" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="15" data-tier="headroom">
+      <text x="40" y="26" fill="#dc2626">30</text><text x="80" y="26" fill="#dc2626">30</text>
+      <line x1="36" y1="21" x2="28.2" y2="10.1" stroke="#dc2626" stroke-width="1.2"/>
     </g>
-    <!-- Range 8: 1 V / 0 dB (Pro Line: Green) -->
-    <g class="range-dial-tick zone-pro" data-range-idx="8" data-tier="pro">
-      <text x="36" y="-22" fill="#16a34a">1</text><text x="58" y="-22" fill="#16a34a">0</text>
-      <line x1="32" y1="-22" x2="26" y2="-16" stroke="#16a34a" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="16" data-tier="headroom">
+      <text x="40" y="46" fill="#dc2626">100</text><text x="80" y="46" fill="#dc2626">40</text>
+      <line x1="36" y1="41" x2="24.7" y2="17.1" stroke="#dc2626" stroke-width="1.2"/>
     </g>
-    <!-- Range 9: 3 V / +10 dB (Pro Line Nominal: Green - Active Default) -->
-    <g class="range-dial-tick zone-pro active" data-range-idx="9" data-tier="pro">
-      <text x="36" y="-10" fill="#16a34a" font-weight="900">3</text><text x="58" y="-10" fill="#16a34a" font-weight="900">+10</text>
-      <line x1="32" y1="-10" x2="28" y2="-8" stroke="#16a34a" stroke-width="2"/>
-    </g>
-    <!-- Range 10: 10 V / +20 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="10" data-tier="headroom">
-      <text x="36" y="2" fill="#dc2626">10</text><text x="58" y="2" fill="#dc2626">+20</text>
-      <line x1="32" y1="2" x2="28" y2="2" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 11: 30 V / +30 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="11" data-tier="headroom">
-      <text x="36" y="14" fill="#dc2626">30</text><text x="58" y="14" fill="#dc2626">+30</text>
-      <line x1="32" y1="14" x2="28" y2="10" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 12: 100 V / +40 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="12" data-tier="headroom">
-      <text x="36" y="26" fill="#dc2626">100</text><text x="58" y="26" fill="#dc2626">+40</text>
-      <line x1="32" y1="26" x2="26" y2="18" stroke="#dc2626" stroke-width="1.2"/>
-    </g>
-    <!-- Range 13: 300 V / +50 dB (Headroom: Red) -->
-    <g class="range-dial-tick zone-headroom" data-range-idx="13" data-tier="headroom">
-      <text x="36" y="38" fill="#dc2626">300</text><text x="58" y="38" fill="#dc2626">+50</text>
-      <line x1="32" y1="38" x2="22" y2="26" stroke="#dc2626" stroke-width="1.2"/>
+    <g class="range-dial-tick zone-headroom" data-range-idx="17" data-tier="headroom">
+      <text x="40" y="66" fill="#dc2626">300</text><text x="80" y="66" fill="#dc2626">50</text>
+      <line x1="36" y1="61" x2="19.4" y2="22.9" stroke="#dc2626" stroke-width="1.2"/>
     </g>
   </g>
 
   <!-- Interactive Rotary Knob Rotor -->
-  <g id="pp-range-knob-rotor" class="range-knob-rotor" style="transform-origin: 0px 0px; cursor: grab; transform: rotate(-15.9deg);" data-range-idx="9">
-    <circle cx="0" cy="0" r="23" fill="url(#pp-knob-base)" stroke="#090d16" stroke-width="2"/>
-    <circle cx="0" cy="0" r="21" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
-    <circle cx="0" cy="0" r="11" fill="url(#pp-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
-    <!-- Range Pointer Indicator Line (pointing at angle along positive X) -->
-    <line x1="0" y1="0" x2="19" y2="0" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="0" cy="0" r="3.5" fill="#f8fafc"/>
+  <g id="pp-range-knob-rotor" class="range-knob-rotor" style="transform-origin: 0px 0px; cursor: grab; transform: rotate(-15.9deg);" data-range-idx="13">
+    <circle cx="0" cy="0" r="28" fill="url(#pp-knob-base)" stroke="#090d16" stroke-width="2"/>
+    <circle cx="0" cy="0" r="25.5" fill="none" stroke="#334155" stroke-dasharray="2,3.5" stroke-width="2"/>
+    <circle cx="0" cy="0" r="13" fill="url(#pp-red-knob)" stroke="#7f1d1d" stroke-width="1.2"/>
+    <line x1="0" y1="0" x2="24" y2="0" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="4" fill="#f8fafc"/>
   </g>
+  <text x="0" y="82" fill="#475569" font-family="Arial, sans-serif" font-size="8.5" font-weight="700" text-anchor="middle">RANGE = full-scale reading · choose the lowest range above the signal</text>
 </g>
 
 <!-- ================= Right: LINE Power Switch & Jewel Pilot Lamp ================= -->
-<g transform="translate(305, 305)">
+<g transform="translate(322, 305)">
   <text x="18" y="0" fill="#0f172a" font-family="Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="0.08em" text-anchor="middle">LINE</text>
-  
-  <!-- Toggle Switch -->
   <g transform="translate(18, 26)">
     <polygon points="-7,-4 0,-8 7,-4 7,4 0,8 -7,4" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
     <circle cx="0" cy="0" r="5" fill="#64748b"/>
     <ellipse cx="0" cy="-7" rx="3.5" ry="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
     <circle cx="0" cy="-13" r="3.5" fill="#e2e8f0" stroke="#64748b" stroke-width="0.75"/>
   </g>
-
-  <!-- ON Label & Red Faceted Jewel Pilot Light -->
   <text x="18" y="68" fill="#0f172a" font-family="Arial, sans-serif" font-size="8" font-weight="800" text-anchor="middle">ON</text>
   <g transform="translate(18, 92)">
     <circle cx="0" cy="0" r="14" fill="#94a3b8" stroke="#475569" stroke-width="1.2"/>
@@ -17551,6 +17880,7 @@ class StorySidebar {
       <!-- Print / Save as PDF (js/print-report.js) with the document version -->
       <div class="sidebar-print-row">
         <button type="button" id="print-pdf-btn" class="sidebar-print-btn" title="Print or save as PDF (committee use only)">🖨️ Print PDF</button>
+        <button type="button" id="print-posters-btn" class="sidebar-print-btn" title="Print every poster, one landscape page each">🖨️ Posters</button>
         <span class="sidebar-doc-version" data-doc-version></span>
       </div>
 
@@ -18000,11 +18330,16 @@ document.addEventListener("DOMContentLoaded", () => {
  *
  * - The version comes from <meta name="doc-version">, stamped by build.py at build time.
  * - Printing always uses the paper view; the instruments, wires and navigation are hidden.
- * - Every printed page carries a diagonal "COMMITTEE USE ONLY" watermark and a header/footer
- *   with the version and page numbers.
+ * - Every printed page carries a diagonal "COMMITTEE USE ONLY · AES SC-05-05" watermark and a
+ *   header/footer with the version, the reader's name and page numbers.
+ * - The PDF is titled "standards.aes — … — NAME — version", which browsers use as the file name.
+ *   Browsers cannot read the Windows or Gmail account name, so NAME is the reviewer sign-in
+ *   (review-comments.js), asked for once if missing.
  */
 
 const PRINT_NOTICE = "FOR COMMITTEE USE ONLY — NOT FOR PUBLICATION";
+const PRINT_ORG = "AES · Audio Engineering Society · SC-05-05";
+const PRINT_NAME_KEY = "ba-review-name"; // shared with the reviewer sign-in
 
 function docVersion() {
   const meta = document.querySelector('meta[name="doc-version"]');
@@ -18012,49 +18347,88 @@ function docVersion() {
   return v === "dev" ? `dev ${new Date(document.lastModified).toISOString().slice(0, 16).replace("T", " ")}` : v;
 }
 
+function storedReaderName() {
+  try {
+    return JSON.parse(localStorage.getItem(PRINT_NAME_KEY) || '""');
+  } catch (e) {
+    return "";
+  }
+}
+
+function askReaderName() {
+  let name = storedReaderName();
+  if (name) return name;
+  name = (prompt("Your name or initials for this PDF (e.g. APK):", "") || "").trim().slice(0, 40);
+  if (name) {
+    try {
+      localStorage.setItem(PRINT_NAME_KEY, JSON.stringify(name));
+    } catch (e) { /* private window: used for this print only */ }
+  }
+  return name;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const version = docVersion();
+  const baseTitle = document.title;
   document.querySelectorAll("[data-doc-version]").forEach(el => (el.textContent = `Version ${version}`));
 
   // Watermark: a fixed element repeats on every printed page
   const mark = document.createElement("div");
   mark.className = "print-watermark";
   mark.setAttribute("aria-hidden", "true");
-  mark.innerHTML = `<span>COMMITTEE USE ONLY<br><small>Not for publishing</small></span>`;
+  mark.innerHTML = `<span>COMMITTEE USE ONLY<br><small>Not for publishing</small><br><small class="print-watermark-org">${PRINT_ORG}</small></span>`;
   document.body.appendChild(mark);
 
   // First-page title block
   const cover = document.createElement("div");
   cover.className = "print-cover";
-  cover.innerHTML = `
-    <div class="print-cover-notice">${PRINT_NOTICE}</div>
-    <div class="print-cover-title">${document.title}</div>
-    <div class="print-cover-meta">Internal Report &amp; Interactive Toolset &bull; AES SC-05-05 &bull; Version ${version} &bull; Printed ${new Date().toLocaleDateString()}</div>`;
   document.body.prepend(cover);
 
-  // Page margin boxes carry the notice, version and page numbers
+  // Page margin boxes carry the notice, version, reader and page numbers
   const pageStyle = document.createElement("style");
-  pageStyle.textContent = `
-    @page {
-      margin: 16mm 12mm;
-      @top-center { content: "${PRINT_NOTICE}"; font: 700 8pt sans-serif; color: #b91c1c; }
-      @bottom-left { content: "Version ${version}"; font: 8pt sans-serif; color: #555; }
-      @bottom-right { content: "Page " counter(page) " of " counter(pages); font: 8pt sans-serif; color: #555; }
-    }`;
   document.head.appendChild(pageStyle);
 
-  // Print in the paper view, then put the reader's view back
+  const stamp = (name, label) => {
+    const who = name ? ` · ${name}` : "";
+    document.title = `standards.aes — ${label} — ${baseTitle}${who} — ${version}`;
+    cover.innerHTML = `
+      <div class="print-cover-notice">${PRINT_NOTICE}</div>
+      <div class="print-cover-org">standards.aes &bull; ${PRINT_ORG}</div>
+      <div class="print-cover-title">${baseTitle}</div>
+      <div class="print-cover-meta">Internal Report &amp; Interactive Toolset &bull; Version ${version} &bull; Printed ${new Date().toLocaleDateString()}${name ? ` for ${name}` : ""}</div>`;
+    pageStyle.textContent = `
+      @page {
+        margin: 16mm 12mm;
+        @top-left { content: "standards.aes"; font: 700 8pt sans-serif; color: #555; }
+        @top-center { content: "${PRINT_NOTICE}"; font: 700 8pt sans-serif; color: #b91c1c; }
+        @top-right { content: "AES SC-05-05"; font: 700 8pt sans-serif; color: #555; }
+        @bottom-left { content: "Version ${version}${who}"; font: 8pt sans-serif; color: #555; }
+        @bottom-right { content: "Page " counter(page) " of " counter(pages); font: 8pt sans-serif; color: #555; }
+      }`;
+  };
+  stamp(storedReaderName(), "Report");
+  document.title = baseTitle; // the tab keeps its normal title until something is printed
+
+  // Buttons ask for the reader's name once; Ctrl+P uses whatever is stored
+  window.printReport = (label = "Report", run = () => window.print()) => {
+    stamp(askReaderName(), label);
+    run();
+  };
+
+  // Print in the paper view, then put the reader's view and the page title back
   let themeBeforePrint = null;
   window.addEventListener("beforeprint", () => {
+    if (document.title === baseTitle) stamp(storedReaderName(), "Report"); // Ctrl+P
     themeBeforePrint = document.documentElement.getAttribute("data-theme");
     document.documentElement.setAttribute("data-theme", "paper");
   });
   window.addEventListener("afterprint", () => {
     if (themeBeforePrint) document.documentElement.setAttribute("data-theme", themeBeforePrint);
     themeBeforePrint = null;
+    document.title = baseTitle;
   });
 
-  document.getElementById("print-pdf-btn")?.addEventListener("click", () => window.print());
+  document.getElementById("print-pdf-btn")?.addEventListener("click", () => window.printReport("Report"));
 });
 
 
@@ -22077,6 +22451,209 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+/* ===== BUNDLED: js/posters.js ===== */
+/**
+ * posters.js — Poster-worthy moments: reference tables, rule cards and figures that stand on their own
+ *
+ * - Each poster gets a "🖨 Poster" button that prints just that piece on one landscape page, in place
+ *   (so live drawings print as they are), with the committee watermark and version (print-report.js).
+ * - "Print Posters" prints the whole set, one landscape page each.
+ * - A "Posters" gallery near the top of the report mirrors every poster; a mirror jumps to its original.
+ * - In the full report PDF a poster starts on a new page and is never split.
+ */
+
+// { sel: something inside the poster, title } — or { sel, all: true, titleSel } for a family of cards
+const POSTERS = [
+  { sel: ".rule-card", all: true, titleSel: ".rule-title", numberSel: ".rule-number" },
+  { sel: ".xlr-inspector-sticky .xlr-table-card", title: "XLR Mating Faces: Connector Pin Inspector" },
+  { sel: ".aes14-t2-row", title: "AES14 Table 2: Connector Pin Designations" },
+  { sel: "#xlr-hub .xlr-table-card table", title: "AES14 Table 1: Connector Designations & Applications" },
+  { sel: ".tia-mnemonic-bar", title: "AES72 / TIA-568-B Pair Colours: SUN · SKY · GRASS · EARTH" },
+  { sel: "#multichannel-hierarchy .detail-card table", title: "AES59 → AES72-4E → XLR / TRS Pin-by-Pin Cross-Reference" },
+  { sel: "#multichannel-hierarchy table:not(.detail-card table)", title: "AES59 Master 8-Path Pinout Matrix" },
+  { sel: ".definitions-grid", title: "Top-Level Engineering Definitions" },
+  { sel: ".level-table-section", all: true, titleSel: ".level-table-heading", prefix: "Signal Level · " },
+  { sel: "#tutorials-section .alignment-table", title: "Richard Hess Interconnection Compatibility Matrix" },
+  { sel: "#normative-references .alignment-table", title: "Standards Referenced in This Report" },
+  { sel: "#dennis-bohn-par .alignment-table", title: "Pro Audio Reference: Greek Technical Alphabet" }
+];
+
+const PRINT_W = 960; // landscape Letter / A4 printable area in CSS px
+const PRINT_H = 600;
+
+function posterRoot(el) {
+  return el.closest(".rule-card, .level-table-section, .xlr-table-card, .detail-card, .table-responsive, .tia-mnemonic-bar, .definitions-grid") || el;
+}
+
+function markPoster(root, title) {
+  if (root.dataset.poster) return;
+  root.dataset.poster = title;
+  root.classList.add("report-poster");
+  if (!root.id) root.id = "poster-" + title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "poster-print-btn";
+  btn.title = `Print "${title}" as a one-page poster`;
+  btn.textContent = "🖨 Poster";
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    printPosters([root], title);
+  });
+  root.prepend(btn);
+}
+
+function findPosters() {
+  POSTERS.forEach(p => {
+    const els = p.all ? [...document.querySelectorAll(p.sel)] : [document.querySelector(p.sel)].filter(Boolean);
+    els.forEach(el => {
+      if (el.closest("#poster-gallery")) return;
+      let title = p.title;
+      if (p.titleSel) {
+        const num = p.numberSel ? el.querySelector(p.numberSel)?.textContent.trim() : "";
+        title = `${p.prefix || ""}${num ? num + " · " : ""}${el.querySelector(p.titleSel)?.textContent.trim() || "Poster"}`;
+      }
+      markPoster(posterRoot(el), title);
+    });
+  });
+}
+
+// A mirror is a copy with every id renamed (and the url(#…) / href="#…" references that point at them),
+// so gradients still resolve and nothing in the live page ever finds the copy instead of the original
+function mirrorOf(root) {
+  const copy = root.cloneNode(true);
+  copy.querySelectorAll(".poster-print-btn").forEach(b => b.remove());
+  const ids = new Map();
+  [copy, ...copy.querySelectorAll("[id]")].forEach(n => {
+    if (!n.id) return;
+    ids.set(n.id, `${n.id}--mirror`);
+    n.id = `${n.id}--mirror`;
+  });
+  const fix = (v) => v.replace(/url\(#([^)]+)\)/g, (m, id) => (ids.has(id) ? `url(#${ids.get(id)})` : m))
+    .replace(/^#(.+)$/, (m, id) => (ids.has(id) ? `#${ids.get(id)}` : m));
+  [copy, ...copy.querySelectorAll("*")].forEach(n => {
+    [...n.attributes].forEach(a => {
+      if (/url\(#|^#/.test(a.value)) n.setAttribute(a.name, fix(a.value));
+    });
+    n.removeAttribute("data-probe-target");
+    n.removeAttribute("data-range-idx");
+    n.removeAttribute("data-circuit-id");
+    n.classList.remove("report-poster", "range-dial-tick", "range-knob-rotor", "aes14-t2-row");
+  });
+  copy.removeAttribute("data-poster");
+  return copy;
+}
+
+function buildGallery() {
+  const posters = [...document.querySelectorAll(".report-poster")];
+  if (!posters.length || document.getElementById("poster-gallery")) return;
+  const section = document.createElement("section");
+  section.id = "poster-gallery";
+  section.className = "section poster-gallery";
+  section.innerHTML = `
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Posters</span>
+        <h2 class="section-title">Posters: The Key Figures and Tables</h2>
+        <p class="section-lead" style="margin: 0;">Each one stands on its own. Select a poster to go to it in the report, print one with its 🖨 Poster button, or print them all as a set.</p>
+        <button type="button" class="poster-set-btn">🖨 Print all ${posters.length} posters</button>
+      </div>
+      <div class="poster-grid"></div>
+    </div>`;
+  section.querySelector(".poster-set-btn").addEventListener("click", printAllPosters);
+  const grid = section.querySelector(".poster-grid");
+  const hero = document.getElementById("hero");
+  if (hero) hero.after(section);
+  else document.body.prepend(section);
+  posters.forEach(root => {
+    const tile = document.createElement("a");
+    tile.className = "poster-tile";
+    tile.href = `#${root.id}`;
+    tile.innerHTML = `<span class="poster-tile-title">${root.dataset.poster}</span><div class="poster-tile-view"></div>`;
+    const view = tile.querySelector(".poster-tile-view");
+    const copy = mirrorOf(root);
+    copy.style.width = `${Math.max(640, root.offsetWidth)}px`;
+    view.appendChild(copy);
+    grid.appendChild(tile);
+    copy.style.zoom = String(Math.min(1, view.clientWidth / Math.max(1, copy.offsetWidth)));
+  });
+}
+
+// Print posters where they stand: everything else is hidden, each poster is sized to one landscape page
+function printPosters(roots, label) {
+  const undo = [];
+  roots.forEach(root => {
+    for (let n = root.parentElement; n && n !== document.body; n = n.parentElement) {
+      if (!n.classList.contains("poster-path")) {
+        n.classList.add("poster-path");
+        undo.push(() => n.classList.remove("poster-path"));
+      }
+    }
+    // The poster's title goes just above it (inside it would upset grid and flex layouts)
+    let title = null;
+    if (!root.matches(".rule-card, .level-table-section")) { // these carry their own heading
+      title = document.createElement("div");
+      title.className = "poster-print-title";
+      title.textContent = root.dataset.poster;
+      root.before(title);
+    }
+    // Widen until it fits the page height too: printed size is width × zoom by height × zoom
+    const oldWidth = root.style.width;
+    // A poster in a hidden tab has no size on screen: measure a copy laid out off-screen instead
+    let probe = root;
+    if (!root.offsetHeight) {
+      probe = root.cloneNode(true);
+      probe.style.cssText = "position:absolute;left:-20000px;top:0;visibility:hidden;display:block;";
+      document.body.appendChild(probe);
+    }
+    let z = 1;
+    for (let i = 0; i < 5; i++) {
+      probe.style.width = `${PRINT_W / z}px`;
+      // scrollHeight: some posters sit in fixed-height scroll boxes that open up in print
+      z = Math.min(1.6, PRINT_H / Math.max(1, probe.offsetHeight, probe.scrollHeight)); // small posters grow to fill the page
+    }
+    if (probe !== root) probe.remove();
+    root.style.width = `${PRINT_W / z}px`;
+    root.style.zoom = String(z);
+    root.classList.add("poster-printing");
+    undo.push(() => {
+      root.classList.remove("poster-printing");
+      root.style.width = oldWidth;
+      root.style.zoom = "";
+      if (title) title.remove();
+    });
+  });
+
+  document.body.classList.add("print-poster-only");
+  const style = document.createElement("style");
+  style.textContent = "@page { size: landscape; }";
+  document.head.appendChild(style);
+  const done = () => {
+    document.body.classList.remove("print-poster-only");
+    undo.forEach(f => f());
+    style.remove();
+    window.removeEventListener("afterprint", done);
+  };
+  window.addEventListener("afterprint", done);
+  if (window.printReport) window.printReport(label);
+  else window.print();
+}
+
+function printAllPosters() {
+  printPosters([...document.querySelectorAll(".report-poster")].filter(p => !p.closest("#poster-gallery")), "Posters");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("print-posters-btn")?.addEventListener("click", printAllPosters);
+  setTimeout(findPosters, 0);
+  // Tables and inspectors are filled in by other scripts on load: mirror them once they exist
+  setTimeout(() => {
+    findPosters();
+    buildGallery();
+  }, 1500);
+});
+
+
 /* ===== BUNDLED: js/eight-channel-bench.js ===== */
 /**
  * eight-channel-bench.js — 8-Line Test Bench (Right Rack "8-CH" Tab) & Left Sidebar Line Selector
@@ -25220,7 +25797,7 @@ class CircuitSimulator {
     });
 
     // Set initial range (3V / +10 dB)
-    setRange(9);
+    setRange(13);
     // Set initial Reference Impedance (600 Ω)
     this.setRefZ(600);
   }
@@ -25986,7 +26563,11 @@ class CircuitSimulator {
       if (refzEl && document.activeElement !== refzEl) refzEl.value = String(refZ);
       if (dbmEl && document.activeElement !== dbmEl) dbmEl.value = dbm.toFixed(2);
 
-      // 1970s DMM Fluorescent LCD readout
+      // 1970s DMM Fluorescent LCD readout (labels set with the values so they always match)
+      [["dmm-lbl-1", "V_RMS (VOLTAGE)"], ["dmm-lbl-2", "AUDIO LEVEL (dBu)"], ["dmm-lbl-3", "V_PEAK (CREST)"]].forEach(([id, txt]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = txt;
+      });
       const dmmVrms = document.getElementById("dmm-vrms-val");
       if (dmmVrms) dmmVrms.textContent = `${vrms >= 1.0 ? vrms.toFixed(3) : (vrms * 1000).toFixed(1) + ' m'}V`;
       const dmmDbu = document.getElementById("dmm-dbu-val");
@@ -27496,8 +28077,9 @@ class QTPSimulatorEngine {
         const dg = this.diagnosticsFor(d.key);
         return `
           <div class="qtp-demo" id="qtp-demo-${d.key}" data-fault="${d.key}">
-            <h4 class="qtp-demo-title"><span class="qtp-demo-no">Example ${i + 1}</span> ${d.title}</h4>
+            <h4 class="qtp-demo-title"><span class="qtp-demo-no">Example ${i + 1}</span>${d.key === "normal" ? "" : '<span class="qtp-demo-fault">Fault</span>'} ${d.title}</h4>
             ${this.svgFor(d.key)}
+            ${this.scopeFor(d.key)}
             <div class="qtp-demo-metrics">
               <span><b>V<sub>DIFF</sub></b> ${dg.vdiff}</span>
               <span style="color: ${dg.phaseColor};"><b>Phase</b> ${dg.phase}</span>
@@ -27531,6 +28113,59 @@ class QTPSimulatorEngine {
         requestAnimationFrame(pick);
       }
     }, { passive: true });
+  }
+
+  // Static scope picture of the example: every conductor by pin, then each pair's difference.
+  // Drawn as SVG so it shows on screen and prints under the drawing.
+  scopeFor(f) {
+    const st = this.getWireState(f);
+    const PAIRS = [
+      { key: "sun", name: "SUN", hot: 2, cold: 1, color: "#f97316" },
+      { key: "sky", name: "SKY", hot: 4, cold: 5, color: "#38bdf8" },
+      { key: "grass", name: "GRASS", hot: 6, cold: 3, color: "#10b981" },
+      { key: "earth", name: "EARTH", hot: 8, cold: 7, color: "#ca8a04" }
+    ];
+    const X0 = 170, X1 = 840, ROW = 24, AMP = 7;
+    const hum = st.shield === false;
+    // One leg: half the pair's swing, polarity +1 / -1, plus the common-mode hum when the shield is lifted
+    const wave = (pol, on) => (t) => (on ? pol * Math.sin(t * 4 * Math.PI) : 0) + (hum ? 0.75 * Math.sin(t * 0.9 * Math.PI) + 0.12 * Math.sin(t * 60) : 0);
+    const path = (fn, y, gain) => {
+      let d = "";
+      for (let i = 0; i <= 160; i++) {
+        const t = i / 160;
+        d += `${i ? "L" : "M"}${(X0 + t * (X1 - X0)).toFixed(1)},${(y - fn(t) * AMP * gain).toFixed(1)} `;
+      }
+      return d;
+    };
+    let rows = "";
+    let y = 30;
+    PAIRS.forEach(p => {
+      const hotOk = st[`${p.key}_hot`] !== false, coldOk = st[`${p.key}_cold`] !== false;
+      const flip = p.key === "sun" && st.sunFlipped, legFlip = p.key === "sun" && st.sunColdFlipped;
+      const hot = wave(flip ? -1 : 1, hotOk);
+      const cold = wave(flip || legFlip ? 1 : -1, coldOk);
+      const diff = (t) => (hot(t) - cold(t)) / 2;
+      const diffNote = !hotOk && !coldOk ? "NO SIGNAL" : legFlip ? "CANCELS" : (!hotOk || !coldOk) ? "−6 dB" : flip ? "INVERTED" : "OK";
+      [
+        { label: `${p.name} P${p.hot} (+)`, fn: hot, ok: hotOk, dash: false, gain: 1 },
+        { label: `${p.name} P${p.cold} (−)`, fn: cold, ok: coldOk, dash: true, gain: 1 },
+        { label: `${p.name} P${p.hot} − P${p.cold}`, fn: diff, ok: true, dash: false, gain: 1, diff: diffNote }
+      ].forEach(r => {
+        rows += `
+          <line x1="${X0}" y1="${y}" x2="${X1}" y2="${y}" stroke="#1e293b" stroke-width="1"/>
+          <text x="${X0 - 10}" y="${y + 4}" fill="${r.diff ? "#e2e8f0" : p.color}" font-size="10.5" font-weight="${r.diff ? 900 : 700}" text-anchor="end">${r.label}</text>
+          <path d="${path(r.fn, y, r.gain)}" fill="none" stroke="${r.ok ? (r.diff ? "#e2e8f0" : p.color) : "#ef4444"}" stroke-width="${r.diff ? 2 : 1.6}"${r.dash ? ' stroke-dasharray="5,3"' : ""}/>
+          <text x="${X1 + 10}" y="${y + 4}" fill="${r.ok && r.diff !== "NO SIGNAL" ? "#94a3b8" : "#ef4444"}" font-size="10" font-weight="800">${r.diff || (r.ok ? "" : "OPEN")}</text>`;
+        y += ROW;
+      });
+      y += 6;
+    });
+    return `
+      <svg class="qtp-demo-scope" viewBox="0 0 920 ${y + 4}" width="100%" xmlns="http://www.w3.org/2000/svg" style="background: #060910; font-family: 'JetBrains Mono', monospace;">
+        <text x="20" y="16" fill="#94a3b8" font-size="10" font-weight="800" letter-spacing="0.08em">SCOPE · EACH CONDUCTOR TO CHASSIS, THEN ACROSS THE PAIR${hum ? " · SHIELD LIFTED: SAME HUM ON EVERY LEG" : ""}</text>
+        ${[0.25, 0.5, 0.75].map(t => `<line x1="${X0 + t * (X1 - X0)}" y1="22" x2="${X0 + t * (X1 - X0)}" y2="${y - 6}" stroke="#1e293b" stroke-width="1" stroke-dasharray="2,3"/>`).join("")}
+        ${rows}
+      </svg>`;
   }
 
   svgFor(f) {
@@ -46062,7 +46697,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ===== BUNDLED: js/modules-data.js ===== */
 /**
  * Balanced Audio & AES-X152 100-Module Reference Curriculum Dataset
- * Compiled by build.py on 2026-10-18 09:34
+ * Compiled by build.py on 2026-10-18 09:47
  */
 
 const BALANCED_MODULES_DATA = [
@@ -49566,6 +50201,249 @@ document.addEventListener("click", (e) => {
   a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 });
+
+
+/* ===== BUNDLED: js/activity-wayfinding.js ===== */
+/**
+ * Activity wayfinding.
+ *
+ * Each interactive activity on the page (control panel, scope, calculator, explorer…) is framed as a
+ * numbered activity tied to its chapter number in the Story Index ("Activity 6.5-B · …"), with a
+ * one-line instruction, what it drives, and an end rule. Each section that has activities gets an
+ * "Activities in this section" strip under its header, linking to them.
+ *
+ * The activities wrap existing nodes (moved, never cloned), so ids, data-probe-target attributes and
+ * listeners are kept. A registry entry names a host element and the first/last host children to wrap
+ * ("from"/"to" may be any element inside those children). A host whose children are all wrapped
+ * drops its own card frame so the activity frames are the only rules.
+ */
+(function () {
+  "use strict";
+
+  const ACTIVITIES = [
+    // 3.0 Levels pyramid
+    { sec: "pyramid-section", host: ".pyr-split", from: ".pyr-split-left",
+      title: "Pick a level on the pyramid", short: "Pyramid",
+      brief: "Click a tier (microphone, consumer line, professional line, maximum headroom) to load its nominal level.",
+      link: "Drives the voltmeter and level converter in the next activity." },
+    { sec: "pyramid-section", host: ".pyr-split", from: ".pyr-split-right",
+      title: "Read and convert the level", short: "Voltmeter & converter",
+      brief: "Turn the range knob or type a level in dBu, dBV or V RMS; the other units are recalculated.",
+      link: "Marks the matching pyramid tier in the previous activity.", results: ["#pyramid-meter-alignment-hud"] },
+
+    // 4.0 Enclosure explorer
+    { sec: "enclosure-explorer", host: ".container", from: ".enclosure-diagram-container",
+      title: "Select an enclosure in the signal chain", short: "Enclosure explorer",
+      brief: "Click a box in the chain diagram; the panel below gives its grounding, shielding and the standard that covers it.",
+      results: ["#enclosure-detail-panel"] },
+
+    // 4.2 Multichannel breakout
+    { sec: "multichannel-hierarchy", host: ".container", from: ".mc-mode-btn", to: ".aes-spec-table",
+      title: "Trace one path through the breakout", short: "Path tracer",
+      brief: "Choose XLR or TRS breakout and a path (1–8), or click a row of the cross-reference table; the diagram traces that path from the DB25 through the QTP cable to its connector.",
+      link: "The path buttons and the table rows both drive the diagram." },
+    { sec: "multichannel-hierarchy", host: ".container", from: ".qtp-sim-card",
+      title: "Snake and QTP fault examples", short: "Fault examples",
+      brief: "Nine worked faults, one per example, each with its wiring and meter readings. Read them in order or jump to one from the Story Index." },
+    { sec: "multichannel-hierarchy", host: ".container", from: ".aes59-always-accessible-card",
+      title: "Look up a path in the AES59 8-path matrix", short: "AES59 matrix",
+      brief: "Reference matrix for all eight paths: DB25 pin, pair colour and XLR pin for each leg." },
+
+    // 4.5 XLR hub
+    { sec: "xlr-hub", host: ".container", from: ".xlr-mode-btn", to: ".xlr-hub-grid",
+      title: "Pick an AES14 Table 2 configuration", short: "XLR configurations",
+      brief: "Choose one of the eight configurations; Table 2 marks its row and the pin inspector shows the mating face and circuit.",
+      results: [".xlr-inspector-sticky"] },
+
+    // 5.0 Key findings: definition calculators
+    ...[
+      ["Balanced interconnection: unbalance the legs", "Leg impedance", "Move Z1 and Z2 apart; the imbalance and the IEC limit are recalculated."],
+      ["Common-mode voltage", "V_CM", "Set the Pin 2 and Pin 3 potentials or use a preset; V_CM is their average."],
+      ["Differential-mode voltage", "V_DM", "Set the Pin 2 and Pin 3 potentials; V_DM is their difference."],
+      ["Common-mode rejection ratio", "CMRR", "Set the common-mode input and gain; the output error and CMRR in dB follow."],
+      ["Shield-current-induced noise", "SCIN", "Choose the cable construction, shield current and run length; the induced noise is calculated."],
+      ["Ground voltage difference", "V_GVD", "Set the neutral current and earth resistance; the ground voltage difference between chassis follows."],
+    ].map(([title, short, brief], i) => ({
+      sec: "top-level", host: `.definitions-grid > .term-card:nth-of-type(${i + 1})`, from: ".micro-demo-container",
+      title, short, brief })),
+
+    // 6.0 Standardized circuits 6.1 – 6.8 (one bench each)
+    ...[
+      ["6-1", "Circuit 6.1: drive the dual push-pull output", "6.1 Push-pull",
+        "Pick a level preset or set drive, series impedance and load on the AN/URM-1960 panel; try the Pin 3 short. The bench readouts and the probes on the schematic update live."],
+      ["6-2", "Circuit 6.2: drive the impedance-balanced output", "6.2 Impedance-balanced",
+        "Set the panel controls; the probes on the schematic below show the voltages on each leg."],
+      ["6-3", "Circuit 6.3: drive the transformer-floating output", "6.3 Transformer floating",
+        "Set the panel controls; the probes on the schematic below show the voltages on each leg."],
+      ["6-4", "Circuit 6.4: inject RF into the cascaded link", "6.4 Cascaded link",
+        "Set the audio drive, RF noise amplitude and load resistance; the schematic below shows how much of the RF reaches the receiver."],
+      ["6-5", "Circuit 6.5: probe the cross-coupled output", "6.5 Cross-coupled",
+        "Read the probe values; the schematic below marks where each probe is taken."],
+      ["6-6", "Circuit 6.6: probe the differential receiver", "6.6 Diff receiver",
+        "Read the probe values; the schematic below marks where each probe is taken."],
+      ["6-7", "Circuit 6.7: probe the instrumentation receiver", "6.7 Instrumentation amp",
+        "Read the probe values; the schematic below marks where each probe is taken."],
+      ["6-8", "Circuit 6.8: probe the active-transformer system", "6.8 Active-transformer",
+        "Read the probe values; the schematic below marks where each probe is taken."],
+    ].map(([id, title, short, brief]) => ({
+      sec: "topologies", host: `#circuit-${id} > .svg-diagram-card`, title, short, brief })),
+
+    // 6.5 Transformer lab
+    { sec: "transformer-simulator", host: ".xfmr-main-card", from: "#xfmr-sat-badge", to: ".xfmr-instruments-row",
+      title: "Observe the transformer on the bench", short: "Schematic, scope & Bode",
+      brief: "Read-only. The schematic, readouts, oscilloscope (time domain) and Bode plot (frequency domain) show the transformer as currently wound and terminated.",
+      link: "Driven by the analyzer panel in the next activity." },
+    { sec: "transformer-simulator", host: ".xfmr-main-card", from: ".vintage-military-panel",
+      title: "Wind, drive and terminate the transformer", short: "Winding analyzer",
+      brief: "Pick a preset or set the core, turns and wire gauge; choose the generator, drive level and secondary termination.",
+      link: "Drives the schematic, scope and Bode plot above. The recommended Zobel termination at the bottom is this panel’s result.",
+      results: ["#zobel-recommendation-card"] },
+
+    // 7.0 Thevenin model
+    { sec: "deepest-dive", host: ".svg-diagram-card",
+      title: "Unbalance the Thevenin interconnection", short: "Thevenin network",
+      brief: "Set the source, cable and receiver impedances on the panel; the network below shows the error voltage, derived step by step underneath." },
+
+    // 8.5 Adapter wiring suite (inside section 8.0)
+    { sec: "tutorials-section", chapter: "adapter-wiring-suite", no: "8.5", host: "", from: "#adapter-wiring-suite",
+      title: "Wire an adapter", short: "Adapter wiring",
+      brief: "Select the standard, signal flow and driver topology; the schematic shows the adapter wiring and the box below gives the diagnosis." },
+
+    // Curriculum
+    { sec: "curriculum-modules", no: "", host: ".container", from: "#module-search-input", to: "#modules-grid-container",
+      title: "Find and open a curriculum module", short: "Module finder",
+      brief: "Search by keyword or filter by part; click a module card to open it in the reader." },
+
+    // 10.0 Data sheet generator
+    { sec: "datasheet-templates", host: ".container", from: ".ds-generator-grid",
+      title: "Generate a data sheet", short: "Data sheet generator",
+      brief: "Load a preset or type the device parameters; the data sheet at right is written as you type and can be copied or downloaded.",
+      results: ["#ds-rendered-view"] },
+
+    // 11.0 PAR glossary
+    { sec: "dennis-bohn-par", host: ".container", from: "#par-glossary-grid",
+      title: "Look up a term in the A–Z glossary", short: "A–Z glossary",
+      brief: "Pick a letter to jump through the glossary; each card gives the term as defined in the Pro Audio Reference." },
+
+    // 11.5 Landmark papers
+    { sec: "landmark-papers", host: "", from: "#paper-search-input", to: "#landmark-papers-grid",
+      title: "Filter the papers dossier", short: "Papers filter",
+      brief: "Search or pick a category; the list below shows only the matching papers and drafts." },
+  ];
+
+  const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+  // Chapter number as the Story Index shows it ("6.5 Audio Transformer Lab" → "6.5")
+  function chapterNo(target, fallback) {
+    const link = document.querySelector(`#story-index-sidebar .story-chapter[data-target="${target}"] .chapter-link`);
+    const m = (link?.textContent || "").trim().match(/^(\d+(?:\.\d+)?)\s/);
+    return m ? m[1] : (fallback ?? "");
+  }
+
+  // The direct child of `host` that contains `el`
+  function childOf(host, el) {
+    while (el && el.parentElement !== host) el = el.parentElement;
+    return el;
+  }
+
+  function el(tag, cls, text) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function build() {
+    const letters = {};
+    const bySection = new Map();
+
+    ACTIVITIES.forEach(a => {
+      const sec = document.getElementById(a.sec);
+      if (!sec) return;
+      const host = a.host ? sec.querySelector(a.host) : sec;
+      if (!host) return;
+      let first = a.from ? childOf(host, host.querySelector(a.from)) : host.firstElementChild;
+      const last = a.to ? childOf(host, host.querySelector(a.to)) : (a.from ? first : host.lastElementChild);
+      // A full-screen button row placed just before the first child belongs to it
+      if (first && first.previousElementSibling?.classList.contains("fs-btn-row")) first = first.previousElementSibling;
+      if (!first || !last) return;
+      const run = [];
+      for (let n = first; n; n = n.nextElementSibling) { run.push(n); if (n === last) break; }
+      if (run[run.length - 1] !== last) return;
+
+      const no = chapterNo(a.chapter || a.sec, a.no);
+      const key = no || a.sec;
+      const letter = String.fromCharCode(65 + (letters[key] = (letters[key] ?? -1) + 1));
+      const label = no ? `${no}-${letter}` : letter;
+      const id = `activity-${slug(no ? label : a.sec + "-" + letter)}`;
+
+      const box = el("div", "activity");
+      box.id = id;
+      box.dataset.activity = label;
+
+      const head = el("div", "activity-head");
+      const line = el("div", "activity-head-line");
+      line.append(el("span", "activity-no", `Activity ${label}`), el("span", "activity-title", a.title));
+      head.append(line, el("p", "activity-brief", a.brief));
+      if (a.link) head.append(el("p", "activity-link", a.link));
+
+      const body = el("div", "activity-body");
+      const foot = el("div", "activity-foot", `End of Activity ${label}`);
+      host.insertBefore(box, first);
+      run.forEach(n => body.appendChild(n));
+      box.append(head, body, foot);
+
+      (a.results || []).forEach(sel => {
+        const r = body.querySelector(sel);
+        if (r) { r.classList.add("activity-result"); r.dataset.activityResult = `Result · Activity ${label}`; }
+      });
+
+      if (!bySection.has(sec)) bySection.set(sec, []);
+      bySection.get(sec).push({ id, label, short: a.short || a.title });
+    });
+
+    // Children with no frame of their own get inner padding so text does not touch the activity rule;
+    // an unframed wrapper around a single framed card passes through, so the card sits on the rule
+    const framed = (n) => {
+      const cs = getComputedStyle(n);
+      return parseFloat(cs.borderTopWidth) > 0 || parseFloat(cs.borderLeftWidth) > 0;
+    };
+    document.querySelectorAll(".activity-body > *").forEach(c => {
+      if (framed(c)) return;
+      const only = c.children.length === 1 && c.children[0];
+      c.classList.add(only && framed(only) ? "activity-pass" : "activity-pad");
+    });
+
+    // Hosts whose content is now entirely activities drop their own card frame
+    document.querySelectorAll(".activity").forEach(box => {
+      const host = box.parentElement;
+      if (host && !host.matches("section, .container") &&
+          [...host.children].every(c => c.classList.contains("activity") || c.tagName === "SCRIPT")) {
+        host.classList.add("activity-host");
+      }
+    });
+
+    // "Activities in this section" strip under each section header
+    bySection.forEach((items, sec) => {
+      const header = sec.querySelector(".section-header");
+      if (!header || header.querySelector(".activity-strip")) return;
+      const nav = el("nav", "activity-strip");
+      nav.setAttribute("aria-label", "Activities in this section");
+      nav.append(el("span", "activity-strip-label", items.length === 1 ? "Activity in this section" : "Activities in this section"));
+      const list = el("span", "activity-strip-list");
+      items.forEach(it => {
+        const a = el("a", "activity-strip-link");
+        a.href = `#${it.id}`;
+        a.append(el("span", "activity-strip-no", it.label), document.createTextNode(" " + it.short));
+        list.append(a);
+      });
+      nav.append(list);
+      header.append(nav);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => setTimeout(build, 0));
+})();
 
 
 /* ===== BUNDLED: js/main.js ===== */

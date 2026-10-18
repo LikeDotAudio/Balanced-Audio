@@ -58,6 +58,7 @@ class StorySidebar {
       <!-- Print / Save as PDF (js/print-report.js) with the document version -->
       <div class="sidebar-print-row">
         <button type="button" id="print-pdf-btn" class="sidebar-print-btn" title="Print or save as PDF (committee use only)">🖨️ Print PDF</button>
+        <button type="button" id="print-posters-btn" class="sidebar-print-btn" title="Print every poster, one landscape page each">🖨️ Posters</button>
         <span class="sidebar-doc-version" data-doc-version></span>
       </div>
 
