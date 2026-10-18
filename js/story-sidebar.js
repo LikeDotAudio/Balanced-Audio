@@ -48,7 +48,7 @@ class StorySidebar {
         <div class="sidebar-brand">
           <span class="sidebar-icon">📖</span>
           <div class="sidebar-title-group">
-            <span class="sidebar-title">Story &amp; Standards</span>
+            <span class="sidebar-title"><span style="white-space: nowrap;">SC-05-05 &middot; Project X152</span><br>Report</span>
             <span class="sidebar-sub">Internal Report &amp; Interactive Toolset</span>
           </div>
         </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="doc-version" content="2026-10-18 09:47">
+  <meta name="doc-version" content="2026-10-18 09:52">
   <title>Balanced Audio Interconnection: A Report on AES-X152</title>
   <meta name="description" content="Report of findings on balanced audio interconnection for AES project X152 (SC-05-05): interactive engineering tools, SVG schematics, AES-X249, AES72-4E, SC-04-04, Jim Meyer Thevenin model, transformer winding simulator, and Dennis A. Bohn Pro Audio Reference for AES-X152 (SC-05-05).">
   
@@ -4608,10 +4608,11 @@ body.sidebar-is-scrolling {
 }
 
 .sidebar-title {
-  font-size: 0.92rem;
+  font-size: 0.86rem;
   font-weight: 800;
   color: #38bdf8;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
   text-transform: uppercase;
 }
 
@@ -9149,6 +9150,22 @@ html[data-theme="paper"] body > section .activity-result::before {
     padding-bottom: 2mm;
     border-bottom: 1px solid currentColor;
   }
+}
+
+/* Hess matrix row numbers (match the wiring diagram numbers below the table) */
+.hess-row-no {
+  width: 2.5rem;
+  text-align: center !important;
+  font: 900 1.1rem var(--font-mono);
+  color: #38bdf8;
+}
+
+.hess-tagline {
+  margin: 0.6rem 0 0;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: #38bdf8;
 }
 
 </style>
@@ -14248,6 +14265,7 @@ html[data-theme="paper"] body > section .activity-result::before {
           Engineering guidance for connecting balanced equipment to unbalanced inputs and outputs. 
           Based on the definitive compatibility matrix by Richard L. Hess (AES Fellow).
         </p>
+        <p class="hess-tagline">Use the Hess chart for less hiss and better Hess.</p>
       </div>
 
       <!-- Richard Hess Compatibility Matrix Table -->
@@ -14255,6 +14273,7 @@ html[data-theme="paper"] body > section .activity-result::before {
         <table class="alignment-table" style="font-size: 0.9rem;">
           <thead>
             <tr>
+              <th class="hess-row-no">#</th>
               <th>Balanced Output Topology (Source)</th>
               <th>Connection to Unbalanced Input (Destination)</th>
               <th>Pin 3 (Cold / Return) Treatment</th>
@@ -14263,63 +14282,72 @@ html[data-theme="paper"] body > section .activity-result::before {
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr id="hess-row-1">
+              <td class="hess-row-no">1</td>
               <td><strong>6.1 Push-Pull (Ground Referenced)</strong></td>
               <td>Pin 2 to Tip, Pin 1 to Sleeve</td>
               <td><span class="badge badge-danger">FLOAT PIN 3 (DO NOT SHORT!)</span></td>
               <td>Drops by 6.0 dB (Half voltage)</td>
               <td>Shorting Pin 3 forces op-amp into current limiting, severe distortion, and thermal failure!</td>
             </tr>
-            <tr>
+            <tr id="hess-row-2">
+              <td class="hess-row-no">2</td>
               <td><strong>6.2 Active Impedance-Balanced</strong></td>
               <td>Pin 2 to Tip, Pin 1 to Sleeve</td>
               <td><span class="badge badge-success">Tie Pin 3 to Pin 1 or Float</span></td>
               <td>0.0 dB Loss (Full voltage preserved)</td>
               <td>Zero risk. Pin 3 carries no audio signal voltage; grounding is 100% safe.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-3">
+              <td class="hess-row-no">3</td>
               <td><strong>6.3 Transformer Floating</strong></td>
               <td>Pin 2 to Tip, Pin 3 to Sleeve</td>
               <td><span class="badge badge-success">MUST BOND PIN 3 TO SLEEVE</span></td>
               <td>0.0 dB Loss (Full winding voltage)</td>
               <td>Zero risk. Floating winding must have Pin 3 tied to ground for unbalancing. Floating produces open circuit.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-4">
+              <td class="hess-row-no">4</td>
               <td><strong>6.4 Double Transformer Link</strong></td>
               <td>Pin 2 to Tip, Pin 3 to Sleeve</td>
               <td><span class="badge badge-success">Tie Pin 3 to Ground at Destination</span></td>
               <td>0.0 dB Loss</td>
               <td>Zero risk. Galvanic isolation eliminates ground loops between equipment completely.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-5">
+              <td class="hess-row-no">5</td>
               <td><strong>6.5 Cross-Coupled (THAT OutSmarts)</strong></td>
               <td>Pin 2 to Tip, Pin 3 to Sleeve</td>
               <td><span class="badge badge-success">MUST SHORT PIN 3 TO PIN 1</span></td>
               <td>0.0 dB Loss (Automatic +6dB transfer)</td>
               <td>Shorting Pin 3 safely transfers drive gain to Pin 2 emulating a true floating winding.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-6">
+              <td class="hess-row-no">6</td>
               <td><strong>3.5mm (1/8″) Stereo TRS to Dual Balanced XLR / 1/4″ TS</strong></td>
               <td>Tip &rarr; Left Pin 2, Ring &rarr; Right Pin 2, Sleeve &rarr; Both Pins 1 &amp; 3</td>
               <td><span class="badge badge-success">STEREO SPLITTER REQUIRED</span></td>
               <td>0.0 dB Loss</td>
               <td>Correct way to connect phones, laptops, and field recorders to pro balanced stereo inputs. Keeps L &amp; R channels independent.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-7">
+              <td class="hess-row-no">7</td>
               <td><strong>3.5mm (1/8″) Stereo TRS into Single Balanced Mono XLR/TRS</strong></td>
               <td>Tip &rarr; Pin 2 (+), Ring &rarr; Pin 3 (-)</td>
               <td><span class="badge badge-danger">DO NOT USE DIRECT CABLE!</span></td>
               <td>-&infin; dB Loss (Center vocals &amp; bass cancelled!)</td>
               <td><strong>THE DIFFERENTIAL CANCELLATION DISASTER:</strong> The balanced receiver subtracts (Tip - Ring). Center mono signals (vocals, kick, bass) are completely subtracted to 0V! Requires summing box or stereo DI.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-8">
+              <td class="hess-row-no">8</td>
               <td><strong>3.5mm (1/8″) Mono TS (Modular Synth / Eurorack)</strong></td>
               <td>Tip &rarr; Pin 2, Sleeve &rarr; Pin 1 (Pin 3 Impedance Matched)</td>
               <td><span class="badge badge-accent">Tie Pin 3 to Gnd via Z_match</span></td>
               <td>Full level preserved</td>
               <td>High-level 10Vpp Eurorack modular signals feeding balanced interface. Impedance balance prevents ground hum loops.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-9">
+              <td class="hess-row-no">9</td>
               <td><strong>Unbalanced Output to Balanced Input (1/4″ TS &amp; RCA)</strong></td>
               <td>Tip to Pin 2, Sleeve to Pin 3</td>
               <td><span class="badge badge-accent">Connect Sleeve to Pin 3 at Source</span></td>
@@ -17870,7 +17898,7 @@ class StorySidebar {
         <div class="sidebar-brand">
           <span class="sidebar-icon">📖</span>
           <div class="sidebar-title-group">
-            <span class="sidebar-title">Story &amp; Standards</span>
+            <span class="sidebar-title"><span style="white-space: nowrap;">SC-05-05 &middot; Project X152</span><br>Report</span>
             <span class="sidebar-sub">Internal Report &amp; Interactive Toolset</span>
           </div>
         </div>
@@ -46697,7 +46725,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ===== BUNDLED: js/modules-data.js ===== */
 /**
  * Balanced Audio & AES-X152 100-Module Reference Curriculum Dataset
- * Compiled by build.py on 2026-10-18 09:47
+ * Compiled by build.py on 2026-10-18 09:52
  */
 
 const BALANCED_MODULES_DATA = [

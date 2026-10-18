@@ -4597,10 +4597,11 @@ body.sidebar-is-scrolling {
 }
 
 .sidebar-title {
-  font-size: 0.92rem;
+  font-size: 0.86rem;
   font-weight: 800;
   color: #38bdf8;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
   text-transform: uppercase;
 }
 
@@ -9138,4 +9139,20 @@ html[data-theme="paper"] body > section .activity-result::before {
     padding-bottom: 2mm;
     border-bottom: 1px solid currentColor;
   }
+}
+
+/* Hess matrix row numbers (match the wiring diagram numbers below the table) */
+.hess-row-no {
+  width: 2.5rem;
+  text-align: center !important;
+  font: 900 1.1rem var(--font-mono);
+  color: #38bdf8;
+}
+
+.hess-tagline {
+  margin: 0.6rem 0 0;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: #38bdf8;
 }

@@ -5041,6 +5041,7 @@
           Engineering guidance for connecting balanced equipment to unbalanced inputs and outputs. 
           Based on the definitive compatibility matrix by Richard L. Hess (AES Fellow).
         </p>
+        <p class="hess-tagline">Use the Hess chart for less hiss and better Hess.</p>
       </div>
 
       <!-- Richard Hess Compatibility Matrix Table -->
@@ -5048,6 +5049,7 @@
         <table class="alignment-table" style="font-size: 0.9rem;">
           <thead>
             <tr>
+              <th class="hess-row-no">#</th>
               <th>Balanced Output Topology (Source)</th>
               <th>Connection to Unbalanced Input (Destination)</th>
               <th>Pin 3 (Cold / Return) Treatment</th>
@@ -5056,63 +5058,72 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr id="hess-row-1">
+              <td class="hess-row-no">1</td>
               <td><strong>6.1 Push-Pull (Ground Referenced)</strong></td>
               <td>Pin 2 to Tip, Pin 1 to Sleeve</td>
               <td><span class="badge badge-danger">FLOAT PIN 3 (DO NOT SHORT!)</span></td>
               <td>Drops by 6.0 dB (Half voltage)</td>
               <td>Shorting Pin 3 forces op-amp into current limiting, severe distortion, and thermal failure!</td>
             </tr>
-            <tr>
+            <tr id="hess-row-2">
+              <td class="hess-row-no">2</td>
               <td><strong>6.2 Active Impedance-Balanced</strong></td>
               <td>Pin 2 to Tip, Pin 1 to Sleeve</td>
               <td><span class="badge badge-success">Tie Pin 3 to Pin 1 or Float</span></td>
               <td>0.0 dB Loss (Full voltage preserved)</td>
               <td>Zero risk. Pin 3 carries no audio signal voltage; grounding is 100% safe.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-3">
+              <td class="hess-row-no">3</td>
               <td><strong>6.3 Transformer Floating</strong></td>
               <td>Pin 2 to Tip, Pin 3 to Sleeve</td>
               <td><span class="badge badge-success">MUST BOND PIN 3 TO SLEEVE</span></td>
               <td>0.0 dB Loss (Full winding voltage)</td>
               <td>Zero risk. Floating winding must have Pin 3 tied to ground for unbalancing. Floating produces open circuit.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-4">
+              <td class="hess-row-no">4</td>
               <td><strong>6.4 Double Transformer Link</strong></td>
               <td>Pin 2 to Tip, Pin 3 to Sleeve</td>
               <td><span class="badge badge-success">Tie Pin 3 to Ground at Destination</span></td>
               <td>0.0 dB Loss</td>
               <td>Zero risk. Galvanic isolation eliminates ground loops between equipment completely.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-5">
+              <td class="hess-row-no">5</td>
               <td><strong>6.5 Cross-Coupled (THAT OutSmarts)</strong></td>
               <td>Pin 2 to Tip, Pin 3 to Sleeve</td>
               <td><span class="badge badge-success">MUST SHORT PIN 3 TO PIN 1</span></td>
               <td>0.0 dB Loss (Automatic +6dB transfer)</td>
               <td>Shorting Pin 3 safely transfers drive gain to Pin 2 emulating a true floating winding.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-6">
+              <td class="hess-row-no">6</td>
               <td><strong>3.5mm (1/8″) Stereo TRS to Dual Balanced XLR / 1/4″ TS</strong></td>
               <td>Tip &rarr; Left Pin 2, Ring &rarr; Right Pin 2, Sleeve &rarr; Both Pins 1 &amp; 3</td>
               <td><span class="badge badge-success">STEREO SPLITTER REQUIRED</span></td>
               <td>0.0 dB Loss</td>
               <td>Correct way to connect phones, laptops, and field recorders to pro balanced stereo inputs. Keeps L &amp; R channels independent.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-7">
+              <td class="hess-row-no">7</td>
               <td><strong>3.5mm (1/8″) Stereo TRS into Single Balanced Mono XLR/TRS</strong></td>
               <td>Tip &rarr; Pin 2 (+), Ring &rarr; Pin 3 (-)</td>
               <td><span class="badge badge-danger">DO NOT USE DIRECT CABLE!</span></td>
               <td>-&infin; dB Loss (Center vocals &amp; bass cancelled!)</td>
               <td><strong>THE DIFFERENTIAL CANCELLATION DISASTER:</strong> The balanced receiver subtracts (Tip - Ring). Center mono signals (vocals, kick, bass) are completely subtracted to 0V! Requires summing box or stereo DI.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-8">
+              <td class="hess-row-no">8</td>
               <td><strong>3.5mm (1/8″) Mono TS (Modular Synth / Eurorack)</strong></td>
               <td>Tip &rarr; Pin 2, Sleeve &rarr; Pin 1 (Pin 3 Impedance Matched)</td>
               <td><span class="badge badge-accent">Tie Pin 3 to Gnd via Z_match</span></td>
               <td>Full level preserved</td>
               <td>High-level 10Vpp Eurorack modular signals feeding balanced interface. Impedance balance prevents ground hum loops.</td>
             </tr>
-            <tr>
+            <tr id="hess-row-9">
+              <td class="hess-row-no">9</td>
               <td><strong>Unbalanced Output to Balanced Input (1/4″ TS &amp; RCA)</strong></td>
               <td>Tip to Pin 2, Sleeve to Pin 3</td>
               <td><span class="badge badge-accent">Connect Sleeve to Pin 3 at Source</span></td>
