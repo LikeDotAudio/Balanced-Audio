@@ -9,16 +9,17 @@
  *    for a few seconds, showing the value and, for capacitors, the reactance at several frequencies.
  */
 
+// Each fader's part, as patterns tried in order (most specific first) against the SVG's text
 const OVERLAY_ANCHORS = [
-  { label: /DRIVE|V<sub>IN|V<sub>PO|SOURCE/i, svg: /driver in|v[_\s]?in|v[_\s]?sig|source|generator|v[_\s]?po/i },
-  { label: /TURNS|RATIO/i, svg: /1\s*:\s*n|turns|ratio|transformer|core/i },
-  { label: /LOAD|BRIDGING/i, svg: /\d\s*(k)?\s*Ω|r[_\s]?load|load/i },
-  { label: /R<sub>OUT|MATCH/i, svg: /r[_\s]?out|z[_\s]?out|50\s*Ω/i },
-  { label: /HOT \(Z/i, svg: /z[_\s]?po|hot/i },
-  { label: /COLD \(Z/i, svg: /z[_\s]?ro|cold/i },
-  { label: /CMZ/i, svg: /cmz|z[_\s]?cm|common/i },
-  { label: /SHIELD \(C|C<sub>/i, svg: /c[_\s]?stray|c[_\s]?ps|shield|capac/i },
-  { label: /HUM/i, svg: /v[_\s]?gvd|hum|ground/i }
+  { label: /DRIVE|V<sub>IN|V<sub>PO|SOURCE/i, pick: "left", svg: [/driver in|audio in|signal in/i, /v[_\s]?in\b|v[_\s]?sig|v[_\s]?po/i, /source|generator|op-?amp/i] },
+  { label: /TURNS|RATIO/i, svg: [/1\s*:\s*n|turns|ratio/i] },
+  { label: /LOAD|BRIDGING/i, pick: "right", svg: [/r[_\s]?load|load/i, /\d\s*k\s*Ω/i, /Ω/i] },
+  { label: /R<sub>OUT|MATCH/i, svg: [/r[_\s]?(po|out)|z[_\s]?out/i, /50\s*Ω/i] },
+  { label: /HOT \(Z/i, svg: [/z[_\s]?po/i, /hot/i] },
+  { label: /COLD \(Z/i, svg: [/z[_\s]?ro/i, /cold/i] },
+  { label: /CMZ/i, svg: [/cmz|z[_\s]?cm/i, /common/i] },
+  { label: /SHIELD \(C|C<sub>/i, svg: [/c[_\s]?stray|c[_\s]?ps/i, /shield|capac/i] },
+  { label: /HUM/i, svg: [/v[_\s]?gvd/i, /hum|ground/i] }
 ];
 
 class CircuitOverlay {
@@ -66,17 +67,19 @@ class CircuitOverlay {
     this.groups.push({ panel, wrapper, svg, layer, items });
   }
 
-  // Centre of the first SVG text that matches the fader's part, relative to the wrapper
-  findAnchor(svg, wrapperRect, pattern, used) {
-    const texts = [...svg.querySelectorAll("text")];
-    for (const t of texts) {
-      if (used.has(t) || !pattern.test(t.textContent || "")) continue;
-      const r = t.getBoundingClientRect();
-      if (!r.width) continue;
-      used.add(t);
-      return { x: r.left + r.width / 2 - wrapperRect.left, y: r.top - wrapperRect.top };
-    }
-    return null;
+  // Centre of a matching SVG text, relative to the wrapper. Sources sit at the left of a schematic and
+  // loads at the right, so "left"/"right" take the outermost match; otherwise the first in drawing order.
+  findAnchor(svg, wrapperRect, pattern, used, pick) {
+    const hits = [...svg.querySelectorAll("text")]
+      .filter(t => !used.has(t) && pattern.test(t.textContent || ""))
+      .map(t => ({ t, r: t.getBoundingClientRect() }))
+      .filter(h => h.r.width);
+    if (!hits.length) return null;
+    if (pick === "left") hits.sort((a, b) => a.r.left - b.r.left);
+    if (pick === "right") hits.sort((a, b) => b.r.right - a.r.right);
+    const { t, r } = hits[0];
+    used.add(t);
+    return { x: r.left + r.width / 2 - wrapperRect.left, y: r.top - wrapperRect.top };
   }
 
   // Transformer core: two long, close, parallel vertical lines
@@ -106,7 +109,13 @@ class CircuitOverlay {
     // Match anchors, then give unmatched faders evenly spaced slots
     g.items.forEach(it => {
       const rule = OVERLAY_ANCHORS.find(a => a.label.test(it.label));
-      it.anchor = rule ? this.findAnchor(g.svg, wr, rule.svg, used) : null;
+      it.anchor = null;
+      if (rule) {
+        for (const pattern of rule.svg) {
+          it.anchor = this.findAnchor(g.svg, wr, pattern, used, rule.pick);
+          if (it.anchor) break;
+        }
+      }
       if (!it.anchor && /TURNS|RATIO/i.test(it.label)) it.anchor = this.findCore(g.svg, wr);
     });
     const free = g.items.filter(it => !it.anchor);

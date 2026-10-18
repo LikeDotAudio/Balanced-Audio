@@ -13845,9 +13845,30 @@ class PARGlossaryEngine {
           <div style="font-size: 0.78rem; color: var(--accent-emerald); background: rgba(16, 185, 129, 0.08); padding: 0.35rem 0.6rem; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.2);">
             <strong>Dennis Bohn Reference:</strong> ${item.bohnNote}
           </div>
+          ${this.definedInHtml(item.term)}
         </div>
       `;
     }).join("");
+  }
+
+  // Which standards define this term, and in which clause (from DEFINED_IN_INDEX)
+  definedInHtml(term) {
+    if (typeof DEFINED_IN_INDEX === "undefined") return "";
+    const keyOf = (t) => {
+      let k = t.toLowerCase().replace(/\([^)]*\)/g, " ").trim().replace(/^(the|a|an)\s+/, "");
+      k = k.replace(/[-/–]/g, " ").replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim();
+      return k.endsWith("s") && k.length > 4 ? k.slice(0, -1) : k;
+    };
+    const keys = [keyOf(term)];
+    const paren = term.match(/\(([^)]{2,40})\)/);
+    if (paren) paren[1].split(/[\/,;]/).forEach(a => keys.push(keyOf(a)));
+    const refs = [];
+    keys.forEach(k => (DEFINED_IN_INDEX[k]?.refs || []).forEach(r => {
+      if (!refs.some(x => x.doc === r.doc && x.clause === r.clause)) refs.push(r);
+    }));
+    if (!refs.length) return "";
+    refs.sort((a, b) => a.doc.localeCompare(b.doc) || a.clause.localeCompare(b.clause, undefined, { numeric: true }));
+    return `<div class="par-defined-in"><strong>Defined in:</strong> ${refs.map(r => `<span>${r.doc} §${r.clause}</span>`).join(" · ")}</div>`;
   }
 
   bindTooltips() {
@@ -13898,3 +13919,34 @@ class PARGlossaryEngine {
 document.addEventListener("DOMContentLoaded", () => {
   window.parGlossaryEngine = new PARGlossaryEngine();
 });
+
+
+// "Terms defined in the standards": each standard's own vocabulary with clause numbers
+function renderStandardsTermsIndex() {
+  const host = document.getElementById("standards-terms-index");
+  if (!host || typeof DEFINED_IN_INDEX === "undefined") return;
+  const byDoc = {};
+  Object.values(DEFINED_IN_INDEX).forEach(({ term, refs }) => {
+    refs.forEach(r => (byDoc[r.doc] = byDoc[r.doc] || []).push({ term, clause: r.clause }));
+  });
+  const clauseNum = (c) => c.split(".").map(Number);
+  const docs = Object.keys(byDoc).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  host.innerHTML = `
+    <h3>Terms Defined in the Standards</h3>
+    <p class="standards-terms-note">Which document defines each term, and in which clause. Definitions are not reproduced here; see each standard.</p>
+    <table class="standards-terms-table">
+      <thead><tr><th>Document</th><th>Defined terms (clause)</th></tr></thead>
+      <tbody>
+        ${docs.map(d => `
+          <tr>
+            <th scope="row">${d}</th>
+            <td>${byDoc[d]
+              .sort((a, b) => { const x = clauseNum(a.clause), y = clauseNum(b.clause); return x[0] - y[0] || (x[1] || 0) - (y[1] || 0); })
+              .map(t => `<span class="std-term">${t.term} <em>§${t.clause}</em></span>`).join("")}</td>
+          </tr>`).join("")}
+      </tbody>
+    </table>`;
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", renderStandardsTermsIndex);
+else renderStandardsTermsIndex();

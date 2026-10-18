@@ -578,11 +578,8 @@ function switchCircuit(circuitKey, scrollToIt = true) {
     return;
   }
 
-  // Hide all other circuits, show ONLY the selected circuit
-  allCircuits.forEach(c => {
-    const isTarget = c.id === `circuit-${circuitKey}`;
-    c.style.display = isTarget ? 'block' : 'none';
-  });
+  // All eight topologies stay on the page, one after another (like worked examples); the tab just goes to one
+  allCircuits.forEach(c => { c.style.display = 'block'; });
 
   const targetEl = document.getElementById(`circuit-${circuitKey}`);
   if (targetEl) {
@@ -965,7 +962,7 @@ document.addEventListener("DOMContentLoaded", () => {
   selectEnclosureBox("mic", false);
 
   // Default circuit topology (Only bring up 6.1 initially)
-  switchCircuit("6-1", false); // select the first circuit without scrolling the page on load
+  switchCircuit("all", false); // all eight topologies shown in sequence; no scroll on load
 
   initTheme();
   initImageModal();

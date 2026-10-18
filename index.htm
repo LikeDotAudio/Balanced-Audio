@@ -7942,6 +7942,130 @@ html[data-theme="paper"] .military-fader-readout {
   }
 }
 
+/* Glossary: which standards define the term */
+.par-defined-in {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: var(--text-secondary);
+}
+
+.par-defined-in strong {
+  color: #38bdf8;
+}
+
+.par-defined-in span {
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* =====================================================================
+   PAPER VIEW as an AES standards report. Colours here are chosen BEFORE the
+   page inversion: near-white text prints black, dark grounds print white,
+   light-grey rules print as thin black lines. Diagrams keep their colours.
+   ===================================================================== */
+html[data-theme="paper"] body > section :is(p, li, td, th, span, strong, em, label, h1, h2, h3, h4, h5, h6, div):not(svg *):not(.badge):not(.btn):not(.clause-no) {
+  color: #f4f4f4 !important;
+}
+
+html[data-theme="paper"] body > section a:not(.btn):not(.htu-start-btn) {
+  color: #93c5fd !important; /* prints as report blue */
+  text-decoration: underline;
+}
+
+html[data-theme="paper"] body > section :is(.rule-card, .triad-card, .detail-card, .svg-diagram-card, .interactive-calc-card,
+  .module-card, .xlr-table-card, .contributor-card, .page-credit-card, .htu-steps li, .htu-legend, .qtp-meter-item,
+  .vintage-military-panel, .military-fader-cell, .probe-badge-panel, .probe-pill, .qtp-demo-metrics span, .table-responsive) {
+  background: transparent !important;
+  border-color: #d4d4d4 !important;
+  border-width: 1px !important;
+  border-left-width: 1px !important;
+  border-top-width: 1px !important;
+}
+
+html[data-theme="paper"] body > section :is(.badge, .section-badge, .triad-badge, .military-spec-badge) {
+  background: transparent !important;
+  border: none !important;
+  color: #f4f4f4 !important;
+  font-variant: small-caps;
+}
+
+html[data-theme="paper"] body > section table {
+  border-collapse: collapse;
+}
+
+html[data-theme="paper"] body > section :is(th, td) {
+  border: 1px solid #d4d4d4 !important;
+  background: transparent !important;
+}
+
+html[data-theme="paper"] body > section :is(h3, h4) {
+  font-family: Georgia, "Times New Roman", serif !important;
+}
+
+/* Figures numbered like a standard */
+html[data-theme="paper"] body {
+  counter-reset: aes-figure;
+}
+
+html[data-theme="paper"] body > section .svg-diagram-wrapper {
+  counter-increment: aes-figure;
+}
+
+html[data-theme="paper"] body > section .svg-diagram-wrapper::after {
+  content: "Figure " counter(aes-figure);
+  display: block;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #f4f4f4;
+  margin-top: 0.4rem;
+}
+
+/* Terms defined in the standards */
+.standards-terms-index {
+  margin-top: 2.5rem;
+}
+
+.standards-terms-note {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.standards-terms-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.standards-terms-table th,
+.standards-terms-table td {
+  border: 1px solid var(--border-color);
+  padding: 0.45rem 0.6rem;
+  vertical-align: top;
+  text-align: left;
+}
+
+.standards-terms-table th[scope="row"] {
+  white-space: nowrap;
+  width: 8rem;
+}
+
+.std-term {
+  display: inline-block;
+  margin: 0 0.9rem 0.25rem 0;
+}
+
+.std-term em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--text-muted);
+}
+
 </style>
   
   <!-- Google Fonts: Inter & JetBrains Mono -->
@@ -13960,6 +14084,9 @@ html[data-theme="paper"] .military-fader-readout {
         </div>
       </div>
 
+      <!-- Terms each standard defines, with clause numbers (from js/defined-in-index.js) -->
+      <div id="standards-terms-index" class="standards-terms-index"></div>
+
       <!-- Searchable PAR A–Z Glossary Explorer -->
       <div style="margin-top: 3.5rem;">
         <div class="d-flex justify-content-between align-items-center mb-2">
@@ -17656,7 +17783,6 @@ class FloatingMeterDock {
           <button id="rack-tab-rack" class="rack-nav-tab active" title="6 Laboratory Instruments">🎛️ LAB RACK</button>
           <button id="rack-tab-8ch" class="rack-nav-tab" title="8 Lines (100–800 Hz) with a scope and meter per line, plus 4 simple generators">📶 8-CH</button>
           <button id="rack-tab-gen" class="rack-nav-tab" title="Signal Generator Quick Access">⚡ GEN</button>
-          <button id="rack-tab-hp353a" class="rack-nav-tab" title="HP 353A Patch Panel">🎛️ HP 353A</button>
           <button id="rack-tab-chart" class="rack-nav-tab" title="Multi-Channel Trend Graph">📉 TREND</button>
         </div>
         <div class="rack-quick-actions">
@@ -20128,12 +20254,17 @@ class FloatingMeterDock {
       if (targetEl) {
         targetRect = targetEl.getBoundingClientRect();
         // Check if target is inside the visible viewport and not under the right rack (width 350px)
-        if (targetRect.bottom > 0 && targetRect.top < window.innerHeight && targetRect.left < window.innerWidth - 350 && targetRect.right > 0) {
+        const cy = targetRect.top + targetRect.height / 2;
+        if (cy > 40 && cy < window.innerHeight - 40 && targetRect.left < window.innerWidth - 350 && targetRect.right > 0) {
           x2 = targetRect.left + targetRect.width / 2;
-          y2 = targetRect.top + targetRect.height / 2;
+          y2 = cy;
           isVisible = true;
         }
       }
+
+      // A wire exists only while its test point is on screen: it breaks as the section scrolls
+      // away (never stretching across titles) and reconnects when the next diagram arrives
+      if (!isVisible) return;
 
       // Calculate staggered vertical offset if multiple probes share the same target
       const count = targetCounts[conn.targetKey] || 1;
@@ -25198,16 +25329,17 @@ document.addEventListener("DOMContentLoaded", () => {
  *    for a few seconds, showing the value and, for capacitors, the reactance at several frequencies.
  */
 
+// Each fader's part, as patterns tried in order (most specific first) against the SVG's text
 const OVERLAY_ANCHORS = [
-  { label: /DRIVE|V<sub>IN|V<sub>PO|SOURCE/i, svg: /driver in|v[_\s]?in|v[_\s]?sig|source|generator|v[_\s]?po/i },
-  { label: /TURNS|RATIO/i, svg: /1\s*:\s*n|turns|ratio|transformer|core/i },
-  { label: /LOAD|BRIDGING/i, svg: /\d\s*(k)?\s*Ω|r[_\s]?load|load/i },
-  { label: /R<sub>OUT|MATCH/i, svg: /r[_\s]?out|z[_\s]?out|50\s*Ω/i },
-  { label: /HOT \(Z/i, svg: /z[_\s]?po|hot/i },
-  { label: /COLD \(Z/i, svg: /z[_\s]?ro|cold/i },
-  { label: /CMZ/i, svg: /cmz|z[_\s]?cm|common/i },
-  { label: /SHIELD \(C|C<sub>/i, svg: /c[_\s]?stray|c[_\s]?ps|shield|capac/i },
-  { label: /HUM/i, svg: /v[_\s]?gvd|hum|ground/i }
+  { label: /DRIVE|V<sub>IN|V<sub>PO|SOURCE/i, pick: "left", svg: [/driver in|audio in|signal in/i, /v[_\s]?in\b|v[_\s]?sig|v[_\s]?po/i, /source|generator|op-?amp/i] },
+  { label: /TURNS|RATIO/i, svg: [/1\s*:\s*n|turns|ratio/i] },
+  { label: /LOAD|BRIDGING/i, pick: "right", svg: [/r[_\s]?load|load/i, /\d\s*k\s*Ω/i, /Ω/i] },
+  { label: /R<sub>OUT|MATCH/i, svg: [/r[_\s]?(po|out)|z[_\s]?out/i, /50\s*Ω/i] },
+  { label: /HOT \(Z/i, svg: [/z[_\s]?po/i, /hot/i] },
+  { label: /COLD \(Z/i, svg: [/z[_\s]?ro/i, /cold/i] },
+  { label: /CMZ/i, svg: [/cmz|z[_\s]?cm/i, /common/i] },
+  { label: /SHIELD \(C|C<sub>/i, svg: [/c[_\s]?stray|c[_\s]?ps/i, /shield|capac/i] },
+  { label: /HUM/i, svg: [/v[_\s]?gvd/i, /hum|ground/i] }
 ];
 
 class CircuitOverlay {
@@ -25255,17 +25387,19 @@ class CircuitOverlay {
     this.groups.push({ panel, wrapper, svg, layer, items });
   }
 
-  // Centre of the first SVG text that matches the fader's part, relative to the wrapper
-  findAnchor(svg, wrapperRect, pattern, used) {
-    const texts = [...svg.querySelectorAll("text")];
-    for (const t of texts) {
-      if (used.has(t) || !pattern.test(t.textContent || "")) continue;
-      const r = t.getBoundingClientRect();
-      if (!r.width) continue;
-      used.add(t);
-      return { x: r.left + r.width / 2 - wrapperRect.left, y: r.top - wrapperRect.top };
-    }
-    return null;
+  // Centre of a matching SVG text, relative to the wrapper. Sources sit at the left of a schematic and
+  // loads at the right, so "left"/"right" take the outermost match; otherwise the first in drawing order.
+  findAnchor(svg, wrapperRect, pattern, used, pick) {
+    const hits = [...svg.querySelectorAll("text")]
+      .filter(t => !used.has(t) && pattern.test(t.textContent || ""))
+      .map(t => ({ t, r: t.getBoundingClientRect() }))
+      .filter(h => h.r.width);
+    if (!hits.length) return null;
+    if (pick === "left") hits.sort((a, b) => a.r.left - b.r.left);
+    if (pick === "right") hits.sort((a, b) => b.r.right - a.r.right);
+    const { t, r } = hits[0];
+    used.add(t);
+    return { x: r.left + r.width / 2 - wrapperRect.left, y: r.top - wrapperRect.top };
   }
 
   // Transformer core: two long, close, parallel vertical lines
@@ -25295,7 +25429,13 @@ class CircuitOverlay {
     // Match anchors, then give unmatched faders evenly spaced slots
     g.items.forEach(it => {
       const rule = OVERLAY_ANCHORS.find(a => a.label.test(it.label));
-      it.anchor = rule ? this.findAnchor(g.svg, wr, rule.svg, used) : null;
+      it.anchor = null;
+      if (rule) {
+        for (const pattern of rule.svg) {
+          it.anchor = this.findAnchor(g.svg, wr, pattern, used, rule.pick);
+          if (it.anchor) break;
+        }
+      }
       if (!it.anchor && /TURNS|RATIO/i.test(it.label)) it.anchor = this.findCore(g.svg, wr);
     });
     const free = g.items.filter(it => !it.anchor);
@@ -28538,6 +28678,857 @@ Standards:            AES-X152, AES48, AES14, AES26, AES59, AES72
 document.addEventListener("DOMContentLoaded", () => {
   window.aesDatasheetGenerator = new AESDatasheetGenerator();
 });
+
+
+/* ===== BUNDLED: js/defined-in-index.js ===== */
+/**
+ * Defined-in index: which standard defines each term, and in which clause.
+ * Generated by scripts/build_defined_in.py from the standards texts (term names and clause
+ * numbers only; definition text is not reproduced).
+ */
+
+const DEFINED_IN_INDEX = {
+ "positive sound pressure": {
+  "term": "Positive sound pressure",
+  "refs": [
+   {
+    "doc": "AES14",
+    "clause": "3.1"
+   },
+   {
+    "doc": "AES59",
+    "clause": "3.2"
+   }
+  ]
+ },
+ "positive polarity": {
+  "term": "Positive polarity",
+  "refs": [
+   {
+    "doc": "AES14",
+    "clause": "3.2"
+   },
+   {
+    "doc": "AES59",
+    "clause": "3.3"
+   }
+  ]
+ },
+ "positive polarity terminal": {
+  "term": "Positive-polarity terminal",
+  "refs": [
+   {
+    "doc": "AES14",
+    "clause": "3.3"
+   },
+   {
+    "doc": "AES59",
+    "clause": "3.4"
+   }
+  ]
+ },
+ "return terminal": {
+  "term": "Return terminal",
+  "refs": [
+   {
+    "doc": "AES14",
+    "clause": "3.4"
+   },
+   {
+    "doc": "AES59",
+    "clause": "3.5"
+   }
+  ]
+ },
+ "positive supply terminal": {
+  "term": "Positive-supply terminal",
+  "refs": [
+   {
+    "doc": "AES14",
+    "clause": "3.5"
+   }
+  ]
+ },
+ "negative supply terminal": {
+  "term": "Negative-supply terminal",
+  "refs": [
+   {
+    "doc": "AES14",
+    "clause": "3.6"
+   }
+  ]
+ },
+ "positive polarity audio signal": {
+  "term": "positive-polarity audio signal",
+  "refs": [
+   {
+    "doc": "AES26",
+    "clause": "3.1"
+   }
+  ]
+ },
+ "magnetic analog audio tape": {
+  "term": "magnetic analog audio tape",
+  "refs": [
+   {
+    "doc": "AES26",
+    "clause": "3.2"
+   }
+  ]
+ },
+ "magnetic videotape": {
+  "term": "magnetic videotape",
+  "refs": [
+   {
+    "doc": "AES26",
+    "clause": "3.3"
+   }
+  ]
+ },
+ "xlr connector": {
+  "term": "XLR connector",
+  "refs": [
+   {
+    "doc": "AES26",
+    "clause": "3.3"
+   },
+   {
+    "doc": "AES26",
+    "clause": "3.4"
+   }
+  ]
+ },
+ "d type connector": {
+  "term": "D-type connector",
+  "refs": [
+   {
+    "doc": "AES59",
+    "clause": "3.1"
+   }
+  ]
+ },
+ "shield": {
+  "term": "shield (of a cable)",
+  "refs": [
+   {
+    "doc": "AES59",
+    "clause": "3.6"
+   }
+  ]
+ },
+ "8p8c": {
+  "term": "8P8C",
+  "refs": [
+   {
+    "doc": "AES72",
+    "clause": "3.1"
+   }
+  ]
+ },
+ "catn cable": {
+  "term": "CATn Cable",
+  "refs": [
+   {
+    "doc": "AES72",
+    "clause": "3.2"
+   }
+  ]
+ },
+ "crossover cable": {
+  "term": "Crossover Cable",
+  "refs": [
+   {
+    "doc": "AES72",
+    "clause": "3.3"
+   }
+  ]
+ },
+ "link": {
+  "term": "Link",
+  "refs": [
+   {
+    "doc": "AES72",
+    "clause": "3.4"
+   }
+  ]
+ },
+ "positive polarity pin": {
+  "term": "Positive Polarity Pin",
+  "refs": [
+   {
+    "doc": "AES72",
+    "clause": "3.5"
+   }
+  ]
+ },
+ "return pin": {
+  "term": "Return Pin",
+  "refs": [
+   {
+    "doc": "AES72",
+    "clause": "3.6"
+   }
+  ]
+ },
+ "qtp": {
+  "term": "QTP",
+  "refs": [
+   {
+    "doc": "AES72",
+    "clause": "3.7"
+   }
+  ]
+ },
+ "rj": {
+  "term": "RJ",
+  "refs": [
+   {
+    "doc": "AES72",
+    "clause": "3.8"
+   }
+  ]
+ },
+ "rj45": {
+  "term": "RJ45",
+  "refs": [
+   {
+    "doc": "AES72",
+    "clause": "3.7"
+   },
+   {
+    "doc": "AES72",
+    "clause": "3.9"
+   }
+  ]
+ },
+ "synchronism": {
+  "term": "synchronism",
+  "refs": [
+   {
+    "doc": "AES11",
+    "clause": "3.1"
+   }
+  ]
+ },
+ "aes3 frame": {
+  "term": "AES3 frame",
+  "refs": [
+   {
+    "doc": "AES11",
+    "clause": "3.2"
+   }
+  ]
+ },
+ "timing reference point": {
+  "term": "timing reference point",
+  "refs": [
+   {
+    "doc": "AES11",
+    "clause": "3.3"
+   }
+  ]
+ },
+ "digital audio reference signal": {
+  "term": "digital audio reference signal",
+  "refs": [
+   {
+    "doc": "AES11",
+    "clause": "3.4"
+   }
+  ]
+ },
+ "luminance signal": {
+  "term": "luminance signal",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.1"
+   }
+  ]
+ },
+ "chrominance signal": {
+  "term": "chrominance signal",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.2"
+   }
+  ]
+ },
+ "y signal": {
+  "term": "Y\" signal",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.3"
+   }
+  ]
+ },
+ "colour signal": {
+  "term": "colour signal",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.4"
+   }
+  ]
+ },
+ "composite video signal": {
+  "term": "composite video signal",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.5"
+   }
+  ]
+ },
+ "composite video blanking and synchronization signal": {
+  "term": "composite video, blanking and synchronization signal",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.6"
+   }
+  ]
+ },
+ "blanking signal": {
+  "term": "blanking signal",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.7"
+   }
+  ]
+ },
+ "synchronizing signal": {
+  "term": "synchronizing signal",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.8"
+   }
+  ]
+ },
+ "interface": {
+  "term": "interface",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.9"
+   }
+  ]
+ },
+ "minimum output voltage": {
+  "term": "minimum output voltage",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.10"
+   }
+  ]
+ },
+ "maximum output voltage": {
+  "term": "maximum output voltage",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.11"
+   }
+  ]
+ },
+ "rated source impedance": {
+  "term": "rated source impedance",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.12"
+   }
+  ]
+ },
+ "input impedance": {
+  "term": "input impedance",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.13"
+   }
+  ]
+ },
+ "rated source emf": {
+  "term": "rated source e.m.f",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.14"
+   }
+  ]
+ },
+ "minimum source emf for rated output voltage": {
+  "term": "minimum source e.m.f. for rated output voltage",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.15"
+   }
+  ]
+ },
+ "rated load impedance": {
+  "term": "rated load impedance",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.16"
+   }
+  ]
+ },
+ "output source impedance": {
+  "term": "output source impedance",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.17"
+   }
+  ]
+ },
+ "rated output voltage": {
+  "term": "rated output voltage",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.18"
+   }
+  ]
+ },
+ "overload source emf": {
+  "term": "overload source e.m.f",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.19"
+   }
+  ]
+ },
+ "externally powered microphone": {
+  "term": "externally powered microphone",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.20"
+   }
+  ]
+ },
+ "powered input": {
+  "term": "powered input",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.21"
+   }
+  ]
+ },
+ "p12": {
+  "term": "P12",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.22"
+   }
+  ]
+ },
+ "p24": {
+  "term": "P24",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.23"
+   }
+  ]
+ },
+ "p48": {
+  "term": "P48",
+  "refs": [
+   {
+    "doc": "IEC 61938",
+    "clause": "3.24"
+   }
+  ]
+ },
+ "star point": {
+  "term": "“Star” Point",
+  "refs": [
+   {
+    "doc": "AES48",
+    "clause": "3.6"
+   }
+  ]
+ },
+ "active": {
+  "term": "Active",
+  "refs": [
+   {
+    "doc": "AES48",
+    "clause": "3.1"
+   }
+  ]
+ },
+ "b gauge plug": {
+  "term": "B-gauge plug",
+  "refs": [
+   {
+    "doc": "AES14id",
+    "clause": "3.5"
+   }
+  ]
+ },
+ "barrel adapter": {
+  "term": "barrel adapter",
+  "refs": [
+   {
+    "doc": "AES54-1",
+    "clause": "3.10"
+   }
+  ]
+ },
+ "bond": {
+  "term": "bond",
+  "refs": [
+   {
+    "doc": "AES54-2",
+    "clause": "3.18"
+   }
+  ]
+ },
+ "connector panel": {
+  "term": "connector panel",
+  "refs": [
+   {
+    "doc": "AES54-1",
+    "clause": "3.5"
+   },
+   {
+    "doc": "AES54-2",
+    "clause": "3.6"
+   }
+  ]
+ },
+ "designated shield contact": {
+  "term": "designated shield contact",
+  "refs": [
+   {
+    "doc": "AES54-1",
+    "clause": "3.4"
+   },
+   {
+    "doc": "AES54-2",
+    "clause": "3.4"
+   }
+  ]
+ },
+ "designated shield contact enclosure": {
+  "term": "designated shield contact enclosure",
+  "refs": [
+   {
+    "doc": "AES54-3",
+    "clause": "3.4"
+   }
+  ]
+ },
+ "enclosure": {
+  "term": "enclosure",
+  "refs": [
+   {
+    "doc": "AES48",
+    "clause": "3.2"
+   },
+   {
+    "doc": "AES54-1",
+    "clause": "3.1"
+   },
+   {
+    "doc": "AES54-2",
+    "clause": "3.1"
+   },
+   {
+    "doc": "AES54-3",
+    "clause": "3.1"
+   }
+  ]
+ },
+ "equipment ground": {
+  "term": "equipment ground",
+  "refs": [
+   {
+    "doc": "AES48",
+    "clause": "3.5"
+   },
+   {
+    "doc": "AES54-2",
+    "clause": "3.11"
+   }
+  ]
+ },
+ "equipment grounding conductor": {
+  "term": "equipment grounding conductor",
+  "refs": [
+   {
+    "doc": "AES54-2",
+    "clause": "3.12"
+   }
+  ]
+ },
+ "faraday shield": {
+  "term": "Faraday shield",
+  "refs": [
+   {
+    "doc": "AES54-2",
+    "clause": "3.14"
+   }
+  ]
+ },
+ "fixed connector panel": {
+  "term": "fixed connector panel",
+  "refs": [
+   {
+    "doc": "AES54-1",
+    "clause": "3.7"
+   },
+   {
+    "doc": "AES54-2",
+    "clause": "3.7"
+   }
+  ]
+ },
+ "iec plug": {
+  "term": "IEC plug",
+  "refs": [
+   {
+    "doc": "AES14id",
+    "clause": "3.4"
+   }
+  ]
+ },
+ "isolated ground": {
+  "term": "isolated ground",
+  "refs": [
+   {
+    "doc": "AES54-2",
+    "clause": "3.13"
+   }
+  ]
+ },
+ "jack": {
+  "term": "Jack",
+  "refs": [
+   {
+    "doc": "AES14id",
+    "clause": "3.1"
+   }
+  ]
+ },
+ "jack field patch bay": {
+  "term": "jack field / patch bay",
+  "refs": [
+   {
+    "doc": "AES54-1",
+    "clause": "3.9"
+   },
+   {
+    "doc": "AES54-2",
+    "clause": "3.16"
+   }
+  ]
+ },
+ "line level": {
+  "term": "line level",
+  "refs": [
+   {
+    "doc": "AES54-1",
+    "clause": "3.11"
+   },
+   {
+    "doc": "AES54-2",
+    "clause": "3.9"
+   }
+  ]
+ },
+ "line level enclosure": {
+  "term": "line level enclosure",
+  "refs": [
+   {
+    "doc": "AES54-3",
+    "clause": "3.5"
+   }
+  ]
+ },
+ "magnetic analog audio tape positive polarity": {
+  "term": "Magnetic analog audio tape positive polarity",
+  "refs": [
+   {
+    "doc": "AES26",
+    "clause": "3.2"
+   }
+  ]
+ },
+ "microphone level": {
+  "term": "microphone level",
+  "refs": [
+   {
+    "doc": "AES54-1",
+    "clause": "3.12"
+   },
+   {
+    "doc": "AES54-2",
+    "clause": "3.10"
+   }
+  ]
+ },
+ "microphone level enclosure": {
+  "term": "microphone level enclosure",
+  "refs": [
+   {
+    "doc": "AES54-3",
+    "clause": "3.6"
+   }
+  ]
+ },
+ "mil plug": {
+  "term": "MIL plug",
+  "refs": [
+   {
+    "doc": "AES14id",
+    "clause": "3.6"
+   }
+  ]
+ },
+ "overall shield": {
+  "term": "overall shield (as applied to a transformer)",
+  "refs": [
+   {
+    "doc": "AES54-2",
+    "clause": "3.15"
+   }
+  ]
+ },
+ "plug": {
+  "term": "Plug",
+  "refs": [
+   {
+    "doc": "AES14id",
+    "clause": "3.2"
+   }
+  ]
+ },
+ "portable connector panel": {
+  "term": "portable connector panel",
+  "refs": [
+   {
+    "doc": "AES54-1",
+    "clause": "3.8"
+   },
+   {
+    "doc": "AES54-2",
+    "clause": "3.8"
+   }
+  ]
+ },
+ "raceway": {
+  "term": "raceway",
+  "refs": [
+   {
+    "doc": "AES54-2",
+    "clause": "3.17"
+   }
+  ]
+ },
+ "screen": {
+  "term": "Screen",
+  "refs": [
+   {
+    "doc": "AES48",
+    "clause": "3.4"
+   }
+  ]
+ },
+ "screen enclosure": {
+  "term": "screen (of a cable) enclosure",
+  "refs": [
+   {
+    "doc": "AES54-3",
+    "clause": "3.2"
+   }
+  ]
+ },
+ "shield screen": {
+  "term": "shield (of a cable) / screen (of a cable)",
+  "refs": [
+   {
+    "doc": "AES54-1",
+    "clause": "3.2"
+   },
+   {
+    "doc": "AES54-2",
+    "clause": "3.2"
+   },
+   {
+    "doc": "AES59",
+    "clause": "3.6"
+   }
+  ]
+ },
+ "shielding enclosure": {
+  "term": "shielding enclosure",
+  "refs": [
+   {
+    "doc": "AES48",
+    "clause": "3.3"
+   },
+   {
+    "doc": "AES54-1",
+    "clause": "3.3"
+   },
+   {
+    "doc": "AES54-2",
+    "clause": "3.3"
+   }
+  ]
+ },
+ "shielding enclosure enclosure": {
+  "term": "shielding enclosure enclosure",
+  "refs": [
+   {
+    "doc": "AES54-3",
+    "clause": "3.3"
+   }
+  ]
+ },
+ "splitter": {
+  "term": "splitter",
+  "refs": [
+   {
+    "doc": "AES54-2",
+    "clause": "3.5"
+   }
+  ]
+ },
+ "tie line": {
+  "term": "tie line",
+  "refs": [
+   {
+    "doc": "AES54-1",
+    "clause": "3.13"
+   }
+  ]
+ },
+ "trs plug": {
+  "term": "TRS plug",
+  "refs": [
+   {
+    "doc": "AES14id",
+    "clause": "3.3"
+   }
+  ]
+ }
+};
 
 
 /* ===== BUNDLED: js/par-glossary.js ===== */
@@ -42388,9 +43379,30 @@ class PARGlossaryEngine {
           <div style="font-size: 0.78rem; color: var(--accent-emerald); background: rgba(16, 185, 129, 0.08); padding: 0.35rem 0.6rem; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.2);">
             <strong>Dennis Bohn Reference:</strong> ${item.bohnNote}
           </div>
+          ${this.definedInHtml(item.term)}
         </div>
       `;
     }).join("");
+  }
+
+  // Which standards define this term, and in which clause (from DEFINED_IN_INDEX)
+  definedInHtml(term) {
+    if (typeof DEFINED_IN_INDEX === "undefined") return "";
+    const keyOf = (t) => {
+      let k = t.toLowerCase().replace(/\([^)]*\)/g, " ").trim().replace(/^(the|a|an)\s+/, "");
+      k = k.replace(/[-/–]/g, " ").replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim();
+      return k.endsWith("s") && k.length > 4 ? k.slice(0, -1) : k;
+    };
+    const keys = [keyOf(term)];
+    const paren = term.match(/\(([^)]{2,40})\)/);
+    if (paren) paren[1].split(/[\/,;]/).forEach(a => keys.push(keyOf(a)));
+    const refs = [];
+    keys.forEach(k => (DEFINED_IN_INDEX[k]?.refs || []).forEach(r => {
+      if (!refs.some(x => x.doc === r.doc && x.clause === r.clause)) refs.push(r);
+    }));
+    if (!refs.length) return "";
+    refs.sort((a, b) => a.doc.localeCompare(b.doc) || a.clause.localeCompare(b.clause, undefined, { numeric: true }));
+    return `<div class="par-defined-in"><strong>Defined in:</strong> ${refs.map(r => `<span>${r.doc} §${r.clause}</span>`).join(" · ")}</div>`;
   }
 
   bindTooltips() {
@@ -42441,6 +43453,37 @@ class PARGlossaryEngine {
 document.addEventListener("DOMContentLoaded", () => {
   window.parGlossaryEngine = new PARGlossaryEngine();
 });
+
+
+// "Terms defined in the standards": each standard's own vocabulary with clause numbers
+function renderStandardsTermsIndex() {
+  const host = document.getElementById("standards-terms-index");
+  if (!host || typeof DEFINED_IN_INDEX === "undefined") return;
+  const byDoc = {};
+  Object.values(DEFINED_IN_INDEX).forEach(({ term, refs }) => {
+    refs.forEach(r => (byDoc[r.doc] = byDoc[r.doc] || []).push({ term, clause: r.clause }));
+  });
+  const clauseNum = (c) => c.split(".").map(Number);
+  const docs = Object.keys(byDoc).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  host.innerHTML = `
+    <h3>Terms Defined in the Standards</h3>
+    <p class="standards-terms-note">Which document defines each term, and in which clause. Definitions are not reproduced here; see each standard.</p>
+    <table class="standards-terms-table">
+      <thead><tr><th>Document</th><th>Defined terms (clause)</th></tr></thead>
+      <tbody>
+        ${docs.map(d => `
+          <tr>
+            <th scope="row">${d}</th>
+            <td>${byDoc[d]
+              .sort((a, b) => { const x = clauseNum(a.clause), y = clauseNum(b.clause); return x[0] - y[0] || (x[1] || 0) - (y[1] || 0); })
+              .map(t => `<span class="std-term">${t.term} <em>§${t.clause}</em></span>`).join("")}</td>
+          </tr>`).join("")}
+      </tbody>
+    </table>`;
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", renderStandardsTermsIndex);
+else renderStandardsTermsIndex();
 
 
 /* ===== BUNDLED: js/landmark-papers.js ===== */
@@ -42519,7 +43562,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ===== BUNDLED: js/modules-data.js ===== */
 /**
  * Balanced Audio & AES-X152 100-Module Reference Curriculum Dataset
- * Compiled by build.py on 2026-10-18 01:04
+ * Compiled by build.py on 2026-10-18 01:14
  */
 
 const BALANCED_MODULES_DATA = [
@@ -46587,11 +47630,8 @@ function switchCircuit(circuitKey, scrollToIt = true) {
     return;
   }
 
-  // Hide all other circuits, show ONLY the selected circuit
-  allCircuits.forEach(c => {
-    const isTarget = c.id === `circuit-${circuitKey}`;
-    c.style.display = isTarget ? 'block' : 'none';
-  });
+  // All eight topologies stay on the page, one after another (like worked examples); the tab just goes to one
+  allCircuits.forEach(c => { c.style.display = 'block'; });
 
   const targetEl = document.getElementById(`circuit-${circuitKey}`);
   if (targetEl) {
@@ -46974,7 +48014,7 @@ document.addEventListener("DOMContentLoaded", () => {
   selectEnclosureBox("mic", false);
 
   // Default circuit topology (Only bring up 6.1 initially)
-  switchCircuit("6-1", false); // select the first circuit without scrolling the page on load
+  switchCircuit("all", false); // all eight topologies shown in sequence; no scroll on load
 
   initTheme();
   initImageModal();

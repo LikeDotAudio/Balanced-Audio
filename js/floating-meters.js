@@ -507,7 +507,6 @@ class FloatingMeterDock {
           <button id="rack-tab-rack" class="rack-nav-tab active" title="6 Laboratory Instruments">🎛️ LAB RACK</button>
           <button id="rack-tab-8ch" class="rack-nav-tab" title="8 Lines (100–800 Hz) with a scope and meter per line, plus 4 simple generators">📶 8-CH</button>
           <button id="rack-tab-gen" class="rack-nav-tab" title="Signal Generator Quick Access">⚡ GEN</button>
-          <button id="rack-tab-hp353a" class="rack-nav-tab" title="HP 353A Patch Panel">🎛️ HP 353A</button>
           <button id="rack-tab-chart" class="rack-nav-tab" title="Multi-Channel Trend Graph">📉 TREND</button>
         </div>
         <div class="rack-quick-actions">
@@ -2979,12 +2978,17 @@ class FloatingMeterDock {
       if (targetEl) {
         targetRect = targetEl.getBoundingClientRect();
         // Check if target is inside the visible viewport and not under the right rack (width 350px)
-        if (targetRect.bottom > 0 && targetRect.top < window.innerHeight && targetRect.left < window.innerWidth - 350 && targetRect.right > 0) {
+        const cy = targetRect.top + targetRect.height / 2;
+        if (cy > 40 && cy < window.innerHeight - 40 && targetRect.left < window.innerWidth - 350 && targetRect.right > 0) {
           x2 = targetRect.left + targetRect.width / 2;
-          y2 = targetRect.top + targetRect.height / 2;
+          y2 = cy;
           isVisible = true;
         }
       }
+
+      // A wire exists only while its test point is on screen: it breaks as the section scrolls
+      // away (never stretching across titles) and reconnects when the next diagram arrives
+      if (!isVisible) return;
 
       // Calculate staggered vertical offset if multiple probes share the same target
       const count = targetCounts[conn.targetKey] || 1;

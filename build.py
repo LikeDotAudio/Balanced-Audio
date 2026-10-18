@@ -4,7 +4,10 @@ build.py — Unified Master Build System for Balanced Audio & AES-X152 Reference
 (c) 2026 Audio Engineering Society SC-05-05 Standards Working Group
 
 Usage:
-    python3 build.py [SNAPSHOT_TIMESTAMP]
+    python3 build.py [SNAPSHOT_TIMESTAMP] [-m "commit message"] [--no-push]
+
+After a successful build the changes are committed and pushed to GitHub (main),
+which also redeploys the GitHub Pages site. Pass --no-push to only build.
 
 This script performs the complete end-to-end build pipeline:
   1. Ingests, validates, and parses all 100 Markdown modules in modules/
@@ -60,6 +63,7 @@ SCRIPTS_ORDER = [
     "js/transformer-sim.js",
     "js/vst-standards.js",
     "js/datasheet-generator.js",
+    "js/defined-in-index.js",
     "js/par-glossary.js",
     "js/landmark-papers.js",
     "js/modules-data.js",
@@ -776,8 +780,44 @@ def bundle_portal(timestamp=None):
         sz = os.path.getsize(path)
         print(f"Bundled successfully -> {path.name} ({sz:,} bytes / {sz / 1024 / 1024:.2f} MB)")
 
+def parse_args(argv):
+    """[SNAPSHOT_TIMESTAMP] [-m MESSAGE] [--no-push]"""
+    opts = {"ts": None, "message": None, "push": True}
+    i = 0
+    while i < len(argv):
+        a = argv[i]
+        if a == "--no-push":
+            opts["push"] = False
+        elif a in ("-m", "--message") and i + 1 < len(argv):
+            opts["message"] = argv[i + 1]
+            i += 1
+        elif not a.startswith("-") and opts["ts"] is None:
+            opts["ts"] = a
+        i += 1
+    return opts
+
+def push_to_github(message):
+    """Commit everything the build changed and push main (GitHub Pages redeploys from it)."""
+    def git(*args, check=True):
+        return subprocess.run(["git", *args], cwd=BASE_DIR, capture_output=True, text=True, check=check)
+    try:
+        if not git("status", "--porcelain").stdout.strip():
+            print("    Nothing changed; nothing to push.")
+            return
+        git("add", "-A")
+        git("commit", "-m", message)
+        out = git("push", "origin", "HEAD:main", check=False)
+        if out.returncode == 0:
+            print("    Pushed to GitHub (main). The Pages site redeploys in a minute or two.")
+        else:
+            print("    Push failed (build and commit kept locally):")
+            print("    " + (out.stderr.strip() or out.stdout.strip()).replace("\n", "\n    "))
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:
+        print(f"    Could not commit/push: {e}")
+
 def main():
-    ts = sys.argv[1] if len(sys.argv) > 1 else datetime.now().strftime("%Y%m%d-%H%M")
+    opts = parse_args(sys.argv[1:])
+    ts = opts["ts"] or datetime.now().strftime("%Y%m%d-%H%M")
     print(f"\n================================================================================")
     print(f"   BALANCED AUDIO & AES-X152 MASTER BUILD SYSTEM [{ts}]")
     print(f"================================================================================\n")
@@ -790,6 +830,10 @@ def main():
     # Step 1b: Render governing equations to SVG
     print("\n>>> Step 1b: Rendering governing equations to SVG...")
     render_equation_svgs(modules)
+
+    # Step 1c: Index which standard defines each term (names + clause numbers only)
+    print("\n>>> Step 1c: Indexing defined terms across the standards...")
+    subprocess.run([sys.executable, str(BASE_DIR / "scripts" / "build_defined_in.py")], check=False)
 
     # Step 2: Generate CSV files
     print("\n>>> Step 2: Generating CSV catalogs...")
@@ -810,6 +854,11 @@ def main():
     print(f"\n================================================================================")
     print(f"   BUILD COMPLETE: ALL 100 MODULES, CSVs, AND HTML FILES SUCCESSFULLY GENERATED")
     print(f"================================================================================\n")
+
+    # Step 6: Commit and push to GitHub (skipped with --no-push)
+    if opts["push"]:
+        print(">>> Step 6: Committing and pushing to GitHub...")
+        push_to_github(opts["message"] or f"build: {ts}")
 
 if __name__ == "__main__":
     main()

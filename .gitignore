@@ -10,3 +10,6 @@ __pycache__/
 
 # Node dependencies (scripts/equations)
 node_modules/
+
+# Timestamped build snapshots
+INDEX.htm-*.html

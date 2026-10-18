@@ -7931,3 +7931,127 @@ html[data-theme="paper"] .military-fader-readout {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* Glossary: which standards define the term */
+.par-defined-in {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: var(--text-secondary);
+}
+
+.par-defined-in strong {
+  color: #38bdf8;
+}
+
+.par-defined-in span {
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* =====================================================================
+   PAPER VIEW as an AES standards report. Colours here are chosen BEFORE the
+   page inversion: near-white text prints black, dark grounds print white,
+   light-grey rules print as thin black lines. Diagrams keep their colours.
+   ===================================================================== */
+html[data-theme="paper"] body > section :is(p, li, td, th, span, strong, em, label, h1, h2, h3, h4, h5, h6, div):not(svg *):not(.badge):not(.btn):not(.clause-no) {
+  color: #f4f4f4 !important;
+}
+
+html[data-theme="paper"] body > section a:not(.btn):not(.htu-start-btn) {
+  color: #93c5fd !important; /* prints as report blue */
+  text-decoration: underline;
+}
+
+html[data-theme="paper"] body > section :is(.rule-card, .triad-card, .detail-card, .svg-diagram-card, .interactive-calc-card,
+  .module-card, .xlr-table-card, .contributor-card, .page-credit-card, .htu-steps li, .htu-legend, .qtp-meter-item,
+  .vintage-military-panel, .military-fader-cell, .probe-badge-panel, .probe-pill, .qtp-demo-metrics span, .table-responsive) {
+  background: transparent !important;
+  border-color: #d4d4d4 !important;
+  border-width: 1px !important;
+  border-left-width: 1px !important;
+  border-top-width: 1px !important;
+}
+
+html[data-theme="paper"] body > section :is(.badge, .section-badge, .triad-badge, .military-spec-badge) {
+  background: transparent !important;
+  border: none !important;
+  color: #f4f4f4 !important;
+  font-variant: small-caps;
+}
+
+html[data-theme="paper"] body > section table {
+  border-collapse: collapse;
+}
+
+html[data-theme="paper"] body > section :is(th, td) {
+  border: 1px solid #d4d4d4 !important;
+  background: transparent !important;
+}
+
+html[data-theme="paper"] body > section :is(h3, h4) {
+  font-family: Georgia, "Times New Roman", serif !important;
+}
+
+/* Figures numbered like a standard */
+html[data-theme="paper"] body {
+  counter-reset: aes-figure;
+}
+
+html[data-theme="paper"] body > section .svg-diagram-wrapper {
+  counter-increment: aes-figure;
+}
+
+html[data-theme="paper"] body > section .svg-diagram-wrapper::after {
+  content: "Figure " counter(aes-figure);
+  display: block;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #f4f4f4;
+  margin-top: 0.4rem;
+}
+
+/* Terms defined in the standards */
+.standards-terms-index {
+  margin-top: 2.5rem;
+}
+
+.standards-terms-note {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.standards-terms-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.standards-terms-table th,
+.standards-terms-table td {
+  border: 1px solid var(--border-color);
+  padding: 0.45rem 0.6rem;
+  vertical-align: top;
+  text-align: left;
+}
+
+.standards-terms-table th[scope="row"] {
+  white-space: nowrap;
+  width: 8rem;
+}
+
+.std-term {
+  display: inline-block;
+  margin: 0 0.9rem 0.25rem 0;
+}
+
+.std-term em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--text-muted);
+}
