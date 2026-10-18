@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <h4 class="module-card-title">${mod.title}</h4>
         <p class="module-card-summary">${mod.summary}</p>
         <div class="module-card-equation">
-          <code>${escapeHtml(mod.equation)}</code>
+          ${mod.equationSvg || `<code>${escapeHtml(mod.equation)}</code>`}
         </div>
         <div class="module-card-footer">
           <div class="module-tags-wrapper">${tagsHtml}</div>
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <h4 style="color: var(--accent-cyan); margin-bottom: 0.4rem;">3. Governing Equation &amp; Mathematical Analysis</h4>
           <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; margin-bottom: 1rem;">
-            <code style="font-size: 1.05rem; color: #38bdf8; display: block; margin-bottom: 0.5rem;">${escapeHtml(mod.equation)}</code>
+            <div class="module-modal-equation">${mod.equationSvg || `<code style="font-size: 1.05rem; color: #38bdf8;">${escapeHtml(mod.equation)}</code>`}</div>
             <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
               ${escapeHtml(mod.math)}
             </p>

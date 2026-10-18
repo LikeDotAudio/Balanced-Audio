@@ -143,6 +143,28 @@ class QTPSimulatorEngine {
     });
   }
 
+  // Which conductors are intact for the current fault (also read by the 8-CH bench scopes)
+  getWireState() {
+    const f = this.currentFault;
+    const isPin1Drop = f === "pin_dropped_1";
+    const isPin2Drop = f === "pin_dropped_2";
+    const isPin3Drop = f === "pin_dropped_3";
+    const isPin4Drop = f === "pin_dropped_4";
+    const isPairDrop = f === "pair_dropped";
+    return {
+      sun_hot: !isPin1Drop && !isPin3Drop && !isPin4Drop && !isPairDrop,
+      sun_cold: !isPin2Drop && !isPin3Drop && !isPin4Drop && !isPairDrop,
+      sky_hot: !isPin4Drop,
+      sky_cold: !isPin4Drop,
+      grass_hot: !isPin3Drop && !isPin4Drop,
+      grass_cold: !isPin2Drop && !isPin3Drop && !isPin4Drop,
+      earth_hot: true,
+      earth_cold: true,
+      shield: f !== "shield_lifted",
+      sunFlipped: f === "phase_flip"
+    };
+  }
+
   setFault(faultKey) {
     this.currentFault = faultKey;
     this.render();
@@ -159,25 +181,7 @@ class QTPSimulatorEngine {
 
     const f = this.currentFault;
     const isPhaseFlip = f === "phase_flip";
-    const isPin1Drop = f === "pin_dropped_1";
-    const isPin2Drop = f === "pin_dropped_2";
-    const isPin3Drop = f === "pin_dropped_3";
-    const isPin4Drop = f === "pin_dropped_4";
-    const isPairDrop = f === "pair_dropped";
-    const isShieldLift = f === "shield_lifted";
-
-    // Wire status flags
-    const wireState = {
-      sun_hot: !isPin1Drop && !isPin3Drop && !isPin4Drop && !isPairDrop,
-      sun_cold: !isPin2Drop && !isPin3Drop && !isPin4Drop && !isPairDrop,
-      sky_hot: !isPin4Drop,
-      sky_cold: !isPin4Drop,
-      grass_hot: !isPin3Drop && !isPin4Drop,
-      grass_cold: !isPin2Drop && !isPin3Drop && !isPin4Drop,
-      earth_hot: true,
-      earth_cold: true,
-      shield: !isShieldLift
-    };
+    const wireState = this.getWireState();
 
     container.innerHTML = `
       <svg viewBox="0 0 920 340" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="background: #060910; border-radius: 8px;">
@@ -204,14 +208,14 @@ class QTPSimulatorEngine {
 
         <!-- 4 TIA-568-B Twisted Pairs Inside Cable -->
         <!-- PAIR 2: SUN (ORANGE) - Link 1: Pin 2 (+) / Pin 1 (-) -->
-        <g transform="translate(100, 85)">
+        <g transform="translate(100, 85)" data-qtp-pair="sun">
           <rect x="0" y="0" width="650" height="36" rx="6" fill="#131d2e" stroke="${wireState.sun_hot && wireState.sun_cold ? '#f97316' : '#ef4444'}" stroke-width="1.5"/>
           <text x="15" y="18" fill="#f97316" font-size="10" font-weight="800">SUN • Pair 2</text>
           
           <!-- Pin 2 Hot Wire (Solid Orange) -->
           <line x1="120" y1="12" x2="620" y2="12" stroke="#f97316" stroke-width="3" stroke-dasharray="${wireState.sun_hot ? 'none' : '6,4'}"/>
           <circle cx="120" cy="12" r="5" fill="#f97316"/>
-          <circle cx="620" cy="12" r="5" fill="${wireState.sun_hot ? '#f97316' : '#ef4444'}"/>
+          <circle data-qtp-wire="sun-hot" cx="620" cy="12" r="5" fill="${wireState.sun_hot ? '#f97316' : '#ef4444'}"/>
           <text x="100" y="15" fill="#f97316" font-size="9" font-weight="700">P2 (+)</text>
           <text x="630" y="15" fill="${wireState.sun_hot ? '#f97316' : '#ef4444'}" font-size="9" font-weight="700">
             ${isPhaseFlip ? 'P2 (180° FLIPPED!)' : (wireState.sun_hot ? 'P2 (HOT +)' : 'P2 (DROPPED!)')}
@@ -220,7 +224,7 @@ class QTPSimulatorEngine {
           <!-- Pin 1 Cold Wire (White/Orange Stripe) -->
           <line x1="120" y1="26" x2="620" y2="26" stroke="#fb923c" stroke-width="2.5" stroke-dasharray="${wireState.sun_cold ? '8,4' : '4,4'}" opacity="${wireState.sun_cold ? '1' : '0.4'}"/>
           <circle cx="120" cy="26" r="4" fill="#fb923c"/>
-          <circle cx="620" cy="26" r="4" fill="${wireState.sun_cold ? '#fb923c' : '#ef4444'}"/>
+          <circle data-qtp-wire="sun-cold" cx="620" cy="26" r="4" fill="${wireState.sun_cold ? '#fb923c' : '#ef4444'}"/>
           <text x="100" y="29" fill="#fed7aa" font-size="8.5">P1 (&minus;)</text>
           <text x="630" y="29" fill="${wireState.sun_cold ? '#fed7aa' : '#ef4444'}" font-size="8.5">
             ${wireState.sun_cold ? 'P1 (COLD &minus;)' : 'P1 (DROPPED!)'}
@@ -228,14 +232,14 @@ class QTPSimulatorEngine {
         </g>
 
         <!-- PAIR 1: SKY (BLUE) - Link 3: Pin 4 (+) / Pin 5 (-) -->
-        <g transform="translate(100, 132)">
+        <g transform="translate(100, 132)" data-qtp-pair="sky">
           <rect x="0" y="0" width="650" height="36" rx="6" fill="#131d2e" stroke="${wireState.sky_hot ? '#38bdf8' : '#ef4444'}" stroke-width="1.5"/>
           <text x="15" y="18" fill="#38bdf8" font-size="10" font-weight="800">SKY • Pair 1</text>
           
           <!-- Pin 4 Hot Wire (Solid Blue) -->
           <line x1="120" y1="12" x2="620" y2="12" stroke="#38bdf8" stroke-width="3" stroke-dasharray="${wireState.sky_hot ? 'none' : '6,4'}"/>
           <circle cx="120" cy="12" r="5" fill="#38bdf8"/>
-          <circle cx="620" cy="12" r="5" fill="${wireState.sky_hot ? '#38bdf8' : '#ef4444'}"/>
+          <circle data-qtp-wire="sky-hot" cx="620" cy="12" r="5" fill="${wireState.sky_hot ? '#38bdf8' : '#ef4444'}"/>
           <text x="100" y="15" fill="#38bdf8" font-size="9" font-weight="700">P4 (+)</text>
           <text x="630" y="15" fill="${wireState.sky_hot ? '#38bdf8' : '#ef4444'}" font-size="9" font-weight="700">
             ${wireState.sky_hot ? 'P4 (HOT +)' : 'P4 (DROPPED!)'}
@@ -244,7 +248,7 @@ class QTPSimulatorEngine {
           <!-- Pin 5 Cold Wire (White/Blue Stripe) -->
           <line x1="120" y1="26" x2="620" y2="26" stroke="#7dd3fc" stroke-width="2.5" stroke-dasharray="${wireState.sky_cold ? '8,4' : '4,4'}" opacity="${wireState.sky_cold ? '1' : '0.4'}"/>
           <circle cx="120" cy="26" r="4" fill="#7dd3fc"/>
-          <circle cx="620" cy="26" r="4" fill="${wireState.sky_cold ? '#7dd3fc' : '#ef4444'}"/>
+          <circle data-qtp-wire="sky-cold" cx="620" cy="26" r="4" fill="${wireState.sky_cold ? '#7dd3fc' : '#ef4444'}"/>
           <text x="100" y="29" fill="#bae6fd" font-size="8.5">P5 (&minus;)</text>
           <text x="630" y="29" fill="${wireState.sky_cold ? '#bae6fd' : '#ef4444'}" font-size="8.5">
             ${wireState.sky_cold ? 'P5 (COLD &minus;)' : 'P5 (DROPPED!)'}
@@ -252,14 +256,14 @@ class QTPSimulatorEngine {
         </g>
 
         <!-- PAIR 3: GRASS (GREEN) - Link 2: Pin 6 (+) / Pin 3 (-) -->
-        <g transform="translate(100, 179)">
+        <g transform="translate(100, 179)" data-qtp-pair="grass">
           <rect x="0" y="0" width="650" height="36" rx="6" fill="#131d2e" stroke="${wireState.grass_hot && wireState.grass_cold ? '#10b981' : '#ef4444'}" stroke-width="1.5"/>
           <text x="15" y="18" fill="#10b981" font-size="10" font-weight="800">GRASS • Pair 3</text>
           
           <!-- Pin 6 Hot Wire (Solid Green) -->
           <line x1="120" y1="12" x2="620" y2="12" stroke="#10b981" stroke-width="3" stroke-dasharray="${wireState.grass_hot ? 'none' : '6,4'}"/>
           <circle cx="120" cy="12" r="5" fill="#10b981"/>
-          <circle cx="620" cy="12" r="5" fill="${wireState.grass_hot ? '#10b981' : '#ef4444'}"/>
+          <circle data-qtp-wire="grass-hot" cx="620" cy="12" r="5" fill="${wireState.grass_hot ? '#10b981' : '#ef4444'}"/>
           <text x="100" y="15" fill="#10b981" font-size="9" font-weight="700">P6 (+)</text>
           <text x="630" y="15" fill="${wireState.grass_hot ? '#10b981' : '#ef4444'}" font-size="9" font-weight="700">
             ${wireState.grass_hot ? 'P6 (HOT +)' : 'P6 (DROPPED!)'}
@@ -268,7 +272,7 @@ class QTPSimulatorEngine {
           <!-- Pin 3 Cold Wire (White/Green Stripe) -->
           <line x1="120" y1="26" x2="620" y2="26" stroke="#6ee7b7" stroke-width="2.5" stroke-dasharray="${wireState.grass_cold ? '8,4' : '4,4'}" opacity="${wireState.grass_cold ? '1' : '0.4'}"/>
           <circle cx="120" cy="26" r="4" fill="#6ee7b7"/>
-          <circle cx="620" cy="26" r="4" fill="${wireState.grass_cold ? '#6ee7b7' : '#ef4444'}"/>
+          <circle data-qtp-wire="grass-cold" cx="620" cy="26" r="4" fill="${wireState.grass_cold ? '#6ee7b7' : '#ef4444'}"/>
           <text x="100" y="29" fill="#a7f3d0" font-size="8.5">P3 (&minus;)</text>
           <text x="630" y="29" fill="${wireState.grass_cold ? '#a7f3d0' : '#ef4444'}" font-size="8.5">
             ${wireState.grass_cold ? 'P3 (COLD &minus;)' : 'P3 (DROPPED!)'}
@@ -276,21 +280,21 @@ class QTPSimulatorEngine {
         </g>
 
         <!-- PAIR 4: EARTH (BROWN) - Link 4: Pin 8 (+) / Pin 7 (-) -->
-        <g transform="translate(100, 226)">
+        <g transform="translate(100, 226)" data-qtp-pair="earth">
           <rect x="0" y="0" width="650" height="36" rx="6" fill="#131d2e" stroke="#ca8a04" stroke-width="1.5"/>
           <text x="15" y="18" fill="#ca8a04" font-size="10" font-weight="800">EARTH • Pair 4</text>
           
           <!-- Pin 8 Hot Wire (Solid Brown) -->
           <line x1="120" y1="12" x2="620" y2="12" stroke="#ca8a04" stroke-width="3"/>
           <circle cx="120" cy="12" r="5" fill="#ca8a04"/>
-          <circle cx="620" cy="12" r="5" fill="#ca8a04"/>
+          <circle data-qtp-wire="earth-hot" cx="620" cy="12" r="5" fill="#ca8a04"/>
           <text x="100" y="15" fill="#ca8a04" font-size="9" font-weight="700">P8 (+)</text>
           <text x="630" y="15" fill="#ca8a04" font-size="9" font-weight="700">P8 (HOT +)</text>
 
           <!-- Pin 7 Cold Wire (White/Brown Stripe) -->
           <line x1="120" y1="26" x2="620" y2="26" stroke="#eab308" stroke-width="2.5" stroke-dasharray="8,4"/>
           <circle cx="120" cy="26" r="4" fill="#eab308"/>
-          <circle cx="620" cy="26" r="4" fill="#eab308"/>
+          <circle data-qtp-wire="earth-cold" cx="620" cy="26" r="4" fill="#eab308"/>
           <text x="100" y="29" fill="#fef08a" font-size="8.5">P7 (&minus;)</text>
           <text x="630" y="29" fill="#fef08a" font-size="8.5">P7 (COLD &minus;)</text>
         </g>

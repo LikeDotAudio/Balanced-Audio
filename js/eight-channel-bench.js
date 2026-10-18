@@ -12,6 +12,9 @@
  * 4. Line selector in the left Story sidebar: picking a line focuses it in the rack (enlarged row,
  *    edit strip for frequency / level / mute, optional audible monitor via Web Audio).
  * 5. Fixed 10 ms scope window: CH1 shows 1 cycle, CH8 shows 8 cycles.
+ * 5b. QTP mode: while the Multi-Pair Snake / QTP fault simulator is on screen, the 8 scopes become one per
+ *     conductor (4 pairs × hot/cold). Hot legs are solid in their TIA-568-B pair colour, cold legs
+ *     (white-striped) are white dashed, and the simulator's fault state drives every trace and meter.
  * 6. The multichannel breakout (AES59 DB25 → AES72 RJ45 → 8 × XLR/TRS) is wired to these meters:
  *    each breakout output gets a live wire to its meter row, and channel selection is shared both ways.
  */
@@ -22,6 +25,17 @@ const BENCH_WAVES = [
   { id: "square", glyph: "⊓", crest: 1 },
   { id: "triangle", glyph: "⋀", crest: Math.sqrt(3) },
   { id: "sawtooth", glyph: "⩘", crest: Math.sqrt(3) }
+];
+// QTP conductors in cable order; each pair carries its AES72 channel's tone (SUN = CH1, GRASS = CH2, SKY = CH3, EARTH = CH4)
+const QTP_WIRES = [
+  { key: "sun-hot", pair: "sun", leg: "hot", label: "SUN P2+", color: "#f97316", ch: 1 },
+  { key: "sun-cold", pair: "sun", leg: "cold", label: "SUN P1−", color: "#ffffff", ch: 1 },
+  { key: "sky-hot", pair: "sky", leg: "hot", label: "SKY P4+", color: "#38bdf8", ch: 3 },
+  { key: "sky-cold", pair: "sky", leg: "cold", label: "SKY P5−", color: "#ffffff", ch: 3 },
+  { key: "grass-hot", pair: "grass", leg: "hot", label: "GRS P6+", color: "#10b981", ch: 2 },
+  { key: "grass-cold", pair: "grass", leg: "cold", label: "GRS P3−", color: "#ffffff", ch: 2 },
+  { key: "earth-hot", pair: "earth", leg: "hot", label: "ERT P8+", color: "#ca8a04", ch: 4 },
+  { key: "earth-cold", pair: "earth", leg: "cold", label: "ERT P7−", color: "#ffffff", ch: 4 }
 ];
 const BENCH_WINDOW_MS = 10;
 const BENCH_METER_MIN = -40;
@@ -46,6 +60,7 @@ class EightChannelBench {
     ];
 
     this.focus = 1; // 0 = all lines equal
+    this.mode = "lines"; // 'lines' (8 balanced lines) | 'qtp' (8 QTP conductors)
     this.monitorOn = false;
     this.audioCtx = null;
     this.monOsc = null;
@@ -116,6 +131,7 @@ class EightChannelBench {
       <div class="bench-line" data-line="${ch.n}" style="--line-color: ${ch.color};">
         <div class="bench-line-id">
           <span class="bench-line-name">CH${ch.n}</span>
+          <span class="bench-line-ref" data-line-ref="${ch.n}">P2↔P3 ACROSS</span>
           <select class="bench-src" data-line-src="${ch.n}" title="Source patched to CH${ch.n}">
             <option value="tone">${ch.freq} Hz</option>
             <option value="A">GEN A</option>
@@ -305,33 +321,62 @@ class EightChannelBench {
     this.wiresSvg.setAttribute("class", "live-probe-wires-svg");
     document.body.appendChild(this.wiresSvg);
 
-    // Bring the 8 meters up while the breakout diagram is in view, back to the lab rack once it leaves
-    const target = document.getElementById("mc-svg-container");
-    if (!target || !("IntersectionObserver" in window)) return;
-    new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const dock = window.floatingMeterDock;
-        if (!dock || dock.autoTrack === false) return;
-        if (entry.isIntersecting && dock.currentTab !== "8ch") dock.switchRackTab("8ch");
-        else if (!entry.isIntersecting && dock.currentTab === "8ch") dock.switchRackTab("rack");
-      });
-    }, { threshold: 0.3 }).observe(target);
+    // Bring the meters up while the breakout or QTP snake diagram is in view, back to the lab rack once both leave
+    if (!("IntersectionObserver" in window)) return;
+    this.inView = { mc: false, qtp: false };
+    const watch = { mc: "mc-svg-container", qtp: "qtp-sim-svg-container" };
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { this.inView[entry.target.dataset.benchWatch] = entry.isIntersecting; });
+      this.setMode(this.inView.qtp ? "qtp" : "lines");
+      const dock = window.floatingMeterDock;
+      if (!dock || dock.autoTrack === false) return;
+      const wanted = this.inView.qtp || this.inView.mc;
+      if (wanted && dock.currentTab !== "8ch") dock.switchRackTab("8ch");
+      else if (!wanted && dock.currentTab === "8ch") dock.switchRackTab("rack");
+    }, { threshold: 0.3 });
+    Object.entries(watch).forEach(([k, id]) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.dataset.benchWatch = k;
+      io.observe(el);
+    });
+  }
+
+  setMode(mode) {
+    if (mode === this.mode) return;
+    this.mode = mode;
+    const qtp = mode === "qtp";
+    this.panel.classList.toggle("qtp-mode", qtp);
+    this.panel.querySelectorAll(".bench-line").forEach(row => {
+      const n = Number(row.dataset.line);
+      const wire = QTP_WIRES[n - 1];
+      const ch = this.channels[n - 1];
+      row.style.setProperty("--line-color", qtp ? wire.color : ch.color);
+      row.classList.toggle("qtp-cold", qtp && wire.leg === "cold");
+      row.querySelector(".bench-line-name").textContent = qtp ? wire.label : `CH${n}`;
+      row.querySelector(".bench-line-ref").textContent = qtp ? "→ GND (SHIELD)" : "P2↔P3 ACROSS";
+    });
   }
 
   renderBreakoutWires() {
     if (!this.wiresSvg) return;
-    const outs = document.querySelectorAll("[data-mc-out]");
-    if (this.panel.offsetParent === null || outs.length === 0) {
+    const qtp = this.mode === "qtp";
+    const ends = qtp
+      ? QTP_WIRES.map((w, i) => ({ n: i + 1, el: document.querySelector(`[data-qtp-wire="${w.key}"]`), color: w.color, dashed: w.leg === "cold" }))
+      : [...document.querySelectorAll("[data-mc-out]")].map(el => {
+          const n = Number(el.dataset.mcOut);
+          return { n, el, color: this.channels[n - 1].color, dashed: false };
+        });
+    if (this.panel.offsetParent === null || !ends.some(e => e.el)) {
       if (this.wiresSvg.innerHTML) this.wiresSvg.innerHTML = "";
       return;
     }
 
     let html = "";
-    outs.forEach(out => {
-      const n = Number(out.dataset.mcOut);
+    ends.forEach(({ n, el, color, dashed }) => {
       const row = this.panel.querySelector(`.bench-line[data-line="${n}"]`);
-      if (!row) return;
-      const a = out.getBoundingClientRect();
+      if (!el || !row) return;
+      const a = el.getBoundingClientRect();
       const b = row.getBoundingClientRect();
       if (a.bottom < 0 || a.top > window.innerHeight) return;
 
@@ -340,10 +385,9 @@ class EightChannelBench {
       const x2 = b.left;
       const y2 = b.top + b.height / 2;
       const dx = Math.max(40, (x2 - x1) * 0.5);
-      const color = this.channels[n - 1].color;
-      const sel = this.focus === n || this.focus === 0;
+      const sel = qtp || this.focus === n || this.focus === 0;
       const d = `M ${x1},${y1} C ${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}`;
-      html += `<path d="${d}" fill="none" stroke="${color}" stroke-width="${sel ? 2.4 : 1.85}" opacity="${sel ? 0.9 : 0.62}" />`;
+      html += `<path d="${d}" fill="none" stroke="${color}" stroke-width="${sel ? 2.4 : 1.85}" opacity="${sel ? 0.9 : 0.62}"${dashed ? ' stroke-dasharray="7,4"' : ""} />`;
       html += `<circle cx="${x1}" cy="${y1}" r="3" fill="${color}" /><circle cx="${x2}" cy="${y2}" r="3" fill="${color}" />`;
     });
     this.wiresSvg.innerHTML = html;
@@ -393,7 +437,8 @@ class EightChannelBench {
     return cv.getContext("2d");
   }
 
-  drawScope(cv, ch, src, lv, tSec) {
+  // Draws one trace; sampleAt(tMs) returns volts. Dashed traces are used for cold (white-striped) legs.
+  drawScope(cv, color, sampleAt, dashed = false) {
     const ctx = this.fitCanvas(cv);
     const w = cv.width;
     const h = cv.height;
@@ -415,23 +460,49 @@ class EightChannelBench {
 
     // Fixed 3 V full-scale half-height so level differences are visible
     const scale = (h / 2 - 2) / 3.0;
-    // Tones are triggered (static); generator sources free-run slowly so they read as patched-in
-    const drift = ch.src === "tone" ? 0 : (tSec * 0.25) % 1;
 
-    ctx.strokeStyle = ch.color;
-    ctx.lineWidth = 1.4;
-    ctx.shadowColor = ch.color;
-    ctx.shadowBlur = 4;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.6;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 6;
+    ctx.setLineDash(dashed ? [6, 4] : []);
     ctx.beginPath();
     for (let x = 0; x <= w; x++) {
-      const tMs = (x / w) * BENCH_WINDOW_MS;
-      const v = lv.vpk * this.waveSample(src.wave, (src.freq * tMs) / 1000 + drift);
+      const v = sampleAt((x / w) * BENCH_WINDOW_MS);
       const y = h / 2 - Math.max(-h / 2 + 1, Math.min(h / 2 - 1, v * scale));
       if (x === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     }
     ctx.stroke();
+    ctx.setLineDash([]);
     ctx.shadowBlur = 0;
+  }
+
+  // One QTP conductor: half the pair's differential swing, polarity by leg, shaped by the simulator's fault state
+  qtpLeg(wire, tSec) {
+    const sim = window.qtpSimulator;
+    const st = sim && typeof sim.getWireState === "function" ? sim.getWireState() : {};
+    const intact = st[`${wire.pair}_${wire.leg}`] !== false;
+    const flipped = wire.pair === "sun" && st.sunFlipped;
+    const shieldOk = st.shield !== false;
+
+    const ch = this.channels[wire.ch - 1];
+    const diffVrms = ch.muted ? 0 : 0.775 * Math.pow(10, ch.levelDbu / 20);
+    const legVpk = intact ? (diffVrms * Math.SQRT2) / 2 : 0;
+    const sign = (wire.leg === "hot") !== flipped ? 1 : -1;
+    const humVpk = shieldOk ? 0 : 0.45;
+
+    const sampleAt = (tMs) => {
+      const t = tMs / 1000;
+      let v = sign * legVpk * Math.sin(2 * Math.PI * ch.freq * t);
+      if (humVpk) v += humVpk * Math.sin(2 * Math.PI * 60 * t + tSec) + 0.12 * Math.sin(2 * Math.PI * 2900 * t + tSec * 7);
+      return v;
+    };
+
+    const vrms = Math.sqrt(Math.pow(legVpk / Math.SQRT2, 2) + Math.pow(humVpk / Math.SQRT2, 2));
+    const dbu = vrms > 0 ? 20 * Math.log10(vrms / 0.775) : -Infinity;
+    const status = !intact ? "OPEN" : flipped ? "180° FLIP" : !shieldOk ? "HUM/RFI" : wire.leg === "hot" ? "HOT +" : "COLD −";
+    return { sampleAt, vrms, vpk: legVpk + humVpk, dbu, status };
   }
 
   drawBar(cv, dbu) {
@@ -460,20 +531,34 @@ class EightChannelBench {
 
   renderFrame(tSec) {
     this.channels.forEach((ch, i) => {
-      const src = this.sourceFor(ch);
-      const lv = this.levels(src);
-      this.drawScope(this.scopes[i], ch, src, lv, tSec);
-      this.drawBar(this.bars[i], lv.dbu);
-
       const dbuEl = this.panel.querySelector(`[data-line-dbu="${ch.n}"]`);
       const vEl = this.panel.querySelector(`[data-line-v="${ch.n}"]`);
-      if (isFinite(lv.dbu)) {
-        dbuEl.textContent = `${lv.dbu >= 0 ? "+" : ""}${lv.dbu.toFixed(1)} dBu`;
-        vEl.textContent = `${lv.vrms.toFixed(3)}V rms · ${lv.vpk.toFixed(2)}pk`;
+      let dbu;
+
+      if (this.mode === "qtp") {
+        const wire = QTP_WIRES[i];
+        const leg = this.qtpLeg(wire, tSec);
+        this.drawScope(this.scopes[i], wire.color, leg.sampleAt, wire.leg === "cold");
+        dbu = leg.dbu;
+        vEl.textContent = isFinite(dbu) ? `${leg.vrms.toFixed(3)}V · ${leg.status}` : leg.status;
       } else {
-        dbuEl.textContent = "−∞ dBu";
-        vEl.textContent = "0.000V rms";
+        const src = this.sourceFor(ch);
+        const lv = this.levels(src);
+        // Tones are triggered (static); generator sources free-run slowly so they read as patched-in
+        const drift = ch.src === "tone" ? 0 : (tSec * 0.25) % 1;
+        this.drawScope(this.scopes[i], ch.color, (tMs) => lv.vpk * this.waveSample(src.wave, (src.freq * tMs) / 1000 + drift));
+        dbu = lv.dbu;
+        vEl.textContent = isFinite(dbu) ? `${lv.vrms.toFixed(3)}V rms · ${lv.vpk.toFixed(2)}pk` : "0.000V rms";
       }
+
+      this.drawBar(this.bars[i], dbu);
+      // Judged against the +4 dBu line-level goal
+      const delta = dbu - 4;
+      const onGoal = Math.abs(delta) < 0.5;
+      dbuEl.textContent = isFinite(dbu)
+        ? `${dbu >= 0 ? "+" : ""}${dbu.toFixed(1)} dBu ${onGoal ? "✓" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}`}`
+        : "−∞ dBu";
+      dbuEl.classList.toggle("on-goal", onGoal);
     });
   }
 

@@ -30,7 +30,10 @@ import glob
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -234,6 +237,37 @@ def parse_all_modules():
     modules.sort(key=lambda m: m["num"])
     return modules
 
+EQUATIONS_DIR = BASE_DIR / "scripts" / "equations"
+EQUATIONS_SVG_CACHE = MODULES_DIR / "equations-svg.json"
+
+def render_equation_svgs(modules):
+    """Render each module's LaTeX governing equation to a standalone SVG (MathJax via Node).
+
+    Results are cached in modules/equations-svg.json so builds without Node (or without
+    `npm install` in scripts/equations) still embed the last rendered SVGs.
+    """
+    node = shutil.which("node")
+    script = EQUATIONS_DIR / "render-equations.mjs"
+    if node and (EQUATIONS_DIR / "node_modules" / "mathjax-full").exists():
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "equations.json"
+            src.write_text(json.dumps({m["id"]: m["equation"] for m in modules}), encoding="utf-8")
+            result = subprocess.run([node, str(script), str(src), str(EQUATIONS_SVG_CACHE)],
+                                    capture_output=True, text=True)
+            for line in (result.stdout + result.stderr).strip().splitlines():
+                print(f"    {line}")
+            if result.returncode != 0:
+                print("    Equation rendering failed; falling back to cached SVGs.")
+    else:
+        print("    Node/MathJax not installed (cd scripts/equations && npm install); using cached SVGs.")
+
+    svgs = {}
+    if EQUATIONS_SVG_CACHE.exists():
+        svgs = json.loads(EQUATIONS_SVG_CACHE.read_text(encoding="utf-8"))
+    for m in modules:
+        m["equation_svg"] = svgs.get(m["id"], "")
+    print(f"    {sum(1 for m in modules if m['equation_svg'])}/{len(modules)} equations have SVG renderings.")
+
 def generate_csv_files(modules):
     """Generate comprehensive CSV files for tabular analysis and reporting."""
     csv_paths = [
@@ -363,6 +397,7 @@ def generate_manifest_and_js(modules):
             "tags": m["tags"],
             "standards": m["standards"],
             "equation": m["equation"],
+            "equationSvg": m.get("equation_svg", ""),
             "summary": m["summary"],
             "authors": m["authors"],
             "myth": m["sections"].get("myth", m["sections"].get("1. industry misconceptions & the real-world problem", "")),
@@ -413,7 +448,7 @@ def generate_standalone_curriculum_html(modules):
               <h3 class="module-article-title">{m['title']}</h3>
               <p class="module-article-summary">{m['summary']}</p>
               <div class="module-article-equation">
-                <strong>Governing Equation:</strong> <code>{m['equation']}</code>
+                <strong>Governing Equation:</strong> {m.get('equation_svg') or f"<code>{m['equation']}</code>"}
               </div>
             </div>
 
@@ -750,6 +785,10 @@ def main():
     print(">>> Step 1: Parsing and validating 100 Markdown modules...")
     modules = parse_all_modules()
     print(f"    Loaded {len(modules)} modules ({sum(m['word_count'] for m in modules):,} total words).")
+
+    # Step 1b: Render governing equations to SVG
+    print("\n>>> Step 1b: Rendering governing equations to SVG...")
+    render_equation_svgs(modules)
 
     # Step 2: Generate CSV files
     print("\n>>> Step 2: Generating CSV catalogs...")
