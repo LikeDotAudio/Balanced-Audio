@@ -529,12 +529,13 @@ class MultichannelBreakoutEngine {
     const benchColors = typeof BENCH_CH_COLORS !== "undefined" ? BENCH_CH_COLORS : chans.map(c => c.color);
     const rowY = (ch) => 62 + (ch - 1) * 48;
 
-    // DB25 face geometry: pins 1–13 on the top row, 14–25 on the bottom row (viewed from the solder side)
-    const PIN_DX = 17;
-    const db = { x: 22, y: 205 };
+    // DB25 stood upright: pins 1–13 in the left column, 14–25 in the right (wires leave to the right)
+    const PIN_DY = 26;
+    const db = { x: 96, y: 50 };
+    const DB_H = 13 * PIN_DY + 8;
     const pinPos = (pin) => pin <= 13
-      ? { x: db.x + 22 + (pin - 1) * PIN_DX, y: db.y + 22 }
-      : { x: db.x + 22 + PIN_DX / 2 + (pin - 14) * PIN_DX, y: db.y + 50 };
+      ? { x: db.x + 22, y: db.y + 18 + (pin - 1) * PIN_DY }
+      : { x: db.x + 52, y: db.y + 18 + PIN_DY / 2 + (pin - 14) * PIN_DY };
 
     // Pin → role lookup so every contact on the face shows +, − or G
     const pinRole = {};
@@ -570,12 +571,13 @@ class MultichannelBreakoutEngine {
       const role = pinRole[pin];
       const sel = role && role.ch.ch === item.ch;
       const ring = role ? conductorColor(role.ch, role.kind) : "#334155";
-      const numY = pin <= 13 ? p.y - 11 : p.y + 17;
+      const numX = pin <= 13 ? p.x - 12 : p.x + 12;
+      const numAnchor = pin <= 13 ? "end" : "start";
       return `
         <g ${role ? `onclick="window.multichannelEngine.selectChannel(${role.ch.ch})" style="cursor: pointer;"` : ""}>
           <circle cx="${p.x}" cy="${p.y}" r="7" fill="${sel ? ring : "#0f172a"}" stroke="${ring}" stroke-width="${sel ? 2 : 1.3}" />
           <text x="${p.x}" y="${p.y + 3.5}" fill="${sel ? "#0f172a" : ring}" font-size="10" font-weight="800" text-anchor="middle">${role ? role.sym : "·"}</text>
-          <text x="${p.x}" y="${numY}" fill="#64748b" font-size="7" text-anchor="middle">${pin}</text>
+          <text x="${numX}" y="${p.y + 3}" fill="#64748b" font-size="7.5" text-anchor="${numAnchor}">${pin}</text>
           ${role ? `<title>Pin ${pin}: CH${role.ch.ch} ${role.kind === "hot" ? "Hot (+)" : role.kind === "cold" ? "Cold (−)" : "Shield / Ground (G)"}</title>` : "<title>Pin 13: not connected</title>"}
         </g>`;
     }).join("");
@@ -635,20 +637,20 @@ class MultichannelBreakoutEngine {
     }).join("");
 
     container.innerHTML = `
-      <svg viewBox="0 0 980 450" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto; background: #070b12; border-radius: 8px;">
+      <svg viewBox="0 0 980 470" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto; background: #070b12; border-radius: 8px;">
         ${harness}
         ${tails}
 
-        <!-- STAGE 1: AES59 DB25 face with + / − / G on every contact -->
-        <path d="M ${db.x - 6},${db.y} L ${db.x + 248},${db.y} L ${db.x + 236},${db.y + 72} L ${db.x + 6},${db.y + 72} Z" fill="#1e293b" fill-opacity="0.85" stroke="#38bdf8" stroke-width="2.5" />
+        <!-- STAGE 1: AES59 DB25 (upright) with + / − / G on every contact -->
+        <path d="M ${db.x},${db.y - 6} L ${db.x + 74},${db.y + 8} L ${db.x + 74},${db.y + DB_H - 8} L ${db.x},${db.y + DB_H + 6} Z" fill="#1e293b" fill-opacity="0.85" stroke="#38bdf8" stroke-width="2.5" />
         ${pinsSvg}
-        <text x="${db.x + 121}" y="${db.y - 26}" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">AES59 DB25 TRUNK</text>
-        <text x="${db.x + 121}" y="${db.y + 96}" fill="#94a3b8" font-size="9" text-anchor="middle">8 balanced channels · Pin 13 n/c · Shell to chassis (AES48)</text>
-        <text x="${db.x + 121}" y="${db.y + 112}" fill="${item.color}" font-size="9.5" font-weight="700" text-anchor="middle">CH${item.ch} (${item.mnemonic}): + Pin ${item.db25.hot} · − Pin ${item.db25.cold} · G Pin ${item.db25.shield}</text>
+        <text x="${db.x + 37}" y="${db.y - 16}" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">AES59 DB25</text>
+        <text transform="translate(${db.x - 34}, ${db.y + DB_H / 2}) rotate(-90)" fill="#94a3b8" font-size="9" text-anchor="middle">8 balanced channels · Pin 13 n/c · Shell to chassis (AES48)</text>
+        <text x="${db.x + 37}" y="${db.y + DB_H + 26}" fill="${item.color}" font-size="9.5" font-weight="700" text-anchor="middle">CH${item.ch} (${item.mnemonic}): + Pin ${item.db25.hot} · − Pin ${item.db25.cold} · G Pin ${item.db25.shield}</text>
         <g font-size="8.5" font-weight="700">
-          <text x="${db.x}" y="${db.y + 140}" fill="#e2e8f0">+ Hot</text>
-          <text x="${db.x + 50}" y="${db.y + 140}" fill="#e2e8f0">− Cold (dashed)</text>
-          <text x="${db.x + 140}" y="${db.y + 140}" fill="#94a3b8">G Shield/Ground</text>
+          <text x="${db.x - 60}" y="${db.y + DB_H + 44}" fill="#e2e8f0">+ Hot</text>
+          <text x="${db.x - 10}" y="${db.y + DB_H + 44}" fill="#e2e8f0">− Cold (dashed)</text>
+          <text x="${db.x + 82}" y="${db.y + DB_H + 44}" fill="#94a3b8">G Shield/Ground</text>
         </g>
 
         <!-- STAGE 2: Two AES72-4E RJ45 banks -->

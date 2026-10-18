@@ -427,7 +427,7 @@ class EightChannelBench {
       const wanted = this.inView.qtp || this.inView.mc || this.inView.snake;
       if (wanted && dock.currentTab !== "8ch") dock.switchRackTab("8ch");
       else if (!wanted && dock.currentTab === "8ch") dock.switchRackTab("rack");
-    }, { threshold: 0.3 });
+    }, { threshold: 0, rootMargin: "-45% 0px -45% 0px" }); // "in view" = crossing the middle of the screen
     Object.entries(watch).forEach(([k, id]) => {
       const el = document.getElementById(id);
       if (!el) return;

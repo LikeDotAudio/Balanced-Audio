@@ -23,6 +23,38 @@
 
 const SCHEMATIC_CONFIGS = [
   {
+    id: "pin1-problem-svg",
+    name: "Rule 02: AES48 Shield Bond vs the Pin 1 Problem",
+    shortName: "Rule 02: Pin 1 Problem",
+    scope1_ch1: "p1-clean",
+    scope1_ch2: "p1-hum",
+    scope2_ch3: "p1-ztrace",
+    scope2_ch4: "p1-shield",
+    dmm1: "p1-hum",
+    dmm2: "p1-clean",
+    vu1: "p1-clean",
+    vu2: "p1-hum",
+    vu3: "p1-shield",
+    vu4: "p1-ztrace",
+    wires: ["p1-clean", "p1-bond", "p1-shield", "p1-ztrace", "p1-hum"]
+  },
+  {
+    id: "aes59-ground-svg",
+    name: "Rule 02: AES-X249 Shield Plane vs the D-Sub Ground-Pin Problem",
+    shortName: "Rule 02: D-Sub Ground Pins",
+    scope1_ch1: "gp-clean",
+    scope1_ch2: "gp-dirty1",
+    scope2_ch3: "gp-bus",
+    scope2_ch4: "gp-drain",
+    dmm1: "gp-dirty1",
+    dmm2: "gp-clean",
+    vu1: "gp-clean",
+    vu2: "gp-dirty1",
+    vu3: "gp-bus",
+    vu4: "gp-dirty8",
+    wires: ["gp-clean", "gp-plane", "gp-drain", "gp-bus", "gp-dirty1", "gp-dirty8"]
+  },
+  {
     id: "enclosure-svg",
     name: "Section 1: Enclosure Grounding & AES48 Standard",
     shortName: "Sec 1: AES48 Enclosure",
@@ -46,7 +78,9 @@ const SCHEMATIC_CONFIGS = [
     dmm1: "xlrf-p2",
     dmm2: "xlrf-diff",
     vu1: "xlrm-p2",
-    vu2: "xlrf-diff"
+    vu2: "xlrf-diff",
+    // One scope strip per wire
+    wires: ["xlrm-p1", "xlrm-p2", "xlrm-p3", "xlrf-p1", "xlrf-p2", "xlrf-p3", "xlrf-diff"]
   },
   {
     id: "pp-schematic-svg",
@@ -1723,6 +1757,28 @@ class FloatingMeterDock {
         status = "EQUIPMENT A CHASSIS";
         name = "Equipment A Chassis Ground";
       }
+    } else if (key.startsWith("p1-") || key.startsWith("gp-")) {
+      // Rule 02 grounding diagrams: clean where shields bond at entry, hum + buzz where shield current crosses the PCB 0V
+      const audio = isMuted ? 0 : 1.228;
+      const MODEL = {
+        "p1-clean": { sig: audio, hum: 0, name: "Clean audio (AES48 bond)", status: "CLEAN AUDIO" },
+        "p1-bond": { sig: 0, hum: 0, name: "Pin 1 chassis bond", status: "CHASSIS 0 V" },
+        "p1-shield": { sig: 0, hum: 0.42, name: "Shield current (Pin 1)", status: "SHIELD CURRENT" },
+        "p1-ztrace": { sig: 0, hum: 0.3, name: "PCB 0V via Z_trace", status: "DIRTY 0V" },
+        "p1-hum": { sig: audio, hum: 0.3, name: "Audio + hum + buzz", status: "AUDIO + HUM (PIN 1 FAULT)" },
+        "gp-clean": { sig: audio, hum: 0, name: "Clean CH1 (shield plane)", status: "CLEAN AUDIO" },
+        "gp-plane": { sig: 0, hum: 0, name: "Shield plane", status: "SHIELD PLANE 0 V" },
+        "gp-drain": { sig: 0, hum: 0.4, name: "CH1 drain current", status: "SHIELD CURRENT" },
+        "gp-bus": { sig: 0, hum: 0.55, name: "PCB 0V bus (8 drains)", status: "DIRTY 0V · Σ I_drain" },
+        "gp-dirty1": { sig: audio, hum: 0.55, name: "CH1 audio + hum", status: "AUDIO + HUM (SHARED 0V)" },
+        "gp-dirty8": { sig: audio, hum: 0.55, name: "CH8 audio + hum", status: "AUDIO + HUM (SHARED 0V)" }
+      }[key] || { sig: 0, hum: 0, name: key, status: "—" };
+      vRms = Math.sqrt(MODEL.sig * MODEL.sig + MODEL.hum * MODEL.hum) || 0.0001;
+      name = MODEL.name;
+      status = MODEL.status;
+      shape = MODEL.sig || MODEL.hum ? "sine" : "flatline";
+      var humVrms = MODEL.hum;
+      var sigVrms = MODEL.sig;
     } else if (key.startsWith("xlrm-") || key.startsWith("xlrf-")) {
       // Universal XLR Hub: contact voltages for the selected AES14 Table 2 configuration, +4 dBu line
       const item = (typeof AES14_TABLE2_DATA !== "undefined" && window.xlrHubEngine)
@@ -1764,6 +1820,9 @@ class FloatingMeterDock {
       freq,
       vRms,
       vPk,
+      // Optional contamination: the audio part and the 60 Hz hum part, drawn separately by the scope
+      sigVpk: typeof sigVrms === "number" ? sigVrms * Math.SQRT2 : undefined,
+      humVpk: typeof humVrms === "number" ? humVrms * Math.SQRT2 : 0,
       phase,
       shape,
       status,
@@ -1798,8 +1857,14 @@ class FloatingMeterDock {
 
   // Short name of a probed point: PIN 2, GEN, SHIELD, CHASSIS …
   shortPoint(key) {
+    const GROUNDING_POINTS = {
+      "p1-clean": "CLEAN OUT", "p1-bond": "PIN 1 BOND", "p1-shield": "SHIELD I", "p1-ztrace": "PCB 0V", "p1-hum": "OUT + HUM",
+      "gp-clean": "CLEAN CH1", "gp-plane": "SHIELD PLANE", "gp-drain": "CH1 DRAIN", "gp-bus": "PCB 0V BUS",
+      "gp-dirty1": "CH1 + HUM", "gp-dirty8": "CH8 + HUM"
+    };
+    if (GROUNDING_POINTS[key]) return GROUNDING_POINTS[key];
     const nm = (this.getSignalForTarget(key).name || key || "").toUpperCase();
-    const pin = nm.match(/(?:PIN|SOCKET|CONTACT)\s*(\d)/);
+    const pin = nm.match(/(?:PIN|SOCKET|CONTACT|MALE|FEMALE)\s*(\d)/);
     if (/ACROSS 2↔3|DIFFERENTIAL|ACROSS LOAD|-LOAD$|-DIFF$/.test(nm) || this.isAcrossKey(key)) return "PIN 2 ↔ PIN 3";
     if (pin) return `PIN ${pin[1]}`;
     if (/VIN|INPUT DRIVE|GENERATOR|AUDIO INP|PRIMARY/.test(nm)) return "GEN";
@@ -2129,29 +2194,30 @@ class FloatingMeterDock {
   }
 
   startMainInstrumentLoop() {
-    const loop = () => {
-      // 1. Advance VU Meter Ballistics
-      this.updateNeedleBallistics();
-
-      // 2. Render the 8-channel scope
-      this.renderScope8();
-
-      // 3. Render Both APK VU Meters
-      [1, 2, 3, 4].forEach(n => this.renderHpVoltmeter(n));
-
-      // 4. Render Trend Graph if tab active
-      if (this.currentTab === "chart") {
-        this.renderTrendGraph();
+    // Each instrument is drawn in its own guard: one failure must never freeze the whole rack
+    const failed = new Set();
+    const safely = (name, fn) => {
+      try {
+        fn();
+      } catch (err) {
+        if (!failed.has(name)) {
+          failed.add(name);
+          console.error(`Rack instrument "${name}" failed to draw:`, err);
+        }
       }
-
-      // 5. Update Active Schematic from scroll position & Render Dynamic SVG Wires
-      this.updateActiveSchematicFromScroll();
-      this.renderWires();
-
+    };
+    const loop = () => {
+      safely("ballistics", () => this.updateNeedleBallistics());
+      safely("scope8", () => this.renderScope8());
+      [1, 2, 3, 4].forEach(n => safely(`vm${n}`, () => this.renderHpVoltmeter(n)));
+      if (this.currentTab === "chart") safely("trend", () => this.renderTrendGraph());
+      safely("tracking", () => this.updateActiveSchematicFromScroll());
+      safely("wires", () => this.renderWires());
       this.animFrame = requestAnimationFrame(loop);
     };
     this.animFrame = requestAnimationFrame(loop);
   }
+
 
   updateNeedleBallistics() {
     const eps = 0.02;
@@ -2181,7 +2247,14 @@ class FloatingMeterDock {
   // Eight probe points as separate strips sharing one time axis: CH1–CH4 are the scope probes,
   // CH5–CH8 show what DMM1, DMM2, VM3 and VM4 are probing
   scope8Channels() {
-    return [
+    const palette = Object.values(PROBE_COLORS);
+    const cfg = this.currentActiveSchematic;
+    // A schematic that lists its wires gets exactly one strip per wire
+    if (this.autoTrack !== false && cfg && cfg.wires) {
+      return cfg.wires.slice(0, 8).map((key, i) => ({ tag: `CH${i + 1}`, key, color: palette[i % palette.length] }));
+    }
+    // Otherwise the probe points, each wire shown once
+    const probes = [
       { tag: "CH1", key: this.scope1VinTarget, color: PROBE_COLORS.CH1 },
       { tag: "CH2", key: this.scope1Target, color: PROBE_COLORS.CH2 },
       { tag: "CH3", key: this.scope2ColdTarget, color: PROBE_COLORS.CH3 },
@@ -2191,7 +2264,10 @@ class FloatingMeterDock {
       { tag: "VM3", key: this.vu3Target, color: PROBE_COLORS.VU3 },
       { tag: "VM4", key: this.vu4Target, color: PROBE_COLORS.VU4 }
     ];
+    const seen = new Set();
+    return probes.filter(p => p.key && !seen.has(p.key) && seen.add(p.key));
   }
+
 
   renderScope8() {
     const canvas = this.scope8Canvas;
@@ -2210,6 +2286,7 @@ class FloatingMeterDock {
     const LABEL_W = 92;
     const plotW = w - LABEL_W;
     const chans = this.scope8Channels();
+    if (!chans.length) return;
     const stripH = (h - RULER) / chans.length;
     const totalMs = 10 * this.scopeTimeDiv;
     const halfV = 2 * this.scope8VoltsDiv; // each strip is 4 divisions tall
@@ -2254,7 +2331,8 @@ class FloatingMeterDock {
       ctx.fillText(c.tag, 3, mid - 5);
       ctx.fillStyle = "#9ca3af";
       ctx.font = "7.5px 'JetBrains Mono', monospace";
-      ctx.fillText(this.measuredLabel(c.key, c.tag === "DMM2" ? this.dmm2Com === "across" : c.tag === "DMM1" ? this.dmm1Com === "across" : false), 3, mid + 5);
+      const side = /^xlrm-/.test(c.key) ? "M " : /^xlrf-/.test(c.key) && !this.isAcrossKey(c.key) ? "F " : "";
+      ctx.fillText(side + this.measuredLabel(c.key), 3, mid + 5);
       ctx.fillStyle = c.color;
       ctx.textAlign = "right";
       ctx.fillText(`${data.vRms.toFixed(2)}V`, LABEL_W - 4, mid - 5);
@@ -2273,7 +2351,10 @@ class FloatingMeterDock {
       for (let sIdx = 0; sIdx <= samples; sIdx++) {
         const t = (sIdx / samples) * totalMs / 1000;
         let v = 0;
-        if (data.shape !== "flatline") {
+        if (data.humVpk) {
+          v = (data.sigVpk || 0) * Math.sin(2 * Math.PI * data.freq * t)
+            + data.humVpk * (Math.sin(2 * Math.PI * 60 * t) + 0.45 * Math.sin(2 * Math.PI * 180 * t + 0.7) + 0.2 * Math.sin(2 * Math.PI * 300 * t));
+        } else if (data.shape !== "flatline") {
           v = data.vPk * Math.sin(2 * Math.PI * data.freq * t + (data.shape === "hum" ? 0 : (data.phase || 0)));
           if (data.status && data.status.includes("CLIP")) v = Math.max(-1.5, Math.min(1.5, v * 1.8));
         }
@@ -2521,6 +2602,7 @@ class FloatingMeterDock {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
+    if (w < 60 || h < 40) return; // not laid out yet (arcs below would get negative radii)
     const color = PROBE_COLORS[`VU${n}`];
     const range = this[`vu${n}Range`];
     const rangeDb = 20 * Math.log10(range / 0.7746);
@@ -2557,7 +2639,7 @@ class FloatingMeterDock {
     ctx.strokeStyle = "rgba(148, 163, 184, 0.45)";
     ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.arc(cx, cy, rDb - 19, A0, A1);
+    ctx.arc(cx, cy, Math.max(1, rDb - 19), A0, A1);
     ctx.stroke();
 
     // Decibel arc: 0 dB at 0.775 of full scale on the 1 V range (HP convention); red above 0
