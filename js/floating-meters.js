@@ -1838,13 +1838,30 @@ class FloatingMeterDock {
       const balanced = Object.values(pins).some(p => p && p.type === "cold");
       const dcNote = (p) => (p && p.dc && !/^0V/.test(p.dc) ? ` · ${p.dc}` : "");
 
-      if (key.endsWith("-diff")) {
+      // DC on each contact from the configuration data: phantom +48 V on both legs (cancels across the
+      // pair); A-B / T-power puts 12 V between hot and return (the return is the 0 V side)
+      const dcFor = (n) => {
+        const pin = pins[n];
+        if (!pin || !pin.dc || /^0V/.test(pin.dc) || pin.type === "shield") return 0;
+        if (/A-B/.test(item.name) && pin.type === "cold") return 0;
+        const m = pin.dc.match(/([+-]?\d+(?:\.\d+)?)\s*V/);
+        return m ? parseFloat(m[1]) : 0;
+      };
+      // Two-channel (5-pin): left channel on 2/3 at 111 Hz, right channel on 4/5 at 2222 Hz
+      const chanFreq = (n) => (item && item.is5Pin ? (n >= 4 ? 2222 : 111) : freq);
+      if (key.endsWith("-diff") || key.endsWith("-diff45")) {
+        const right = key.endsWith("-diff45");
+        const [hp, cp] = right ? [4, 5] : [2, 3];
+        var dcVolts = dcFor(hp) - dcFor(cp);
+        freq = chanFreq(hp);
         vRms = lineVrms;
-        name = `${item ? item.name : "XLR"}: across 2↔3`;
+        name = `${item ? item.name : "XLR"}: across ${hp}↔${cp}`;
         status = item && item.id === 4 ? "DIFFERENTIAL · 12V DC ACROSS 2-3!" : "RECEIVER DIFFERENTIAL";
       } else {
         const n = Number(key.split("-p")[1]);
         const pin = pins[n];
+        var dcVolts = dcFor(n);
+        freq = chanFreq(n);
         name = `${side} ${n}: ${pin ? pin.name : "n/c"}`;
         if (!pin || pin.type === "shield" || pin.type === "jumper") {
           vRms = 0.0001;
@@ -1870,6 +1887,7 @@ class FloatingMeterDock {
       // Optional contamination: the audio part and the 60 Hz hum part, drawn separately by the scope
       sigVpk: typeof sigVrms === "number" ? sigVrms * Math.SQRT2 : undefined,
       humVpk: typeof humVrms === "number" ? humVrms * Math.SQRT2 : 0,
+      dc: typeof dcVolts === "number" ? dcVolts : 0,
       phase,
       shape,
       status,
@@ -1886,7 +1904,7 @@ class FloatingMeterDock {
 
   // Target keys that are already a measurement across the pair (Pin 2 to Pin 3) rather than one wire to ground
   isAcrossKey(key) {
-    return /-(load|diff|sec)$/.test(key || "");  // e.g. xfmr-load, meyer-diff, xlrf-diff
+    return /-(load|diff|diff45|sec)$/.test(key || "");  // e.g. xfmr-load, meyer-diff, xlrf-diff
   }
 
   // Hot, cold and across-the-pair keys for the schematic currently in view
@@ -1923,6 +1941,7 @@ class FloatingMeterDock {
 
   // What a meter is measuring, as its whole name: "PIN 2 → GND" or "PIN 2 ↔ PIN 3"
   measuredLabel(key, forceAcross = false) {
+    if (/-diff45$/.test(key || "")) return "PIN 4 ↔ PIN 5";
     if (forceAcross || this.isAcrossKey(key)) return "PIN 2 ↔ PIN 3";
     const pt = this.shortPoint(key);
     return pt === "PIN 2 ↔ PIN 3" ? pt : `${pt} → GND`;
@@ -2093,7 +2112,7 @@ class FloatingMeterDock {
     if (dmm1Val1 && dmm1Val2) {
       if (this.dmm1Mode === "rms") {
         dmm1Val1.textContent = `${v1Rms.toFixed(3)} Vrms`;
-        dmm1Val2.textContent = `${dbu1 >= 0 ? "+" : ""}${dbu1.toFixed(1)} dBu`;
+        dmm1Val2.textContent = data1.dc ? `${data1.dc > 0 ? "+" : ""}${data1.dc.toFixed(1)} V DC` : `${dbu1 >= 0 ? "+" : ""}${dbu1.toFixed(1)} dBu`;
       } else if (this.dmm1Mode === "dbu") {
         dmm1Val1.textContent = `${dbm1 >= 0 ? "+" : ""}${dbm1.toFixed(2)} dBm`;
         dmm1Val2.textContent = `${v1Rms.toFixed(3)} V RMS`;
@@ -2147,7 +2166,7 @@ class FloatingMeterDock {
     if (dmm2Val1 && dmm2Val2) {
       if (this.dmm2Mode === "diff") {
         dmm2Val1.textContent = `${v2Rms.toFixed(3)} Vrms`;
-        dmm2Val2.textContent = `${dbu2 >= 0 ? "+" : ""}${dbu2.toFixed(1)} dBu`;
+        dmm2Val2.textContent = data2.dc ? `${data2.dc > 0 ? "+" : ""}${data2.dc.toFixed(1)} V DC` : `${dbu2 >= 0 ? "+" : ""}${dbu2.toFixed(1)} dBu`;
       } else if (this.dmm2Mode === "thd") {
         dmm2Val1.textContent = `${data2.thd.toFixed(3)} %`;
         const distDb = -20 * Math.log10(Math.max(0.00001, data2.thd / 100));
@@ -2297,6 +2316,13 @@ class FloatingMeterDock {
     const palette = Object.values(PROBE_COLORS);
     const cfg = this.currentActiveSchematic;
     // A schematic that lists its wires gets exactly one strip per wire
+    if (this.autoTrack !== false && cfg && cfg.id === "xlr-svg-container" && typeof AES14_TABLE2_DATA !== "undefined" && window.xlrHubEngine) {
+      const item = AES14_TABLE2_DATA.find(d => d.id === window.xlrHubEngine.currentCircuitId);
+      if (item && item.is5Pin) {
+        const keys = ["xlrf-p1", "xlrf-p2", "xlrf-p3", "xlrf-p4", "xlrf-p5", "xlrf-diff", "xlrf-diff45", "xlrm-p2"];
+        return keys.map((key, i) => ({ tag: `CH${i + 1}`, key, color: palette[i % palette.length] }));
+      }
+    }
     if (this.autoTrack !== false && cfg && cfg.wires) {
       return cfg.wires.slice(0, 8).map((key, i) => ({ tag: `CH${i + 1}`, key, color: palette[i % palette.length] }));
     }
@@ -2384,6 +2410,16 @@ class FloatingMeterDock {
       ctx.textAlign = "right";
       ctx.fillText(`${data.vRms.toFixed(2)}V`, LABEL_W - 4, mid - 5);
 
+      // DC offset jumps the trace vertically (eased so the step is visible). Offsets beyond the strip
+      // at this volts/div stop near the edge; the big readout gives the value.
+      this.dcShown = this.dcShown || {};
+      const dcTarget = data.dc || 0;
+      const prev = this.dcShown[c.key] ?? 0;
+      const dcShown = Math.abs(dcTarget - prev) < 0.05 ? dcTarget : prev + (dcTarget - prev) * 0.12;
+      this.dcShown[c.key] = dcShown;
+      const baseFrac = Math.max(-0.82, Math.min(0.82, dcShown / halfV));
+      const baseY = mid - baseFrac * (stripH / 2 - 1);
+
       // Trace
       ctx.save();
       ctx.beginPath();
@@ -2406,12 +2442,21 @@ class FloatingMeterDock {
           if (data.status && data.status.includes("CLIP")) v = Math.max(-1.5, Math.min(1.5, v * 1.8));
         }
         const x = LABEL_W + (sIdx / samples) * plotW;
-        const y = mid - (v / halfV) * (stripH / 2 - 1);
+        const y = baseY - (v / halfV) * (stripH / 2 - 1);
         if (sIdx === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
       ctx.stroke();
       ctx.restore();
+
+      // DC reading in big digits while a pin carries DC (e.g. +48 V phantom on pins 2 and 3)
+      if (Math.abs(dcTarget) > 0.05 || Math.abs(dcShown) > 0.5) {
+        ctx.fillStyle = "#f59e0b";
+        ctx.font = "900 15px 'JetBrains Mono', monospace";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+        ctx.fillText(`${dcShown >= 0 ? "+" : ""}${dcShown.toFixed(1)} V DC`, w - 6, top + Math.min(12, stripH / 2));
+      }
     });
 
     // Common time ruler

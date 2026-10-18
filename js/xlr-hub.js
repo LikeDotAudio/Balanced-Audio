@@ -455,6 +455,16 @@ class XLRHubEngine {
       g.setAttribute("data-probe-label", "Across contacts 2 & 3 (differential)");
       g.style.cursor = "crosshair";
       female.appendChild(g);
+      if (item.is5Pin) {
+        const g45 = document.createElementNS(ns, "g");
+        g45.innerHTML = `
+          <rect x="-26" y="54" width="52" height="16" rx="3" fill="#0f172a" stroke="#f97316" stroke-width="1.2" />
+          <text x="0" y="66" fill="#f97316" font-size="9" font-weight="800" text-anchor="middle">V 4↔5</text>`;
+        g45.setAttribute("data-probe-target", "xlrf-diff45");
+        g45.setAttribute("data-probe-label", "Across contacts 4 & 5 (right channel)");
+        g45.style.cursor = "crosshair";
+        female.appendChild(g45);
+      }
     }
   }
 
