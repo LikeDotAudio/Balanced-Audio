@@ -9,104 +9,104 @@
 
 const MULTICHANNEL_DATA = {
   tiaPairs: [
-    { name: "SUN", colorName: "Orange", hex: "#f97316", hotPin: 2, coldPin: 1, pairNum: 2, desc: "Pair 2 • Pin 2 (+) Solid Orange | Pin 1 (-) White/Orange" },
-    { name: "SKY", colorName: "Blue", hex: "#38bdf8", hotPin: 4, coldPin: 5, pairNum: 1, desc: "Pair 1 • Pin 4 (+) Solid Blue | Pin 5 (-) White/Blue" },
-    { name: "GRASS", colorName: "Green", hex: "#10b981", hotPin: 6, coldPin: 3, pairNum: 3, desc: "Pair 3 • Pin 6 (+) Solid Green | Pin 3 (-) White/Green" },
-    { name: "EARTH", colorName: "Brown", hex: "#ca8a04", hotPin: 8, coldPin: 7, pairNum: 4, desc: "Pair 4 • Pin 8 (+) Solid Brown | Pin 7 (-) White/Brown" }
+    { name: "SUN", colorName: "Orange", hex: "#f97316", hotPin: 2, coldPin: 1, pairNum: 2, desc: "Pin 2 (+) Solid Orange | Pin 1 (-) White/Orange" },
+    { name: "SKY", colorName: "Blue", hex: "#38bdf8", hotPin: 4, coldPin: 5, pairNum: 1, desc: "Pin 4 (+) Solid Blue | Pin 5 (-) White/Blue" },
+    { name: "GRASS", colorName: "Green", hex: "#10b981", hotPin: 6, coldPin: 3, pairNum: 3, desc: "Pin 6 (+) Solid Green | Pin 3 (-) White/Green" },
+    { name: "EARTH", colorName: "Brown", hex: "#ca8a04", hotPin: 8, coldPin: 7, pairNum: 4, desc: "Pin 8 (+) Solid Brown | Pin 7 (-) White/Brown" }
   ],
   channels: [
     {
       ch: 1,
-      bank: "Bank A (Ch 1–4) • RJ45 #1",
+      bank: "Paths 1–4 • RJ45 #1",
       link: "Link 1",
       mnemonic: "SUN",
       pairColor: "Orange",
       db25: { hot: 24, cold: 12, shield: 25 },
-      rj45: { pair: "Pair 2 (SUN: Orange / White-Orange)", hotPin: 2, coldPin: 1, mnemonic: "SUN (Orange)" },
+      rj45: { pair: "(SUN: Orange / White-Orange)", hotPin: 2, coldPin: 1, mnemonic: "SUN (Orange)" },
       xlr: { pin1: "Shield (Chassis)", pin2: "Hot (+)", pin3: "Cold (-)" },
       trs: { tip: "Hot (+)", ring: "Cold (-)", sleeve: "Shield (Chassis)" },
       color: "#f97316"
     },
     {
       ch: 2,
-      bank: "Bank A (Ch 1–4) • RJ45 #1",
+      bank: "Paths 1–4 • RJ45 #1",
       link: "Link 2",
-      mnemonic: "GRASS",
-      pairColor: "Green",
-      db25: { hot: 10, cold: 23, shield: 11 },
-      rj45: { pair: "Pair 3 (GRASS: Green / White-Green)", hotPin: 6, coldPin: 3, mnemonic: "GRASS (Green)" },
-      xlr: { pin1: "Shield (Chassis)", pin2: "Hot (+)", pin3: "Cold (-)" },
-      trs: { tip: "Hot (+)", ring: "Cold (-)", sleeve: "Shield (Chassis)" },
-      color: "#10b981"
-    },
-    {
-      ch: 3,
-      bank: "Bank A (Ch 1–4) • RJ45 #1",
-      link: "Link 3",
       mnemonic: "SKY",
       pairColor: "Blue",
-      db25: { hot: 21, cold: 9, shield: 22 },
-      rj45: { pair: "Pair 1 (SKY: Blue / White-Blue)", hotPin: 4, coldPin: 5, mnemonic: "SKY (Blue)" },
+      db25: { hot: 10, cold: 23, shield: 11 },
+      rj45: { pair: "(SKY: Blue / White-Blue)", hotPin: 4, coldPin: 5, mnemonic: "SKY (Blue)" },
       xlr: { pin1: "Shield (Chassis)", pin2: "Hot (+)", pin3: "Cold (-)" },
       trs: { tip: "Hot (+)", ring: "Cold (-)", sleeve: "Shield (Chassis)" },
       color: "#38bdf8"
     },
     {
+      ch: 3,
+      bank: "Paths 1–4 • RJ45 #1",
+      link: "Link 3",
+      mnemonic: "GRASS",
+      pairColor: "Green",
+      db25: { hot: 21, cold: 9, shield: 22 },
+      rj45: { pair: "(GRASS: Green / White-Green)", hotPin: 6, coldPin: 3, mnemonic: "GRASS (Green)" },
+      xlr: { pin1: "Shield (Chassis)", pin2: "Hot (+)", pin3: "Cold (-)" },
+      trs: { tip: "Hot (+)", ring: "Cold (-)", sleeve: "Shield (Chassis)" },
+      color: "#10b981"
+    },
+    {
       ch: 4,
-      bank: "Bank A (Ch 1–4) • RJ45 #1",
+      bank: "Paths 1–4 • RJ45 #1",
       link: "Link 4",
       mnemonic: "EARTH",
       pairColor: "Brown",
       db25: { hot: 7, cold: 20, shield: 8 },
-      rj45: { pair: "Pair 4 (EARTH: Brown / White-Brown)", hotPin: 8, coldPin: 7, mnemonic: "EARTH (Brown)" },
+      rj45: { pair: "(EARTH: Brown / White-Brown)", hotPin: 8, coldPin: 7, mnemonic: "EARTH (Brown)" },
       xlr: { pin1: "Shield (Chassis)", pin2: "Hot (+)", pin3: "Cold (-)" },
       trs: { tip: "Hot (+)", ring: "Cold (-)", sleeve: "Shield (Chassis)" },
       color: "#ca8a04"
     },
     {
       ch: 5,
-      bank: "Bank B (Ch 5–8) • RJ45 #2",
+      bank: "Paths 5–8 • RJ45 #2",
       link: "Link 1",
       mnemonic: "SUN",
       pairColor: "Orange",
       db25: { hot: 18, cold: 6, shield: 19 },
-      rj45: { pair: "Pair 2 (SUN: Orange / White-Orange)", hotPin: 2, coldPin: 1, mnemonic: "SUN (Orange)" },
+      rj45: { pair: "(SUN: Orange / White-Orange)", hotPin: 2, coldPin: 1, mnemonic: "SUN (Orange)" },
       xlr: { pin1: "Shield (Chassis)", pin2: "Hot (+)", pin3: "Cold (-)" },
       trs: { tip: "Hot (+)", ring: "Cold (-)", sleeve: "Shield (Chassis)" },
       color: "#f97316"
     },
     {
       ch: 6,
-      bank: "Bank B (Ch 5–8) • RJ45 #2",
+      bank: "Paths 5–8 • RJ45 #2",
       link: "Link 2",
-      mnemonic: "GRASS",
-      pairColor: "Green",
-      db25: { hot: 4, cold: 17, shield: 5 },
-      rj45: { pair: "Pair 3 (GRASS: Green / White-Green)", hotPin: 6, coldPin: 3, mnemonic: "GRASS (Green)" },
-      xlr: { pin1: "Shield (Chassis)", pin2: "Hot (+)", pin3: "Cold (-)" },
-      trs: { tip: "Hot (+)", ring: "Cold (-)", sleeve: "Shield (Chassis)" },
-      color: "#10b981"
-    },
-    {
-      ch: 7,
-      bank: "Bank B (Ch 5–8) • RJ45 #2",
-      link: "Link 3",
       mnemonic: "SKY",
       pairColor: "Blue",
-      db25: { hot: 15, cold: 3, shield: 16 },
-      rj45: { pair: "Pair 1 (SKY: Blue / White-Blue)", hotPin: 4, coldPin: 5, mnemonic: "SKY (Blue)" },
+      db25: { hot: 4, cold: 17, shield: 5 },
+      rj45: { pair: "(SKY: Blue / White-Blue)", hotPin: 4, coldPin: 5, mnemonic: "SKY (Blue)" },
       xlr: { pin1: "Shield (Chassis)", pin2: "Hot (+)", pin3: "Cold (-)" },
       trs: { tip: "Hot (+)", ring: "Cold (-)", sleeve: "Shield (Chassis)" },
       color: "#38bdf8"
     },
     {
+      ch: 7,
+      bank: "Paths 5–8 • RJ45 #2",
+      link: "Link 3",
+      mnemonic: "GRASS",
+      pairColor: "Green",
+      db25: { hot: 15, cold: 3, shield: 16 },
+      rj45: { pair: "(GRASS: Green / White-Green)", hotPin: 6, coldPin: 3, mnemonic: "GRASS (Green)" },
+      xlr: { pin1: "Shield (Chassis)", pin2: "Hot (+)", pin3: "Cold (-)" },
+      trs: { tip: "Hot (+)", ring: "Cold (-)", sleeve: "Shield (Chassis)" },
+      color: "#10b981"
+    },
+    {
       ch: 8,
-      bank: "Bank B (Ch 5–8) • RJ45 #2",
+      bank: "Paths 5–8 • RJ45 #2",
       link: "Link 4",
       mnemonic: "EARTH",
       pairColor: "Brown",
       db25: { hot: 1, cold: 14, shield: 2 },
-      rj45: { pair: "Pair 4 (EARTH: Brown / White-Brown)", hotPin: 8, coldPin: 7, mnemonic: "EARTH (Brown)" },
+      rj45: { pair: "(EARTH: Brown / White-Brown)", hotPin: 8, coldPin: 7, mnemonic: "EARTH (Brown)" },
       xlr: { pin1: "Shield (Chassis)", pin2: "Hot (+)", pin3: "Cold (-)" },
       trs: { tip: "Hot (+)", ring: "Cold (-)", sleeve: "Shield (Chassis)" },
       color: "#ca8a04"
@@ -121,7 +121,7 @@ const QTP_DEMOS = [
   { key: "pin_dropped_2", title: "2 Pins Dropped (Pins 1 & 3 Cold Open)" },
   { key: "pin_dropped_3", title: "3 Pins Dropped (Multi-Conductor Open)" },
   { key: "pin_dropped_4", title: "4 Pins Dropped (Quad Trunk Open)" },
-  { key: "pair_dropped", title: "1 Pair Dropped (Channel Mute)" },
+  { key: "pair_dropped", title: "SUN Path Dropped (Silent)" },
   { key: "shield_lifted", title: "Shield Lifted (P48 Fails)" },
   { key: "leg_flipped", title: "Mixed Polarity (One Conductor Flipped)" }
 ];
@@ -268,7 +268,7 @@ class QTPSimulatorEngine {
         <!-- PAIR 2: SUN (ORANGE) - Link 1: Pin 2 (+) / Pin 1 (-) -->
         <g transform="translate(100, 85)" data-qtp-pair="sun">
           <rect x="0" y="0" width="650" height="36" rx="6" fill="#131d2e" stroke="${wireState.sun_hot && wireState.sun_cold ? '#f97316' : '#ef4444'}" stroke-width="1.5"/>
-          <text x="15" y="18" fill="#f97316" font-size="10" font-weight="800">SUN • Pair 2</text>
+          <text x="15" y="18" fill="#f97316" font-size="10" font-weight="800">SUN PATH</text>
           ${wireState.shield ? "" : '<text x="15" y="31" fill="#ef4444" font-size="8" font-weight="800">⇅ same hum on both legs</text>'}
           
           <!-- Pin 2 Hot Wire (Solid Orange) -->
@@ -293,7 +293,7 @@ class QTPSimulatorEngine {
         <!-- PAIR 1: SKY (BLUE) - Link 3: Pin 4 (+) / Pin 5 (-) -->
         <g transform="translate(100, 132)" data-qtp-pair="sky">
           <rect x="0" y="0" width="650" height="36" rx="6" fill="#131d2e" stroke="${wireState.sky_hot ? '#38bdf8' : '#ef4444'}" stroke-width="1.5"/>
-          <text x="15" y="18" fill="#38bdf8" font-size="10" font-weight="800">SKY • Pair 1</text>
+          <text x="15" y="18" fill="#38bdf8" font-size="10" font-weight="800">SKY PATH</text>
           ${wireState.shield ? "" : '<text x="15" y="31" fill="#ef4444" font-size="8" font-weight="800">⇅ same hum on both legs</text>'}
           
           <!-- Pin 4 Hot Wire (Solid Blue) -->
@@ -318,7 +318,7 @@ class QTPSimulatorEngine {
         <!-- PAIR 3: GRASS (GREEN) - Link 2: Pin 6 (+) / Pin 3 (-) -->
         <g transform="translate(100, 179)" data-qtp-pair="grass">
           <rect x="0" y="0" width="650" height="36" rx="6" fill="#131d2e" stroke="${wireState.grass_hot && wireState.grass_cold ? '#10b981' : '#ef4444'}" stroke-width="1.5"/>
-          <text x="15" y="18" fill="#10b981" font-size="10" font-weight="800">GRASS • Pair 3</text>
+          <text x="15" y="18" fill="#10b981" font-size="10" font-weight="800">GRASS PATH</text>
           ${wireState.shield ? "" : '<text x="15" y="31" fill="#ef4444" font-size="8" font-weight="800">⇅ same hum on both legs</text>'}
           
           <!-- Pin 6 Hot Wire (Solid Green) -->
@@ -343,7 +343,7 @@ class QTPSimulatorEngine {
         <!-- PAIR 4: EARTH (BROWN) - Link 4: Pin 8 (+) / Pin 7 (-) -->
         <g transform="translate(100, 226)" data-qtp-pair="earth">
           <rect x="0" y="0" width="650" height="36" rx="6" fill="#131d2e" stroke="#ca8a04" stroke-width="1.5"/>
-          <text x="15" y="18" fill="#ca8a04" font-size="10" font-weight="800">EARTH • Pair 4</text>
+          <text x="15" y="18" fill="#ca8a04" font-size="10" font-weight="800">EARTH PATH</text>
           ${wireState.shield ? "" : '<text x="15" y="31" fill="#ef4444" font-size="8" font-weight="800">⇅ same hum on both legs</text>'}
           
           <!-- Pin 8 Hot Wire (Solid Brown) -->
@@ -379,7 +379,7 @@ class QTPSimulatorEngine {
     let cmrrColor = "#10b981";
     let p48 = "48.0 VDC (Normal)";
     let p48Color = "#10b981";
-    let diag = "Normal Balanced Transmission: Conforms fully to AES72-4E and AES48. Balanced line rejects common-mode noise. All 4 pairs carry differential audio.";
+    let diag = "Normal Balanced Transmission: Conforms fully to AES72-4E and AES48. Balanced line rejects common-mode noise. The SUN, SKY, GRASS and EARTH paths all carry differential audio.";
 
     if (f === "phase_flip") {
       vdiff = "+4.0 dBu (1.228 V)";
@@ -388,7 +388,7 @@ class QTPSimulatorEngine {
       cmrr = "> 90 dB (Diff Intact)";
       cmrrColor = "#10b981";
       p48 = "48.0 VDC (OK)";
-      diag = "PHASE FLIP (180° Inversion): Hot and Cold polarity reversed on Pair 2 (SUN). Audio is inverting; when summed with in-phase stereo channels or stereo microphones, causes catastrophic bass cancellation and comb filtering!";
+      diag = "PHASE FLIP (180° Inversion): Hot and Cold polarity reversed on the SUN path. Audio is inverting; when summed with in-phase stereo signals or stereo microphones, causes catastrophic bass cancellation and comb filtering!";
     } else if (f === "pin_dropped_1") {
       vdiff = "-2.02 dBu (0.614 V)";
       phase = "Single-Ended (Unbalanced)";
@@ -404,7 +404,7 @@ class QTPSimulatorEngine {
       cmrr = "0 dB (Loss of CMRR!)";
       cmrrColor = "#ef4444";
       p48 = "24.0 VDC (Sagged)";
-      diag = "TWO PINS DROPPED (Pins 1 & 3 Cold Open): Both return legs disconnected across Link 1 & Link 2. Floating grounds cause electrostatic buzz and severe high-frequency crosstalk between channels.";
+      diag = "TWO PINS DROPPED (Pins 1 & 3 Cold Open): Both return legs disconnected across Link 1 & Link 2. Floating grounds cause electrostatic buzz and severe high-frequency crosstalk between paths.";
     } else if (f === "pin_dropped_3") {
       vdiff = "Unstable / Distorted";
       phase = "Broken Reference";
@@ -412,7 +412,7 @@ class QTPSimulatorEngine {
       cmrr = "0 dB (Failed)";
       cmrrColor = "#ef4444";
       p48 = "12.0 VDC (Failed)";
-      diag = "THREE PINS DROPPED: Catastrophic cable failure. 3 out of 8 signal lines open. Multi-channel signal integrity ruined.";
+      diag = "THREE PINS DROPPED: Catastrophic cable failure. 3 out of 8 signal lines open. Signal integrity ruined on every path.";
     } else if (f === "pin_dropped_4") {
       vdiff = "-inf dB (Muted)";
       phase = "Open Trunk";
@@ -420,15 +420,15 @@ class QTPSimulatorEngine {
       cmrr = "0 dB (No Link)";
       cmrrColor = "#ef4444";
       p48 = "0.0 VDC (Dead)";
-      diag = "FOUR PINS DROPPED: Complete Quad Trunk Failure (all 4 conductors in one RJ45 bank severed). Total signal loss on all 4 channels.";
+      diag = "FOUR PINS DROPPED: Complete Quad Trunk Failure (all 4 conductors in one RJ45 bank severed). Total signal loss on the SUN, SKY, GRASS and EARTH paths.";
     } else if (f === "pair_dropped") {
       vdiff = "-inf dB (0.00 V)";
-      phase = "No Signal (Dead Channel)";
+      phase = "No Signal (Dead Path)";
       phaseColor = "#ef4444";
       cmrr = "N/A (Open Circuit)";
       cmrrColor = "#94a3b8";
-      p48 = "0.0 VDC (Pair Open)";
-      diag = "ONE PAIR DROPPED (SUN / Orange Pair 2 Severed): Channel 1 completely open. Audio receiver reads 0.00 V. Full channel mute.";
+      p48 = "0.0 VDC (Path Open)";
+      diag = "SUN PATH DROPPED (orange conductors severed): Both SUN path conductors open. The receiver reads 0.00 V: silence.";
     } else if (f === "leg_flipped") {
       vdiff = "-inf dB (Audio Cancels!)";
       phase = "Legs In Phase (✗ Same Polarity)";
@@ -436,7 +436,7 @@ class QTPSimulatorEngine {
       cmrr = "Rejects the AUDIO";
       cmrrColor = "#ef4444";
       p48 = "48.0 VDC (OK)";
-      diag = "MIXED POLARITY (One Conductor Flipped on Pair 2 / SUN): the cold conductor now carries the SAME polarity as the hot. Both legs swing together, so the audio is common-mode and the balanced receiver cancels it: V_DIFF ≈ 0 while each wire still measures full signal to ground. Check every conductor's polarity, not just the pair.";
+      diag = "MIXED POLARITY (One SUN Path Conductor Flipped): the cold conductor now carries the SAME polarity as the hot. Both legs swing together, so the audio is common-mode and the balanced receiver cancels it: V_DIFF ≈ 0 while each wire still measures full signal to ground. Check every conductor's polarity, not just the path.";
     } else if (f === "shield_lifted") {
       vdiff = "+4.0 dBu (Severe Buzz)";
       phase = "0° (Shield Floating)";
@@ -518,7 +518,7 @@ class MultichannelBreakoutEngine {
     // Update Channel Badge & Title
     const titleEl = document.getElementById("mc-active-title");
     if (titleEl) {
-      titleEl.innerHTML = `<span style="color: ${item.color}; font-weight: 700;">Channel ${item.ch}</span>: Signal Routing (${item.bank})`;
+      titleEl.innerHTML = `<span style="color: ${item.color}; font-weight: 700;">Path ${item.ch}</span>: Signal Routing (${item.bank})`;
     }
 
     // Render Dynamic SVG Icon Chain
@@ -609,13 +609,13 @@ class MultichannelBreakoutEngine {
         return `
           <g onclick="window.multichannelEngine.selectChannel(${c.ch})" style="cursor: pointer;">
             <rect x="${RJ_X + 26}" y="${yc - 18}" width="${RJ_W - 32}" height="36" rx="3" fill="${sel ? "rgba(56,189,248,0.12)" : "#0f172a"}" stroke="${sel ? c.color : "#1e293b"}" />
-            <text x="${RJ_X + 34}" y="${yc - 4}" fill="${c.color}" font-size="9.5" font-weight="800">CH${c.ch} · ${c.mnemonic}</text>
+            <text x="${RJ_X + 34}" y="${yc - 4}" fill="${c.color}" font-size="9.5" font-weight="800">PATH ${c.ch} · ${c.mnemonic}</text>
             <text x="${RJ_X + 34}" y="${yc + 10}" fill="#94a3b8" font-size="8">+ Pin ${c.rj45.hotPin} · − Pin ${c.rj45.coldPin} · G Drain</text>
           </g>`;
       }).join("");
       return `
         <rect x="${RJ_X}" y="${top}" width="${RJ_W}" height="${height}" rx="6" fill="#1e293b" stroke="${active ? item.color : "#475569"}" stroke-width="${active ? 2.2 : 1.2}" />
-        <text transform="translate(${RJ_X + 16}, ${top + height / 2}) rotate(-90)" fill="${first === 1 ? "#34d399" : "#a855f7"}" font-size="9.5" font-weight="800" text-anchor="middle">AES72-4E RJ45 #${bank} · CH ${first}–${first + 3}</text>
+        <text transform="translate(${RJ_X + 16}, ${top + height / 2}) rotate(-90)" fill="${first === 1 ? "#34d399" : "#a855f7"}" font-size="9.5" font-weight="800" text-anchor="middle">AES72-4E RJ45 #${bank} · PATHS ${first}–${first + 3}</text>
         ${rows}`;
     };
 
@@ -646,7 +646,7 @@ class MultichannelBreakoutEngine {
         <g transform="translate(${OUT_X}, ${yc - 21})" data-mc-out="${c.ch}" onclick="window.multichannelEngine.selectChannel(${c.ch})" style="cursor: pointer;">
           <rect x="0" y="0" width="300" height="42" rx="5" fill="${sel ? "rgba(56, 189, 248, 0.15)" : "rgba(30, 41, 59, 0.4)"}" stroke="${stroke}" stroke-width="${sel ? 2 : 1}" />
           ${icon}
-          <text x="46" y="18" fill="#f8fafc" font-size="10.5" font-weight="700">Channel ${c.ch} (${label})</text>
+          <text x="46" y="18" fill="#f8fafc" font-size="10.5" font-weight="700">Path ${c.ch} (${label})</text>
           <text x="46" y="31" fill="#94a3b8" font-size="8.5">${pins}</text>
           <rect x="248" y="11" width="46" height="20" rx="3" fill="${sel ? c.color : "#0f172a"}" stroke="${benchColors[c.ch - 1]}" />
           <text x="271" y="25" fill="${sel ? "#0f172a" : benchColors[c.ch - 1]}" font-size="8.5" font-weight="800" text-anchor="middle">METER</text>
@@ -662,9 +662,9 @@ class MultichannelBreakoutEngine {
         <path d="M ${db.x},${db.y - 6} L ${db.x + 74},${db.y + 8} L ${db.x + 74},${db.y + DB_H - 8} L ${db.x},${db.y + DB_H + 6} Z" fill="#1e293b" fill-opacity="0.85" stroke="#38bdf8" stroke-width="2.5" />
         ${pinsSvg}
         <text x="${db.x + 37}" y="${db.y - 30}" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">AES59 DB25</text>
-        <text x="${db.x + 37}" y="${db.y - 14}" fill="#e2e8f0" font-size="9.5" font-weight="800" text-anchor="middle">CH1–4 SEND → · ← CH5–8 RETURN</text>
-        <text transform="translate(${db.x - 34}, ${db.y + DB_H / 2}) rotate(-90)" fill="#94a3b8" font-size="9" text-anchor="middle">8 balanced channels · Pin 13 n/c · Shell to chassis (AES48)</text>
-        <text x="${db.x + 37}" y="${db.y + DB_H + 26}" fill="${item.color}" font-size="9.5" font-weight="700" text-anchor="middle">CH${item.ch} (${item.mnemonic}): + Pin ${item.db25.hot} · − Pin ${item.db25.cold} · G Pin ${item.db25.shield}</text>
+        <text x="${db.x + 37}" y="${db.y - 14}" fill="#e2e8f0" font-size="9.5" font-weight="800" text-anchor="middle">PATHS 1–4 SEND → · ← PATHS 5–8 RETURN</text>
+        <text transform="translate(${db.x - 34}, ${db.y + DB_H / 2}) rotate(-90)" fill="#94a3b8" font-size="9" text-anchor="middle">8 balanced paths · Pin 13 n/c · Shell to chassis (AES48)</text>
+        <text x="${db.x + 37}" y="${db.y + DB_H + 26}" fill="${item.color}" font-size="9.5" font-weight="700" text-anchor="middle">PATH ${item.ch} (${item.mnemonic}): + Pin ${item.db25.hot} · − Pin ${item.db25.cold} · G Pin ${item.db25.shield}</text>
         <g font-size="8.5" font-weight="700">
           <text x="${db.x - 60}" y="${db.y + DB_H + 44}" fill="#e2e8f0">+ Hot</text>
           <text x="${db.x - 10}" y="${db.y + DB_H + 44}" fill="#e2e8f0">− Cold (dashed)</text>
@@ -698,7 +698,7 @@ class MultichannelBreakoutEngine {
 
       return `
         <tr style="${bgStyle} cursor: pointer;" onclick="window.multichannelEngine.selectChannel(${c.ch})">
-          <td style="color: ${c.color}; font-weight: 700;">Ch ${c.ch}</td>
+          <td style="color: ${c.color}; font-weight: 700;">Path ${c.ch}</td>
           <td>${c.bank}</td>
           <td>Hot: Pin ${c.db25.hot} &bull; Cold: Pin ${c.db25.cold} &bull; Shield: Pin ${c.db25.shield}</td>
           <td>${c.rj45.pair} (Pins ${c.rj45.hotPin}/${c.rj45.coldPin})</td>
@@ -718,7 +718,7 @@ class MultichannelBreakoutEngine {
       const bgStyle = isSel ? `background: rgba(56, 189, 248, 0.15); font-weight: 700;` : "";
       return `
         <tr style="${bgStyle} cursor: pointer;" onclick="window.multichannelEngine.selectChannel(${c.ch})">
-          <td style="color: ${c.color}; font-weight: 800;">Channel ${c.ch}</td>
+          <td style="color: ${c.color}; font-weight: 800;">Path ${c.ch}</td>
           <td><span class="aes59-pin-pill hot">Pin ${c.db25.hot} (+)</span></td>
           <td><span class="aes59-pin-pill cold">Pin ${c.db25.cold} (&minus;)</span></td>
           <td><span class="aes59-pin-pill gnd">Pin ${c.db25.shield} (GND)</span></td>

@@ -29,14 +29,14 @@ const BENCH_WAVES = [
   { id: "triangle", glyph: "⋀", crest: Math.sqrt(3) },
   { id: "sawtooth", glyph: "⩘", crest: Math.sqrt(3) }
 ];
-// QTP conductors in cable order; each pair carries its AES72 channel's tone (SUN = CH1, GRASS = CH2, SKY = CH3, EARTH = CH4)
+// QTP conductors in cable order; each pair carries its AES72 channel's tone (SUN = CH1, SKY = CH2, GRASS = CH3, EARTH = CH4)
 const QTP_WIRES = [
   { key: "sun-hot", pair: "sun", leg: "hot", label: "SUN P2+", color: "#f97316", ch: 1 },
   { key: "sun-cold", pair: "sun", leg: "cold", label: "SUN P1−", color: "#ffffff", ch: 1 },
-  { key: "sky-hot", pair: "sky", leg: "hot", label: "SKY P4+", color: "#38bdf8", ch: 3 },
-  { key: "sky-cold", pair: "sky", leg: "cold", label: "SKY P5−", color: "#ffffff", ch: 3 },
-  { key: "grass-hot", pair: "grass", leg: "hot", label: "GRS P6+", color: "#10b981", ch: 2 },
-  { key: "grass-cold", pair: "grass", leg: "cold", label: "GRS P3−", color: "#ffffff", ch: 2 },
+  { key: "sky-hot", pair: "sky", leg: "hot", label: "SKY P4+", color: "#38bdf8", ch: 2 },
+  { key: "sky-cold", pair: "sky", leg: "cold", label: "SKY P5−", color: "#ffffff", ch: 2 },
+  { key: "grass-hot", pair: "grass", leg: "hot", label: "GRS P6+", color: "#10b981", ch: 3 },
+  { key: "grass-cold", pair: "grass", leg: "cold", label: "GRS P3−", color: "#ffffff", ch: 3 },
   { key: "earth-hot", pair: "earth", leg: "hot", label: "ERT P8+", color: "#ca8a04", ch: 4 },
   { key: "earth-cold", pair: "earth", leg: "cold", label: "ERT P7−", color: "#ffffff", ch: 4 }
 ];
