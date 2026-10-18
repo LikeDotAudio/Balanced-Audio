@@ -23,6 +23,7 @@ class StorySidebar {
 
   init() {
     this.createSidebarDOM();
+    this.lockSidebarOpen();
     this.setupScrollListener();
     this.setupIntersectionObserver();
     this.setupGlobalTreeLinks();
@@ -266,6 +267,15 @@ class StorySidebar {
     }
   }
 
+  // The sidebar is permanent: always shown, never collapsed, content laid out beside it
+  lockSidebarOpen() {
+    if (!this.sidebar) return;
+    this.sidebar.classList.add("sidebar-visible", "sidebar-locked");
+    this.sidebar.classList.remove("collapsed", "scrolling-hidden");
+    document.body.classList.add("has-story-sidebar");
+    document.body.classList.remove("sidebar-collapsed", "sidebar-is-scrolling");
+  }
+
   switchTab(tabName) {
     if (!this.sidebar) return;
     this.activeTab = tabName;
@@ -319,19 +329,8 @@ class StorySidebar {
   }
 
   setupScrollListener() {
-    let scrollTimer = null;
-
     window.addEventListener("scroll", () => {
       const currentScrollY = window.scrollY;
-
-      // When user is scrolling, hide the sidebar so it never obstructs content
-      if (this.sidebar) {
-        this.sidebar.classList.add("scrolling-hidden");
-        document.body.classList.add("sidebar-is-scrolling");
-        if (this.sidebar.classList.contains("mobile-open")) {
-          this.sidebar.classList.remove("mobile-open");
-        }
-      }
 
       // Hide top header when scrolled past hero
       if (currentScrollY > 180) {
@@ -340,44 +339,8 @@ class StorySidebar {
         if (this.header) this.header.classList.remove("header-hidden");
       }
 
-      // Once scrolling stops for 750ms, restore visibility if past hero
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        if (this.sidebar) {
-          this.sidebar.classList.remove("scrolling-hidden");
-          document.body.classList.remove("sidebar-is-scrolling");
-          if (currentScrollY > 180) {
-            this.sidebar.classList.add("sidebar-visible");
-            document.body.classList.add("has-story-sidebar");
-          } else {
-            this.sidebar.classList.remove("sidebar-visible");
-            document.body.classList.remove("has-story-sidebar");
-          }
-        }
-      }, 750);
-
       this.lastScrollY = currentScrollY;
     }, { passive: true });
-
-    // Allow user to reveal sidebar instantly by hovering near left edge (<= 45px)
-    window.addEventListener("mousemove", (e) => {
-      if (e.clientX <= 45 && window.scrollY > 180) {
-        if (this.sidebar) {
-          this.sidebar.classList.remove("scrolling-hidden");
-          this.sidebar.classList.add("sidebar-visible");
-          document.body.classList.remove("sidebar-is-scrolling");
-        }
-      }
-    }, { passive: true });
-
-    // Hide sidebar immediately when clicking any chapter link
-    if (this.sidebar) {
-      this.sidebar.querySelectorAll(".chapter-link").forEach(link => {
-        link.addEventListener("click", () => {
-          this.sidebar.classList.add("scrolling-hidden");
-        });
-      });
-    }
   }
 
   setupIntersectionObserver() {

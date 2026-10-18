@@ -169,6 +169,15 @@ class FloatingMeterDock {
     this.showToast(`Fluke 8050A Reference Z set to ${rTxt}`);
   }
 
+  // Blend two #rrggbb colours; t = 0 gives a, t = 1 gives b
+  mixHex(a, b, t) {
+    const parse = (h) => /^#[0-9a-f]{6}$/i.test(h) ? [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)) : null;
+    const ca = parse(a);
+    const cb = parse(b);
+    if (!ca || !cb) return a;
+    return "#" + ca.map((v, i) => Math.round(v + (cb[i] - v) * t).toString(16).padStart(2, "0")).join("");
+  }
+
   cycleRefZ() {
     const list = this.refZList || [50, 75, 93, 110, 125, 135, 150, 250, 300, 500, 600, 800, 900, 1000, 1200, 2400, 8000, 10000];
     const idx = list.indexOf(this.refZ || 600);
@@ -2341,14 +2350,13 @@ class FloatingMeterDock {
         shadowWidth = 0;
         glintOpacity = 0;
       } else if (isWireStyleGray) {
-        // Reading Mode (Default): Lighter, light gray so the user can easily read the text
-        wireStrokeColor = "#94a3b8"; // Clean, light neutral slate/silver gray
-        wireStrokeWidth = 1.6;
-        finalWireOpacity = isVisible ? 0.30 : 0.14;
-        // Soft, faint shadow so it NEVER strikes through white text
-        shadowStroke = "rgba(0, 0, 0, 0.08)";
-        shadowWidth = 2.0;
-        glintOpacity = 0.2;
+        // Reading Mode (Default): halfway between light gray and the vivid channel colour
+        wireStrokeColor = this.mixHex("#94a3b8", conn.color, 0.5);
+        wireStrokeWidth = 2.1;
+        finalWireOpacity = isVisible ? 0.62 : 0.18;
+        shadowStroke = "rgba(0, 0, 0, 0.34)";
+        shadowWidth = 3.25;
+        glintOpacity = 0.48;
       } else {
         // Classic vivid workbench mode
         wireStrokeColor = conn.color;

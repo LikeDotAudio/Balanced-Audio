@@ -8,9 +8,12 @@
  *    all eight visible at once with no scrolling.
  * 3. Four simple signal generators (GEN A–D: sine / square / triangle / sawtooth, frequency, level, on/off).
  *    Any line can be re-patched from its own tone to GEN A–D.
+ * 3b. The generators live in the left sidebar and appear only while the 8-CH meters are showing.
  * 4. Line selector in the left Story sidebar: picking a line focuses it in the rack (enlarged row,
  *    edit strip for frequency / level / mute, optional audible monitor via Web Audio).
  * 5. Fixed 10 ms scope window: CH1 shows 1 cycle, CH8 shows 8 cycles.
+ * 6. The multichannel breakout (AES59 DB25 → AES72 RJ45 → 8 × XLR/TRS) is wired to these meters:
+ *    each breakout output gets a live wire to its meter row, and channel selection is shared both ways.
  */
 
 const BENCH_CH_COLORS = ["#facc15", "#38bdf8", "#f43f5e", "#4ade80", "#a78bfa", "#fb923c", "#2dd4bf", "#f472b6"];
@@ -58,6 +61,7 @@ class EightChannelBench {
     this.renderPanel();
     this.buildSidebarSelector();
     this.focusLine(this.focus, false);
+    this.initBreakoutLink();
     this.startLoop();
   }
 
@@ -128,8 +132,12 @@ class EightChannelBench {
         </div>
       </div>`).join("");
 
+    this.genDock = document.createElement("div");
+    this.genDock.id = "sidebar-gen-dock";
+    this.genDock.className = "sidebar-gen-dock";
+    this.genDock.innerHTML = `<div class="sidebar-line-title"><span>⚡ GENERATORS A–D</span></div><div class="bench-gens">${genHtml}</div>`;
+
     this.panel.innerHTML = `
-      <div class="bench-gens">${genHtml}</div>
       <div class="bench-lines">${rowHtml}</div>
       <div class="bench-edit" id="bench-edit">
         <span class="bench-edit-name" id="bench-edit-name">CH1</span>
@@ -147,29 +155,30 @@ class EightChannelBench {
 
   bindPanel() {
     const p = this.panel;
+    const g = this.genDock;
 
-    p.querySelectorAll("[data-gen-power]").forEach(btn => btn.addEventListener("click", () => {
-      const g = this.generators.find(x => x.id === btn.dataset.genPower);
-      g.on = !g.on;
-      btn.textContent = g.on ? "ON" : "OFF";
-      btn.closest(".bench-gen").classList.toggle("on", g.on);
+    g.querySelectorAll("[data-gen-power]").forEach(btn => btn.addEventListener("click", () => {
+      const gen = this.generators.find(x => x.id === btn.dataset.genPower);
+      gen.on = !gen.on;
+      btn.textContent = gen.on ? "ON" : "OFF";
+      btn.closest(".bench-gen").classList.toggle("on", gen.on);
       this.updateMonitor();
     }));
 
-    p.querySelectorAll("[data-gen-wave]").forEach(btn => btn.addEventListener("click", () => {
-      const g = this.generators.find(x => x.id === btn.dataset.genWave);
-      g.wave = btn.dataset.wave;
-      p.querySelectorAll(`[data-gen-wave="${g.id}"]`).forEach(b => b.classList.toggle("active", b === btn));
+    g.querySelectorAll("[data-gen-wave]").forEach(btn => btn.addEventListener("click", () => {
+      const gen = this.generators.find(x => x.id === btn.dataset.genWave);
+      gen.wave = btn.dataset.wave;
+      this.genDock.querySelectorAll(`[data-gen-wave="${gen.id}"]`).forEach(b => b.classList.toggle("active", b === btn));
       this.updateMonitor();
     }));
 
-    p.querySelectorAll("[data-gen-freq]").forEach(inp => inp.addEventListener("input", () => {
+    g.querySelectorAll("[data-gen-freq]").forEach(inp => inp.addEventListener("input", () => {
       const v = parseFloat(inp.value);
       if (!isNaN(v) && v > 0) this.generators.find(x => x.id === inp.dataset.genFreq).freq = Math.min(20000, v);
       this.updateMonitor();
     }));
 
-    p.querySelectorAll("[data-gen-level]").forEach(inp => inp.addEventListener("input", () => {
+    g.querySelectorAll("[data-gen-level]").forEach(inp => inp.addEventListener("input", () => {
       const v = parseFloat(inp.value);
       if (!isNaN(v)) this.generators.find(x => x.id === inp.dataset.genLevel).levelDbu = Math.max(-40, Math.min(24, v));
       this.updateMonitor();
@@ -239,6 +248,7 @@ class EightChannelBench {
           </button>`).join("")}
       </div>
     `;
+    sidebar.appendChild(this.genDock);
     sidebar.appendChild(box);
 
     box.querySelectorAll("[data-select-line]").forEach(btn => btn.addEventListener("click", () => {
@@ -276,11 +286,67 @@ class EightChannelBench {
       this.panel.querySelector("#bench-edit-name").textContent = "ALL";
     }
 
+    if (n > 0 && window.multichannelEngine && window.multichannelEngine.selectedCh !== n) {
+      window.multichannelEngine.selectChannel(n, true);
+    }
+
     if (openRack && window.floatingMeterDock && typeof window.floatingMeterDock.switchRackTab === "function") {
       window.floatingMeterDock.switchRackTab("8ch");
     }
     this.updateSidebarSelector();
     this.updateMonitor();
+  }
+
+  // ---------- Breakout → meter wiring ----------
+
+  initBreakoutLink() {
+    this.wiresSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    this.wiresSvg.id = "bench-breakout-wires-svg";
+    this.wiresSvg.setAttribute("class", "live-probe-wires-svg");
+    document.body.appendChild(this.wiresSvg);
+
+    // Bring the 8 meters up while the breakout diagram is in view, back to the lab rack once it leaves
+    const target = document.getElementById("mc-svg-container");
+    if (!target || !("IntersectionObserver" in window)) return;
+    new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const dock = window.floatingMeterDock;
+        if (!dock || dock.autoTrack === false) return;
+        if (entry.isIntersecting && dock.currentTab !== "8ch") dock.switchRackTab("8ch");
+        else if (!entry.isIntersecting && dock.currentTab === "8ch") dock.switchRackTab("rack");
+      });
+    }, { threshold: 0.3 }).observe(target);
+  }
+
+  renderBreakoutWires() {
+    if (!this.wiresSvg) return;
+    const outs = document.querySelectorAll("[data-mc-out]");
+    if (this.panel.offsetParent === null || outs.length === 0) {
+      if (this.wiresSvg.innerHTML) this.wiresSvg.innerHTML = "";
+      return;
+    }
+
+    let html = "";
+    outs.forEach(out => {
+      const n = Number(out.dataset.mcOut);
+      const row = this.panel.querySelector(`.bench-line[data-line="${n}"]`);
+      if (!row) return;
+      const a = out.getBoundingClientRect();
+      const b = row.getBoundingClientRect();
+      if (a.bottom < 0 || a.top > window.innerHeight) return;
+
+      const x1 = a.right;
+      const y1 = a.top + a.height / 2;
+      const x2 = b.left;
+      const y2 = b.top + b.height / 2;
+      const dx = Math.max(40, (x2 - x1) * 0.5);
+      const color = this.channels[n - 1].color;
+      const sel = this.focus === n || this.focus === 0;
+      const d = `M ${x1},${y1} C ${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}`;
+      html += `<path d="${d}" fill="none" stroke="${color}" stroke-width="${sel ? 2.4 : 1.85}" opacity="${sel ? 0.9 : 0.62}" />`;
+      html += `<circle cx="${x1}" cy="${y1}" r="3" fill="${color}" /><circle cx="${x2}" cy="${y2}" r="3" fill="${color}" />`;
+    });
+    this.wiresSvg.innerHTML = html;
   }
 
   // ---------- Audio monitor ----------
@@ -414,7 +480,10 @@ class EightChannelBench {
   startLoop() {
     const loop = (ts) => {
       // Only draw while the 8-CH tab is visible
-      if (this.panel.offsetParent !== null) this.renderFrame(ts / 1000);
+      const benchUp = this.panel.offsetParent !== null;
+      if (benchUp) this.renderFrame(ts / 1000);
+      if (this.genDock.classList.contains("shown") !== benchUp) this.genDock.classList.toggle("shown", benchUp);
+      this.renderBreakoutWires();
       this.animFrame = requestAnimationFrame(loop);
     };
     this.animFrame = requestAnimationFrame(loop);

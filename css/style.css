@@ -6764,3 +6764,48 @@ body,
   padding-left: 2px;
   padding-right: 2px;
 }
+
+/* ================= Locked Story sidebar: always shown, content laid out beside it ================= */
+.story-index-sidebar.sidebar-locked,
+.story-index-sidebar.sidebar-locked.scrolling-hidden {
+  transform: translateX(0) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  width: 270px;
+}
+
+.story-index-sidebar.sidebar-locked.taxonomy-active {
+  width: 360px;
+}
+
+.story-index-sidebar.sidebar-locked #sidebar-collapse-btn,
+body.has-story-sidebar .mobile-story-tab {
+  display: none !important;
+}
+
+body.has-story-sidebar,
+body.has-story-sidebar.sidebar-is-scrolling,
+body.has-story-sidebar.sidebar-collapsed {
+  padding-left: 270px !important;
+}
+
+body.has-story-sidebar.sidebar-taxonomy-active {
+  padding-left: 360px !important;
+}
+
+/* Generators A–D in the sidebar, shown only while the 8-CH meters are up */
+.sidebar-gen-dock {
+  display: none;
+  flex: 0 0 auto;
+  border-top: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 6px 8px 0;
+  font-family: var(--font-mono);
+}
+
+.sidebar-gen-dock.shown {
+  display: block;
+}
+
+.sidebar-gen-dock .bench-num {
+  width: 40px;
+}

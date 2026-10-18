@@ -6775,6 +6775,51 @@ body,
   padding-right: 2px;
 }
 
+/* ================= Locked Story sidebar: always shown, content laid out beside it ================= */
+.story-index-sidebar.sidebar-locked,
+.story-index-sidebar.sidebar-locked.scrolling-hidden {
+  transform: translateX(0) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  width: 270px;
+}
+
+.story-index-sidebar.sidebar-locked.taxonomy-active {
+  width: 360px;
+}
+
+.story-index-sidebar.sidebar-locked #sidebar-collapse-btn,
+body.has-story-sidebar .mobile-story-tab {
+  display: none !important;
+}
+
+body.has-story-sidebar,
+body.has-story-sidebar.sidebar-is-scrolling,
+body.has-story-sidebar.sidebar-collapsed {
+  padding-left: 270px !important;
+}
+
+body.has-story-sidebar.sidebar-taxonomy-active {
+  padding-left: 360px !important;
+}
+
+/* Generators A–D in the sidebar, shown only while the 8-CH meters are up */
+.sidebar-gen-dock {
+  display: none;
+  flex: 0 0 auto;
+  border-top: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 6px 8px 0;
+  font-family: var(--font-mono);
+}
+
+.sidebar-gen-dock.shown {
+  display: block;
+}
+
+.sidebar-gen-dock .bench-num {
+  width: 40px;
+}
+
 </style>
   
   <!-- Google Fonts: Inter & JetBrains Mono -->
@@ -15323,6 +15368,7 @@ class StorySidebar {
 
   init() {
     this.createSidebarDOM();
+    this.lockSidebarOpen();
     this.setupScrollListener();
     this.setupIntersectionObserver();
     this.setupGlobalTreeLinks();
@@ -15566,6 +15612,15 @@ class StorySidebar {
     }
   }
 
+  // The sidebar is permanent: always shown, never collapsed, content laid out beside it
+  lockSidebarOpen() {
+    if (!this.sidebar) return;
+    this.sidebar.classList.add("sidebar-visible", "sidebar-locked");
+    this.sidebar.classList.remove("collapsed", "scrolling-hidden");
+    document.body.classList.add("has-story-sidebar");
+    document.body.classList.remove("sidebar-collapsed", "sidebar-is-scrolling");
+  }
+
   switchTab(tabName) {
     if (!this.sidebar) return;
     this.activeTab = tabName;
@@ -15619,19 +15674,8 @@ class StorySidebar {
   }
 
   setupScrollListener() {
-    let scrollTimer = null;
-
     window.addEventListener("scroll", () => {
       const currentScrollY = window.scrollY;
-
-      // When user is scrolling, hide the sidebar so it never obstructs content
-      if (this.sidebar) {
-        this.sidebar.classList.add("scrolling-hidden");
-        document.body.classList.add("sidebar-is-scrolling");
-        if (this.sidebar.classList.contains("mobile-open")) {
-          this.sidebar.classList.remove("mobile-open");
-        }
-      }
 
       // Hide top header when scrolled past hero
       if (currentScrollY > 180) {
@@ -15640,44 +15684,8 @@ class StorySidebar {
         if (this.header) this.header.classList.remove("header-hidden");
       }
 
-      // Once scrolling stops for 750ms, restore visibility if past hero
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        if (this.sidebar) {
-          this.sidebar.classList.remove("scrolling-hidden");
-          document.body.classList.remove("sidebar-is-scrolling");
-          if (currentScrollY > 180) {
-            this.sidebar.classList.add("sidebar-visible");
-            document.body.classList.add("has-story-sidebar");
-          } else {
-            this.sidebar.classList.remove("sidebar-visible");
-            document.body.classList.remove("has-story-sidebar");
-          }
-        }
-      }, 750);
-
       this.lastScrollY = currentScrollY;
     }, { passive: true });
-
-    // Allow user to reveal sidebar instantly by hovering near left edge (<= 45px)
-    window.addEventListener("mousemove", (e) => {
-      if (e.clientX <= 45 && window.scrollY > 180) {
-        if (this.sidebar) {
-          this.sidebar.classList.remove("scrolling-hidden");
-          this.sidebar.classList.add("sidebar-visible");
-          document.body.classList.remove("sidebar-is-scrolling");
-        }
-      }
-    }, { passive: true });
-
-    // Hide sidebar immediately when clicking any chapter link
-    if (this.sidebar) {
-      this.sidebar.querySelectorAll(".chapter-link").forEach(link => {
-        link.addEventListener("click", () => {
-          this.sidebar.classList.add("scrolling-hidden");
-        });
-      });
-    }
   }
 
   setupIntersectionObserver() {
@@ -15911,6 +15919,15 @@ class FloatingMeterDock {
     if (btn2) btn2.textContent = `REF Z: ${rTxt}`;
     this.updateFromActiveCircuit();
     this.showToast(`Fluke 8050A Reference Z set to ${rTxt}`);
+  }
+
+  // Blend two #rrggbb colours; t = 0 gives a, t = 1 gives b
+  mixHex(a, b, t) {
+    const parse = (h) => /^#[0-9a-f]{6}$/i.test(h) ? [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)) : null;
+    const ca = parse(a);
+    const cb = parse(b);
+    if (!ca || !cb) return a;
+    return "#" + ca.map((v, i) => Math.round(v + (cb[i] - v) * t).toString(16).padStart(2, "0")).join("");
   }
 
   cycleRefZ() {
@@ -18085,14 +18102,13 @@ class FloatingMeterDock {
         shadowWidth = 0;
         glintOpacity = 0;
       } else if (isWireStyleGray) {
-        // Reading Mode (Default): Lighter, light gray so the user can easily read the text
-        wireStrokeColor = "#94a3b8"; // Clean, light neutral slate/silver gray
-        wireStrokeWidth = 1.6;
-        finalWireOpacity = isVisible ? 0.30 : 0.14;
-        // Soft, faint shadow so it NEVER strikes through white text
-        shadowStroke = "rgba(0, 0, 0, 0.08)";
-        shadowWidth = 2.0;
-        glintOpacity = 0.2;
+        // Reading Mode (Default): halfway between light gray and the vivid channel colour
+        wireStrokeColor = this.mixHex("#94a3b8", conn.color, 0.5);
+        wireStrokeWidth = 2.1;
+        finalWireOpacity = isVisible ? 0.62 : 0.18;
+        shadowStroke = "rgba(0, 0, 0, 0.34)";
+        shadowWidth = 3.25;
+        glintOpacity = 0.48;
       } else {
         // Classic vivid workbench mode
         wireStrokeColor = conn.color;
@@ -18199,9 +18215,12 @@ if (document.readyState === "loading") {
  *    all eight visible at once with no scrolling.
  * 3. Four simple signal generators (GEN A–D: sine / square / triangle / sawtooth, frequency, level, on/off).
  *    Any line can be re-patched from its own tone to GEN A–D.
+ * 3b. The generators live in the left sidebar and appear only while the 8-CH meters are showing.
  * 4. Line selector in the left Story sidebar: picking a line focuses it in the rack (enlarged row,
  *    edit strip for frequency / level / mute, optional audible monitor via Web Audio).
  * 5. Fixed 10 ms scope window: CH1 shows 1 cycle, CH8 shows 8 cycles.
+ * 6. The multichannel breakout (AES59 DB25 → AES72 RJ45 → 8 × XLR/TRS) is wired to these meters:
+ *    each breakout output gets a live wire to its meter row, and channel selection is shared both ways.
  */
 
 const BENCH_CH_COLORS = ["#facc15", "#38bdf8", "#f43f5e", "#4ade80", "#a78bfa", "#fb923c", "#2dd4bf", "#f472b6"];
@@ -18249,6 +18268,7 @@ class EightChannelBench {
     this.renderPanel();
     this.buildSidebarSelector();
     this.focusLine(this.focus, false);
+    this.initBreakoutLink();
     this.startLoop();
   }
 
@@ -18319,8 +18339,12 @@ class EightChannelBench {
         </div>
       </div>`).join("");
 
+    this.genDock = document.createElement("div");
+    this.genDock.id = "sidebar-gen-dock";
+    this.genDock.className = "sidebar-gen-dock";
+    this.genDock.innerHTML = `<div class="sidebar-line-title"><span>⚡ GENERATORS A–D</span></div><div class="bench-gens">${genHtml}</div>`;
+
     this.panel.innerHTML = `
-      <div class="bench-gens">${genHtml}</div>
       <div class="bench-lines">${rowHtml}</div>
       <div class="bench-edit" id="bench-edit">
         <span class="bench-edit-name" id="bench-edit-name">CH1</span>
@@ -18338,29 +18362,30 @@ class EightChannelBench {
 
   bindPanel() {
     const p = this.panel;
+    const g = this.genDock;
 
-    p.querySelectorAll("[data-gen-power]").forEach(btn => btn.addEventListener("click", () => {
-      const g = this.generators.find(x => x.id === btn.dataset.genPower);
-      g.on = !g.on;
-      btn.textContent = g.on ? "ON" : "OFF";
-      btn.closest(".bench-gen").classList.toggle("on", g.on);
+    g.querySelectorAll("[data-gen-power]").forEach(btn => btn.addEventListener("click", () => {
+      const gen = this.generators.find(x => x.id === btn.dataset.genPower);
+      gen.on = !gen.on;
+      btn.textContent = gen.on ? "ON" : "OFF";
+      btn.closest(".bench-gen").classList.toggle("on", gen.on);
       this.updateMonitor();
     }));
 
-    p.querySelectorAll("[data-gen-wave]").forEach(btn => btn.addEventListener("click", () => {
-      const g = this.generators.find(x => x.id === btn.dataset.genWave);
-      g.wave = btn.dataset.wave;
-      p.querySelectorAll(`[data-gen-wave="${g.id}"]`).forEach(b => b.classList.toggle("active", b === btn));
+    g.querySelectorAll("[data-gen-wave]").forEach(btn => btn.addEventListener("click", () => {
+      const gen = this.generators.find(x => x.id === btn.dataset.genWave);
+      gen.wave = btn.dataset.wave;
+      this.genDock.querySelectorAll(`[data-gen-wave="${gen.id}"]`).forEach(b => b.classList.toggle("active", b === btn));
       this.updateMonitor();
     }));
 
-    p.querySelectorAll("[data-gen-freq]").forEach(inp => inp.addEventListener("input", () => {
+    g.querySelectorAll("[data-gen-freq]").forEach(inp => inp.addEventListener("input", () => {
       const v = parseFloat(inp.value);
       if (!isNaN(v) && v > 0) this.generators.find(x => x.id === inp.dataset.genFreq).freq = Math.min(20000, v);
       this.updateMonitor();
     }));
 
-    p.querySelectorAll("[data-gen-level]").forEach(inp => inp.addEventListener("input", () => {
+    g.querySelectorAll("[data-gen-level]").forEach(inp => inp.addEventListener("input", () => {
       const v = parseFloat(inp.value);
       if (!isNaN(v)) this.generators.find(x => x.id === inp.dataset.genLevel).levelDbu = Math.max(-40, Math.min(24, v));
       this.updateMonitor();
@@ -18430,6 +18455,7 @@ class EightChannelBench {
           </button>`).join("")}
       </div>
     `;
+    sidebar.appendChild(this.genDock);
     sidebar.appendChild(box);
 
     box.querySelectorAll("[data-select-line]").forEach(btn => btn.addEventListener("click", () => {
@@ -18467,11 +18493,67 @@ class EightChannelBench {
       this.panel.querySelector("#bench-edit-name").textContent = "ALL";
     }
 
+    if (n > 0 && window.multichannelEngine && window.multichannelEngine.selectedCh !== n) {
+      window.multichannelEngine.selectChannel(n, true);
+    }
+
     if (openRack && window.floatingMeterDock && typeof window.floatingMeterDock.switchRackTab === "function") {
       window.floatingMeterDock.switchRackTab("8ch");
     }
     this.updateSidebarSelector();
     this.updateMonitor();
+  }
+
+  // ---------- Breakout → meter wiring ----------
+
+  initBreakoutLink() {
+    this.wiresSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    this.wiresSvg.id = "bench-breakout-wires-svg";
+    this.wiresSvg.setAttribute("class", "live-probe-wires-svg");
+    document.body.appendChild(this.wiresSvg);
+
+    // Bring the 8 meters up while the breakout diagram is in view, back to the lab rack once it leaves
+    const target = document.getElementById("mc-svg-container");
+    if (!target || !("IntersectionObserver" in window)) return;
+    new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const dock = window.floatingMeterDock;
+        if (!dock || dock.autoTrack === false) return;
+        if (entry.isIntersecting && dock.currentTab !== "8ch") dock.switchRackTab("8ch");
+        else if (!entry.isIntersecting && dock.currentTab === "8ch") dock.switchRackTab("rack");
+      });
+    }, { threshold: 0.3 }).observe(target);
+  }
+
+  renderBreakoutWires() {
+    if (!this.wiresSvg) return;
+    const outs = document.querySelectorAll("[data-mc-out]");
+    if (this.panel.offsetParent === null || outs.length === 0) {
+      if (this.wiresSvg.innerHTML) this.wiresSvg.innerHTML = "";
+      return;
+    }
+
+    let html = "";
+    outs.forEach(out => {
+      const n = Number(out.dataset.mcOut);
+      const row = this.panel.querySelector(`.bench-line[data-line="${n}"]`);
+      if (!row) return;
+      const a = out.getBoundingClientRect();
+      const b = row.getBoundingClientRect();
+      if (a.bottom < 0 || a.top > window.innerHeight) return;
+
+      const x1 = a.right;
+      const y1 = a.top + a.height / 2;
+      const x2 = b.left;
+      const y2 = b.top + b.height / 2;
+      const dx = Math.max(40, (x2 - x1) * 0.5);
+      const color = this.channels[n - 1].color;
+      const sel = this.focus === n || this.focus === 0;
+      const d = `M ${x1},${y1} C ${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}`;
+      html += `<path d="${d}" fill="none" stroke="${color}" stroke-width="${sel ? 2.4 : 1.85}" opacity="${sel ? 0.9 : 0.62}" />`;
+      html += `<circle cx="${x1}" cy="${y1}" r="3" fill="${color}" /><circle cx="${x2}" cy="${y2}" r="3" fill="${color}" />`;
+    });
+    this.wiresSvg.innerHTML = html;
   }
 
   // ---------- Audio monitor ----------
@@ -18605,7 +18687,10 @@ class EightChannelBench {
   startLoop() {
     const loop = (ts) => {
       // Only draw while the 8-CH tab is visible
-      if (this.panel.offsetParent !== null) this.renderFrame(ts / 1000);
+      const benchUp = this.panel.offsetParent !== null;
+      if (benchUp) this.renderFrame(ts / 1000);
+      if (this.genDock.classList.contains("shown") !== benchUp) this.genDock.classList.toggle("shown", benchUp);
+      this.renderBreakoutWires();
       this.animFrame = requestAnimationFrame(loop);
     };
     this.animFrame = requestAnimationFrame(loop);
@@ -23092,8 +23177,7 @@ class MultichannelBreakoutEngine {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".mc-ch-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-        this.selectedCh = parseInt(btn.dataset.ch, 10);
-        this.render();
+        this.selectChannel(parseInt(btn.dataset.ch, 10));
       });
     });
   }
@@ -23122,116 +23206,139 @@ class MultichannelBreakoutEngine {
     if (!container) return;
 
     const isXlr = this.breakoutMode === "xlr";
-    const destIconName = isXlr ? "4 × XLR-3 Circular Connectors" : "4 × 1/4″ TRS Phone Jacks";
+    const chans = MULTICHANNEL_DATA.channels;
+    const benchColors = typeof BENCH_CH_COLORS !== "undefined" ? BENCH_CH_COLORS : chans.map(c => c.color);
+    const rowY = (ch) => 62 + (ch - 1) * 48;
+
+    // DB25 face geometry: pins 1–13 on the top row, 14–25 on the bottom row (viewed from the solder side)
+    const PIN_DX = 17;
+    const db = { x: 22, y: 205 };
+    const pinPos = (pin) => pin <= 13
+      ? { x: db.x + 22 + (pin - 1) * PIN_DX, y: db.y + 22 }
+      : { x: db.x + 22 + PIN_DX / 2 + (pin - 14) * PIN_DX, y: db.y + 50 };
+
+    // Pin → role lookup so every contact on the face shows +, − or G
+    const pinRole = {};
+    chans.forEach(c => {
+      pinRole[c.db25.hot] = { ch: c, sym: "+", kind: "hot" };
+      pinRole[c.db25.cold] = { ch: c, sym: "−", kind: "cold" };
+      pinRole[c.db25.shield] = { ch: c, sym: "G", kind: "gnd" };
+    });
+
+    const conductorColor = (c, kind) => kind === "gnd" ? "#94a3b8" : c.color;
+    const RJ_X = 430;
+    const RJ_W = 170;
+    const OUT_X = 640;
+
+    // Harness: three conductors per channel from the DB25 pins to the RJ45 pair row
+    const harness = chans.map(c => {
+      const sel = c.ch === item.ch;
+      const yc = rowY(c.ch);
+      return [["hot", c.db25.hot, -7], ["cold", c.db25.cold, 0], ["gnd", c.db25.shield, 7]].map(([kind, pin, dy]) => {
+        const p = pinPos(pin);
+        const ex = RJ_X;
+        const ey = yc + dy;
+        const midX = 300 + (c.ch - 1) * 6;
+        return `<path d="M ${p.x},${p.y} C ${midX},${p.y} ${midX - 40},${ey} ${ex},${ey}" fill="none"
+          stroke="${conductorColor(c, kind)}" stroke-width="${sel ? 2.2 : 1}" opacity="${sel ? 1 : 0.4}"
+          ${kind === "cold" ? 'stroke-dasharray="5,2"' : ""} />`;
+      }).join("");
+    }).join("");
+
+    const pinsSvg = Array.from({ length: 25 }, (_, i) => {
+      const pin = i + 1;
+      const p = pinPos(pin);
+      const role = pinRole[pin];
+      const sel = role && role.ch.ch === item.ch;
+      const ring = role ? conductorColor(role.ch, role.kind) : "#334155";
+      const numY = pin <= 13 ? p.y - 11 : p.y + 17;
+      return `
+        <g ${role ? `onclick="window.multichannelEngine.selectChannel(${role.ch.ch})" style="cursor: pointer;"` : ""}>
+          <circle cx="${p.x}" cy="${p.y}" r="7" fill="${sel ? ring : "#0f172a"}" stroke="${ring}" stroke-width="${sel ? 2 : 1.3}" />
+          <text x="${p.x}" y="${p.y + 3.5}" fill="${sel ? "#0f172a" : ring}" font-size="10" font-weight="800" text-anchor="middle">${role ? role.sym : "·"}</text>
+          <text x="${p.x}" y="${numY}" fill="#64748b" font-size="7" text-anchor="middle">${pin}</text>
+          ${role ? `<title>Pin ${pin}: CH${role.ch.ch} ${role.kind === "hot" ? "Hot (+)" : role.kind === "cold" ? "Cold (−)" : "Shield / Ground (G)"}</title>` : "<title>Pin 13: not connected</title>"}
+        </g>`;
+    }).join("");
+
+    const rjBank = (bank, first) => {
+      const top = rowY(first) - 24;
+      const height = 48 * 4;
+      const active = item.ch >= first && item.ch < first + 4;
+      const rows = chans.filter(c => c.ch >= first && c.ch < first + 4).map(c => {
+        const sel = c.ch === item.ch;
+        const yc = rowY(c.ch);
+        return `
+          <g onclick="window.multichannelEngine.selectChannel(${c.ch})" style="cursor: pointer;">
+            <rect x="${RJ_X + 26}" y="${yc - 18}" width="${RJ_W - 32}" height="36" rx="3" fill="${sel ? "rgba(56,189,248,0.12)" : "#0f172a"}" stroke="${sel ? c.color : "#1e293b"}" />
+            <text x="${RJ_X + 34}" y="${yc - 4}" fill="${c.color}" font-size="9.5" font-weight="800">CH${c.ch} · ${c.mnemonic}</text>
+            <text x="${RJ_X + 34}" y="${yc + 10}" fill="#94a3b8" font-size="8">+ Pin ${c.rj45.hotPin} · − Pin ${c.rj45.coldPin} · G Drain</text>
+          </g>`;
+      }).join("");
+      return `
+        <rect x="${RJ_X}" y="${top}" width="${RJ_W}" height="${height}" rx="6" fill="#1e293b" stroke="${active ? item.color : "#475569"}" stroke-width="${active ? 2.2 : 1.2}" />
+        <text transform="translate(${RJ_X + 16}, ${top + height / 2}) rotate(-90)" fill="${first === 1 ? "#34d399" : "#a855f7"}" font-size="9.5" font-weight="800" text-anchor="middle">AES72-4E RJ45 #${bank} · CH ${first}–${first + 3}</text>
+        ${rows}`;
+    };
+
+    // RJ45 → breakout: + / − / G per channel
+    const tails = chans.map(c => {
+      const sel = c.ch === item.ch;
+      const yc = rowY(c.ch);
+      return [["hot", -7], ["cold", 0], ["gnd", 7]].map(([kind, dy]) => `
+        <line x1="${RJ_X + RJ_W}" y1="${yc + dy}" x2="${OUT_X}" y2="${yc + dy}" stroke="${conductorColor(c, kind)}"
+          stroke-width="${sel ? 2.2 : 1}" opacity="${sel ? 1 : 0.45}" ${kind === "cold" ? 'stroke-dasharray="5,2"' : ""} />`).join("");
+    }).join("");
+
+    const outputs = chans.map(c => {
+      const sel = c.ch === item.ch;
+      const yc = rowY(c.ch);
+      const stroke = sel ? c.color : "#475569";
+      const icon = isXlr
+        ? `<circle cx="22" cy="21" r="14" fill="#1e293b" stroke="${stroke}" stroke-width="1.6" />
+           <text x="15" y="18" fill="#94a3b8" font-size="7" font-weight="800" text-anchor="middle">G</text>
+           <text x="29" y="18" fill="#10b981" font-size="8" font-weight="800" text-anchor="middle">+</text>
+           <text x="22" y="31" fill="#ef4444" font-size="8" font-weight="800" text-anchor="middle">−</text>`
+        : `<rect x="6" y="18" width="16" height="6" fill="#94a3b8" />
+           <rect x="23" y="18" width="6" height="6" fill="#ef4444" />
+           <polygon points="30,18 38,21 30,24" fill="#10b981" />`;
+      const label = isXlr ? "XLR-3" : "1/4″ TRS";
+      const pins = isXlr ? "Pin 2 + · Pin 3 − · Pin 1 G" : "Tip + · Ring − · Sleeve G";
+      return `
+        <g transform="translate(${OUT_X}, ${yc - 21})" data-mc-out="${c.ch}" onclick="window.multichannelEngine.selectChannel(${c.ch})" style="cursor: pointer;">
+          <rect x="0" y="0" width="300" height="42" rx="5" fill="${sel ? "rgba(56, 189, 248, 0.15)" : "rgba(30, 41, 59, 0.4)"}" stroke="${stroke}" stroke-width="${sel ? 2 : 1}" />
+          ${icon}
+          <text x="46" y="18" fill="#f8fafc" font-size="10.5" font-weight="700">Channel ${c.ch} (${label})</text>
+          <text x="46" y="31" fill="#94a3b8" font-size="8.5">${pins}</text>
+          <rect x="248" y="11" width="46" height="20" rx="3" fill="${sel ? c.color : "#0f172a"}" stroke="${benchColors[c.ch - 1]}" />
+          <text x="271" y="25" fill="${sel ? "#0f172a" : benchColors[c.ch - 1]}" font-size="8.5" font-weight="800" text-anchor="middle">METER</text>
+        </g>`;
+    }).join("");
 
     container.innerHTML = `
-      <svg viewBox="0 0 980 340" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto; background: #070b12; border-radius: 8px;">
-        <!-- STAGE 1: AES59 DB25 Trunk (8 Channels) -->
-        <g transform="translate(60, 50)">
-          <!-- DB25 Icon Shroud -->
-          <path d="M 0,20 L 20,0 L 150,0 L 170,20 L 155,190 L 15,190 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5" />
-          <rect x="25" y="20" width="120" height="150" rx="4" fill="#0f172a" stroke="#475569" stroke-width="1.5" />
-          
-          <text x="85" y="45" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">AES59 (DB25)</text>
-          <text x="85" y="62" fill="#94a3b8" font-size="9" text-anchor="middle">8 Balanced Channels</text>
-          
-          <!-- Miniature 25-pin grid representation -->
-          <g transform="translate(35, 75)">
-            ${Array.from({ length: 13 }).map((_, i) => `
-              <circle cx="${i * 8}" cy="0" r="2.2" fill="${i + 1 === item.db25.hot || i + 1 === item.db25.cold ? item.color : '#64748b'}" />
-            `).join("")}
-            ${Array.from({ length: 12 }).map((_, i) => `
-              <circle cx="${4 + i * 8}" cy="10" r="2.2" fill="${i + 14 === item.db25.hot || i + 14 === item.db25.cold ? item.color : '#64748b'}" />
-            `).join("")}
-          </g>
+      <svg viewBox="0 0 980 450" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto; background: #070b12; border-radius: 8px;">
+        ${harness}
+        ${tails}
 
-          <rect x="25" y="105" width="120" height="55" rx="4" fill="#1e293b" />
-          <text x="85" y="122" fill="#f8fafc" font-size="9.5" font-weight="600" text-anchor="middle">Ch ${item.ch} (${item.mnemonic}):</text>
-          <text x="85" y="137" fill="${item.color}" font-size="9" font-weight="700" text-anchor="middle">Hot: Pin ${item.db25.hot} &bull; Cold: Pin ${item.db25.cold}</text>
-          <text x="85" y="151" fill="#94a3b8" font-size="8.5" text-anchor="middle">Shield: Pin ${item.db25.shield} + Shroud (AES-X249)</text>
-
-          <text x="85" y="215" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">AES59 DB25 TRUNK</text>
-          <text x="85" y="230" fill="#94a3b8" font-size="9" text-anchor="middle">Ch 1–8 Send/Receive Female</text>
+        <!-- STAGE 1: AES59 DB25 face with + / − / G on every contact -->
+        <path d="M ${db.x - 6},${db.y} L ${db.x + 248},${db.y} L ${db.x + 236},${db.y + 72} L ${db.x + 6},${db.y + 72} Z" fill="#1e293b" fill-opacity="0.85" stroke="#38bdf8" stroke-width="2.5" />
+        ${pinsSvg}
+        <text x="${db.x + 121}" y="${db.y - 26}" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">AES59 DB25 TRUNK</text>
+        <text x="${db.x + 121}" y="${db.y + 96}" fill="#94a3b8" font-size="9" text-anchor="middle">8 balanced channels · Pin 13 n/c · Shell to chassis (AES48)</text>
+        <text x="${db.x + 121}" y="${db.y + 112}" fill="${item.color}" font-size="9.5" font-weight="700" text-anchor="middle">CH${item.ch} (${item.mnemonic}): + Pin ${item.db25.hot} · − Pin ${item.db25.cold} · G Pin ${item.db25.shield}</text>
+        <g font-size="8.5" font-weight="700">
+          <text x="${db.x}" y="${db.y + 140}" fill="#e2e8f0">+ Hot</text>
+          <text x="${db.x + 50}" y="${db.y + 140}" fill="#e2e8f0">− Cold (dashed)</text>
+          <text x="${db.x + 140}" y="${db.y + 140}" fill="#94a3b8">G Shield/Ground</text>
         </g>
 
-        <!-- Arrow Splitting DB25 to 2 x RJ45 -->
-        <g stroke="${item.color}" stroke-width="2.5" fill="none">
-          <!-- Upper Path: Bank A (Ch 1-4) -->
-          <path d="M 230,120 C 290,120 300,90 350,90" stroke-dasharray="${item.ch <= 4 ? 'none' : '4,4'}" opacity="${item.ch <= 4 ? '1' : '0.35'}" />
-          <!-- Lower Path: Bank B (Ch 5-8) -->
-          <path d="M 230,160 C 290,160 300,210 350,210" stroke-dasharray="${item.ch > 4 ? 'none' : '4,4'}" opacity="${item.ch > 4 ? '1' : '0.35'}" />
-        </g>
+        <!-- STAGE 2: Two AES72-4E RJ45 banks -->
+        ${rjBank(1, 1)}
+        ${rjBank(2, 5)}
 
-        <!-- STAGE 2: AES72-4E QTP RJ45 Connectors (Two 4-Channel Banks) -->
-        <!-- Bank A: RJ45 Port 1 (Ch 1–4) -->
-        <g transform="translate(360, 40)" opacity="${item.ch <= 4 ? '1' : '0.45'}">
-          <rect x="0" y="0" width="160" height="98" rx="6" fill="#1e293b" stroke="${item.ch <= 4 ? item.color : '#475569'}" stroke-width="${item.ch <= 4 ? '2.5' : '1.5'}" />
-          <rect x="55" y="0" width="50" height="12" fill="#0f172a" />
-          <text x="80" y="28" fill="#34d399" font-size="11.5" font-weight="700" text-anchor="middle">AES72-4E (RJ45 #1)</text>
-          <text x="80" y="44" fill="#94a3b8" font-size="9" text-anchor="middle">Bank A: Ch 1–4 &bull; TIA-568-B</text>
-          <rect x="15" y="52" width="130" height="34" rx="3" fill="#0f172a" />
-          <text x="80" y="67" fill="${item.ch <= 4 ? item.color : '#94a3b8'}" font-size="8.5" font-weight="700" text-anchor="middle">${item.mnemonic} (${item.pairColor})</text>
-          <text x="80" y="80" fill="#94a3b8" font-size="8" text-anchor="middle">Hot Pin ${item.rj45.hotPin} (+) &bull; Cold Pin ${item.rj45.coldPin} (&minus;)</text>
-        </g>
-
-        <!-- Bank B: RJ45 Port 2 (Ch 5–8) -->
-        <g transform="translate(360, 160)" opacity="${item.ch > 4 ? '1' : '0.45'}">
-          <rect x="0" y="0" width="160" height="98" rx="6" fill="#1e293b" stroke="${item.ch > 4 ? item.color : '#475569'}" stroke-width="${item.ch > 4 ? '2.5' : '1.5'}" />
-          <rect x="55" y="0" width="50" height="12" fill="#0f172a" />
-          <text x="80" y="28" fill="#a855f7" font-size="11.5" font-weight="700" text-anchor="middle">AES72-4E (RJ45 #2)</text>
-          <text x="80" y="44" fill="#94a3b8" font-size="9" text-anchor="middle">Bank B: Ch 5–8 &bull; TIA-568-B</text>
-          <rect x="15" y="52" width="130" height="34" rx="3" fill="#0f172a" />
-          <text x="80" y="67" fill="${item.ch > 4 ? item.color : '#94a3b8'}" font-size="8.5" font-weight="700" text-anchor="middle">${item.mnemonic} (${item.pairColor})</text>
-          <text x="80" y="80" fill="#94a3b8" font-size="8" text-anchor="middle">Hot Pin ${item.rj45.hotPin} (+) &bull; Cold Pin ${item.rj45.coldPin} (&minus;)</text>
-        </g>
-
-        <!-- Connecting lines to 4x Breakouts -->
-        <path d="M 520,${item.ch <= 4 ? 85 : 205} C 570,${item.ch <= 4 ? 85 : 205} 580,145 640,145" stroke="${item.color}" stroke-width="2.5" fill="none" />
-
-        <!-- STAGE 3: 4 x XLR or 4 x TRS Breakout Icons -->
-        <g transform="translate(640, 25)">
-          <rect x="0" y="0" width="310" height="260" rx="8" fill="#111827" stroke="#374151" stroke-width="1.5" />
-          <text x="155" y="25" fill="#f8fafc" font-size="12" font-weight="700" text-anchor="middle">${destIconName}</text>
-          <text x="155" y="40" fill="#94a3b8" font-size="9" text-anchor="middle">Discrete Balanced Channel Termination</text>
-
-          <!-- 4 Output Connector Icons -->
-          ${[1, 2, 3, 4].map((localCh) => {
-            const globalCh = (item.ch <= 4) ? localCh : (localCh + 4);
-            const isTarget = (globalCh === item.ch);
-            const yPos = 55 + (localCh - 1) * 48;
-            const strokeColor = isTarget ? item.color : "#475569";
-            const fillColor = isTarget ? "rgba(56, 189, 248, 0.15)" : "rgba(30, 41, 59, 0.4)";
-
-            if (isXlr) {
-              return `
-                <g transform="translate(20, ${yPos})">
-                  <rect x="0" y="0" width="270" height="42" rx="6" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${isTarget ? '2' : '1'}" />
-                  <circle cx="28" cy="21" r="15" fill="#1e293b" stroke="${strokeColor}" stroke-width="1.8" />
-                  <circle cx="22" cy="16" r="3" fill="#94a3b8" />
-                  <circle cx="34" cy="16" r="3" fill="#10b981" />
-                  <circle cx="28" cy="27" r="3" fill="#ef4444" />
-                  
-                  <text x="55" y="19" fill="#f8fafc" font-size="10.5" font-weight="700">Channel ${globalCh} (XLR-3)</text>
-                  <text x="55" y="32" fill="#94a3b8" font-size="8.5">Pin 1: Shield | Pin 2: Hot (+) | Pin 3: Cold (-)</text>
-                  ${isTarget ? `<rect x="220" y="10" width="42" height="20" rx="3" fill="${item.color}" /><text x="241" y="24" fill="#0f172a" font-size="9" font-weight="800" text-anchor="middle">ACTIVE</text>` : ''}
-                </g>
-              `;
-            } else {
-              return `
-                <g transform="translate(20, ${yPos})">
-                  <rect x="0" y="0" width="270" height="42" rx="6" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${isTarget ? '2' : '1'}" />
-                  <rect x="14" y="18" width="18" height="6" fill="#94a3b8" />
-                  <rect x="33" y="18" width="6" height="6" fill="#ef4444" />
-                  <polygon points="40,18 48,21 40,24" fill="#10b981" />
-                  
-                  <text x="55" y="19" fill="#f8fafc" font-size="10.5" font-weight="700">Channel ${globalCh} (1/4″ TRS)</text>
-                  <text x="55" y="32" fill="#94a3b8" font-size="8.5">Tip: Hot (+) | Ring: Cold (-) | Sleeve: Shield</text>
-                  ${isTarget ? `<rect x="220" y="10" width="42" height="20" rx="3" fill="${item.color}" /><text x="241" y="24" fill="#0f172a" font-size="9" font-weight="800" text-anchor="middle">ACTIVE</text>` : ''}
-                </g>
-              `;
-            }
-          }).join("")}
-        </g>
+        <!-- STAGE 3: 8 discrete breakouts, each wired to its meter in the right rack -->
+        <text x="${OUT_X + 150}" y="22" fill="#f8fafc" font-size="11.5" font-weight="700" text-anchor="middle">8 × ${isXlr ? "XLR-3 (AES14)" : "1/4″ TRS"} → 8-CH METERS</text>
+        ${outputs}
       </svg>
     `;
   }
@@ -23284,8 +23391,9 @@ class MultichannelBreakoutEngine {
     }).join("");
   }
 
-  selectChannel(chNum) {
+  selectChannel(chNum, fromBench = false) {
     this.selectedCh = chNum;
+    if (!fromBench && window.eightChannelBench) window.eightChannelBench.focusLine(chNum, true);
     document.querySelectorAll(".mc-ch-btn").forEach(b => {
       b.classList.toggle("active", parseInt(b.dataset.ch, 10) === chNum);
     });
@@ -39664,7 +39772,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ===== BUNDLED: js/modules-data.js ===== */
 /**
  * Balanced Audio & AES-X152 100-Module Reference Curriculum Dataset
- * Compiled by build.py on 2026-10-17 21:32
+ * Compiled by build.py on 2026-10-17 22:28
  */
 
 const BALANCED_MODULES_DATA = [
