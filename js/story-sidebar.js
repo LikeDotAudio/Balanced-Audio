@@ -79,6 +79,17 @@ class StorySidebar {
           <div class="story-chapter" data-target="multichannel-hierarchy">
             <div class="chapter-dot"></div>
             <a href="#multichannel-hierarchy" class="chapter-link">0.2 Multichannel Breakout (DB25 / RJ45)</a>
+            <div class="chapter-subnodes fault-subnodes">
+              <span class="subnode-heading">Snake / QTP faults</span>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode active" data-sidebar-fault="normal">✓ Normal Balanced</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="phase_flip">⚡ Phase Flip (180°)</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_1">⚠️ 1 Pin Dropped (Pin 2)</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_2">⚠️ 2 Pins Dropped (Pins 1 &amp; 3)</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_3">❌ 3 Pins Dropped</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_4">❌ 4 Pins Dropped (Trunk Open)</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pair_dropped">🚫 1 Pair Dropped (Mute)</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="shield_lifted">🛡️ Shield Lifted (P48 Fails)</a>
+            </div>
           </div>
 
           <div class="story-chapter" data-target="xlr-hub">
@@ -246,6 +257,14 @@ class StorySidebar {
         }
       });
     }
+
+    // QTP snake fault injection lives in the chapter list; it drives the simulator's own (hidden) fault buttons
+    aside.querySelectorAll("[data-sidebar-fault]").forEach(link => {
+      link.addEventListener("click", () => {
+        const btn = document.querySelector(`.fault-btn[data-fault="${link.dataset.sidebarFault}"]`);
+        if (btn) btn.click();
+      });
+    });
 
     // Tab buttons
     const tabChaptersBtn = aside.querySelector("#sidebar-tab-chapters");

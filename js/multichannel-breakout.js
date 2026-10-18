@@ -167,6 +167,9 @@ class QTPSimulatorEngine {
 
   setFault(faultKey) {
     this.currentFault = faultKey;
+    document.querySelectorAll("[data-sidebar-fault]").forEach(link => {
+      link.classList.toggle("active", link.dataset.sidebarFault === faultKey);
+    });
     this.render();
   }
 

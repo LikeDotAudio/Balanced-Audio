@@ -6930,6 +6930,35 @@ body.has-story-sidebar.sidebar-taxonomy-active {
   font-size: 1.25rem;
 }
 
+/* QTP snake faults chosen from the chapter list */
+.fault-btn-grid[hidden] {
+  display: none !important;
+}
+
+.subnode-heading {
+  color: #475569;
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.2rem 0;
+}
+
+.fault-subnode.active {
+  color: #0f172a;
+  background: #38bdf8;
+  font-weight: 700;
+}
+
+.fault-subnode.active[data-sidebar-fault="phase_flip"] {
+  background: #f59e0b;
+}
+
+.fault-subnode.active:not([data-sidebar-fault="normal"]):not([data-sidebar-fault="phase_flip"]) {
+  background: #ef4444;
+  color: #ffffff;
+}
+
 </style>
   
   <!-- Google Fonts: Inter & JetBrains Mono -->
@@ -7784,11 +7813,8 @@ body.has-story-sidebar.sidebar-taxonomy-active {
           </div>
         </div>
 
-        <!-- Fault Mode Buttons -->
-        <div style="margin-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: #94a3b8;">
-          Inject Fault Condition into Multi-Pair Snake / QTP Line:
-        </div>
-        <div class="fault-btn-grid">
+        <!-- Fault Mode Buttons: chosen from the chapter list (0.2 → Snake / QTP faults); kept hidden here as the simulator's state -->
+        <div class="fault-btn-grid" hidden>
           <button class="fault-btn active" data-fault="normal">✓ Normal Balanced (Optimal)</button>
           <button class="fault-btn" data-fault="phase_flip">⚡ Phase Flip (180° Polarity Inverted)</button>
           <button class="fault-btn" data-fault="pin_dropped_1">⚠️ 1 Pin Dropped (Pin 2 Hot Open)</button>
@@ -15534,6 +15560,17 @@ class StorySidebar {
           <div class="story-chapter" data-target="multichannel-hierarchy">
             <div class="chapter-dot"></div>
             <a href="#multichannel-hierarchy" class="chapter-link">0.2 Multichannel Breakout (DB25 / RJ45)</a>
+            <div class="chapter-subnodes fault-subnodes">
+              <span class="subnode-heading">Snake / QTP faults</span>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode active" data-sidebar-fault="normal">✓ Normal Balanced</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="phase_flip">⚡ Phase Flip (180°)</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_1">⚠️ 1 Pin Dropped (Pin 2)</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_2">⚠️ 2 Pins Dropped (Pins 1 &amp; 3)</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_3">❌ 3 Pins Dropped</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pin_dropped_4">❌ 4 Pins Dropped (Trunk Open)</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="pair_dropped">🚫 1 Pair Dropped (Mute)</a>
+              <a href="#qtp-sim-svg-container" class="subnode-link fault-subnode" data-sidebar-fault="shield_lifted">🛡️ Shield Lifted (P48 Fails)</a>
+            </div>
           </div>
 
           <div class="story-chapter" data-target="xlr-hub">
@@ -15701,6 +15738,14 @@ class StorySidebar {
         }
       });
     }
+
+    // QTP snake fault injection lives in the chapter list; it drives the simulator's own (hidden) fault buttons
+    aside.querySelectorAll("[data-sidebar-fault]").forEach(link => {
+      link.addEventListener("click", () => {
+        const btn = document.querySelector(`.fault-btn[data-fault="${link.dataset.sidebarFault}"]`);
+        if (btn) btn.click();
+      });
+    });
 
     // Tab buttons
     const tabChaptersBtn = aside.querySelector("#sidebar-tab-chapters");
@@ -23225,6 +23270,9 @@ class QTPSimulatorEngine {
 
   setFault(faultKey) {
     this.currentFault = faultKey;
+    document.querySelectorAll("[data-sidebar-fault]").forEach(link => {
+      link.classList.toggle("active", link.dataset.sidebarFault === faultKey);
+    });
     this.render();
   }
 
@@ -40085,7 +40133,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ===== BUNDLED: js/modules-data.js ===== */
 /**
  * Balanced Audio & AES-X152 100-Module Reference Curriculum Dataset
- * Compiled by build.py on 2026-10-17 22:42
+ * Compiled by build.py on 2026-10-17 22:44
  */
 
 const BALANCED_MODULES_DATA = [

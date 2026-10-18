@@ -861,11 +861,8 @@
           </div>
         </div>
 
-        <!-- Fault Mode Buttons -->
-        <div style="margin-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: #94a3b8;">
-          Inject Fault Condition into Multi-Pair Snake / QTP Line:
-        </div>
-        <div class="fault-btn-grid">
+        <!-- Fault Mode Buttons: chosen from the chapter list (0.2 → Snake / QTP faults); kept hidden here as the simulator's state -->
+        <div class="fault-btn-grid" hidden>
           <button class="fault-btn active" data-fault="normal">✓ Normal Balanced (Optimal)</button>
           <button class="fault-btn" data-fault="phase_flip">⚡ Phase Flip (180° Polarity Inverted)</button>
           <button class="fault-btn" data-fault="pin_dropped_1">⚠️ 1 Pin Dropped (Pin 2 Hot Open)</button>
