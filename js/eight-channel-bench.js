@@ -458,7 +458,7 @@ class EightChannelBench {
       row.classList.toggle("qtp-cold", qtp && wire.leg === "cold");
       if (!qtp) row.classList.remove("cm-alert", "cm-top", "cm-bottom", "pair-flipped", "flip-top", "flip-bottom");
       row.querySelector(".bench-line-name").textContent = qtp ? wire.label : `CH${n}`;
-      row.querySelector(".bench-line-ref").textContent = qtp ? "→ GND (SHIELD)" : "P2↔P3 ACROSS";
+      row.querySelector(".bench-line-ref").textContent = qtp ? "→ CHASSIS" : "P2↔P3 ACROSS";
     });
   }
 
@@ -517,7 +517,7 @@ class EightChannelBench {
     row.classList.toggle("cm-alert", on);
     row.classList.toggle("cm-top", on && wire.leg === "hot");
     row.classList.toggle("cm-bottom", on && wire.leg === "cold");
-    row.querySelector(".bench-line-ref").textContent = on ? "⇅ SAME CM" : "→ GND (SHIELD)";
+    row.querySelector(".bench-line-ref").textContent = on ? "⇅ SAME CM" : "→ CHASSIS";
   }
 
   // ---------- Audio monitor ----------

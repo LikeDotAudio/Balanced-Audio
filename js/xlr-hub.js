@@ -464,6 +464,13 @@ class XLRHubEngine {
       if (!sides[f]) return;
       const [prefix, label] = sides[f];
       const contacts = [...face.querySelectorAll("circle")].filter(c => ["14", "11"].includes(c.getAttribute("r")));
+      // The metal shell is the chassis contact
+      const shellEl = [...face.querySelectorAll("circle")].find(c => ["86", "76"].includes(c.getAttribute("r")));
+      if (shellEl) {
+        shellEl.setAttribute("data-probe-target", `${prefix}-shell`);
+        shellEl.setAttribute("data-probe-label", `${label} shell (chassis)`);
+        shellEl.style.cursor = "crosshair";
+      }
       contacts.forEach((c, i) => {
         c.setAttribute("data-probe-target", `${prefix}-p${i + 1}`);
         c.setAttribute("data-probe-label", `${label} ${i + 1}: ${item.pins[i + 1]?.name || ""}`);

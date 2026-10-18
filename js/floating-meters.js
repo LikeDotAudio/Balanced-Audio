@@ -79,8 +79,11 @@ const SCHEMATIC_CONFIGS = [
     dmm2: "xlrf-diff",
     vu1: "xlrm-p2",
     vu2: "xlrf-diff",
+    vu3: "xlrf-p2",
+    vu4: "xlrf-shell", // chassis: the needle should rest at zero
     // One scope strip per wire
-    wires: ["xlrm-p1", "xlrm-p2", "xlrm-p3", "xlrf-p1", "xlrf-p2", "xlrf-p3", "xlrf-diff"]
+    // 6 pins + 2 chassis shells
+    wires: ["xlrm-p1", "xlrm-p2", "xlrm-p3", "xlrf-p1", "xlrf-p2", "xlrf-p3", "xlrm-shell", "xlrf-shell"]
   },
   {
     id: "pp-schematic-svg",
@@ -578,7 +581,7 @@ class FloatingMeterDock {
             <span id="rack-dmm1-val1" class="rack-dmm-digits" style="color: ${PROBE_COLORS.DMM1};">1.228 V</span>
             <span id="rack-dmm1-val2" class="rack-dmm-sub-digits" style="color: ${PROBE_COLORS.DMM1};">+4.0 dBu</span>
           </div>
-          <div class="rack-ref-line" id="rack-dmm1-ref"><button type="button" class="rack-com-btn" data-dmm-com="1" title="Move the COM lead: ground (single-ended) or across both wires of the pair">COM: GND</button><span class="rack-ref-text"></span><span class="rack-goal"></span><span class="rack-drop" title="Level against the +4 dBu goal"><i></i><b></b></span></div>
+          <div class="rack-ref-line" id="rack-dmm1-ref"><button type="button" class="rack-com-btn" data-dmm-com="1" title="Move the COM lead: ground (single-ended) or across both wires of the pair">COM: CHASSIS</button><span class="rack-ref-text"></span><span class="rack-goal"></span><span class="rack-drop" title="Level against the +4 dBu goal"><i></i><b></b></span></div>
           <!-- LCR mode (shown while a resistance / capacitance control is being turned) -->
           <div class="rack-dmm-lcr" id="rack-dmm1-lcr" hidden></div>
           <!-- All Engineering Values & Equivalents Multi-Matrix -->
@@ -640,7 +643,7 @@ class FloatingMeterDock {
             <span id="rack-dmm2-val1" class="rack-dmm-digits" style="color: ${PROBE_COLORS.DMM2};">2.456 V</span>
             <span id="rack-dmm2-val2" class="rack-dmm-sub-digits" style="color: ${PROBE_COLORS.DMM2};">0.003% THD</span>
           </div>
-          <div class="rack-ref-line" id="rack-dmm2-ref"><button type="button" class="rack-com-btn" data-dmm-com="2" title="Move the COM lead: ground (single-ended) or across both wires of the pair">COM: GND</button><span class="rack-ref-text"></span><span class="rack-goal"></span><span class="rack-drop" title="Level against the +4 dBu goal"><i></i><b></b></span></div>
+          <div class="rack-ref-line" id="rack-dmm2-ref"><button type="button" class="rack-com-btn" data-dmm-com="2" title="Move the COM lead: ground (single-ended) or across both wires of the pair">COM: CHASSIS</button><span class="rack-ref-text"></span><span class="rack-goal"></span><span class="rack-drop" title="Level against the +4 dBu goal"><i></i><b></b></span></div>
           <!-- All Engineering Values & Equivalents Multi-Matrix -->
           <div class="rack-dmm-matrix" id="rack-dmm2-matrix">
             <div class="matrix-item"><span class="m-lbl">Vpk:</span><span id="dmm2-mat-vpk" class="m-val">3.474V</span></div>
@@ -1854,7 +1857,12 @@ class FloatingMeterDock {
       };
       // Two-channel (5-pin): left channel on 2/3 at 111 Hz, right channel on 4/5 at 2222 Hz
       const chanFreq = (n) => (item && item.is5Pin ? (n >= 4 ? 2222 : 111) : freq);
-      if (key.endsWith("-diff") || key.endsWith("-diff45")) {
+      if (key.endsWith("-shell")) {
+        vRms = 0.0001;
+        shape = "flatline";
+        name = `${side} shell`;
+        status = "CHASSIS (AES48)";
+      } else if (key.endsWith("-diff") || key.endsWith("-diff45")) {
         const right = key.endsWith("-diff45");
         const [hp, cp] = right ? [4, 5] : [2, 3];
         var dcVolts = dcFor(hp) - dcFor(cp);
@@ -1933,6 +1941,8 @@ class FloatingMeterDock {
       "gp-dirty1": "CH1 + HUM", "gp-dirty8": "CH8 + HUM"
     };
     if (GROUNDING_POINTS[key]) return GROUNDING_POINTS[key];
+    const hub = (key || "").match(/^xlr([mf])-(p(\d)|shell)$/);
+    if (hub) return hub[3] ? `PIN ${hub[3]}` : "CHASSIS";
     const nm = (this.getSignalForTarget(key).name || key || "").toUpperCase();
     const pin = nm.match(/(?:PIN|SOCKET|CONTACT|MALE|FEMALE)\s*(\d)/);
     if (/ACROSS 2↔3|DIFFERENTIAL|ACROSS LOAD|-LOAD$|-DIFF$/.test(nm) || this.isAcrossKey(key)) return "PIN 2 ↔ PIN 3";
@@ -1944,12 +1954,14 @@ class FloatingMeterDock {
     return nm.length > 12 ? nm.slice(0, 11) + "…" : nm;
   }
 
-  // What a meter is measuring, as its whole name: "PIN 2 → GND" or "PIN 2 ↔ PIN 3"
+  // What a meter is measuring, as its whole name: "PIN 2 → CHASSIS" or "PIN 2 ↔ PIN 3"
   measuredLabel(key, forceAcross = false) {
     if (/-diff45$/.test(key || "")) return "PIN 4 ↔ PIN 5";
     if (forceAcross || this.isAcrossKey(key)) return "PIN 2 ↔ PIN 3";
     const pt = this.shortPoint(key);
-    return pt === "PIN 2 ↔ PIN 3" ? pt : `${pt} → GND`;
+    if (pt === "PIN 2 ↔ PIN 3") return pt;
+    // Ground is always the chassis: single-ended readings are referenced to it
+    return pt === "CHASSIS" ? "CHASSIS (REF 0 V)" : `${pt} → CHASSIS`;
   }
 
   // "V+ … · COM …" text describing what a meter is connected between
@@ -1962,7 +1974,7 @@ class FloatingMeterDock {
       const pair = this.activePairKeys();
       return `V+ ${shortName(pair.hot)} · COM ${shortName(pair.cold)} · ACROSS PAIR`;
     }
-    return `V+ ${shortName(key)} · COM GND (Pin 1)`;
+    return `V+ ${shortName(key)} · COM CHASSIS`;
   }
 
   // Fill a meter's reference line: what it is across, Vrms, dBu and distance from the +4 dBu goal
@@ -1988,7 +2000,7 @@ class FloatingMeterDock {
     if (drop) this.setDropBar(drop, dbu);
     const comBtn = line.querySelector(".rack-com-btn");
     if (comBtn) {
-      comBtn.textContent = forceAcross ? "COM: ACROSS" : "COM: GND";
+      comBtn.textContent = forceAcross ? "COM: ACROSS" : "COM: CHASSIS";
       comBtn.classList.toggle("across", !!forceAcross);
     }
   }
@@ -2440,7 +2452,7 @@ class FloatingMeterDock {
       ctx.fillText(point, 14, mid - 5);
       ctx.fillStyle = "#9ca3af";
       ctx.font = "7.5px 'JetBrains Mono', monospace";
-      ctx.fillText(across ? "ACROSS PAIR" : "→ GND", 14, mid + 5);
+      ctx.fillText(across ? "ACROSS PAIR" : "→ CHASSIS", 14, mid + 5);
       ctx.fillStyle = c.color;
       ctx.textAlign = "right";
       ctx.fillText(`${data.vRms.toFixed(2)}V`, LABEL_W - 4, mid - 5);
@@ -2855,10 +2867,10 @@ class FloatingMeterDock {
       ctx.font = "900 11px 'JetBrains Mono', monospace";
       ctx.textAlign = "left";
       ctx.fillStyle = "#0f172a";
-      ctx.fillText(dbuNow <= -119 ? "−∞" : `${dbuNow >= 0 ? "+" : ""}${dbuNow.toFixed(1)}`, 5, h - 5);
+      ctx.fillText(dbuNow <= -60 ? "0 V" : `${dbuNow >= 0 ? "+" : ""}${dbuNow.toFixed(1)}`, 5, h - 5);
       ctx.textAlign = "right";
       ctx.fillStyle = onGoal ? "#15803d" : Math.abs(delta + 6.02) < 0.6 ? "#b45309" : "#dc2626";
-      ctx.fillText(onGoal ? "+4 ✓" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}`, w - 5, h - 5);
+      ctx.fillText(dbuNow <= -60 ? "CHASSIS" : onGoal ? "+4 ✓" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}`, w - 5, h - 5);
       ctx.textBaseline = "middle";
     }
 
