@@ -846,6 +846,23 @@ function selectEnclosureBox(eqKey, playSound = true) {
     }
   });
 
+  // Connectors show what each standard actually uses (DB25 gets its 25-pin face)
+  const CONNECTOR_LABELS = {
+    'mic': ['XLR-M', 'XLR-F'],
+    'line-src': ['XLR-M', 'XLR-F'],
+    'digital': ['XLR / BNC', 'XLR / BNC'],
+    'db25': ['DB25-F', 'DB25-F'],
+    'qtp': ['RJ45', 'etherCON']
+  };
+  const [txLab, rxLab] = CONNECTOR_LABELS[eqKey] || CONNECTOR_LABELS.mic;
+  setTxt('svg-tx-conn-label', txLab);
+  setTxt('svg-rx-conn-label', rxLab);
+  document.querySelectorAll('.connector-group').forEach(g => {
+    const many = eqKey === 'db25';
+    g.querySelector('.conn-3pins')?.setAttribute('display', many ? 'none' : 'inline');
+    g.querySelector('.conn-db25-pins')?.setAttribute('display', many ? 'inline' : 'none');
+  });
+
   // When DB25 is selected, update cable graphics to illustrate the 8-channel snake
   const cableLabel = document.getElementById('svg-cable-label');
   const cableSub = document.getElementById('svg-cable-sub');
