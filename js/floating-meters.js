@@ -378,11 +378,15 @@ class FloatingMeterDock {
     let shake = { dir: 0, flips: 0, since: 0, lastX: 0 };
     let armed = true;
 
+    // Zoom = a bigger window onto the instrument, not a magnified picture: the card is given more
+    // real space and redraws into it at normal text size (the scope shows more time and taller strips)
+    let placeholder = null;
     const close = () => {
       if (!zoomed) return;
       zoomed.classList.remove("rack-zoomed");
-      zoomed.style.transform = "";
-      zoomed.querySelectorAll("canvas").forEach(c => delete c.dataset.zoom);
+      ["position", "top", "right", "width", "height", "zIndex"].forEach(k => { zoomed.style[k] = ""; });
+      if (placeholder) placeholder.remove();
+      placeholder = null;
       dock.classList.remove("rack-zooming");
       zoomed = null;
       armed = false;
@@ -390,17 +394,24 @@ class FloatingMeterDock {
 
     const open = (card) => {
       const r = card.getBoundingClientRect();
-      const vw = window.innerWidth;
+      const rackLeft = dock.getBoundingClientRect().left;
       const vh = window.innerHeight;
-      const k = Math.max(1.5, Math.min(MAX_ZOOM, (vw * 0.82) / r.width, (vh - 16) / r.height));
-      // Grow leftwards from the card's top-right corner, nudged to stay inside the window
-      let dy = 0;
-      if (r.top + r.height * k > vh - 8) dy = vh - 8 - (r.top + r.height * k);
-      if (r.top + dy < 8) dy = 8 - r.top;
+      const width = Math.round(Math.max(r.width, Math.min(rackLeft - 24, r.width * MAX_ZOOM)));
+      const height = Math.round(Math.max(r.height, Math.min(vh - 16, r.height * MAX_ZOOM)));
+      const top = Math.round(Math.max(8, Math.min(vh - 8 - height, r.top - (height - r.height) / 2)));
+      placeholder = document.createElement("div");
+      placeholder.style.height = `${r.height}px`;
+      card.parentNode.insertBefore(placeholder, card);
       dock.classList.add("rack-zooming");
       card.classList.add("rack-zoomed");
-      card.style.transform = `translateY(${dy}px) scale(${k})`;
-      card.querySelectorAll("canvas").forEach(c => { c.dataset.zoom = String(k); });
+      Object.assign(card.style, {
+        position: "fixed",
+        top: `${top}px`,
+        right: `${window.innerWidth - rackLeft + 8}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+        zIndex: "10050"
+      });
       zoomed = card;
     };
 
@@ -2389,7 +2400,7 @@ class FloatingMeterDock {
     const canvas = this.scope8Canvas;
     if (!canvas) return;
     // Logical size = laid-out size; backing store is multiplied while the card is hover-zoomed (stays sharp)
-    const zk = (window.devicePixelRatio || 1) * (+canvas.dataset.zoom || 1);
+    const zk = window.devicePixelRatio || 1;
     const w = Math.max(1, Math.round(canvas.clientWidth));
     const h = Math.max(1, Math.round(canvas.clientHeight));
     if (canvas.width !== Math.round(w * zk) || canvas.height !== Math.round(h * zk)) {
@@ -2405,8 +2416,10 @@ class FloatingMeterDock {
     if (!chans.length) return;
     const stripH = (h - RULER) / chans.length;
     this.placeStripDots(canvas, chans, stripH);
-    const totalMs = 10 * this.scopeTimeDiv;
-    const halfV = 2 * this.scope8VoltsDiv; // each strip is 4 divisions tall
+    // Same ms/div at any size: a wider scope shows more divisions (more of what is going on)
+    const divs = Math.max(10, Math.round(((w - 92) / 240) * 10));
+    const totalMs = divs * this.scopeTimeDiv;
+    const baseHalfV = 2 * this.scope8VoltsDiv; // each strip is 4 divisions tall
 
     ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, w, h);
@@ -2415,8 +2428,8 @@ class FloatingMeterDock {
     ctx.strokeStyle = "#1c1c1c";
     ctx.lineWidth = 1;
     ctx.beginPath();
-    for (let i = 0; i <= 10; i++) {
-      const x = Math.round(LABEL_W + (i / 10) * plotW) + 0.5;
+    for (let i = 0; i <= divs; i++) {
+      const x = Math.round(LABEL_W + (i / divs) * plotW) + 0.5;
       ctx.moveTo(x, 0);
       ctx.lineTo(x, h - RULER);
     }
@@ -2456,6 +2469,18 @@ class FloatingMeterDock {
       ctx.fillStyle = c.color;
       ctx.textAlign = "right";
       ctx.fillText(`${data.vRms.toFixed(2)}V`, LABEL_W - 4, mid - 5);
+
+      // Each strip autoranges its volts/div so its signal fits (no clipped traces)
+      const peak = (data.vPk || 0) + (data.humVpk || 0) * 1.9;
+      const NICE = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50];
+      const stripDiv = peak > baseHalfV ? (NICE.find(d => 2 * d >= peak * 1.05) || 50) : this.scope8VoltsDiv;
+      const halfV = 2 * stripDiv;
+      if (stripDiv !== this.scope8VoltsDiv) {
+        ctx.fillStyle = "#64748b";
+        ctx.font = "7.5px 'JetBrains Mono', monospace";
+        ctx.textAlign = "right";
+        ctx.fillText(`${stripDiv}V/div`, LABEL_W - 4, mid + 5);
+      }
 
       // DC offset jumps the trace vertically (eased so the step is visible). Offsets beyond the strip
       // at this volts/div stop near the edge; the big readout gives the value.
@@ -2532,9 +2557,10 @@ class FloatingMeterDock {
     ctx.fillStyle = "#9ca3af";
     ctx.font = "7.5px 'JetBrains Mono', monospace";
     ctx.textBaseline = "middle";
-    for (let i = 0; i <= 10; i += 2) {
-      const x = LABEL_W + (i / 10) * plotW;
-      ctx.textAlign = i === 0 ? "left" : i === 10 ? "right" : "center";
+    const labelEvery = Math.max(2, Math.round(divs / 6));
+    for (let i = 0; i <= divs; i += labelEvery) {
+      const x = LABEL_W + (i / divs) * plotW;
+      ctx.textAlign = i === 0 ? "left" : i + labelEvery > divs ? "right" : "center";
       const ms = i * this.scopeTimeDiv;
       ctx.fillText(`${ms >= 1 ? ms.toFixed(ms % 1 ? 1 : 0) : ms.toFixed(2)}ms`, x, h - RULER / 2);
     }
@@ -2750,7 +2776,7 @@ class FloatingMeterDock {
   renderHpVoltmeter(n) {
     const canvas = this[`vu${n}Canvas`];
     if (!canvas) return;
-    const dpr = (window.devicePixelRatio || 1) * (+canvas.dataset.zoom || 1);
+    const dpr = window.devicePixelRatio || 1;
     const cw = Math.max(1, Math.round(canvas.clientWidth * dpr));
     const ch = Math.max(1, Math.round(canvas.clientHeight * dpr));
     if (canvas.width !== cw || canvas.height !== ch) {

@@ -8363,3 +8363,27 @@ html[data-theme="paper"] body > section .svg-diagram-card {
 .rack-meter-card:hover,
 .bench-gen:hover,
 .sidebar-line-btn:hover { position: relative; z-index: 1; }
+
+/* Zoomed instrument: a bigger window, same text size; the drawing fills the new space */
+.rack-meter-card.rack-zoomed {
+  display: flex;
+  flex-direction: column;
+  background: #000000;
+  border: 1px solid #333333;
+  overflow: hidden;
+}
+
+.rack-meter-card.rack-zoomed .rack-scope-bezel,
+.rack-meter-card.rack-zoomed .rack-vu-bezel {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;
+}
+
+.rack-meter-card.rack-zoomed .rack-canvas {
+  height: 100% !important;
+}
+
+.rack-meter-card.rack-zoomed .meter-collapsible-drawer {
+  flex: 0 0 auto;
+}
