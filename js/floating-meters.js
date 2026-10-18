@@ -586,6 +586,7 @@ class FloatingMeterDock {
     this.initAnchorEngine();
     this.initScrollTracker();
     this.initHoverZoom();
+    this.initLabReveal();
     // Diagrams are built by other scripts on load: add their Full Screen buttons once they exist
     setTimeout(() => this.addFullscreenButtons(), 0);
     setTimeout(() => this.addFullscreenButtons(), 1500);
@@ -3340,6 +3341,24 @@ class FloatingMeterDock {
   /**
    * Dynamic SVG Wires Engine: Renders physical colored leads from rack terminal dots to circuit nodes/anchors
    */
+  // The lab wings (this rack, the sidebar generators and Breakaway Meters) stay out of the way until
+  // section 4 (#enclosure-explorer) comes into view; before that the report reads full width
+  initLabReveal() {
+    const start = document.getElementById("enclosure-explorer");
+    if (!start) return;
+    const update = () => {
+      const before = start.getBoundingClientRect().top;
+      const hidden = before > window.innerHeight * 0.75;
+      if (document.body.classList.contains("lab-hidden") === hidden) return;
+      document.body.classList.toggle("lab-hidden", hidden);
+      // The page width changes and the text above reflows: keep section 4 where the reader saw it
+      window.scrollBy(0, start.getBoundingClientRect().top - before);
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    update();
+  }
+
   // Every diagram the meters probe gets a Full Screen button (the rack and wires stay with it)
   addFullscreenButtons() {
     if (typeof window.toggleCircuitFullscreen !== "function") return;

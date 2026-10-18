@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="doc-version" content="2026-10-18 10:12">
+  <meta name="doc-version" content="2026-10-18 10:19">
   <title>Balanced Audio Interconnection: A Report on AES-X152</title>
   <meta name="description" content="Report of findings on balanced audio interconnection for AES project X152 (SC-05-05): interactive engineering tools, SVG schematics, AES-X249, AES72-4E, SC-04-04, Jim Meyer Thevenin model, transformer winding simulator, and Dennis A. Bohn Pro Audio Reference for AES-X152 (SC-05-05).">
   
@@ -8152,7 +8152,8 @@ html[data-theme="paper"] .military-fader-readout {
    page inversion: near-white text prints black, dark grounds print white,
    light-grey rules print as thin black lines. Diagrams keep their colours.
    ===================================================================== */
-html[data-theme="paper"] body > section :is(p, li, td, th, span, strong, em, label, h1, h2, h3, h4, h5, h6, div):not(svg *):not(.badge):not(.btn):not(.clause-no) {
+/* (instruments that are flipped back to their own colours, like the bench DMM, keep their own text colours) */
+html[data-theme="paper"] body > section :is(p, li, td, th, span, strong, em, label, h1, h2, h3, h4, h5, h6, div):not(svg *):not(.badge):not(.btn):not(.clause-no):not(.dmm-display-card *):not(.hp-voltmeter-card *):not(.cal-panel *) {
   color: #f4f4f4 !important;
 }
 
@@ -9339,6 +9340,84 @@ html[data-theme="paper"] .floating-meter-dock .rack-vu-bezel {
 .bench-gen-master .bench-gen-name { font-size: 0.7rem; }
 .sidebar-gen-dock .sidebar-line-title { display: flex; justify-content: space-between; align-items: center; }
 
+/* Before section 4 the lab wings are hidden and the report uses the full width (js/floating-meters.js) */
+body.lab-hidden { margin-right: 0 !important; }
+body.lab-hidden .floating-meter-dock,
+body.lab-hidden .live-probe-wires-svg,
+body.lab-hidden #sidebar-gen-dock,
+body.lab-hidden .sidebar-meter-action { display: none !important; }
+
+/* ==========================================================================
+   Bench DMM: Nixie-tube readouts and chunky latching switches
+   ========================================================================== */
+.dmm-display-card .dmm-readout-item {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.3rem;
+}
+.dmm-display-card .dmm-readout-label { color: #a8a29e; font-size: 0.66rem; }
+
+/* Each value sits in its own glass tube: dark envelope, fine anode mesh, orange neon numerals */
+.dmm-display-card .dmm-readout-value,
+.dmm-display-card .dmm-readout-value.yellow,
+.dmm-display-card .dmm-readout-value.green,
+.dmm-display-card .dmm-readout-value.cyan,
+.dmm-display-card .dmm-readout-value.amber,
+.dmm-display-card .dmm-readout-value.rose {
+  align-self: stretch;
+  text-align: right;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid #3f2a1d;
+  border-radius: 14px 14px 6px 6px;
+  background:
+    radial-gradient(circle, rgba(255, 140, 60, 0.10) 1px, transparent 1.5px) 0 0 / 5px 5px,
+    linear-gradient(180deg, #1c120c 0%, #0b0705 55%, #150d08 100%);
+  box-shadow: inset 0 0 18px rgba(255, 110, 30, 0.18), inset 0 6px 10px rgba(255, 255, 255, 0.05);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.55rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: #ffb26b;
+  text-shadow:
+    0 0 2px #fff1e0,
+    0 0 6px #ff8a2a,
+    0 0 14px rgba(255, 106, 0, 0.85),
+    0 0 26px rgba(255, 80, 0, 0.45);
+}
+
+/* Chunky push-latch switches: tall keys with a deep skirt that clunk down when latched */
+.dmm-display-card .dmm-keypad { gap: 6px; padding: 10px; }
+.dmm-display-card .dmm-key {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 45%, #cbd5e1 100%);
+  color: #0f172a;
+  font: 900 0.74rem var(--font-mono);
+  border: 1px solid #64748b;
+  border-bottom: 7px solid #475569;
+  border-radius: 3px;
+  box-shadow: 0 4px 0 #1e293b, 0 6px 8px rgba(0, 0, 0, 0.6), inset 0 1px 0 #fff;
+  transform: translateY(0);
+  transition: transform 70ms cubic-bezier(0.2, 1.6, 0.4, 1), border-bottom-width 70ms, box-shadow 70ms;
+}
+.dmm-display-card .dmm-key:hover { filter: brightness(1.05); transform: translateY(-1px); }
+.dmm-display-card .dmm-key:active,
+.dmm-display-card .dmm-key.active {
+  transform: translateY(5px) !important;
+  border-bottom-width: 2px !important;
+  box-shadow: 0 1px 0 #1e293b, inset 0 3px 6px rgba(0, 0, 0, 0.45) !important;
+  background: linear-gradient(180deg, #cbd5e1 0%, #d6dde6 100%) !important;
+  color: #7c2d12 !important;
+}
+.dmm-display-card .dmm-key.key-red {
+  background: linear-gradient(180deg, #f87171 0%, #dc2626 60%, #b91c1c 100%);
+  border-color: #7f1d1d;
+  border-bottom-color: #7f1d1d;
+  color: #fff;
+}
+
 </style>
   
   <!-- Fonts: Inter & JetBrains Mono, served locally (inlined by build.py) -->
@@ -10292,7 +10371,7 @@ html[data-theme="paper"] .floating-meter-dock .rack-vu-bezel {
             </div>
             <div class="dmm-bezel">
               <div class="dmm-header">
-                <span class="dmm-model">VACUUM FLUORESCENT DISPLAY</span>
+                <span class="dmm-model">NIXIE TUBE DISPLAY</span>
                 <span class="dmm-badge">&#9679; AC RMS ACTIVE</span>
               </div>
               <div class="dmm-grid">
@@ -12863,7 +12942,7 @@ html[data-theme="paper"] .floating-meter-dock .rack-vu-bezel {
                 </div>
                 <div class="dmm-bezel">
                   <div class="dmm-header">
-                    <span class="dmm-model">VACUUM FLUORESCENT DISPLAY</span>
+                    <span class="dmm-model">NIXIE TUBE DISPLAY</span>
                     <span class="dmm-badge">&#9679; DIFFERENTIAL LOAD ACTIVE</span>
                   </div>
                   <div class="dmm-grid">
@@ -19379,6 +19458,7 @@ class FloatingMeterDock {
     this.initAnchorEngine();
     this.initScrollTracker();
     this.initHoverZoom();
+    this.initLabReveal();
     // Diagrams are built by other scripts on load: add their Full Screen buttons once they exist
     setTimeout(() => this.addFullscreenButtons(), 0);
     setTimeout(() => this.addFullscreenButtons(), 1500);
@@ -22133,6 +22213,24 @@ class FloatingMeterDock {
   /**
    * Dynamic SVG Wires Engine: Renders physical colored leads from rack terminal dots to circuit nodes/anchors
    */
+  // The lab wings (this rack, the sidebar generators and Breakaway Meters) stay out of the way until
+  // section 4 (#enclosure-explorer) comes into view; before that the report reads full width
+  initLabReveal() {
+    const start = document.getElementById("enclosure-explorer");
+    if (!start) return;
+    const update = () => {
+      const before = start.getBoundingClientRect().top;
+      const hidden = before > window.innerHeight * 0.75;
+      if (document.body.classList.contains("lab-hidden") === hidden) return;
+      document.body.classList.toggle("lab-hidden", hidden);
+      // The page width changes and the text above reflows: keep section 4 where the reader saw it
+      window.scrollBy(0, start.getBoundingClientRect().top - before);
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    update();
+  }
+
   // Every diagram the meters probe gets a Full Screen button (the rack and wires stay with it)
   addFullscreenButtons() {
     if (typeof window.toggleCircuitFullscreen !== "function") return;
@@ -47109,7 +47207,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ===== BUNDLED: js/modules-data.js ===== */
 /**
  * Balanced Audio & AES-X152 100-Module Reference Curriculum Dataset
- * Compiled by build.py on 2026-10-18 10:12
+ * Compiled by build.py on 2026-10-18 10:19
  */
 
 const BALANCED_MODULES_DATA = [
